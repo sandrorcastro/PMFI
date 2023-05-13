@@ -13,7 +13,7 @@ namespace Infra.Repositories
     public class TipoPessoaRepository : RepositoryBase<TipoPessoa>, ITipoPessoaRepository
     {
         //private readonly IDbContextFactory<ContextoAplicacao> contexto;
-        private readonly ContextoAplicacao contexto;
+       // private readonly ContextoAplicacao contexto;
         //public TipoPessoaRepository(IDbContextFactory<ContextoAplicacao> contexto) : base(contexto) { }
         public TipoPessoaRepository(ContextoAplicacao contexto) : base(contexto) { }
 

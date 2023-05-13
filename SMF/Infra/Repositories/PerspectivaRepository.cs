@@ -13,7 +13,7 @@ namespace Infra.Repositories
     public class PerspectivaRepository : RepositoryBase<Perspectiva>, IPerspectivaRepository
     {
         //private readonly IDbContextFactory<ContextoAplicacao> contexto;
-        private readonly ContextoAplicacao contexto;
+        //private readonly ContextoAplicacao contexto;
         //public PerspectivaRepository(IDbContextFactory<ContextoAplicacao> contexto) : base(contexto) { }
         public PerspectivaRepository(ContextoAplicacao contexto) : base(contexto) { }
 

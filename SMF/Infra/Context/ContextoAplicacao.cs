@@ -79,6 +79,14 @@ public DbSet<Perspectiva> dbSPerspectivas { get; set; } = default!;
             builder.ApplyConfiguration(new TipoResponsabilidadeConfiguration());
             builder.ApplyConfiguration(new TipoPessoaConfiguration());
             builder.ApplyConfiguration(new ServidorConfiguration());
+            builder.ApplyConfiguration(new BairroConfiguration());
+            builder.ApplyConfiguration(new CidadeConfiguration());
+            builder.ApplyConfiguration(new ContatoConfiguration());
+            builder.ApplyConfiguration(new EstadoConfiguration());
+            builder.ApplyConfiguration(new LogradouroConfiguration());
+            builder.ApplyConfiguration(new PaisConfiguration());
+            builder.ApplyConfiguration(new RegiaoConfiguration());
+            builder.ApplyConfiguration(new TipoLogradouroConfiguration());
             builder.ApplyConfiguration(new Endereco_EntidadeConfiguration());
             builder.ApplyConfiguration(new PessoaConfiguration());
             builder.ApplyConfiguration(new PessoaFisicaConfiguration());
@@ -105,23 +113,10 @@ public DbSet<Perspectiva> dbSPerspectivas { get; set; } = default!;
             builder.ApplyConfiguration(new DocumentoPessoaConfiguration());
             //builder.ApplyConfiguration(new Configuration());
 
-        
-
-
-            foreach (var property in builder.Model.GetEntityTypes().SelectMany(t => t.GetProperties()).Where(p => p.ClrType == typeof(string)))
+/*            foreach (var property in builder.Model.GetEntityTypes().SelectMany(t => t.GetProperties()).Where(p => p.ClrType == typeof(string)))
             {
                 property.SetColumnType("varchar");
-            }
-          /*  foreach (var property in builder.Model.GetEntityTypes().SelectMany(t => t.GetProperties()).Where(p => p.ClrType == typeof(DateTime)))
-            {
-                property.SetColumnType("date");
-                //property. .HasColumnType("date").HasComputedColumnSql("DATEFROMPARTS(YEAR(Ano), 1, 1)");
             }*/
-
-
-
-
-
         }
 
         public override int SaveChanges()

@@ -25,16 +25,14 @@ namespace Infra.Migrations
             modelBuilder.Entity("Domain.Entities.Bairro", b =>
                 {
                     b.Property<long>("BairroId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("BairroId"));
 
                     b.Property<int?>("CidadeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Descricao")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<long?>("RegiaoId")
                         .HasColumnType("bigint");
@@ -45,22 +43,21 @@ namespace Infra.Migrations
 
                     b.HasIndex("RegiaoId");
 
-                    b.ToTable("dbSBairros");
+                    b.ToTable("Bairro", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Cidade", b =>
                 {
                     b.Property<int>("CidadeId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("CidadeId"));
 
                     b.Property<int?>("DDDId")
                         .HasColumnType("int");
 
                     b.Property<string>("Descricao")
-                        .HasColumnType("varchar");
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int?>("EstadoId")
                         .HasColumnType("int");
@@ -71,23 +68,16 @@ namespace Infra.Migrations
 
                     b.HasIndex("EstadoId");
 
-                    b.ToTable("dbSCidades");
+                    b.ToTable("Cidade", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Contato", b =>
                 {
                     b.Property<int>("ContatoId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ContatoId"));
 
                     b.Property<bool>("Ativo")
                         .HasColumnType("bit");
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("varchar");
 
                     b.Property<bool>("Principal")
                         .HasColumnType("bit");
@@ -99,11 +89,9 @@ namespace Infra.Migrations
 
                     b.HasIndex("TipoContatoId");
 
-                    b.ToTable("dbSContatos");
+                    b.ToTable("Contato", (string)null);
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("Contato");
-
-                    b.UseTphMappingStrategy();
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("Domain.Entities.Contato_Pessoa", b =>
@@ -134,33 +122,30 @@ namespace Infra.Migrations
             modelBuilder.Entity("Domain.Entities.DDD", b =>
                 {
                     b.Property<int>("DDDId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DDDId"));
-
                     b.Property<string>("CodigoDDD")
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Numero")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("DDDId");
 
-                    b.ToTable("dbSDDDs");
+                    b.ToTable("DDD", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.DocumentoPessoa", b =>
                 {
                     b.Property<int>("DocumentoPessoaId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("DocumentoPessoaId"));
-
-                    b.Property<string>("Discriminator")
-                        .IsRequired()
-                        .HasColumnType("varchar");
-
                     b.Property<string>("Numero")
-                        .HasColumnType("varchar");
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<long>("PessoaId")
                         .HasColumnType("bigint");
@@ -174,11 +159,9 @@ namespace Infra.Migrations
 
                     b.HasIndex("TipoDocumentoId");
 
-                    b.ToTable("dbSDocumentosPessoa");
+                    b.ToTable("DocumentoPessoa", (string)null);
 
-                    b.HasDiscriminator<string>("Discriminator").HasValue("DocumentoPessoa");
-
-                    b.UseTphMappingStrategy();
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("Domain.Entities.Economia", b =>
@@ -191,40 +174,40 @@ namespace Infra.Migrations
 
                     b.Property<string>("AnoConstrucao")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("AreaConstruida")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Caracteristica")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Complemento")
                         .HasMaxLength(500)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Latitude")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Longitude")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Matricula")
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Numeracao")
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("TemProcessos")
                         .HasColumnType("bit");
 
                     b.Property<string>("TerrenoIdTemp")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("ImovelId", "EconomiaId");
 
@@ -272,10 +255,7 @@ namespace Infra.Migrations
             modelBuilder.Entity("Domain.Entities.Endereco", b =>
                 {
                     b.Property<long>("EnderecoId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("EnderecoId"));
 
                     b.Property<bool?>("Ativo")
                         .HasColumnType("bit");
@@ -283,17 +263,27 @@ namespace Infra.Migrations
                     b.Property<long?>("BairroId")
                         .HasColumnType("bigint");
 
+                    b.Property<string>("CEP")
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
                     b.Property<int?>("CidadeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Complemento")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<long?>("LogradouroId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("Referencia")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("logradouro_Temp")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.HasKey("EnderecoId");
 
@@ -303,7 +293,7 @@ namespace Infra.Migrations
 
                     b.HasIndex("LogradouroId");
 
-                    b.ToTable("dbSEnderecos");
+                    b.ToTable("Endereco", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Endereco_Entidade", b =>
@@ -319,7 +309,7 @@ namespace Infra.Migrations
 
                     b.Property<string>("Numero")
                         .HasMaxLength(10)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<bool?>("Ativo")
                         .ValueGeneratedOnAdd()
@@ -328,7 +318,7 @@ namespace Infra.Migrations
 
                     b.Property<string>("CEP")
                         .HasMaxLength(10)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<bool?>("Correnspondencia")
                         .HasColumnType("bit");
@@ -379,25 +369,24 @@ namespace Infra.Migrations
             modelBuilder.Entity("Domain.Entities.Estado", b =>
                 {
                     b.Property<int>("EstadoId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("EstadoId"));
-
                     b.Property<string>("Descricao")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int?>("PaisId")
                         .HasColumnType("int");
 
                     b.Property<string>("Sigla")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(5)
+                        .HasColumnType("nvarchar(5)");
 
                     b.HasKey("EstadoId");
 
                     b.HasIndex("PaisId");
 
-                    b.ToTable("dbSEstados");
+                    b.ToTable("Estado", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Etapa", b =>
@@ -419,7 +408,7 @@ namespace Infra.Migrations
 
                     b.Property<string>("Ano")
                         .HasMaxLength(4)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(4)");
 
                     b.Property<DateTime?>("DataFim")
                         .HasColumnType("datetime2");
@@ -437,7 +426,7 @@ namespace Infra.Migrations
 
                     b.Property<string>("Observacao")
                         .HasMaxLength(5000)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long?>("PessoaId")
                         .HasColumnType("bigint");
@@ -465,7 +454,7 @@ namespace Infra.Migrations
 
                     b.Property<string>("anoprotocolo")
                         .HasMaxLength(20)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<bool?>("antigo")
                         .HasColumnType("bit");
@@ -478,7 +467,7 @@ namespace Infra.Migrations
 
                     b.Property<string>("protocolo")
                         .HasMaxLength(20)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<bool?>("whatsEnviado")
                         .HasColumnType("bit");
@@ -512,14 +501,12 @@ namespace Infra.Migrations
             modelBuilder.Entity("Domain.Entities.FluxoProcesso", b =>
                 {
                     b.Property<int>("FluxoProcessoId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("FluxoProcessoId"));
 
                     b.Property<string>("Descricao")
                         .IsRequired()
-                        .HasColumnType("varchar");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int>("TipoEtapaId")
                         .HasColumnType("int");
@@ -533,31 +520,36 @@ namespace Infra.Migrations
 
                     b.HasIndex("TipoProcessoId");
 
-                    b.ToTable("dbSFluxosProcesso");
+                    b.ToTable("FluxoProcesso", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Image", b =>
                 {
                     b.Property<string>("ImageId")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(256)
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("Caminho")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<DateTime?>("CreateDate")
-                        .HasColumnType("datetime2");
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2")
+                        .HasDefaultValueSql("getdate()");
 
                     b.Property<long?>("EconomiaId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("ImageBase64String")
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long?>("ImovelId")
                         .HasColumnType("bigint");
 
                     b.Property<string>("NomeArquivo")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<int?>("PerspectivaId")
                         .HasColumnType("int");
@@ -605,7 +597,7 @@ namespace Infra.Migrations
 
                     b.HasIndex("ProcessoOrgaoId", "ProcessoSequenciaNumerica", "ProcessoAno", "ProcessoDigitoVerificador");
 
-                    b.ToTable("dbSImages");
+                    b.ToTable("Image", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Imovel", b =>
@@ -615,35 +607,35 @@ namespace Infra.Migrations
 
                     b.Property<string>("AnoConstrucao")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("AreaConstruida")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("AreaTerreno")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Caracteristica")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Complemento")
                         .HasMaxLength(500)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("Latitude")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Longitude")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Matricula")
                         .HasMaxLength(20)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(20)");
 
                     b.HasKey("ImovelId");
 
@@ -653,19 +645,18 @@ namespace Infra.Migrations
             modelBuilder.Entity("Domain.Entities.IncrementoTabelas", b =>
                 {
                     b.Property<int>("IncrementoTabelasId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("IncrementoTabelasId"));
-
                     b.Property<string>("Ano")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(4)
+                        .HasColumnType("nvarchar(4)");
 
                     b.Property<string>("Parametro")
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Tabela")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<long?>("valorAtual")
                         .HasColumnType("bigint");
@@ -681,16 +672,13 @@ namespace Infra.Migrations
 
                     b.HasKey("IncrementoTabelasId");
 
-                    b.ToTable("dbSIncrementoTabelas");
+                    b.ToTable("IncrementoTabelas", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Logradouro", b =>
                 {
                     b.Property<long>("LogradouroId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("LogradouroId"));
 
                     b.Property<bool?>("Ativo")
                         .HasColumnType("bit");
@@ -699,13 +687,14 @@ namespace Infra.Migrations
                         .HasColumnType("bigint");
 
                     b.Property<string>("CEP")
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int?>("CidadeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Descricao")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<int?>("TipoLogradouroId")
                         .HasColumnType("int");
@@ -718,22 +707,20 @@ namespace Infra.Migrations
 
                     b.HasIndex("TipoLogradouroId");
 
-                    b.ToTable("dbSLogradouros");
+                    b.ToTable("Logradouro", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Loteamento", b =>
                 {
                     b.Property<int>("LoteamentoId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LoteamentoId"));
 
                     b.Property<DateTime?>("DataCadastro")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Descricao")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<long?>("RegiaoId")
                         .HasColumnType("bigint");
@@ -742,26 +729,25 @@ namespace Infra.Migrations
 
                     b.HasIndex("RegiaoId");
 
-                    b.ToTable("dbSLoteamentos");
+                    b.ToTable("Loteamento", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.OperadoraTelefone", b =>
                 {
                     b.Property<int>("OperadoraTelefoneId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("OperadoraTelefoneId"));
-
                     b.Property<string>("CodigoOperadora")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<string>("Descricao")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("OperadoraTelefoneId");
 
-                    b.ToTable("dbSOperadoraTelefoneS");
+                    b.ToTable("OperadoraTelefone", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Orgao", b =>
@@ -771,7 +757,7 @@ namespace Infra.Migrations
 
                     b.Property<string>("Descricao")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("OrgaoId");
 
@@ -781,36 +767,57 @@ namespace Infra.Migrations
             modelBuilder.Entity("Domain.Entities.Pais", b =>
                 {
                     b.Property<int>("PaisId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("PaisId"));
-
                     b.Property<string>("Nome")
-                        .HasColumnType("varchar");
+                        .IsRequired()
+                        .HasMaxLength(200)
+                        .HasColumnType("nvarchar(200)");
 
                     b.Property<string>("Sigla")
-                        .HasColumnType("varchar");
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.HasKey("PaisId");
 
-                    b.ToTable("dbSPaises");
+                    b.ToTable("Pais", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Perspectiva", b =>
                 {
                     b.Property<int?>("PerspectivaId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int?>("PerspectivaId"));
-
                     b.Property<string>("Descricao")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("PerspectivaId");
 
-                    b.ToTable("dbSPerspectivas");
+                    b.ToTable("Perspectiva", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            PerspectivaId = 1,
+                            Descricao = "Frontal"
+                        },
+                        new
+                        {
+                            PerspectivaId = 2,
+                            Descricao = "Lateral Direita"
+                        },
+                        new
+                        {
+                            PerspectivaId = 3,
+                            Descricao = "Lateral Esquerda"
+                        },
+                        new
+                        {
+                            PerspectivaId = 4,
+                            Descricao = "Fundo"
+                        });
                 });
 
             modelBuilder.Entity("Domain.Entities.Pessoa", b =>
@@ -831,7 +838,7 @@ namespace Infra.Migrations
                     b.Property<string>("Nome")
                         .IsRequired()
                         .HasMaxLength(250)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(250)");
 
                     b.Property<int>("TipoPessoaId")
                         .HasColumnType("int");
@@ -870,7 +877,7 @@ namespace Infra.Migrations
 
                     b.Property<string>("ObservacaoProcesso")
                         .HasMaxLength(1000)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<int>("OrgaoDestinatarioId")
                         .HasColumnType("int");
@@ -913,22 +920,23 @@ namespace Infra.Migrations
             modelBuilder.Entity("Domain.Entities.Regiao", b =>
                 {
                     b.Property<long>("RegiaoId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("RegiaoId"));
-
                     b.Property<string>("CentroGrauLat")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("CentroGrauLon")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int?>("CidadeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Descricao")
-                        .HasColumnType("varchar");
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<float?>("PercentualUVC")
                         .HasColumnType("real");
@@ -937,7 +945,7 @@ namespace Infra.Migrations
 
                     b.HasIndex("CidadeId");
 
-                    b.ToTable("dbSRegioes");
+                    b.ToTable("Regiao", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Servidor", b =>
@@ -952,11 +960,11 @@ namespace Infra.Migrations
 
                     b.Property<string>("Matricula")
                         .HasMaxLength(15)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(15)");
 
                     b.Property<string>("Nome")
                         .HasMaxLength(150)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(150)");
 
                     b.HasKey("ServidorId");
 
@@ -970,7 +978,7 @@ namespace Infra.Migrations
 
                     b.Property<string>("Descricao")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("SituacaoEtapaId");
 
@@ -1001,7 +1009,7 @@ namespace Infra.Migrations
 
                     b.Property<string>("Descricao")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasKey("SituacaoProcessoId");
 
@@ -1023,33 +1031,30 @@ namespace Infra.Migrations
             modelBuilder.Entity("Domain.Entities.TipoContato", b =>
                 {
                     b.Property<int>("TipoContatoId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TipoContatoId"));
-
-                    b.Property<int>("Descricao")
-                        .HasColumnType("int");
+                    b.Property<string>("Descricao")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.HasKey("TipoContatoId");
 
-                    b.ToTable("dbSTiposContato");
+                    b.ToTable("TipoContato", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TipoDocumento", b =>
                 {
                     b.Property<int>("TipoDocumentoId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TipoDocumentoId"));
-
                     b.Property<string>("Descricao")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.HasKey("TipoDocumentoId");
 
-                    b.ToTable("dbSTiposDocumento");
+                    b.ToTable("TipoDocumento", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TipoEtapa", b =>
@@ -1059,23 +1064,23 @@ namespace Infra.Migrations
 
                     b.Property<string>("Descricao")
                         .HasMaxLength(60)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(60)");
 
                     b.Property<int?>("DiasTramite")
                         .HasColumnType("int");
 
                     b.Property<string>("Lei")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<int?>("Permanencia")
                         .HasColumnType("int");
 
                     b.Property<string>("Template")
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("TextoLei")
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool?>("liberado")
                         .HasColumnType("bit");
@@ -1088,17 +1093,15 @@ namespace Infra.Migrations
             modelBuilder.Entity("Domain.Entities.TipoLogradouro", b =>
                 {
                     b.Property<int>("TipoLogradouroId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TipoLogradouroId"));
-
                     b.Property<string>("Descricao")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("TipoLogradouroId");
 
-                    b.ToTable("dbSTiposLogradouro");
+                    b.ToTable("TipoLogradouro", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.TipoPessoa", b =>
@@ -1109,7 +1112,7 @@ namespace Infra.Migrations
                     b.Property<string>("Descricao")
                         .IsRequired()
                         .HasMaxLength(50)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("TipoPessoaId");
 
@@ -1135,7 +1138,7 @@ namespace Infra.Migrations
 
                     b.Property<string>("Descricao")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int?>("DiasTramite")
                         .HasColumnType("int");
@@ -1158,7 +1161,7 @@ namespace Infra.Migrations
 
                     b.Property<string>("Descricao")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(50)");
 
                     b.HasKey("TipoResponsabilidadeId");
 
@@ -1185,17 +1188,15 @@ namespace Infra.Migrations
             modelBuilder.Entity("Domain.Entities.TipoTelefone", b =>
                 {
                     b.Property<int>("TipoTelefoneId")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("TipoTelefoneId"));
-
                     b.Property<string>("Descricao")
-                        .HasColumnType("varchar");
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
 
                     b.HasKey("TipoTelefoneId");
 
-                    b.ToTable("dbSTiposTelefone");
+                    b.ToTable("TipoTelefone", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.Unidade", b =>
@@ -1205,7 +1206,7 @@ namespace Infra.Migrations
 
                     b.Property<string>("Descricao")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<int?>("OrgaoId")
                         .HasColumnType("int");
@@ -1230,11 +1231,11 @@ namespace Infra.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
@@ -1247,30 +1248,30 @@ namespace Infra.Migrations
 
                     b.Property<string>("NormalizedEmail")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedUserName")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("PasswordHash")
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("PhoneNumber")
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
                     b.Property<string>("SecurityStamp")
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
                     b.Property<string>("UserName")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -1295,15 +1296,15 @@ namespace Infra.Migrations
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(256)");
 
                     b.Property<string>("NormalizedName")
                         .HasMaxLength(256)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(256)");
 
                     b.HasKey("Id");
 
@@ -1324,10 +1325,10 @@ namespace Infra.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("RoleId")
                         .HasColumnType("bigint");
@@ -1348,10 +1349,10 @@ namespace Infra.Migrations
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("ClaimType")
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ClaimValue")
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -1367,14 +1368,14 @@ namespace Infra.Migrations
                 {
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderKey")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("ProviderDisplayName")
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<long>("UserId")
                         .HasColumnType("bigint");
@@ -1408,14 +1409,14 @@ namespace Infra.Migrations
 
                     b.Property<string>("LoginProvider")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Name")
                         .HasMaxLength(128)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(128)");
 
                     b.Property<string>("Value")
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("UserId", "LoginProvider", "Name");
 
@@ -1426,7 +1427,7 @@ namespace Infra.Migrations
                 {
                     b.HasBaseType("Domain.Entities.Contato");
 
-                    b.Property<int>("DDDId")
+                    b.Property<int?>("DDDId")
                         .HasColumnType("int");
 
                     b.Property<DateTime?>("DataCadastro")
@@ -1435,7 +1436,12 @@ namespace Infra.Migrations
                     b.Property<DateTime?>("DataUltimaAtualizacao")
                         .HasColumnType("datetime2");
 
-                    b.Property<int>("OperadoraTelefoneId")
+                    b.Property<string>("Numero")
+                        .IsRequired()
+                        .HasMaxLength(15)
+                        .HasColumnType("nvarchar(15)");
+
+                    b.Property<int?>("OperadoraTelefoneId")
                         .HasColumnType("int");
 
                     b.Property<int>("TipoTelefoneId")
@@ -1447,7 +1453,7 @@ namespace Infra.Migrations
 
                     b.HasIndex("TipoTelefoneId");
 
-                    b.HasDiscriminator().HasValue("Telefone");
+                    b.ToTable("Telefone", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.CNPJ", b =>
@@ -1461,23 +1467,13 @@ namespace Infra.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("OrgaoEmissor")
-                        .HasColumnType("varchar");
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.HasIndex("EstadoEmissorId");
 
-                    b.ToTable("dbSDocumentosPessoa", t =>
-                        {
-                            t.Property("DataExpedicao")
-                                .HasColumnName("CNPJ_DataExpedicao");
-
-                            t.Property("EstadoEmissorId")
-                                .HasColumnName("CNPJ_EstadoEmissorId");
-
-                            t.Property("OrgaoEmissor")
-                                .HasColumnName("CNPJ_OrgaoEmissor");
-                        });
-
-                    b.HasDiscriminator().HasValue("CNPJ");
+                    b.ToTable("CNPJ", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.CPF", b =>
@@ -1491,11 +1487,13 @@ namespace Infra.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("OrgaoEmissor")
-                        .HasColumnType("varchar");
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.HasIndex("EstadoEmissorId");
 
-                    b.HasDiscriminator().HasValue("CPF");
+                    b.ToTable("CPF", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.RG", b =>
@@ -1509,23 +1507,13 @@ namespace Infra.Migrations
                         .HasColumnType("int");
 
                     b.Property<string>("OrgaoEmissor")
-                        .HasColumnType("varchar");
+                        .IsRequired()
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.HasIndex("EstadoEmissorId");
 
-                    b.ToTable("dbSDocumentosPessoa", t =>
-                        {
-                            t.Property("DataExpedicao")
-                                .HasColumnName("RG_DataExpedicao");
-
-                            t.Property("EstadoEmissorId")
-                                .HasColumnName("RG_EstadoEmissorId");
-
-                            t.Property("OrgaoEmissor")
-                                .HasColumnName("RG_OrgaoEmissor");
-                        });
-
-                    b.HasDiscriminator().HasValue("RG");
+                    b.ToTable("RG", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.PessoaFisica", b =>
@@ -1540,30 +1528,30 @@ namespace Infra.Migrations
 
                     b.Property<string>("DefinicaoSexual")
                         .HasMaxLength(25)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<string>("EstadoCivil")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("NomeMeio")
                         .HasMaxLength(150)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(150)");
 
                     b.Property<int?>("PaisId")
                         .HasColumnType("int");
 
                     b.Property<string>("PrimeiroNome")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("Sexo")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Sobrenome")
                         .HasMaxLength(100)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(100)");
 
                     b.HasIndex("PaisId");
 
@@ -1576,43 +1564,17 @@ namespace Infra.Migrations
 
                     b.Property<string>("InscricaoEstadual")
                         .HasMaxLength(50)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("NomeFantasia")
                         .HasMaxLength(500)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<string>("RazaoSocial")
                         .HasMaxLength(500)
-                        .HasColumnType("varchar");
+                        .HasColumnType("nvarchar(500)");
 
                     b.ToTable("PessoaJuridica", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Entities.TelefoneComercial", b =>
-                {
-                    b.HasBaseType("Domain.Entities.Telefone");
-
-                    b.Property<string>("Numero")
-                        .HasColumnType("varchar");
-
-                    b.HasDiscriminator().HasValue("TelefoneComercial");
-                });
-
-            modelBuilder.Entity("Domain.Entities.TelefoneResidencial", b =>
-                {
-                    b.HasBaseType("Domain.Entities.Telefone");
-
-                    b.Property<string>("Numero")
-                        .HasColumnType("varchar");
-
-                    b.ToTable("dbSContatos", t =>
-                        {
-                            t.Property("Numero")
-                                .HasColumnName("TelefoneResidencial_Numero");
-                        });
-
-                    b.HasDiscriminator().HasValue("TelefoneResidencial");
                 });
 
             modelBuilder.Entity("Domain.Entities.Bairro", b =>
@@ -2097,17 +2059,19 @@ namespace Infra.Migrations
 
             modelBuilder.Entity("Domain.Entities.Telefone", b =>
                 {
-                    b.HasOne("Domain.Entities.DDD", "DDD")
-                        .WithMany()
-                        .HasForeignKey("DDDId")
+                    b.HasOne("Domain.Entities.Contato", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.Telefone", "ContatoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Domain.Entities.DDD", "DDD")
+                        .WithMany()
+                        .HasForeignKey("DDDId");
+
                     b.HasOne("Domain.Entities.OperadoraTelefone", "OperadoraTelefone")
                         .WithMany()
-                        .HasForeignKey("OperadoraTelefoneId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("OperadoraTelefoneId");
 
                     b.HasOne("Domain.Entities.TipoTelefone", "TipoTelefone")
                         .WithMany()
@@ -2124,6 +2088,12 @@ namespace Infra.Migrations
 
             modelBuilder.Entity("Domain.Entities.CNPJ", b =>
                 {
+                    b.HasOne("Domain.Entities.DocumentoPessoa", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.CNPJ", "DocumentoPessoaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Estado", "EstadoEmissor")
                         .WithMany()
                         .HasForeignKey("EstadoEmissorId");
@@ -2133,6 +2103,12 @@ namespace Infra.Migrations
 
             modelBuilder.Entity("Domain.Entities.CPF", b =>
                 {
+                    b.HasOne("Domain.Entities.DocumentoPessoa", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.CPF", "DocumentoPessoaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Estado", "EstadoEmissor")
                         .WithMany()
                         .HasForeignKey("EstadoEmissorId");
@@ -2142,6 +2118,12 @@ namespace Infra.Migrations
 
             modelBuilder.Entity("Domain.Entities.RG", b =>
                 {
+                    b.HasOne("Domain.Entities.DocumentoPessoa", null)
+                        .WithOne()
+                        .HasForeignKey("Domain.Entities.RG", "DocumentoPessoaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.HasOne("Domain.Entities.Estado", "EstadoEmissor")
                         .WithMany()
                         .HasForeignKey("EstadoEmissorId");

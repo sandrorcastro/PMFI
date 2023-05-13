@@ -19,9 +19,9 @@ namespace Infra.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
-                    NormalizedName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "varchar", nullable: true)
+                    Name = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -34,15 +34,15 @@ namespace Infra.Migrations
                 {
                     Id = table.Column<long>(type: "bigint", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    UserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
-                    NormalizedUserName = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
-                    Email = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
-                    NormalizedEmail = table.Column<string>(type: "varchar(256)", maxLength: 256, nullable: true),
+                    UserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedUserName = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    Email = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
+                    NormalizedEmail = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: true),
                     EmailConfirmed = table.Column<bool>(type: "bit", nullable: false),
-                    PasswordHash = table.Column<string>(type: "varchar", nullable: true),
-                    SecurityStamp = table.Column<string>(type: "varchar", nullable: true),
-                    ConcurrencyStamp = table.Column<string>(type: "varchar", nullable: true),
-                    PhoneNumber = table.Column<string>(type: "varchar", nullable: true),
+                    PasswordHash = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    SecurityStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ConcurrencyStamp = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    PhoneNumber = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     PhoneNumberConfirmed = table.Column<bool>(type: "bit", nullable: false),
                     TwoFactorEnabled = table.Column<bool>(type: "bit", nullable: false),
                     LockoutEnd = table.Column<DateTimeOffset>(type: "datetimeoffset", nullable: true),
@@ -55,128 +55,16 @@ namespace Infra.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "dbSDDDs",
+                name: "DDD",
                 columns: table => new
                 {
-                    DDDId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    CodigoDDD = table.Column<string>(type: "varchar", nullable: true)
+                    DDDId = table.Column<int>(type: "int", nullable: false),
+                    CodigoDDD = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Numero = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbSDDDs", x => x.DDDId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "dbSIncrementoTabelas",
-                columns: table => new
-                {
-                    IncrementoTabelasId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Tabela = table.Column<string>(type: "varchar", nullable: true),
-                    Parametro = table.Column<string>(type: "varchar", nullable: true),
-                    valorAtual = table.Column<long>(type: "bigint", nullable: true),
-                    Ano = table.Column<string>(type: "varchar", nullable: true),
-                    valorInicial = table.Column<long>(type: "bigint", nullable: true),
-                    valorFinal = table.Column<long>(type: "bigint", nullable: true),
-                    valorincrementar = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_dbSIncrementoTabelas", x => x.IncrementoTabelasId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "dbSOperadoraTelefoneS",
-                columns: table => new
-                {
-                    OperadoraTelefoneId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "varchar", nullable: true),
-                    CodigoOperadora = table.Column<string>(type: "varchar", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_dbSOperadoraTelefoneS", x => x.OperadoraTelefoneId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "dbSPaises",
-                columns: table => new
-                {
-                    PaisId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "varchar", nullable: true),
-                    Sigla = table.Column<string>(type: "varchar", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_dbSPaises", x => x.PaisId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "dbSPerspectivas",
-                columns: table => new
-                {
-                    PerspectivaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "varchar", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_dbSPerspectivas", x => x.PerspectivaId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "dbSTiposContato",
-                columns: table => new
-                {
-                    TipoContatoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_dbSTiposContato", x => x.TipoContatoId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "dbSTiposDocumento",
-                columns: table => new
-                {
-                    TipoDocumentoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "varchar", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_dbSTiposDocumento", x => x.TipoDocumentoId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "dbSTiposLogradouro",
-                columns: table => new
-                {
-                    TipoLogradouroId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "varchar", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_dbSTiposLogradouro", x => x.TipoLogradouroId);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "dbSTiposTelefone",
-                columns: table => new
-                {
-                    TipoTelefoneId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "varchar", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_dbSTiposTelefone", x => x.TipoTelefoneId);
+                    table.PrimaryKey("PK_DDD", x => x.DDDId);
                 });
 
             migrationBuilder.CreateTable(
@@ -184,14 +72,14 @@ namespace Infra.Migrations
                 columns: table => new
                 {
                     ImovelId = table.Column<long>(type: "bigint", nullable: false),
-                    Matricula = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true),
-                    Latitude = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    Longitude = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    Complemento = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true),
-                    AreaTerreno = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    AreaConstruida = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    AnoConstrucao = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    Caracteristica = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    Matricula = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Latitude = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Longitude = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Complemento = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    AreaTerreno = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    AreaConstruida = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    AnoConstrucao = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Caracteristica = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -199,11 +87,42 @@ namespace Infra.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "IncrementoTabelas",
+                columns: table => new
+                {
+                    IncrementoTabelasId = table.Column<int>(type: "int", nullable: false),
+                    Tabela = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Parametro = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    valorAtual = table.Column<long>(type: "bigint", nullable: true),
+                    Ano = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
+                    valorInicial = table.Column<long>(type: "bigint", nullable: true),
+                    valorFinal = table.Column<long>(type: "bigint", nullable: true),
+                    valorincrementar = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_IncrementoTabelas", x => x.IncrementoTabelasId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OperadoraTelefone",
+                columns: table => new
+                {
+                    OperadoraTelefoneId = table.Column<int>(type: "int", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    CodigoOperadora = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OperadoraTelefone", x => x.OperadoraTelefoneId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Orgao",
                 columns: table => new
                 {
                     OrgaoId = table.Column<int>(type: "int", nullable: false),
-                    Descricao = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                    Descricao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -211,12 +130,37 @@ namespace Infra.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Pais",
+                columns: table => new
+                {
+                    PaisId = table.Column<int>(type: "int", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: false),
+                    Sigla = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pais", x => x.PaisId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Perspectiva",
+                columns: table => new
+                {
+                    PerspectivaId = table.Column<int>(type: "int", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Perspectiva", x => x.PerspectivaId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Servidor",
                 columns: table => new
                 {
                     ServidorId = table.Column<long>(type: "bigint", nullable: false),
-                    Nome = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: true),
-                    Matricula = table.Column<string>(type: "varchar(15)", maxLength: 15, nullable: true),
+                    Nome = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    Matricula = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
                     Ativo = table.Column<bool>(type: "bit", nullable: true, defaultValue: true)
                 },
                 constraints: table =>
@@ -229,7 +173,7 @@ namespace Infra.Migrations
                 columns: table => new
                 {
                     SituacaoEtapaId = table.Column<int>(type: "int", nullable: false),
-                    Descricao = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                    Descricao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -241,7 +185,7 @@ namespace Infra.Migrations
                 columns: table => new
                 {
                     SituacaoProcessoId = table.Column<int>(type: "int", nullable: false),
-                    Descricao = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true)
+                    Descricao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -249,16 +193,40 @@ namespace Infra.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TipoContato",
+                columns: table => new
+                {
+                    TipoContatoId = table.Column<int>(type: "int", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TipoContato", x => x.TipoContatoId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TipoDocumento",
+                columns: table => new
+                {
+                    TipoDocumentoId = table.Column<int>(type: "int", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TipoDocumento", x => x.TipoDocumentoId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TipoEtapa",
                 columns: table => new
                 {
                     TipoEtapaId = table.Column<int>(type: "int", nullable: false),
-                    Descricao = table.Column<string>(type: "varchar(60)", maxLength: 60, nullable: true),
+                    Descricao = table.Column<string>(type: "nvarchar(60)", maxLength: 60, nullable: true),
                     DiasTramite = table.Column<int>(type: "int", nullable: true),
                     Permanencia = table.Column<int>(type: "int", nullable: true),
-                    Lei = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    TextoLei = table.Column<string>(type: "varchar", nullable: true),
-                    Template = table.Column<string>(type: "varchar", nullable: true),
+                    Lei = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    TextoLei = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Template = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     liberado = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
@@ -267,11 +235,23 @@ namespace Infra.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "TipoLogradouro",
+                columns: table => new
+                {
+                    TipoLogradouroId = table.Column<int>(type: "int", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TipoLogradouro", x => x.TipoLogradouroId);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TipoPessoa",
                 columns: table => new
                 {
                     TipoPessoaId = table.Column<int>(type: "int", nullable: false),
-                    Descricao = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: false)
+                    Descricao = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -283,7 +263,7 @@ namespace Infra.Migrations
                 columns: table => new
                 {
                     TipoProcessoId = table.Column<int>(type: "int", nullable: false),
-                    Descricao = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true),
+                    Descricao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     DiasTramite = table.Column<int>(type: "int", nullable: true),
                     Permanencia = table.Column<int>(type: "int", nullable: true),
                     liberado = table.Column<bool>(type: "bit", nullable: true)
@@ -298,11 +278,23 @@ namespace Infra.Migrations
                 columns: table => new
                 {
                     TipoResponsabilidadeId = table.Column<int>(type: "int", nullable: false),
-                    Descricao = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    Descricao = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TipoResponsabilidade", x => x.TipoResponsabilidadeId);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "TipoTelefone",
+                columns: table => new
+                {
+                    TipoTelefoneId = table.Column<int>(type: "int", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_TipoTelefone", x => x.TipoTelefoneId);
                 });
 
             migrationBuilder.CreateTable(
@@ -312,8 +304,8 @@ namespace Infra.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     RoleId = table.Column<long>(type: "bigint", nullable: false),
-                    ClaimType = table.Column<string>(type: "varchar", nullable: true),
-                    ClaimValue = table.Column<string>(type: "varchar", nullable: true)
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -333,8 +325,8 @@ namespace Infra.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    ClaimType = table.Column<string>(type: "varchar", nullable: true),
-                    ClaimValue = table.Column<string>(type: "varchar", nullable: true)
+                    ClaimType = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    ClaimValue = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -351,9 +343,9 @@ namespace Infra.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false),
-                    ProviderDisplayName = table.Column<string>(type: "varchar", nullable: true),
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: false)
                 },
                 constraints: table =>
@@ -396,9 +388,9 @@ namespace Infra.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    LoginProvider = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "varchar(128)", maxLength: 128, nullable: false),
-                    Value = table.Column<string>(type: "varchar", nullable: true)
+                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -412,87 +404,21 @@ namespace Infra.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "dbSEstados",
-                columns: table => new
-                {
-                    EstadoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "varchar", nullable: true),
-                    Sigla = table.Column<string>(type: "varchar", nullable: true),
-                    PaisId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_dbSEstados", x => x.EstadoId);
-                    table.ForeignKey(
-                        name: "FK_dbSEstados_dbSPaises_PaisId",
-                        column: x => x.PaisId,
-                        principalTable: "dbSPaises",
-                        principalColumn: "PaisId");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "dbSContatos",
-                columns: table => new
-                {
-                    ContatoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    TipoContatoId = table.Column<int>(type: "int", nullable: true),
-                    Ativo = table.Column<bool>(type: "bit", nullable: false),
-                    Principal = table.Column<bool>(type: "bit", nullable: false),
-                    Discriminator = table.Column<string>(type: "varchar", nullable: false),
-                    TipoTelefoneId = table.Column<int>(type: "int", nullable: true),
-                    DDDId = table.Column<int>(type: "int", nullable: true),
-                    OperadoraTelefoneId = table.Column<int>(type: "int", nullable: true),
-                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    DataUltimaAtualizacao = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Numero = table.Column<string>(type: "varchar", nullable: true),
-                    TelefoneResidencial_Numero = table.Column<string>(type: "varchar", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_dbSContatos", x => x.ContatoId);
-                    table.ForeignKey(
-                        name: "FK_dbSContatos_dbSDDDs_DDDId",
-                        column: x => x.DDDId,
-                        principalTable: "dbSDDDs",
-                        principalColumn: "DDDId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_dbSContatos_dbSOperadoraTelefoneS_OperadoraTelefoneId",
-                        column: x => x.OperadoraTelefoneId,
-                        principalTable: "dbSOperadoraTelefoneS",
-                        principalColumn: "OperadoraTelefoneId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_dbSContatos_dbSTiposContato_TipoContatoId",
-                        column: x => x.TipoContatoId,
-                        principalTable: "dbSTiposContato",
-                        principalColumn: "TipoContatoId");
-                    table.ForeignKey(
-                        name: "FK_dbSContatos_dbSTiposTelefone_TipoTelefoneId",
-                        column: x => x.TipoTelefoneId,
-                        principalTable: "dbSTiposTelefone",
-                        principalColumn: "TipoTelefoneId",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Economia",
                 columns: table => new
                 {
                     ImovelId = table.Column<long>(type: "bigint", nullable: false),
                     EconomiaId = table.Column<long>(type: "bigint", nullable: false),
-                    Latitude = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    Longitude = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    Complemento = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true),
-                    AreaConstruida = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    AnoConstrucao = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    Numeracao = table.Column<string>(type: "varchar", nullable: true),
-                    Caracteristica = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    Matricula = table.Column<string>(type: "varchar", nullable: true),
+                    Latitude = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Longitude = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Complemento = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    AreaConstruida = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    AnoConstrucao = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Numeracao = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    Caracteristica = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    Matricula = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     TemProcessos = table.Column<bool>(type: "bit", nullable: true),
-                    TerrenoIdTemp = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    TerrenoIdTemp = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -510,7 +436,7 @@ namespace Infra.Migrations
                 columns: table => new
                 {
                     UnidadeId = table.Column<int>(type: "int", nullable: false),
-                    Descricao = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true),
+                    Descricao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     OrgaoId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -524,11 +450,49 @@ namespace Infra.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Estado",
+                columns: table => new
+                {
+                    EstadoId = table.Column<int>(type: "int", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Sigla = table.Column<string>(type: "nvarchar(5)", maxLength: 5, nullable: true),
+                    PaisId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Estado", x => x.EstadoId);
+                    table.ForeignKey(
+                        name: "FK_Estado_Pais_PaisId",
+                        column: x => x.PaisId,
+                        principalTable: "Pais",
+                        principalColumn: "PaisId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Contato",
+                columns: table => new
+                {
+                    ContatoId = table.Column<int>(type: "int", nullable: false),
+                    TipoContatoId = table.Column<int>(type: "int", nullable: true),
+                    Ativo = table.Column<bool>(type: "bit", nullable: false),
+                    Principal = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Contato", x => x.ContatoId);
+                    table.ForeignKey(
+                        name: "FK_Contato_TipoContato_TipoContatoId",
+                        column: x => x.TipoContatoId,
+                        principalTable: "TipoContato",
+                        principalColumn: "TipoContatoId");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Pessoa",
                 columns: table => new
                 {
                     PessoaId = table.Column<long>(type: "bigint", nullable: false),
-                    Nome = table.Column<string>(type: "varchar(250)", maxLength: 250, nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: false),
                     TipoPessoaId = table.Column<int>(type: "int", nullable: false),
                     DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "getdate()"),
                     Ativo = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
@@ -546,26 +510,25 @@ namespace Infra.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "dbSFluxosProcesso",
+                name: "FluxoProcesso",
                 columns: table => new
                 {
-                    FluxoProcessoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "varchar", nullable: false),
+                    FluxoProcessoId = table.Column<int>(type: "int", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     TipoProcessoId = table.Column<int>(type: "int", nullable: false),
                     TipoEtapaId = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbSFluxosProcesso", x => x.FluxoProcessoId);
+                    table.PrimaryKey("PK_FluxoProcesso", x => x.FluxoProcessoId);
                     table.ForeignKey(
-                        name: "FK_dbSFluxosProcesso_TipoEtapa_TipoEtapaId",
+                        name: "FK_FluxoProcesso_TipoEtapa_TipoEtapaId",
                         column: x => x.TipoEtapaId,
                         principalTable: "TipoEtapa",
                         principalColumn: "TipoEtapaId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_dbSFluxosProcesso_TipoProcesso_TipoProcessoId",
+                        name: "FK_FluxoProcesso_TipoProcesso_TipoProcessoId",
                         column: x => x.TipoProcessoId,
                         principalTable: "TipoProcesso",
                         principalColumn: "TipoProcessoId",
@@ -573,28 +536,66 @@ namespace Infra.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "dbSCidades",
+                name: "Cidade",
                 columns: table => new
                 {
-                    CidadeId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "varchar", nullable: true),
+                    CidadeId = table.Column<int>(type: "int", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     EstadoId = table.Column<int>(type: "int", nullable: true),
                     DDDId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbSCidades", x => x.CidadeId);
+                    table.PrimaryKey("PK_Cidade", x => x.CidadeId);
                     table.ForeignKey(
-                        name: "FK_dbSCidades_dbSDDDs_DDDId",
+                        name: "FK_Cidade_DDD_DDDId",
                         column: x => x.DDDId,
-                        principalTable: "dbSDDDs",
+                        principalTable: "DDD",
                         principalColumn: "DDDId");
                     table.ForeignKey(
-                        name: "FK_dbSCidades_dbSEstados_EstadoId",
+                        name: "FK_Cidade_Estado_EstadoId",
                         column: x => x.EstadoId,
-                        principalTable: "dbSEstados",
+                        principalTable: "Estado",
                         principalColumn: "EstadoId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Telefone",
+                columns: table => new
+                {
+                    ContatoId = table.Column<int>(type: "int", nullable: false),
+                    TipoTelefoneId = table.Column<int>(type: "int", nullable: false),
+                    DDDId = table.Column<int>(type: "int", nullable: true),
+                    OperadoraTelefoneId = table.Column<int>(type: "int", nullable: true),
+                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DataUltimaAtualizacao = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Numero = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Telefone", x => x.ContatoId);
+                    table.ForeignKey(
+                        name: "FK_Telefone_Contato_ContatoId",
+                        column: x => x.ContatoId,
+                        principalTable: "Contato",
+                        principalColumn: "ContatoId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Telefone_DDD_DDDId",
+                        column: x => x.DDDId,
+                        principalTable: "DDD",
+                        principalColumn: "DDDId");
+                    table.ForeignKey(
+                        name: "FK_Telefone_OperadoraTelefone_OperadoraTelefoneId",
+                        column: x => x.OperadoraTelefoneId,
+                        principalTable: "OperadoraTelefone",
+                        principalColumn: "OperadoraTelefoneId");
+                    table.ForeignKey(
+                        name: "FK_Telefone_TipoTelefone_TipoTelefoneId",
+                        column: x => x.TipoTelefoneId,
+                        principalTable: "TipoTelefone",
+                        principalColumn: "TipoTelefoneId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -610,67 +611,41 @@ namespace Infra.Migrations
                 {
                     table.PrimaryKey("PK_Contato_Pessoa", x => new { x.ContatoId, x.PessoaId });
                     table.ForeignKey(
+                        name: "FK_Contato_Pessoa_Contato_ContatoId",
+                        column: x => x.ContatoId,
+                        principalTable: "Contato",
+                        principalColumn: "ContatoId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Contato_Pessoa_Pessoa_PessoaId",
                         column: x => x.PessoaId,
                         principalTable: "Pessoa",
                         principalColumn: "PessoaId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Contato_Pessoa_dbSContatos_ContatoId",
-                        column: x => x.ContatoId,
-                        principalTable: "dbSContatos",
-                        principalColumn: "ContatoId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "dbSDocumentosPessoa",
+                name: "DocumentoPessoa",
                 columns: table => new
                 {
-                    DocumentoPessoaId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    DocumentoPessoaId = table.Column<int>(type: "int", nullable: false),
                     PessoaId = table.Column<long>(type: "bigint", nullable: false),
                     TipoDocumentoId = table.Column<int>(type: "int", nullable: false),
-                    Numero = table.Column<string>(type: "varchar", nullable: true),
-                    Discriminator = table.Column<string>(type: "varchar", nullable: false),
-                    CNPJ_DataExpedicao = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CNPJ_EstadoEmissorId = table.Column<int>(type: "int", nullable: true),
-                    CNPJ_OrgaoEmissor = table.Column<string>(type: "varchar", nullable: true),
-                    DataExpedicao = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    EstadoEmissorId = table.Column<int>(type: "int", nullable: true),
-                    OrgaoEmissor = table.Column<string>(type: "varchar", nullable: true),
-                    RG_DataExpedicao = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    RG_EstadoEmissorId = table.Column<int>(type: "int", nullable: true),
-                    RG_OrgaoEmissor = table.Column<string>(type: "varchar", nullable: true)
+                    Numero = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbSDocumentosPessoa", x => x.DocumentoPessoaId);
+                    table.PrimaryKey("PK_DocumentoPessoa", x => x.DocumentoPessoaId);
                     table.ForeignKey(
-                        name: "FK_dbSDocumentosPessoa_Pessoa_PessoaId",
+                        name: "FK_DocumentoPessoa_Pessoa_PessoaId",
                         column: x => x.PessoaId,
                         principalTable: "Pessoa",
                         principalColumn: "PessoaId",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_dbSDocumentosPessoa_dbSEstados_CNPJ_EstadoEmissorId",
-                        column: x => x.CNPJ_EstadoEmissorId,
-                        principalTable: "dbSEstados",
-                        principalColumn: "EstadoId");
-                    table.ForeignKey(
-                        name: "FK_dbSDocumentosPessoa_dbSEstados_EstadoEmissorId",
-                        column: x => x.EstadoEmissorId,
-                        principalTable: "dbSEstados",
-                        principalColumn: "EstadoId");
-                    table.ForeignKey(
-                        name: "FK_dbSDocumentosPessoa_dbSEstados_RG_EstadoEmissorId",
-                        column: x => x.RG_EstadoEmissorId,
-                        principalTable: "dbSEstados",
-                        principalColumn: "EstadoId");
-                    table.ForeignKey(
-                        name: "FK_dbSDocumentosPessoa_dbSTiposDocumento_TipoDocumentoId",
+                        name: "FK_DocumentoPessoa_TipoDocumento_TipoDocumentoId",
                         column: x => x.TipoDocumentoId,
-                        principalTable: "dbSTiposDocumento",
+                        principalTable: "TipoDocumento",
                         principalColumn: "TipoDocumentoId",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -719,30 +694,30 @@ namespace Infra.Migrations
                 columns: table => new
                 {
                     PessoaId = table.Column<long>(type: "bigint", nullable: false),
-                    PrimeiroNome = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true),
-                    NomeMeio = table.Column<string>(type: "varchar(150)", maxLength: 150, nullable: true),
-                    Sobrenome = table.Column<string>(type: "varchar(100)", maxLength: 100, nullable: true),
-                    EstadoCivil = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
+                    PrimeiroNome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    NomeMeio = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    Sobrenome = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    EstadoCivil = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     PaisId = table.Column<int>(type: "int", nullable: true),
                     DataNascimento = table.Column<DateTime>(type: "datetime2", nullable: true),
                     DataObito = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    Sexo = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true),
-                    DefinicaoSexual = table.Column<string>(type: "varchar(25)", maxLength: 25, nullable: true)
+                    Sexo = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    DefinicaoSexual = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_PessoaFisica", x => x.PessoaId);
+                    table.ForeignKey(
+                        name: "FK_PessoaFisica_Pais_PaisId",
+                        column: x => x.PaisId,
+                        principalTable: "Pais",
+                        principalColumn: "PaisId");
                     table.ForeignKey(
                         name: "FK_PessoaFisica_Pessoa_PessoaId",
                         column: x => x.PessoaId,
                         principalTable: "Pessoa",
                         principalColumn: "PessoaId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_PessoaFisica_dbSPaises_PaisId",
-                        column: x => x.PaisId,
-                        principalTable: "dbSPaises",
-                        principalColumn: "PaisId");
                 });
 
             migrationBuilder.CreateTable(
@@ -750,9 +725,9 @@ namespace Infra.Migrations
                 columns: table => new
                 {
                     PessoaId = table.Column<long>(type: "bigint", nullable: false),
-                    RazaoSocial = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true),
-                    NomeFantasia = table.Column<string>(type: "varchar(500)", maxLength: 500, nullable: true),
-                    InscricaoEstadual = table.Column<string>(type: "varchar(50)", maxLength: 50, nullable: true)
+                    RazaoSocial = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    NomeFantasia = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    InscricaoEstadual = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
@@ -780,13 +755,19 @@ namespace Infra.Migrations
                     OrgaoDestinatarioId = table.Column<int>(type: "int", nullable: false),
                     UnidadeDestinatarioId = table.Column<int>(type: "int", nullable: false),
                     FluxoProcessoId = table.Column<int>(type: "int", nullable: false),
-                    ObservacaoProcesso = table.Column<string>(type: "varchar(1000)", maxLength: 1000, nullable: true),
+                    ObservacaoProcesso = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
                     ProcessoEnviado = table.Column<bool>(type: "bit", nullable: false),
                     ProcessoRecebido = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Processo", x => new { x.OrgaoId, x.SequenciaNumerica, x.Ano, x.DigitoVerificador });
+                    table.ForeignKey(
+                        name: "FK_Processo_FluxoProcesso_FluxoProcessoId",
+                        column: x => x.FluxoProcessoId,
+                        principalTable: "FluxoProcesso",
+                        principalColumn: "FluxoProcessoId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Processo_Orgao_OrgaoDestinatarioId",
                         column: x => x.OrgaoDestinatarioId,
@@ -817,43 +798,111 @@ namespace Infra.Migrations
                         column: x => x.UnidadeRemetenteId,
                         principalTable: "Unidade",
                         principalColumn: "UnidadeId");
-                    table.ForeignKey(
-                        name: "FK_Processo_dbSFluxosProcesso_FluxoProcessoId",
-                        column: x => x.FluxoProcessoId,
-                        principalTable: "dbSFluxosProcesso",
-                        principalColumn: "FluxoProcessoId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
-                name: "dbSRegioes",
+                name: "Regiao",
                 columns: table => new
                 {
-                    RegiaoId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "varchar", nullable: true),
+                    RegiaoId = table.Column<long>(type: "bigint", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     CidadeId = table.Column<int>(type: "int", nullable: true),
                     PercentualUVC = table.Column<float>(type: "real", nullable: true),
-                    CentroGrauLon = table.Column<string>(type: "varchar", nullable: true),
-                    CentroGrauLat = table.Column<string>(type: "varchar", nullable: true)
+                    CentroGrauLon = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    CentroGrauLat = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbSRegioes", x => x.RegiaoId);
+                    table.PrimaryKey("PK_Regiao", x => x.RegiaoId);
                     table.ForeignKey(
-                        name: "FK_dbSRegioes_dbSCidades_CidadeId",
+                        name: "FK_Regiao_Cidade_CidadeId",
                         column: x => x.CidadeId,
-                        principalTable: "dbSCidades",
+                        principalTable: "Cidade",
                         principalColumn: "CidadeId");
                 });
 
             migrationBuilder.CreateTable(
-                name: "dbSImages",
+                name: "CNPJ",
                 columns: table => new
                 {
-                    ImageId = table.Column<string>(type: "varchar", nullable: false),
-                    ImageBase64String = table.Column<string>(type: "varchar", nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DocumentoPessoaId = table.Column<int>(type: "int", nullable: false),
+                    DataExpedicao = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EstadoEmissorId = table.Column<int>(type: "int", nullable: true),
+                    OrgaoEmissor = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CNPJ", x => x.DocumentoPessoaId);
+                    table.ForeignKey(
+                        name: "FK_CNPJ_DocumentoPessoa_DocumentoPessoaId",
+                        column: x => x.DocumentoPessoaId,
+                        principalTable: "DocumentoPessoa",
+                        principalColumn: "DocumentoPessoaId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CNPJ_Estado_EstadoEmissorId",
+                        column: x => x.EstadoEmissorId,
+                        principalTable: "Estado",
+                        principalColumn: "EstadoId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "CPF",
+                columns: table => new
+                {
+                    DocumentoPessoaId = table.Column<int>(type: "int", nullable: false),
+                    DataExpedicao = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EstadoEmissorId = table.Column<int>(type: "int", nullable: true),
+                    OrgaoEmissor = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_CPF", x => x.DocumentoPessoaId);
+                    table.ForeignKey(
+                        name: "FK_CPF_DocumentoPessoa_DocumentoPessoaId",
+                        column: x => x.DocumentoPessoaId,
+                        principalTable: "DocumentoPessoa",
+                        principalColumn: "DocumentoPessoaId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_CPF_Estado_EstadoEmissorId",
+                        column: x => x.EstadoEmissorId,
+                        principalTable: "Estado",
+                        principalColumn: "EstadoId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "RG",
+                columns: table => new
+                {
+                    DocumentoPessoaId = table.Column<int>(type: "int", nullable: false),
+                    DataExpedicao = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    EstadoEmissorId = table.Column<int>(type: "int", nullable: true),
+                    OrgaoEmissor = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_RG", x => x.DocumentoPessoaId);
+                    table.ForeignKey(
+                        name: "FK_RG_DocumentoPessoa_DocumentoPessoaId",
+                        column: x => x.DocumentoPessoaId,
+                        principalTable: "DocumentoPessoa",
+                        principalColumn: "DocumentoPessoaId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_RG_Estado_EstadoEmissorId",
+                        column: x => x.EstadoEmissorId,
+                        principalTable: "Estado",
+                        principalColumn: "EstadoId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Image",
+                columns: table => new
+                {
+                    ImageId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    ImageBase64String = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "getdate()"),
                     ProcessoId = table.Column<long>(type: "bigint", nullable: true),
                     ProcessoOrgaoId = table.Column<int>(type: "int", nullable: true),
                     ProcessoSequenciaNumerica = table.Column<long>(type: "bigint", nullable: true),
@@ -866,157 +915,155 @@ namespace Infra.Migrations
                     SituacaoEtapaId = table.Column<int>(type: "int", nullable: true),
                     TipoEtapaId = table.Column<int>(type: "int", nullable: true),
                     PerspectivaId = table.Column<int>(type: "int", nullable: true),
-                    NomeArquivo = table.Column<string>(type: "varchar", nullable: true),
-                    Caminho = table.Column<string>(type: "varchar", nullable: true)
+                    NomeArquivo = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    Caminho = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbSImages", x => x.ImageId);
+                    table.PrimaryKey("PK_Image", x => x.ImageId);
                     table.ForeignKey(
-                        name: "FK_dbSImages_Imovel_ImovelId",
+                        name: "FK_Image_Imovel_ImovelId",
                         column: x => x.ImovelId,
                         principalTable: "Imovel",
                         principalColumn: "ImovelId");
                     table.ForeignKey(
-                        name: "FK_dbSImages_Processo_ProcessoOrgaoId_ProcessoSequenciaNumerica_ProcessoAno_ProcessoDigitoVerificador",
+                        name: "FK_Image_Perspectiva_PerspectivaId",
+                        column: x => x.PerspectivaId,
+                        principalTable: "Perspectiva",
+                        principalColumn: "PerspectivaId");
+                    table.ForeignKey(
+                        name: "FK_Image_Processo_ProcessoOrgaoId_ProcessoSequenciaNumerica_ProcessoAno_ProcessoDigitoVerificador",
                         columns: x => new { x.ProcessoOrgaoId, x.ProcessoSequenciaNumerica, x.ProcessoAno, x.ProcessoDigitoVerificador },
                         principalTable: "Processo",
                         principalColumns: new[] { "OrgaoId", "SequenciaNumerica", "Ano", "DigitoVerificador" });
                     table.ForeignKey(
-                        name: "FK_dbSImages_SituacaoEtapa_SituacaoEtapaId",
+                        name: "FK_Image_SituacaoEtapa_SituacaoEtapaId",
                         column: x => x.SituacaoEtapaId,
                         principalTable: "SituacaoEtapa",
                         principalColumn: "SituacaoEtapaId");
                     table.ForeignKey(
-                        name: "FK_dbSImages_SituacaoProcesso_SituacaoProcessoId",
+                        name: "FK_Image_SituacaoProcesso_SituacaoProcessoId",
                         column: x => x.SituacaoProcessoId,
                         principalTable: "SituacaoProcesso",
                         principalColumn: "SituacaoProcessoId");
                     table.ForeignKey(
-                        name: "FK_dbSImages_TipoEtapa_TipoEtapaId",
+                        name: "FK_Image_TipoEtapa_TipoEtapaId",
                         column: x => x.TipoEtapaId,
                         principalTable: "TipoEtapa",
                         principalColumn: "TipoEtapaId");
                     table.ForeignKey(
-                        name: "FK_dbSImages_TipoProcesso_TipoProcessoId",
+                        name: "FK_Image_TipoProcesso_TipoProcessoId",
                         column: x => x.TipoProcessoId,
                         principalTable: "TipoProcesso",
                         principalColumn: "TipoProcessoId");
-                    table.ForeignKey(
-                        name: "FK_dbSImages_dbSPerspectivas_PerspectivaId",
-                        column: x => x.PerspectivaId,
-                        principalTable: "dbSPerspectivas",
-                        principalColumn: "PerspectivaId");
                 });
 
             migrationBuilder.CreateTable(
-                name: "dbSBairros",
+                name: "Bairro",
                 columns: table => new
                 {
-                    BairroId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "varchar", nullable: true),
+                    BairroId = table.Column<long>(type: "bigint", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
                     RegiaoId = table.Column<long>(type: "bigint", nullable: true),
                     CidadeId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbSBairros", x => x.BairroId);
+                    table.PrimaryKey("PK_Bairro", x => x.BairroId);
                     table.ForeignKey(
-                        name: "FK_dbSBairros_dbSCidades_CidadeId",
+                        name: "FK_Bairro_Cidade_CidadeId",
                         column: x => x.CidadeId,
-                        principalTable: "dbSCidades",
+                        principalTable: "Cidade",
                         principalColumn: "CidadeId");
                     table.ForeignKey(
-                        name: "FK_dbSBairros_dbSRegioes_RegiaoId",
+                        name: "FK_Bairro_Regiao_RegiaoId",
                         column: x => x.RegiaoId,
-                        principalTable: "dbSRegioes",
+                        principalTable: "Regiao",
                         principalColumn: "RegiaoId");
                 });
 
             migrationBuilder.CreateTable(
-                name: "dbSLoteamentos",
+                name: "Loteamento",
                 columns: table => new
                 {
-                    LoteamentoId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "varchar", nullable: true),
+                    LoteamentoId = table.Column<int>(type: "int", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
                     RegiaoId = table.Column<long>(type: "bigint", nullable: true),
                     DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbSLoteamentos", x => x.LoteamentoId);
+                    table.PrimaryKey("PK_Loteamento", x => x.LoteamentoId);
                     table.ForeignKey(
-                        name: "FK_dbSLoteamentos_dbSRegioes_RegiaoId",
+                        name: "FK_Loteamento_Regiao_RegiaoId",
                         column: x => x.RegiaoId,
-                        principalTable: "dbSRegioes",
+                        principalTable: "Regiao",
                         principalColumn: "RegiaoId");
                 });
 
             migrationBuilder.CreateTable(
-                name: "dbSLogradouros",
+                name: "Logradouro",
                 columns: table => new
                 {
-                    LogradouroId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Descricao = table.Column<string>(type: "varchar", nullable: true),
+                    LogradouroId = table.Column<long>(type: "bigint", nullable: false),
+                    Descricao = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     CidadeId = table.Column<int>(type: "int", nullable: true),
                     BairroId = table.Column<long>(type: "bigint", nullable: true),
                     TipoLogradouroId = table.Column<int>(type: "int", nullable: true),
-                    CEP = table.Column<string>(type: "varchar", nullable: true),
+                    CEP = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Ativo = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbSLogradouros", x => x.LogradouroId);
+                    table.PrimaryKey("PK_Logradouro", x => x.LogradouroId);
                     table.ForeignKey(
-                        name: "FK_dbSLogradouros_dbSBairros_BairroId",
+                        name: "FK_Logradouro_Bairro_BairroId",
                         column: x => x.BairroId,
-                        principalTable: "dbSBairros",
+                        principalTable: "Bairro",
                         principalColumn: "BairroId");
                     table.ForeignKey(
-                        name: "FK_dbSLogradouros_dbSCidades_CidadeId",
+                        name: "FK_Logradouro_Cidade_CidadeId",
                         column: x => x.CidadeId,
-                        principalTable: "dbSCidades",
+                        principalTable: "Cidade",
                         principalColumn: "CidadeId");
                     table.ForeignKey(
-                        name: "FK_dbSLogradouros_dbSTiposLogradouro_TipoLogradouroId",
+                        name: "FK_Logradouro_TipoLogradouro_TipoLogradouroId",
                         column: x => x.TipoLogradouroId,
-                        principalTable: "dbSTiposLogradouro",
+                        principalTable: "TipoLogradouro",
                         principalColumn: "TipoLogradouroId");
                 });
 
             migrationBuilder.CreateTable(
-                name: "dbSEnderecos",
+                name: "Endereco",
                 columns: table => new
                 {
-                    EnderecoId = table.Column<long>(type: "bigint", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
+                    EnderecoId = table.Column<long>(type: "bigint", nullable: false),
                     CidadeId = table.Column<int>(type: "int", nullable: true),
                     LogradouroId = table.Column<long>(type: "bigint", nullable: true),
                     BairroId = table.Column<long>(type: "bigint", nullable: true),
-                    Complemento = table.Column<string>(type: "varchar", nullable: true),
-                    Referencia = table.Column<string>(type: "varchar", nullable: true),
-                    Ativo = table.Column<bool>(type: "bit", nullable: true)
+                    Complemento = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    Referencia = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    Ativo = table.Column<bool>(type: "bit", nullable: true),
+                    CEP = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
+                    logradouro_Temp = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_dbSEnderecos", x => x.EnderecoId);
+                    table.PrimaryKey("PK_Endereco", x => x.EnderecoId);
                     table.ForeignKey(
-                        name: "FK_dbSEnderecos_dbSBairros_BairroId",
+                        name: "FK_Endereco_Bairro_BairroId",
                         column: x => x.BairroId,
-                        principalTable: "dbSBairros",
+                        principalTable: "Bairro",
                         principalColumn: "BairroId");
                     table.ForeignKey(
-                        name: "FK_dbSEnderecos_dbSCidades_CidadeId",
+                        name: "FK_Endereco_Cidade_CidadeId",
                         column: x => x.CidadeId,
-                        principalTable: "dbSCidades",
+                        principalTable: "Cidade",
                         principalColumn: "CidadeId");
                     table.ForeignKey(
-                        name: "FK_dbSEnderecos_dbSLogradouros_LogradouroId",
+                        name: "FK_Endereco_Logradouro_LogradouroId",
                         column: x => x.LogradouroId,
-                        principalTable: "dbSLogradouros",
+                        principalTable: "Logradouro",
                         principalColumn: "LogradouroId");
                 });
 
@@ -1026,11 +1073,11 @@ namespace Infra.Migrations
                 {
                     EntidadeId = table.Column<long>(type: "bigint", nullable: false),
                     EnderecoId = table.Column<long>(type: "bigint", nullable: false),
-                    Numero = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: false),
+                    Numero = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: false),
                     TipoEntidadeId = table.Column<int>(type: "int", nullable: false),
                     DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "getdate()"),
                     DataUltimaAlteracao = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    CEP = table.Column<string>(type: "varchar(10)", maxLength: 10, nullable: true),
+                    CEP = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
                     Correnspondencia = table.Column<bool>(type: "bit", nullable: true),
                     Principal = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
                     Ativo = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
@@ -1049,6 +1096,12 @@ namespace Infra.Migrations
                         principalTable: "Economia",
                         principalColumns: new[] { "ImovelId", "EconomiaId" });
                     table.ForeignKey(
+                        name: "FK_Endereco_Entidade_Endereco_EnderecoId",
+                        column: x => x.EnderecoId,
+                        principalTable: "Endereco",
+                        principalColumn: "EnderecoId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
                         name: "FK_Endereco_Entidade_Imovel_ImovelId",
                         column: x => x.ImovelId,
                         principalTable: "Imovel",
@@ -1058,12 +1111,6 @@ namespace Infra.Migrations
                         column: x => x.PessoaId,
                         principalTable: "Pessoa",
                         principalColumn: "PessoaId");
-                    table.ForeignKey(
-                        name: "FK_Endereco_Entidade_dbSEnderecos_EnderecoId",
-                        column: x => x.EnderecoId,
-                        principalTable: "dbSEnderecos",
-                        principalColumn: "EnderecoId",
-                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -1087,11 +1134,11 @@ namespace Infra.Migrations
                     PessoaId = table.Column<long>(type: "bigint", nullable: true),
                     PessoaProprietariaResponsavelId = table.Column<long>(type: "bigint", nullable: true),
                     PessoaTerceiraID = table.Column<long>(type: "bigint", nullable: true),
-                    Ano = table.Column<string>(type: "varchar(4)", maxLength: 4, nullable: true),
+                    Ano = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
                     antigo = table.Column<bool>(type: "bit", nullable: true),
-                    protocolo = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true),
-                    anoprotocolo = table.Column<string>(type: "varchar(20)", maxLength: 20, nullable: true),
-                    Observacao = table.Column<string>(type: "varchar(5000)", maxLength: 5000, nullable: true),
+                    protocolo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    anoprotocolo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    Observacao = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
                     emailEnviado = table.Column<bool>(type: "bit", nullable: true),
                     emailRecebido = table.Column<bool>(type: "bit", nullable: true),
                     whatsEnviado = table.Column<bool>(type: "bit", nullable: true),
@@ -1106,6 +1153,11 @@ namespace Infra.Migrations
                         principalTable: "Economia",
                         principalColumns: new[] { "ImovelId", "EconomiaId" },
                         onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Etapa_Endereco_EnderecoId",
+                        column: x => x.EnderecoId,
+                        principalTable: "Endereco",
+                        principalColumn: "EnderecoId");
                     table.ForeignKey(
                         name: "FK_Etapa_Imovel_ImovelId",
                         column: x => x.ImovelId,
@@ -1149,11 +1201,17 @@ namespace Infra.Migrations
                         principalTable: "TipoEtapa",
                         principalColumn: "TipoEtapaId",
                         onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Etapa_dbSEnderecos_EnderecoId",
-                        column: x => x.EnderecoId,
-                        principalTable: "dbSEnderecos",
-                        principalColumn: "EnderecoId");
+                });
+
+            migrationBuilder.InsertData(
+                table: "Perspectiva",
+                columns: new[] { "PerspectivaId", "Descricao" },
+                values: new object[,]
+                {
+                    { 1, "Frontal" },
+                    { 2, "Lateral Direita" },
+                    { 3, "Lateral Esquerda" },
+                    { 4, "Fundo" }
                 });
 
             migrationBuilder.InsertData(
@@ -1234,164 +1292,54 @@ namespace Infra.Migrations
                 filter: "[NormalizedUserName] IS NOT NULL");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Bairro_CidadeId",
+                table: "Bairro",
+                column: "CidadeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Bairro_RegiaoId",
+                table: "Bairro",
+                column: "RegiaoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cidade_DDDId",
+                table: "Cidade",
+                column: "DDDId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Cidade_EstadoId",
+                table: "Cidade",
+                column: "EstadoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_CNPJ_EstadoEmissorId",
+                table: "CNPJ",
+                column: "EstadoEmissorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Contato_TipoContatoId",
+                table: "Contato",
+                column: "TipoContatoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Contato_Pessoa_PessoaId",
                 table: "Contato_Pessoa",
                 column: "PessoaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_dbSBairros_CidadeId",
-                table: "dbSBairros",
-                column: "CidadeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSBairros_RegiaoId",
-                table: "dbSBairros",
-                column: "RegiaoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSCidades_DDDId",
-                table: "dbSCidades",
-                column: "DDDId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSCidades_EstadoId",
-                table: "dbSCidades",
-                column: "EstadoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSContatos_DDDId",
-                table: "dbSContatos",
-                column: "DDDId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSContatos_OperadoraTelefoneId",
-                table: "dbSContatos",
-                column: "OperadoraTelefoneId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSContatos_TipoContatoId",
-                table: "dbSContatos",
-                column: "TipoContatoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSContatos_TipoTelefoneId",
-                table: "dbSContatos",
-                column: "TipoTelefoneId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSDocumentosPessoa_CNPJ_EstadoEmissorId",
-                table: "dbSDocumentosPessoa",
-                column: "CNPJ_EstadoEmissorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSDocumentosPessoa_EstadoEmissorId",
-                table: "dbSDocumentosPessoa",
+                name: "IX_CPF_EstadoEmissorId",
+                table: "CPF",
                 column: "EstadoEmissorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_dbSDocumentosPessoa_PessoaId",
-                table: "dbSDocumentosPessoa",
+                name: "IX_DocumentoPessoa_PessoaId",
+                table: "DocumentoPessoa",
                 column: "PessoaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_dbSDocumentosPessoa_RG_EstadoEmissorId",
-                table: "dbSDocumentosPessoa",
-                column: "RG_EstadoEmissorId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSDocumentosPessoa_TipoDocumentoId",
-                table: "dbSDocumentosPessoa",
+                name: "IX_DocumentoPessoa_TipoDocumentoId",
+                table: "DocumentoPessoa",
                 column: "TipoDocumentoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSEnderecos_BairroId",
-                table: "dbSEnderecos",
-                column: "BairroId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSEnderecos_CidadeId",
-                table: "dbSEnderecos",
-                column: "CidadeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSEnderecos_LogradouroId",
-                table: "dbSEnderecos",
-                column: "LogradouroId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSEstados_PaisId",
-                table: "dbSEstados",
-                column: "PaisId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSFluxosProcesso_TipoEtapaId",
-                table: "dbSFluxosProcesso",
-                column: "TipoEtapaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSFluxosProcesso_TipoProcessoId",
-                table: "dbSFluxosProcesso",
-                column: "TipoProcessoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSImages_ImovelId",
-                table: "dbSImages",
-                column: "ImovelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSImages_PerspectivaId",
-                table: "dbSImages",
-                column: "PerspectivaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSImages_ProcessoOrgaoId_ProcessoSequenciaNumerica_ProcessoAno_ProcessoDigitoVerificador",
-                table: "dbSImages",
-                columns: new[] { "ProcessoOrgaoId", "ProcessoSequenciaNumerica", "ProcessoAno", "ProcessoDigitoVerificador" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSImages_SituacaoEtapaId",
-                table: "dbSImages",
-                column: "SituacaoEtapaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSImages_SituacaoProcessoId",
-                table: "dbSImages",
-                column: "SituacaoProcessoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSImages_TipoEtapaId",
-                table: "dbSImages",
-                column: "TipoEtapaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSImages_TipoProcessoId",
-                table: "dbSImages",
-                column: "TipoProcessoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSLogradouros_BairroId",
-                table: "dbSLogradouros",
-                column: "BairroId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSLogradouros_CidadeId",
-                table: "dbSLogradouros",
-                column: "CidadeId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSLogradouros_TipoLogradouroId",
-                table: "dbSLogradouros",
-                column: "TipoLogradouroId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSLoteamentos_RegiaoId",
-                table: "dbSLoteamentos",
-                column: "RegiaoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_dbSRegioes_CidadeId",
-                table: "dbSRegioes",
-                column: "CidadeId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Economia_Entidade_PessoaId",
@@ -1402,6 +1350,21 @@ namespace Infra.Migrations
                 name: "IX_Economia_Entidade_TipoResponsabilidadeId",
                 table: "Economia_Entidade",
                 column: "TipoResponsabilidadeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Endereco_BairroId",
+                table: "Endereco",
+                column: "BairroId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Endereco_CidadeId",
+                table: "Endereco",
+                column: "CidadeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Endereco_LogradouroId",
+                table: "Endereco",
+                column: "LogradouroId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Endereco_Entidade_EconomiaImovelId_EconomiaId",
@@ -1422,6 +1385,11 @@ namespace Infra.Migrations
                 name: "IX_Endereco_Entidade_PessoaId",
                 table: "Endereco_Entidade",
                 column: "PessoaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Estado_PaisId",
+                table: "Estado",
+                column: "PaisId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Etapa_EnderecoId",
@@ -1469,6 +1437,71 @@ namespace Infra.Migrations
                 column: "TipoEtapaId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_FluxoProcesso_TipoEtapaId",
+                table: "FluxoProcesso",
+                column: "TipoEtapaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_FluxoProcesso_TipoProcessoId",
+                table: "FluxoProcesso",
+                column: "TipoProcessoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Image_ImovelId",
+                table: "Image",
+                column: "ImovelId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Image_PerspectivaId",
+                table: "Image",
+                column: "PerspectivaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Image_ProcessoOrgaoId_ProcessoSequenciaNumerica_ProcessoAno_ProcessoDigitoVerificador",
+                table: "Image",
+                columns: new[] { "ProcessoOrgaoId", "ProcessoSequenciaNumerica", "ProcessoAno", "ProcessoDigitoVerificador" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Image_SituacaoEtapaId",
+                table: "Image",
+                column: "SituacaoEtapaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Image_SituacaoProcessoId",
+                table: "Image",
+                column: "SituacaoProcessoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Image_TipoEtapaId",
+                table: "Image",
+                column: "TipoEtapaId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Image_TipoProcessoId",
+                table: "Image",
+                column: "TipoProcessoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Logradouro_BairroId",
+                table: "Logradouro",
+                column: "BairroId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Logradouro_CidadeId",
+                table: "Logradouro",
+                column: "CidadeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Logradouro_TipoLogradouroId",
+                table: "Logradouro",
+                column: "TipoLogradouroId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Loteamento_RegiaoId",
+                table: "Loteamento",
+                column: "RegiaoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Pessoa_TipoPessoaId",
                 table: "Pessoa",
                 column: "TipoPessoaId");
@@ -1509,6 +1542,31 @@ namespace Infra.Migrations
                 column: "UnidadeRemetenteId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Regiao_CidadeId",
+                table: "Regiao",
+                column: "CidadeId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_RG_EstadoEmissorId",
+                table: "RG",
+                column: "EstadoEmissorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Telefone_DDDId",
+                table: "Telefone",
+                column: "DDDId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Telefone_OperadoraTelefoneId",
+                table: "Telefone",
+                column: "OperadoraTelefoneId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Telefone_TipoTelefoneId",
+                table: "Telefone",
+                column: "TipoTelefoneId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Unidade_OrgaoId",
                 table: "Unidade",
                 column: "OrgaoId");
@@ -1533,19 +1591,13 @@ namespace Infra.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "CNPJ");
+
+            migrationBuilder.DropTable(
                 name: "Contato_Pessoa");
 
             migrationBuilder.DropTable(
-                name: "dbSDocumentosPessoa");
-
-            migrationBuilder.DropTable(
-                name: "dbSImages");
-
-            migrationBuilder.DropTable(
-                name: "dbSIncrementoTabelas");
-
-            migrationBuilder.DropTable(
-                name: "dbSLoteamentos");
+                name: "CPF");
 
             migrationBuilder.DropTable(
                 name: "Economia_Entidade");
@@ -1557,10 +1609,25 @@ namespace Infra.Migrations
                 name: "Etapa");
 
             migrationBuilder.DropTable(
+                name: "Image");
+
+            migrationBuilder.DropTable(
+                name: "IncrementoTabelas");
+
+            migrationBuilder.DropTable(
+                name: "Loteamento");
+
+            migrationBuilder.DropTable(
                 name: "PessoaFisica");
 
             migrationBuilder.DropTable(
                 name: "PessoaJuridica");
+
+            migrationBuilder.DropTable(
+                name: "RG");
+
+            migrationBuilder.DropTable(
+                name: "Telefone");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -1569,64 +1636,67 @@ namespace Infra.Migrations
                 name: "AspNetUsers");
 
             migrationBuilder.DropTable(
-                name: "dbSContatos");
-
-            migrationBuilder.DropTable(
-                name: "dbSTiposDocumento");
-
-            migrationBuilder.DropTable(
-                name: "SituacaoProcesso");
-
-            migrationBuilder.DropTable(
-                name: "dbSPerspectivas");
-
-            migrationBuilder.DropTable(
                 name: "TipoResponsabilidade");
 
             migrationBuilder.DropTable(
                 name: "Economia");
 
             migrationBuilder.DropTable(
-                name: "Processo");
+                name: "Endereco");
 
             migrationBuilder.DropTable(
                 name: "Servidor");
 
             migrationBuilder.DropTable(
+                name: "Perspectiva");
+
+            migrationBuilder.DropTable(
+                name: "Processo");
+
+            migrationBuilder.DropTable(
                 name: "SituacaoEtapa");
 
             migrationBuilder.DropTable(
-                name: "dbSEnderecos");
+                name: "SituacaoProcesso");
 
             migrationBuilder.DropTable(
-                name: "Pessoa");
+                name: "DocumentoPessoa");
 
             migrationBuilder.DropTable(
-                name: "dbSOperadoraTelefoneS");
+                name: "Contato");
 
             migrationBuilder.DropTable(
-                name: "dbSTiposContato");
+                name: "OperadoraTelefone");
 
             migrationBuilder.DropTable(
-                name: "dbSTiposTelefone");
+                name: "TipoTelefone");
 
             migrationBuilder.DropTable(
                 name: "Imovel");
 
             migrationBuilder.DropTable(
+                name: "Logradouro");
+
+            migrationBuilder.DropTable(
+                name: "FluxoProcesso");
+
+            migrationBuilder.DropTable(
                 name: "Unidade");
 
             migrationBuilder.DropTable(
-                name: "dbSFluxosProcesso");
+                name: "Pessoa");
 
             migrationBuilder.DropTable(
-                name: "dbSLogradouros");
+                name: "TipoDocumento");
 
             migrationBuilder.DropTable(
-                name: "TipoPessoa");
+                name: "TipoContato");
 
             migrationBuilder.DropTable(
-                name: "Orgao");
+                name: "Bairro");
+
+            migrationBuilder.DropTable(
+                name: "TipoLogradouro");
 
             migrationBuilder.DropTable(
                 name: "TipoEtapa");
@@ -1635,25 +1705,25 @@ namespace Infra.Migrations
                 name: "TipoProcesso");
 
             migrationBuilder.DropTable(
-                name: "dbSBairros");
+                name: "Orgao");
 
             migrationBuilder.DropTable(
-                name: "dbSTiposLogradouro");
+                name: "TipoPessoa");
 
             migrationBuilder.DropTable(
-                name: "dbSRegioes");
+                name: "Regiao");
 
             migrationBuilder.DropTable(
-                name: "dbSCidades");
+                name: "Cidade");
 
             migrationBuilder.DropTable(
-                name: "dbSDDDs");
+                name: "DDD");
 
             migrationBuilder.DropTable(
-                name: "dbSEstados");
+                name: "Estado");
 
             migrationBuilder.DropTable(
-                name: "dbSPaises");
+                name: "Pais");
         }
     }
 }

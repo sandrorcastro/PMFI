@@ -13,7 +13,7 @@ namespace Infra.Repositories
     public class Economia_EntidadeRepository : RepositoryBase<Economia_Entidade>, IEconomia_EntidadeRepository
     {
         // private readonly IDbContextFactory<ContextoAplicacao> contexto;
-        private readonly ContextoAplicacao contexto;
+       //private readonly ContextoAplicacao contexto;
         //public EconomiaPessoaRepository(IDbContextFactory<ContextoAplicacao> contexto) : base(contexto) { }
         public Economia_EntidadeRepository(ContextoAplicacao contexto) : base(contexto) { }
 

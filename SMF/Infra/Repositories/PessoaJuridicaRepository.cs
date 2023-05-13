@@ -24,12 +24,12 @@ namespace Infra.Repositories
                 return contexto.dbSPessoasJuridica.Where(p => p.Nome == nome);
             //}
         }
-        public PessoaJuridica GetById(long id)
+     /*   public PessoaJuridica GetById(long id)
         {
             //using (var Db = contexto.CreateDbContext())
             //{
                 return contexto.dbSPessoasJuridica.Where(p => p.PessoaId == id).Include(tp => tp.TipoPessoa).FirstOrDefault();
             //}
-        }
+        }*/
     }
 }

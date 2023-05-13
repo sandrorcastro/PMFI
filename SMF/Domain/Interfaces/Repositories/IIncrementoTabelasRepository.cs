@@ -7,7 +7,7 @@ namespace Domain.Interfaces.Repositories
     {
         IncrementoTabelas BuscarPorTabela(string tabela);
         long ValorAtual(string? tabela, string? parametro, string? ano);
-        long Incrementar(string? tabela, string? parametro, string? ano);
+        long Incrementar(string tabela, string parametro, string ano);
 
     }
 }

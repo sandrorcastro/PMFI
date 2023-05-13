@@ -11,7 +11,8 @@ namespace Infra.Repositories
     {
         //protected ProjetoModeloContext db = new ProjetoModeloContext();
         //private IDbContextFactory<ContextoAplicacao> dbF;
-        protected ContextoAplicacao contexto;
+        //protected ContextoAplicacao contexto;
+        public ContextoAplicacao contexto;
 
         //public RepositoryBase(IDbContextFactory<ContextoAplicacao> dbf)
         public RepositoryBase(ContextoAplicacao contexto)

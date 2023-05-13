@@ -13,7 +13,7 @@ namespace Infra.Repositories
     public class Endereco_EntidadeRepository : RepositoryBase<Endereco_Entidade>, IEndereco_EntidadeRepository
     {
         // private readonly IDbContextFactory<ContextoAplicacao> contexto;
-        private readonly ContextoAplicacao contexto;
+        //private readonly ContextoAplicacao contexto;
         //public EnderecoEntidadeRepository(IDbContextFactory<ContextoAplicacao> contexto) : base(contexto) { }
         public Endereco_EntidadeRepository(ContextoAplicacao contexto) : base(contexto) { }
 
