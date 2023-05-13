@@ -3,6 +3,7 @@ using Infra.EntityConfig;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System.Reflection.Emit;
 namespace Infra.Context
 {
@@ -39,21 +40,36 @@ namespace Infra.Context
         public DbSet<Pessoa> dbSPessoas { get; set; }
         public DbSet<PessoaFisica> dbSPessoasFisicas { get; set; }
         public DbSet<PessoaJuridica> dbSPessoasJuridicas { get; set; }
-
         public DbSet<TipoPessoa> dbSTiposPessoa { get; set; }
         public DbSet<Economia_Entidade> dbSEconomias_Entidades { get; set; }
         public DbSet<Imovel> dbSImoveis { get; set; }
         public DbSet<Economia> dbSEconomias { get; set; }
-
-
-
+        public DbSet<DDD> dbSDDDs { get; set; } = default!;
+        public DbSet<Endereco> dbSEnderecos { get; set; } = default!;
+        public DbSet<FluxoProcesso> dbSFluxosProcesso { get; set; } = default!;
+        public DbSet<Image> dbSImages { get; set; } = default!;
+        public DbSet<IncrementoTabelas> dbSIncrementoTabelas { get; set; } = default!;
+        public DbSet<Loteamento> dbSLoteamentos { get; set; } = default!;
+        public DbSet<OperadoraTelefone> dbSOperadoraTelefoneS { get; set; } = default!;
+public DbSet<Perspectiva> dbSPerspectivas { get; set; } = default!;
+        public DbSet<PessoaFisica> dbSPessoasFisica { get; set; } = default!;
+        public DbSet<PessoaJuridica> dbSPessoasJuridica { get; set; } = default!;
+        public DbSet<RG> dbSRGs { get; set; } = default!;
+        public DbSet<Telefone> dbSTelefones { get; set; } = default!;
+        public DbSet<Contato> dbSContatos { get; set; } = default!;
+        public DbSet<CNPJ> dbSCNPJs { get; set; } = default!;
+        public DbSet<CPF> dbSCPFs { get; set; } = default!;
+        public DbSet<DocumentoPessoa> dbSDocumentosPessoa { get; set; } = default!;
+        public DbSet<TipoContato> dbSTiposContato { get; set; } = default!;
+        public DbSet<TipoDocumento> dbSTiposDocumento { get; set; } = default!;
+        public DbSet<TipoTelefone> dbSTiposTelefone { get; set; } = default!;
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
 
             builder.ApplyConfiguration(new ProcessoConfiguration());
             builder.ApplyConfiguration(new EtapaConfiguration());
-            //   builder.ApplyConfiguration(new ProtocoloConfiguration());
+            //builder.ApplyConfiguration(new ProtocoloConfiguration());
             builder.ApplyConfiguration(new OrgaoConfiguration());
             builder.ApplyConfiguration(new UnidadeConfiguration());
             builder.ApplyConfiguration(new TipoProcessoConfiguration());
@@ -67,13 +83,29 @@ namespace Infra.Context
             builder.ApplyConfiguration(new PessoaConfiguration());
             builder.ApplyConfiguration(new PessoaFisicaConfiguration());
             builder.ApplyConfiguration(new PessoaJuridicaConfiguration());
-
-            
             builder.ApplyConfiguration(new Economia_EntidadeConfiguration());
             builder.ApplyConfiguration(new EconomiaConfiguration());
             builder.ApplyConfiguration(new ImovelConfiguration());
             builder.ApplyConfiguration(new Contato_PessoaConfiguration());
-            
+            builder.ApplyConfiguration(new DDDConfiguration());
+            builder.ApplyConfiguration(new EnderecoConfiguration());
+            builder.ApplyConfiguration(new FluxoProcessoConfiguration());
+            builder.ApplyConfiguration(new ImageConfiguration());
+            builder.ApplyConfiguration(new IncrementoTabelasConfiguration());
+            builder.ApplyConfiguration(new LoteamentoConfiguration());
+            builder.ApplyConfiguration(new OperadoraTelefoneConfiguration());
+            builder.ApplyConfiguration(new PerspectivaConfiguration());
+            builder.ApplyConfiguration(new RGConfiguration());
+            builder.ApplyConfiguration(new TelefoneConfiguration());
+            builder.ApplyConfiguration(new CNPJConfiguration());
+            builder.ApplyConfiguration(new CPFConfiguration());
+            builder.ApplyConfiguration(new TipoContatoConfiguration());
+            builder.ApplyConfiguration(new TipoDocumentoConfiguration());
+            builder.ApplyConfiguration(new TipoTelefoneConfiguration());
+            builder.ApplyConfiguration(new DocumentoPessoaConfiguration());
+            //builder.ApplyConfiguration(new Configuration());
+
+        
 
 
             foreach (var property in builder.Model.GetEntityTypes().SelectMany(t => t.GetProperties()).Where(p => p.ClrType == typeof(string)))
@@ -121,47 +153,10 @@ namespace Infra.Context
             return base.SaveChanges();
         }
 
-        public DbSet<Domain.Entities.DDD> dbSDDDs { get; set; } = default!;
+       
+        
 
-        public DbSet<Domain.Entities.Endereco> dbSEnderecos { get; set; } = default!;
-
-        public DbSet<Domain.Entities.FluxoProcesso> dbSFluxosProcesso { get; set; } = default!;
-
-        public DbSet<Domain.Entities.Image> dbSImages { get; set; } = default!;
-
-        public DbSet<Domain.Entities.IncrementoTabelas> dbSIncrementoTabelas { get; set; } = default!;
-
-        public DbSet<Domain.Entities.Loteamento> dbSLoteamentos { get; set; } = default!;
-
-        public DbSet<Domain.Entities.OperadoraTelefone> dbSOperadoraTelefoneS { get; set; } = default!;
-
-        public DbSet<Domain.Entities.Perspectiva> dbSPerspectivas { get; set; } = default!;
-
-        public DbSet<Domain.Entities.PessoaFisica> dbSPessoasFisica { get; set; } = default!;
-
-        public DbSet<Domain.Entities.PessoaJuridica> dbSPessoasJuridica { get; set; } = default!;
-
-        public DbSet<Domain.Entities.RG> dbSRGs { get; set; } = default!;
-
-        public DbSet<Domain.Entities.Telefone> dbSTelefones { get; set; } = default!;
-
-        public DbSet<Domain.Entities.TelefoneComercial> dbSTelefonesComerciais { get; set; } = default!;
-
-        public DbSet<Domain.Entities.TelefoneResidencial> dbSTelefonesResidenciais { get; set; } = default!;
-
-        public DbSet<Domain.Entities.Contato> dbSContatos { get; set; } = default!;
-
-        public DbSet<Domain.Entities.CNPJ> dbSCNPJs { get; set; } = default!;
-
-        public DbSet<Domain.Entities.CPF> dbSCPFs { get; set; } = default!;
-
-        public DbSet<Domain.Entities.DocumentoPessoa> dbSDocumentosPessoa { get; set; } = default!;
-
-        public DbSet<Domain.Entities.TipoContato> dbSTiposContato { get; set; } = default!;
-
-        public DbSet<Domain.Entities.TipoDocumento> dbSTiposDocumento { get; set; } = default!;
-
-        public DbSet<Domain.Entities.TipoTelefone> dbSTiposTelefone { get; set; } = default!;
+        
 
     }
 }

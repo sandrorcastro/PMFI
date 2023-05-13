@@ -10,12 +10,13 @@ namespace Domain.Entities
     {
        public int TipoTelefoneId { get; set; }
        public TipoTelefone? TipoTelefone { get; set; }
-        public int DDDId { get; set; }
+        public int? DDDId { get; set; }
         public DDD? DDD { get; set; }
 
-        public int OperadoraTelefoneId { get; set; }
+        public int? OperadoraTelefoneId { get; set; }
         public OperadoraTelefone? OperadoraTelefone { get; set; }
         public DateTime? DataCadastro { get; set; }
         public DateTime? DataUltimaAtualizacao { get; set; }
+        public string? Numero { get; set; }
     }
 }

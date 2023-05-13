@@ -11,7 +11,6 @@
         public long? conId { get; set; }
         public ICollection<Endereco_Entidade>? Enderecos { get; set; }
         public ICollection<DocumentoPessoa>? Documentos { get; set; }
-        //public ICollection<Economia_Pessoa>? Economias { get; set; }
         public ICollection<Economia_Entidade>? Economias { get; set; }
         public ICollection<Contato_Pessoa>? Contatos { get; set; }
 
