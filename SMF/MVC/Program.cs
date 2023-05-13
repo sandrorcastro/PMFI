@@ -1,8 +1,8 @@
 
 //using Infra.Context;
-using MVC.Context;
+using Infra.Context;
 using Infra.EntityConfig;
-using IOC;
+
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 

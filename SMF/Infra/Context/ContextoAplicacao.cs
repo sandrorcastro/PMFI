@@ -3,12 +3,8 @@ using Infra.EntityConfig;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using MVC.Context;
 using System.Reflection.Emit;
-
-
-//namespace Infra.Context
-namespace MVC.Context
+namespace Infra.Context
 {
     public class ContextoAplicacao : IdentityDbContext<ApplicationUser, IdentityRole<long>, long>
     //public class ContextoAplicacao : IdentityDbContext
@@ -125,47 +121,47 @@ namespace MVC.Context
             return base.SaveChanges();
         }
 
-        public DbSet<Domain.Entities.DDD> DDD { get; set; } = default!;
+        public DbSet<Domain.Entities.DDD> dbSDDDs { get; set; } = default!;
 
-        public DbSet<Domain.Entities.Endereco> Endereco { get; set; } = default!;
+        public DbSet<Domain.Entities.Endereco> dbSEnderecos { get; set; } = default!;
 
-        public DbSet<Domain.Entities.FluxoProcesso> FluxoProcesso { get; set; } = default!;
+        public DbSet<Domain.Entities.FluxoProcesso> dbSFluxosProcesso { get; set; } = default!;
 
-        public DbSet<Domain.Entities.Image> Image { get; set; } = default!;
+        public DbSet<Domain.Entities.Image> dbSImages { get; set; } = default!;
 
-        public DbSet<Domain.Entities.IncrementoTabelas> IncrementoTabelas { get; set; } = default!;
+        public DbSet<Domain.Entities.IncrementoTabelas> dbSIncrementoTabelas { get; set; } = default!;
 
-        public DbSet<Domain.Entities.Loteamento> Loteamento { get; set; } = default!;
+        public DbSet<Domain.Entities.Loteamento> dbSLoteamentos { get; set; } = default!;
 
-        public DbSet<Domain.Entities.OperadoraTelefone> OperadoraTelefone { get; set; } = default!;
+        public DbSet<Domain.Entities.OperadoraTelefone> dbSOperadoraTelefoneS { get; set; } = default!;
 
-        public DbSet<Domain.Entities.Perspectiva> Perspectiva { get; set; } = default!;
+        public DbSet<Domain.Entities.Perspectiva> dbSPerspectivas { get; set; } = default!;
 
-        public DbSet<Domain.Entities.PessoaFisica> PessoaFisica { get; set; } = default!;
+        public DbSet<Domain.Entities.PessoaFisica> dbSPessoasFisica { get; set; } = default!;
 
-        public DbSet<Domain.Entities.PessoaJuridica> PessoaJuridica { get; set; } = default!;
+        public DbSet<Domain.Entities.PessoaJuridica> dbSPessoasJuridica { get; set; } = default!;
 
-        public DbSet<Domain.Entities.RG> RG { get; set; } = default!;
+        public DbSet<Domain.Entities.RG> dbSRGs { get; set; } = default!;
 
-        public DbSet<Domain.Entities.Telefone> Telefone { get; set; } = default!;
+        public DbSet<Domain.Entities.Telefone> dbSTelefones { get; set; } = default!;
 
-        public DbSet<Domain.Entities.TelefoneComercial> TelefoneComercial { get; set; } = default!;
+        public DbSet<Domain.Entities.TelefoneComercial> dbSTelefonesComerciais { get; set; } = default!;
 
-        public DbSet<Domain.Entities.TelefoneResidencial> TelefoneResidencial { get; set; } = default!;
+        public DbSet<Domain.Entities.TelefoneResidencial> dbSTelefonesResidenciais { get; set; } = default!;
 
-        public DbSet<Domain.Entities.Contato> Contato { get; set; } = default!;
+        public DbSet<Domain.Entities.Contato> dbSContatos { get; set; } = default!;
 
-        public DbSet<Domain.Entities.CNPJ> CNPJ { get; set; } = default!;
+        public DbSet<Domain.Entities.CNPJ> dbSCNPJs { get; set; } = default!;
 
-        public DbSet<Domain.Entities.CPF> CPF { get; set; } = default!;
+        public DbSet<Domain.Entities.CPF> dbSCPFs { get; set; } = default!;
 
-        public DbSet<Domain.Entities.DocumentoPessoa> DocumentoPessoa { get; set; } = default!;
+        public DbSet<Domain.Entities.DocumentoPessoa> dbSDocumentosPessoa { get; set; } = default!;
 
-        public DbSet<Domain.Entities.TipoContato> TipoContato { get; set; } = default!;
+        public DbSet<Domain.Entities.TipoContato> dbSTiposContato { get; set; } = default!;
 
-        public DbSet<Domain.Entities.TipoDocumento> TipoDocumento { get; set; } = default!;
+        public DbSet<Domain.Entities.TipoDocumento> dbSTiposDocumento { get; set; } = default!;
 
-        public DbSet<Domain.Entities.TipoTelefone> TipoTelefone { get; set; } = default!;
+        public DbSet<Domain.Entities.TipoTelefone> dbSTiposTelefone { get; set; } = default!;
 
     }
 }

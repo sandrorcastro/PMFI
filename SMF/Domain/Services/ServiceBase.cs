@@ -1,0 +1,144 @@
+﻿using Domain.Interfaces.Base;
+
+namespace Domain.Services
+{
+     public class ServiceBase<TEntity> : IDisposable, IServiceBase<TEntity> where TEntity : class
+    //public class ServiceBase<TEntity> : IServiceBase<TEntity> where TEntity : class
+    {
+        private readonly IRepositoryBase<TEntity> _repository;
+
+        public ServiceBase(IRepositoryBase<TEntity> repository)
+        {
+            _repository = repository;
+        }
+
+        public void Add(TEntity obj)
+        {
+            _repository.Add(obj);
+        }
+
+        public TEntity GetById(int id)
+        {
+            return _repository.GetById(id);
+        }
+        public TEntity GetById(long id)
+        {
+            return _repository.GetById(id);
+        }
+
+        public IEnumerable<TEntity> GetAll()
+        {
+            return _repository.GetAll();
+        }
+
+        public void Update(TEntity obj)
+        {
+            _repository.Update(obj);
+        }
+
+        public void Remove(TEntity obj)
+        {
+            _repository.Remove(obj);
+        }
+
+        public void Dispose()
+        {
+            _repository.Dispose();
+        }
+        /////////////////////////
+        public IQueryable<TEntity> GetTodos()
+        {
+            try
+            {
+                return _repository.GetTodos();
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+
+        }
+
+        public IQueryable<TEntity> Get(Func<TEntity, bool> predicate)
+        {
+            try
+            {
+                return GetTodos().Where(predicate).AsQueryable();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public TEntity GetRelacoes(Func<TEntity, bool> predicate)
+        {
+            try
+            {
+                return _repository.GetRelacoes(predicate);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public TEntity Find(Func<TEntity, bool> predicate)
+        {
+            try
+            {
+                return _repository.Find(predicate);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public TEntity Find(params object[] key)
+        {
+            try
+            {
+
+                return _repository.Find(key);
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+       
+
+        public void SalvarTodos()
+        {
+            try
+            {
+
+                _repository.SalvarTodos();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+      
+
+        public void Remove(Func<TEntity, bool> predicate)
+        {
+            try
+            {
+
+                _repository.Remove(predicate);
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+       
+    
+}
+}

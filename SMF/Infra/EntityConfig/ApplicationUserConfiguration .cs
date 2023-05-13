@@ -2,11 +2,7 @@
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
-using MVC.Context;
-
-
-//namespace Infra.EntityConfig
-namespace MVC.EntityConfig
+namespace Infra.EntityConfig
 {
     public class ApplicationUserConfiguration : IEntityTypeConfiguration<ApplicationUser>
     {

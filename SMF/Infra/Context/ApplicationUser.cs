@@ -5,9 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
-//namespace Infra.EntityConfig
-namespace MVC.Context
+namespace Infra.EntityConfig
 {
     public class ApplicationUser : IdentityUser<long>
     {
