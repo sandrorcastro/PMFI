@@ -1,0 +1,47 @@
+﻿@model IEnumerable<Domain.Entities.FluxoProcesso>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Lista de FluxoProcesso</h1>
+
+<p>
+    <a asp-action="Create">Criar Novo</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Descricao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoProcesso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoEtapa)
+            </th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Descricao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoProcesso.Descricao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoEtapa.Descricao)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.FluxoProcessoId">Editar</a> |
+                <a asp-action="Details" asp-route-id="@item.FluxoProcessoId">Detalhes</a> |
+                <a asp-action="Delete" asp-route-id="@item.FluxoProcessoId">Deletar</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -1,7 +1,15 @@
 ﻿//using MailKit;
 
+using Application.Interfaces;
+using Application.Interfaces.Base;
+using Application.Services;
+using Domain.Interfaces.Base;
+using Domain.Interfaces.Repositories;
+using Domain.Interfaces.Services;
+using Domain.Services;
 using Infra.Context;
 using Infra.EntityConfig;
+using Infra.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -44,8 +52,8 @@ namespace IOC
 
 
             /////////////////////////////////////////////////////////////////////
-            /*            services.AddScoped(typeof(IAppServiceBase<>),typeof(AppServiceBase<>));
-                        services.AddScoped<ITipoLogradouroAppService,TipoLogradouroAppService>();
+                        services.AddScoped(typeof(IAppServiceBase<>),typeof(AppServiceBase<>));
+            /*            services.AddScoped<ITipoLogradouroAppService,TipoLogradouroAppService>();
                         services.AddScoped<IIncrementoTabelasAppService, IncrementoTabelasAppService>();
                         services.AddScoped<IEstadoAppService, EstadoAppService>();
                         services.AddScoped<IPaisAppService, PaisAppService>();
@@ -68,39 +76,46 @@ namespace IOC
                         services.AddScoped<IEtapaAppService, EtapaAppService>();
                         services.AddScoped<ITipoEtapaAppService, TipoEtapaAppService>();
                         services.AddScoped<ISituacaoEtapaAppService, SituacaoEtapaAppService>();
-                        services.AddScoped<IProcessoAppService, ProcessoAppService>();
+                        services.AddScoped<IProcessoAppService, ProcessoAppService>();    
+            */
+                        services.AddScoped<IFluxoProcessoAppService, FluxoProcessoAppService>();
+            /*
                         services.AddScoped<ITipoProcessoAppService, TipoProcessoAppService>();
                         services.AddScoped<ISituacaoProcessoAppService, SituacaoProcessoAppService>();
                         services.AddScoped<IImageAppService, ImageAppService>();
                         services.AddScoped<IPerspectivaAppService, PerspectivaAppService>();
                         services.AddScoped<ITextoAutuacaoAppService, TextoAutuacaoAppService>();
 
-
+            */
                         ////////////////////////////////////////////////////////////////////
                         services.AddScoped(typeof(IServiceBase<>),typeof(ServiceBase<>));
-                        services.AddScoped<ITipoLogradouroService,TipoLogradouroService>();
-                        services.AddScoped<IIncrementoTabelasService, IncrementoTabelasService>();
-                        services.AddScoped<IEstadoService, EstadoService>();
-                        services.AddScoped<IPaisService, PaisService>();
-                        services.AddScoped<IDDDService, DDDService>();
-                        services.AddScoped<ICidadeService, CidadeService>();
-                        services.AddScoped<IRegiaoService, RegiaoService>();
-                        services.AddScoped<IBairroService, BairroService>();
-                        services.AddScoped<ILogradouroService, LogradouroService>();
-                        services.AddScoped<IEnderecoService, EnderecoService>();
-                        services.AddScoped<IEnderecoEntidadeService, EnderecoEntidadeService>();
-                        services.AddScoped<ITipoPessoaService, TipoPessoaService>();
-                        services.AddScoped<IPessoaService, PessoaService>();
-                        services.AddScoped<IPessoaFisicaService, PessoaFisicaService>();
-                        services.AddScoped<IPessoaJuridicaService, PessoaJuridicaService>();
-                        services.AddScoped<ITipoResponsabilidadeService, TipoResponsabilidadeService>();
-                        services.AddScoped<IEconomiaService, EconomiaService>();
-                        services.AddScoped<IEconomiaPessoaService, EconomiaPessoaService>();
-                        services.AddScoped<IImovelService, ImovelService>();
-                        services.AddScoped<IServidorService, ServidorService>();
-                        services.AddScoped<IEtapaService, EtapaService>();
-                        services.AddScoped<ITipoEtapaService, TipoEtapaService>();
-                        services.AddScoped<ISituacaoEtapaService, SituacaoEtapaService>();
+            /*
+                      services.AddScoped<ITipoLogradouroService,TipoLogradouroService>();
+                      services.AddScoped<IIncrementoTabelasService, IncrementoTabelasService>();
+                      services.AddScoped<IEstadoService, EstadoService>();
+                      services.AddScoped<IPaisService, PaisService>();
+                      services.AddScoped<IDDDService, DDDService>();
+                      services.AddScoped<ICidadeService, CidadeService>();
+                      services.AddScoped<IRegiaoService, RegiaoService>();
+                      services.AddScoped<IBairroService, BairroService>();
+                      services.AddScoped<ILogradouroService, LogradouroService>();
+                      services.AddScoped<IEnderecoService, EnderecoService>();
+                      services.AddScoped<IEnderecoEntidadeService, EnderecoEntidadeService>();
+                      services.AddScoped<ITipoPessoaService, TipoPessoaService>();
+                      services.AddScoped<IPessoaService, PessoaService>();
+                      services.AddScoped<IPessoaFisicaService, PessoaFisicaService>();
+                      services.AddScoped<IPessoaJuridicaService, PessoaJuridicaService>();
+                      services.AddScoped<ITipoResponsabilidadeService, TipoResponsabilidadeService>();
+                      services.AddScoped<IEconomiaService, EconomiaService>();
+                      services.AddScoped<IEconomiaPessoaService, EconomiaPessoaService>();
+                      services.AddScoped<IImovelService, ImovelService>();
+                      services.AddScoped<IServidorService, ServidorService>();
+                      services.AddScoped<IEtapaService, EtapaService>();
+                      services.AddScoped<ITipoEtapaService, TipoEtapaService>();
+                      services.AddScoped<ISituacaoEtapaService, SituacaoEtapaService>();
+          */
+                      services.AddScoped<IFluxoProcessoService, FluxoProcessoService>();
+            /*
                         services.AddScoped<IProcessoService, ProcessoService>();
                         services.AddScoped<ITipoProcessoService, TipoProcessoService>();
                         services.AddScoped<ISituacaoProcessoService, SituacaoProcessoService>();
@@ -110,39 +125,41 @@ namespace IOC
 
 
 
-
+            */
                         //////////////////////////////////////////////////////////////////////
 
                         services.AddScoped(typeof(IRepositoryBase<>),typeof(RepositoryBase<>));
-                        services.AddScoped<ITipoLogradouroRepository,TipoLogradouroRepository>();
-                        services.AddScoped<IIncrementoTabelasRepository, IncrementoTabelasRepository>();
-                        services.AddScoped<IEstadoRepository, EstadoRepository>();
-                        services.AddScoped<IPaisRepository, PaisRepository>();
-                        services.AddScoped<IDDDRepository, DDDRepository>();
-                        services.AddScoped<ICidadeRepository, CidadeRepository>();
-                        services.AddScoped<IRegiaoRepository, RegiaoRepository>();
-                        services.AddScoped<IBairroRepository, BairroRepository>();
-                        services.AddScoped<ILogradouroRepository, LogradouroRepository>();
-                        services.AddScoped<IEnderecoRepository, EnderecoRepository>();
-                        services.AddScoped<IEnderecoEntidadeRepository, EnderecoEntidadeRepository>();
-                        services.AddScoped<ITipoPessoaRepository, TipoPessoaRepository>();
-                        services.AddScoped<IPessoaRepository, PessoaRepository>();
-                        services.AddScoped<IPessoaFisicaRepository, PessoaFisicaRepository>();
-                        services.AddScoped<IPessoaJuridicaRepository, PessoaJuridicaRepository>();
-                        services.AddScoped<ITipoResponsabilidadeRepository, TipoResponsabilidadeRepository>();
-                        services.AddScoped<IEconomiaRepository, EconomiaRepository>();
-                        services.AddScoped<IEconomiaPessoaRepository, EconomiaPessoaRepository>();
-                        services.AddScoped<IImovelRepository, ImovelRepository>();
-                        services.AddScoped<IServidorRepository, ServidorRepository>();
-                        services.AddScoped<IEtapaRepository, EtapaRepository>();
-                        services.AddScoped<ITipoEtapaRepository, TipoEtapaRepository>();
-                        services.AddScoped<ISituacaoEtapaRepository, SituacaoEtapaRepository>();
-                        services.AddScoped<IProcessoRepository, ProcessoRepository>();
-                        services.AddScoped<ITipoProcessoRepository, TipoProcessoRepository>();
-                        services.AddScoped<ISituacaoProcessoRepository, SituacaoProcessoRepository>();
-                        services.AddScoped<IImageRepository, ImageRepository>();
-                        services.AddScoped<IPerspectivaRepository, PerspectivaRepository>();
-                        services.AddScoped<ITextoAutuacaoRepository, TextoAutuacaoRepository>();*/
+            /*          services.AddScoped<ITipoLogradouroRepository,TipoLogradouroRepository>();
+                      services.AddScoped<IIncrementoTabelasRepository, IncrementoTabelasRepository>();
+                      services.AddScoped<IEstadoRepository, EstadoRepository>();
+                      services.AddScoped<IPaisRepository, PaisRepository>();
+                      services.AddScoped<IDDDRepository, DDDRepository>();
+                      services.AddScoped<ICidadeRepository, CidadeRepository>();
+                      services.AddScoped<IRegiaoRepository, RegiaoRepository>();
+                      services.AddScoped<IBairroRepository, BairroRepository>();
+                      services.AddScoped<ILogradouroRepository, LogradouroRepository>();
+                      services.AddScoped<IEnderecoRepository, EnderecoRepository>();
+                      services.AddScoped<IEnderecoEntidadeRepository, EnderecoEntidadeRepository>();
+                      services.AddScoped<ITipoPessoaRepository, TipoPessoaRepository>();
+                      services.AddScoped<IPessoaRepository, PessoaRepository>();
+                      services.AddScoped<IPessoaFisicaRepository, PessoaFisicaRepository>();
+                      services.AddScoped<IPessoaJuridicaRepository, PessoaJuridicaRepository>();
+                      services.AddScoped<ITipoResponsabilidadeRepository, TipoResponsabilidadeRepository>();
+                      services.AddScoped<IEconomiaRepository, EconomiaRepository>();
+                      services.AddScoped<IEconomiaPessoaRepository, EconomiaPessoaRepository>();
+                      services.AddScoped<IImovelRepository, ImovelRepository>();
+                      services.AddScoped<IServidorRepository, ServidorRepository>();
+                      services.AddScoped<IEtapaRepository, EtapaRepository>();
+                      services.AddScoped<ITipoEtapaRepository, TipoEtapaRepository>();
+                      services.AddScoped<ISituacaoEtapaRepository, SituacaoEtapaRepository>();
+                      services.AddScoped<IProcessoRepository, ProcessoRepository>();
+            */
+                      services.AddScoped<IFluxoProcessoRepository, FluxoProcessoRepository>();
+             /*         services.AddScoped<ITipoProcessoRepository, TipoProcessoRepository>();
+                      services.AddScoped<ISituacaoProcessoRepository, SituacaoProcessoRepository>();
+                      services.AddScoped<IImageRepository, ImageRepository>();
+                      services.AddScoped<IPerspectivaRepository, PerspectivaRepository>();
+                      services.AddScoped<ITextoAutuacaoRepository, TextoAutuacaoRepository>();*/
 
             return services;
         }

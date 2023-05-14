@@ -84,13 +84,14 @@ namespace MVC.Mappings
 
 
             CreateMap<Processo, ProcessoViewModel>();
-                 // CreateMap<TipoProcesso, TipoProcessoViewModel>();
-                  //CreateMap<SituacaoProcesso, SituacaoProcessoViewModel>();
-                 //CreateMap<SituacaoEtapa, SituacaoEtapaViewModel>();
-                 // CreateMap<TipoEtapa, TipoEtapaViewModel>();
-                 // CreateMap<Servidor, ServidorViewModel>();
-                  //CreateMap<Image, ImageViewModel>();
-                  //CreateMap<Perspectiva, PerspectivaViewModel>();
+            CreateMap<FluxoProcesso, FluxoProcessoViewModel>();
+            // CreateMap<TipoProcesso, TipoProcessoViewModel>();
+            //CreateMap<SituacaoProcesso, SituacaoProcessoViewModel>();
+            //CreateMap<SituacaoEtapa, SituacaoEtapaViewModel>();
+            // CreateMap<TipoEtapa, TipoEtapaViewModel>();
+            // CreateMap<Servidor, ServidorViewModel>();
+            //CreateMap<Image, ImageViewModel>();
+            //CreateMap<Perspectiva, PerspectivaViewModel>();
             //CreateMap<IncrementoTabelas, IncrementoTabelasViewModel>();
             //CreateMap<TextoAutuacao, TextoAutuacaoViewModel>();
             /*

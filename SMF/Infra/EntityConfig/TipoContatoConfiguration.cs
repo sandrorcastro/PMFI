@@ -10,7 +10,7 @@ namespace Infra.EntityConfig
         {
             builder.HasKey("TipoContatoId");
             builder.Property(tp => tp.TipoContatoId).ValueGeneratedNever();
-            builder.Property<string>("Descricao").HasMaxLength(15); //.IsRequired();
+            builder.Property<string>("Descricao").HasMaxLength(50); //.IsRequired();
             builder.ToTable("TipoContato");
             
         }

@@ -1,15 +1,14 @@
 ﻿using Domain.Entities;
-using Domain.Entities;
 using Domain.Interfaces.Repositories;
 using Domain.Interfaces.Services;
 
 namespace Domain.Services
 {
-    public class ProcessoService : ServiceBase<Processo>, IProcessoService
+    public class FluxoProcessoService : ServiceBase<FluxoProcesso>, IFluxoProcessoService
     {
-        private readonly IProcessoRepository _Repository;
+        private readonly IFluxoProcessoRepository _Repository;
 
-        public ProcessoService(IProcessoRepository Repository)
+        public FluxoProcessoService(IFluxoProcessoRepository Repository)
             : base(Repository)
         {
             _Repository = Repository;
