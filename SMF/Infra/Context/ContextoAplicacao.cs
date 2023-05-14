@@ -3,19 +3,33 @@ using Infra.EntityConfig;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.Reflection.Emit;
 namespace Infra.Context
 {
-    public class ContextoAplicacao : IdentityDbContext<ApplicationUser, IdentityRole<long>, long>
+    public class ContextoAplicacao : IdentityDbContext<ApplicationUser, IdentityRole<long>, long> 
     //public class ContextoAplicacao : IdentityDbContext
     {
         //public ContextoAplicacao(): base("PMFI") {    }
+       // public ContextoAplicacao() { }
         public ContextoAplicacao(DbContextOptions<ContextoAplicacao> options)
             : base(options)
         {
+            
         }
-        
+     /*   public ContextoAplicacao CreateDbContext(string[] args)
+        {
+            var optionsBuilder = new DbContextOptionsBuilder<ContextoAplicacao>();
+            optionsBuilder.UseSqlServer("Data Source=SANDRO-ASPIRE-4\\SQLEXPRESS;Initial Catalog=SMF_Processo;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+
+            return new ContextoAplicacao(optionsBuilder.Options);
+        }
+         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+         {
+             optionsBuilder.UseSqlServer("Data Source=SANDRO-ASPIRE-4\\SQLEXPRESS;Initial Catalog=SMF_Processo;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+         }*/
+
         public DbSet<Processo> dbSProcessos { get; set; }
         public DbSet<Etapa> dbSEtapas { get; set; }
         public DbSet<Orgao> dbSOrgaos { get; set; }
@@ -148,10 +162,6 @@ public DbSet<Perspectiva> dbSPerspectivas { get; set; } = default!;
             return base.SaveChanges();
         }
 
-       
         
-
-        
-
     }
 }

@@ -1,0 +1,96 @@
+﻿@*@model IEnumerable<Domain.Entities.Processo>*@
+@model IEnumerable<MVC.ViewModels.ProcessoViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Orgao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataCadastro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoProcesso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrgaoRemetente)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnidadeRemetente)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.OrgaoDestinatario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnidadeDestinatario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FluxoProcesso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ObservacaoProcesso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProcessoEnviado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProcessoRecebido)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Orgao.OrgaoId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataCadastro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoProcesso.TipoProcessoId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrgaoRemetente.OrgaoId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnidadeRemetente.UnidadeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.OrgaoDestinatario.OrgaoId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnidadeDestinatario.UnidadeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FluxoProcesso.Descricao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ObservacaoProcesso)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProcessoEnviado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProcessoRecebido)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

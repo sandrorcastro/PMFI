@@ -2,9 +2,10 @@
 //using Infra.Context;
 using Infra.Context;
 using Infra.EntityConfig;
-
+using IOC;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using MVC.MappingConfig;
 
 //using MVC.MappingConfig;
 
@@ -25,10 +26,11 @@ namespace MVC
             // services.AddDbContext<ContextoAplicacao>(options =>
           
 
-            builder.Services.AddDbContext<ContextoAplicacao>(options => options.UseSqlServer(connectionString)
+           /*---builder.Services.AddDbContext<ContextoAplicacao>(options => options.UseSqlServer(connectionString)
                                                                                     //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-                                                                                    );
+                                                                                    );*/
 
+            //builder.Services.AddDbContext<ContextoAplicacao>();
 
             //builder.Services.AddDbContextFactory<ContextoAplicacao>(options => options.UseSqlServer(connectionString));
             /* builder.Services.AddDbContext<ApplicationDbContext>(options =>
@@ -36,17 +38,17 @@ namespace MVC
              builder.Services.AddDatabaseDeveloperPageExceptionFilter();
             */
             ///builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false);
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ContextoAplicacao>();
             //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false);//.AddEntityFrameworkStores<ContextoAplicacao>();
 
             // Minhas Adi��es
 
+            builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ContextoAplicacao>();
 
-           // builder.Services.AddInfrastructure(builder.Configuration);
             // builder.Services.Configure<SendinBlueSettings>(builder.Configuration.GetSection("SendinBlueSettings"));
             //builder.Services.AddSingleton<IEmailService, SendinBlueService>();
             //builder.Services.AddSingleton<IWhatsappService, TwilioWhatsappService>();
-            //builder.Services.AddAutoMapperConfig();
+            builder.Services.AddAutoMapperConfig();
             /// builder.Services.AddDbContext<CameraDatabaseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddControllersWithViews().AddRazorOptions(options =>
             {
