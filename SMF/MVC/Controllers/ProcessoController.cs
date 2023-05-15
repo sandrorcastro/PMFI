@@ -27,7 +27,9 @@ namespace MVC.Controllers
         public async Task<IActionResult> Index()
         {
             var contextoAplicacao = _context.dbSProcessos.Include(p => p.FluxoProcesso).Include(p => p.Orgao).Include(p => p.OrgaoDestinatario).Include(p => p.OrgaoRemetente).Include(p => p.TipoProcesso).Include(p => p.UnidadeDestinatario).Include(p => p.UnidadeRemetente);
-           // var pvm = mapper.Map<IEnumerable<ProcessoViewModel>>(contextoAplicacao.ToList());
+           //ProcessoViewModel p = new ProcessoViewModel();
+            
+            // var pvm = mapper.Map<IEnumerable<ProcessoViewModel>>(contextoAplicacao.ToList());
             return View(mapper.Map<IEnumerable<ProcessoViewModel>>(contextoAplicacao.ToList()));
         }
 

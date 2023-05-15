@@ -1,4 +1,5 @@
 ﻿using Domain.Entities;
+using MVC.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MVC.ViewModels
 {
-    public class ProcessoViewModel
+    public class ProcessoViewModel : PaginatedList<Processo>
     {
         //   public int ProtocoloId { get; set; }
         // public Protocolo? Protocolo { get; set; }

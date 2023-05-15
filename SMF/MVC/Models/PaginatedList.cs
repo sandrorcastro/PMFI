@@ -6,9 +6,6 @@ namespace MVC.Models
     public class PaginatedList<T> : List<T>, IPaginatedList where T:class
     {
         public PaginatedList() { }
-
-
-         
         public PaginatedList(List<T> items, int count, int currentPage, int pageSize)
        // public PaginatedListVC(IQueryable<T> source, int count, int currentPage, int pageSize)
         //IQueryable<T> source
@@ -17,7 +14,6 @@ namespace MVC.Models
             PageSize = pageSize;
             TotalItems = count;
             TotalPages = (int)Math.Ceiling(count / (double)pageSize);
-
             AddRange(items);
             //AddRange(source);
         }
@@ -32,7 +28,6 @@ namespace MVC.Models
         {
             var count = await source.CountAsync();
             var items = await source.Skip((currentPage - 1) * pageSize).Take(pageSize).ToListAsync();
-
             return new PaginatedList<T>(items, count, currentPage, pageSize);
         }
     }
