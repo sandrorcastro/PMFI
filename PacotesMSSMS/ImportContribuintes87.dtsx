@@ -1,0 +1,2359 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="5/15/2023 9:14:32 AM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="PC-1117734"
+  DTS:CreatorName="PMFI\sandro.src"
+  DTS:Description="Importa os Contribuintes do 87 para o 102"
+  DTS:DTSID="{C2D289B4-4290-4C24-9C9A-60443F245F99}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="16.0.5107.0"
+  DTS:LocaleID="1046"
+  DTS:MaxErrorCount="0"
+  DTS:ObjectName="ImportContribuintes87"
+  DTS:ProtectionLevel="0"
+  DTS:VersionGUID="{E9F30CEC-84E3-4710-B78D-8611E0B7CA5A}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[DestinationConnectionOLEDB]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{F3274207-786B-4E2F-B580-A8FFFC180AD8}"
+      DTS:ObjectName="DestinationConnectionOLEDB">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=172.27.84.102;User ID=rpdesenv;Initial Catalog=SMF_Processo;Provider=SQLOLEDB;Auto Translate=false;">
+          <DTS:Password
+            DTS:Name="Password"
+            Sensitive="1"></DTS:Password>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[SourceConnectionOLEDB]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{C8C3B0DF-F572-4C4E-814A-10C2CCFB75DA}"
+      DTS:ObjectName="SourceConnectionOLEDB">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=172.27.1.87;User ID=userdbprosiga;Initial Catalog=DBProSIGA_IPTU;Provider=SQLOLEDB;Auto Translate=false;">
+          <DTS:Password
+            DTS:Name="Password"
+            Sensitive="1"></DTS:Password>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Tarefa Fluxo de Dados 1"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:DelayValidation="True"
+      DTS:DTSID="{F7F1A039-87C7-4C87-B0D5-7E01177EF11E}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:FailPackageOnFailure="True"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Tarefa Fluxo de Dados 1"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          defaultBufferSize="3145728"
+          version="1">
+          <components>
+            <component
+              refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="Destino OLE DB;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos os Direitos Reservados; http://www.microsoft.com/sql/support;4"
+              description="Destino OLE DB"
+              name="Destino - Contribuintes"
+              usesDispositions="true"
+              validateExternalMetadata="False"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="O tempo em segundos antes que um comando expire. Zero indica uma expiração infinita."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica o nome do objeto de banco de dados usado para abrir um conjunto de linhas."
+                  name="OpenRowset">[dbo].[Contribuintes]</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica a variável que contém o nome do objeto de banco de dados usado para abrir um conjunto de linhas."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="O comando SQL a ser executado."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica a página de código de coluna a ser usada quando não há informações de página de código disponíveis a partir da fonte de dados."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forca o uso do valor da propriedade DefaultCodePage durante a descrição dos dados de caractere."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica o modo usado para acessar o banco de dados."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica se os valores fornecidos para colunas de identidade serão copiados no destino. Se false, os valores para colunas de identidade serão gerados automaticamente no destino. Aplicável apenas se o carregamento rápido estiver ativado."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica se as colunas que contêm null terão null inserido no destino. Se false, as colunas que contêm null terão seus valores padrão inseridos no destino. Aplicável apenas se o carregamento rápido estiver ativado."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica as opções a serem usadas com o carregamento rápido. Aplicável apenas se o carregamento rápido estiver ativado."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica quando confirmações são emitidas durante a inserção de dados. Um valor de 0 especifica que uma confirmação será emitida ao final da inserção de dados. Aplicável somente se o carregamento rápido estiver ativado."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DestinationConnectionOLEDB]"
+                  connectionManagerRefId="Package.ConnectionManagers[DestinationConnectionOLEDB]"
+                  description="A conexão de tempo de execução OLE DB usada para acessar o banco de dados."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input]"
+                  errorOrTruncationOperation="Inserir"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConId]"
+                      cachedDataType="i8"
+                      cachedName="ConId"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConId]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConId]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConTipoPessoa]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="20"
+                      cachedName="ConTipoPessoa"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConTipoPessoa]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTipoPessoa]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConNome]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="255"
+                      cachedName="ConNome"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConNome]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNome]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConCNPJCPF]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="14"
+                      cachedName="ConCNPJCPF"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConCNPJCPF]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCNPJCPF]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConNomeFantasia]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="255"
+                      cachedName="ConNomeFantasia"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConNomeFantasia]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNomeFantasia]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConInscrEstadual]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="30"
+                      cachedName="ConInscrEstadual"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConInscrEstadual]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConInscrEstadual]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConCargo]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="60"
+                      cachedName="ConCargo"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConCargo]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCargo]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConFuncao]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="60"
+                      cachedName="ConFuncao"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConFuncao]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConFuncao]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConCMC]"
+                      cachedDataType="i8"
+                      cachedName="ConCMC"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConCMC]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCMC]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConDtNasc]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="ConDtNasc"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConDtNasc]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConDtNasc]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConSexo]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="10"
+                      cachedName="ConSexo"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConSexo]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConSexo]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConRG]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="20"
+                      cachedName="ConRG"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConRG]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRG]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConRGDtEmissao]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="ConRGDtEmissao"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConRGDtEmissao]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRGDtEmissao]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConRGOrgaoExp]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="10"
+                      cachedName="ConRGOrgaoExp"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConRGOrgaoExp]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRGOrgaoExp]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConRGUFExp]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="2"
+                      cachedName="ConRGUFExp"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConRGUFExp]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRGUFExp]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConNumTitulo]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="30"
+                      cachedName="ConNumTitulo"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConNumTitulo]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNumTitulo]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConNumHabilitacao]"
+                      cachedDataType="i8"
+                      cachedName="ConNumHabilitacao"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConNumHabilitacao]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNumHabilitacao]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConCatHabilitacao]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="5"
+                      cachedName="ConCatHabilitacao"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConCatHabilitacao]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCatHabilitacao]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConIDTipoDocumento]"
+                      cachedDataType="i4"
+                      cachedName="ConIDTipoDocumento"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConIDTipoDocumento]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConIDTipoDocumento]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConNrDocumento]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="ConNrDocumento"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConNrDocumento]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNrDocumento]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConUFDocumento]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="2"
+                      cachedName="ConUFDocumento"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConUFDocumento]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConUFDocumento]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConNacionalidade]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="30"
+                      cachedName="ConNacionalidade"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConNacionalidade]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNacionalidade]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConNacCorrigida]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="30"
+                      cachedName="ConNacCorrigida"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConNacCorrigida]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNacCorrigida]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConEstadoCivil]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="30"
+                      cachedName="ConEstadoCivil"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConEstadoCivil]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConEstadoCivil]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConProfissao]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="ConProfissao"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConProfissao]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConProfissao]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConTelefones]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="80"
+                      cachedName="ConTelefones"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConTelefones]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTelefones]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConTelefoneResidencial]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="11"
+                      cachedName="ConTelefoneResidencial"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConTelefoneResidencial]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTelefoneResidencial]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConTelefoneComercial]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="11"
+                      cachedName="ConTelefoneComercial"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConTelefoneComercial]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTelefoneComercial]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConTelefoneCelular]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="11"
+                      cachedName="ConTelefoneCelular"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConTelefoneCelular]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTelefoneCelular]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConEMail]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="ConEMail"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConEMail]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConEMail]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConCEP]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="9"
+                      cachedName="ConCEP"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConCEP]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCEP]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConTipoLograd]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="25"
+                      cachedName="ConTipoLograd"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConTipoLograd]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTipoLograd]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConEndereco]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="75"
+                      cachedName="ConEndereco"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConEndereco]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConEndereco]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConNumero]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="10"
+                      cachedName="ConNumero"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConNumero]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNumero]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConComplemento]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="120"
+                      cachedName="ConComplemento"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConComplemento]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConComplemento]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConBairroId]"
+                      cachedDataType="i4"
+                      cachedName="ConBairroId"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConBairroId]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConBairroId]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConCidadeId]"
+                      cachedDataType="i4"
+                      cachedName="ConCidadeId"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConCidadeId]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCidadeId]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConCidNascId]"
+                      cachedDataType="i4"
+                      cachedName="ConCidNascId"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConCidNascId]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCidNascId]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConRespRG]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="15"
+                      cachedName="ConRespRG"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConRespRG]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRespRG]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConRespNome]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="50"
+                      cachedName="ConRespNome"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConRespNome]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRespNome]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConFoto]"
+                      cachedDataType="image"
+                      cachedName="ConFoto"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConFoto]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConFoto]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConIDConjuge]"
+                      cachedDataType="i8"
+                      cachedName="ConIDConjuge"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConIDConjuge]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConIDConjuge]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConSite]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="ConSite"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConSite]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConSite]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConIDAnterior]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="30"
+                      cachedName="ConIDAnterior"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConIDAnterior]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConIDAnterior]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConRendaMensal]"
+                      cachedDataType="cy"
+                      cachedName="ConRendaMensal"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConRendaMensal]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRendaMensal]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConFalecido]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="3"
+                      cachedName="ConFalecido"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConFalecido]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConFalecido]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConGrafica]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="3"
+                      cachedName="ConGrafica"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConGrafica]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConGrafica]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConDtBaseTCE]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="ConDtBaseTCE"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConDtBaseTCE]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConDtBaseTCE]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConIDCBO]"
+                      cachedDataType="i4"
+                      cachedName="ConIDCBO"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConIDCBO]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConIDCBO]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConNomeMae]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="ConNomeMae"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConNomeMae]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNomeMae]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConTecUltAlt]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="255"
+                      cachedName="ConTecUltAlt"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConTecUltAlt]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTecUltAlt]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConDtUltAlt]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="ConDtUltAlt"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConDtUltAlt]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConDtUltAlt]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConSenha]"
+                      cachedDataType="bytes"
+                      cachedLength="50"
+                      cachedName="ConSenha"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConSenha]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConSenha]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConDtValidadeSenha]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="ConDtValidadeSenha"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConDtValidadeSenha]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConDtValidadeSenha]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConDtCriaSenha]"
+                      cachedDataType="dbTimeStamp"
+                      cachedName="ConDtCriaSenha"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConDtCriaSenha]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConDtCriaSenha]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[conFonetizado]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="100"
+                      cachedName="conFonetizado"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[conFonetizado]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[conFonetizado]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[ConIDNacionalidade]"
+                      cachedDataType="i4"
+                      cachedName="ConIDNacionalidade"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConIDNacionalidade]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConIDNacionalidade]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[tmpConFoneAuxiliar]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="13"
+                      cachedName="tmpConFoneAuxiliar"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[tmpConFoneAuxiliar]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[tmpConFoneAuxiliar]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].Columns[tmpTipoPessoa]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="20"
+                      cachedName="tmpTipoPessoa"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[tmpTipoPessoa]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[tmpTipoPessoa]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConId]"
+                      dataType="i8"
+                      name="ConId" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConTipoPessoa]"
+                      codePage="1252"
+                      dataType="str"
+                      length="20"
+                      name="ConTipoPessoa" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConNome]"
+                      codePage="1252"
+                      dataType="str"
+                      length="255"
+                      name="ConNome" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConCNPJCPF]"
+                      codePage="1252"
+                      dataType="str"
+                      length="14"
+                      name="ConCNPJCPF" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConNomeFantasia]"
+                      codePage="1252"
+                      dataType="str"
+                      length="255"
+                      name="ConNomeFantasia" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConInscrEstadual]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      name="ConInscrEstadual" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConCargo]"
+                      codePage="1252"
+                      dataType="str"
+                      length="60"
+                      name="ConCargo" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConFuncao]"
+                      codePage="1252"
+                      dataType="str"
+                      length="60"
+                      name="ConFuncao" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConCMC]"
+                      dataType="i8"
+                      name="ConCMC" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConDtNasc]"
+                      dataType="dbTimeStamp"
+                      name="ConDtNasc" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConSexo]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="ConSexo" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConRG]"
+                      codePage="1252"
+                      dataType="str"
+                      length="20"
+                      name="ConRG" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConRGDtEmissao]"
+                      dataType="dbTimeStamp"
+                      name="ConRGDtEmissao" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConRGOrgaoExp]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="ConRGOrgaoExp" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConRGUFExp]"
+                      codePage="1252"
+                      dataType="str"
+                      length="2"
+                      name="ConRGUFExp" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConNumTitulo]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      name="ConNumTitulo" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConNumHabilitacao]"
+                      dataType="i8"
+                      name="ConNumHabilitacao" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConCatHabilitacao]"
+                      codePage="1252"
+                      dataType="str"
+                      length="5"
+                      name="ConCatHabilitacao" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConIDTipoDocumento]"
+                      dataType="i4"
+                      name="ConIDTipoDocumento" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConNrDocumento]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="ConNrDocumento" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConUFDocumento]"
+                      codePage="1252"
+                      dataType="str"
+                      length="2"
+                      name="ConUFDocumento" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConNacionalidade]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      name="ConNacionalidade" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConNacCorrigida]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      name="ConNacCorrigida" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConEstadoCivil]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      name="ConEstadoCivil" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConProfissao]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="ConProfissao" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConTelefones]"
+                      codePage="1252"
+                      dataType="str"
+                      length="80"
+                      name="ConTelefones" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConTelefoneResidencial]"
+                      codePage="1252"
+                      dataType="str"
+                      length="11"
+                      name="ConTelefoneResidencial" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConTelefoneComercial]"
+                      codePage="1252"
+                      dataType="str"
+                      length="11"
+                      name="ConTelefoneComercial" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConTelefoneCelular]"
+                      codePage="1252"
+                      dataType="str"
+                      length="11"
+                      name="ConTelefoneCelular" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConEMail]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="ConEMail" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConCEP]"
+                      codePage="1252"
+                      dataType="str"
+                      length="9"
+                      name="ConCEP" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConTipoLograd]"
+                      codePage="1252"
+                      dataType="str"
+                      length="25"
+                      name="ConTipoLograd" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConEndereco]"
+                      codePage="1252"
+                      dataType="str"
+                      length="75"
+                      name="ConEndereco" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConNumero]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="ConNumero" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConComplemento]"
+                      codePage="1252"
+                      dataType="str"
+                      length="120"
+                      name="ConComplemento" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConBairroId]"
+                      dataType="i4"
+                      name="ConBairroId" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConCidadeId]"
+                      dataType="i4"
+                      name="ConCidadeId" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConCidNascId]"
+                      dataType="i4"
+                      name="ConCidNascId" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConRespRG]"
+                      codePage="1252"
+                      dataType="str"
+                      length="15"
+                      name="ConRespRG" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConRespNome]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="ConRespNome" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConFoto]"
+                      dataType="image"
+                      name="ConFoto" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConIDConjuge]"
+                      dataType="i8"
+                      name="ConIDConjuge" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConSite]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="ConSite" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConIDAnterior]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      name="ConIDAnterior" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConRendaMensal]"
+                      dataType="cy"
+                      name="ConRendaMensal"
+                      scale="4" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConFalecido]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="ConFalecido" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConGrafica]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="ConGrafica" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConDtBaseTCE]"
+                      dataType="dbTimeStamp"
+                      name="ConDtBaseTCE" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConIDCBO]"
+                      dataType="i4"
+                      name="ConIDCBO" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConNomeMae]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="ConNomeMae" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConTecUltAlt]"
+                      codePage="1252"
+                      dataType="str"
+                      length="255"
+                      name="ConTecUltAlt" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConDtUltAlt]"
+                      dataType="dbTimeStamp"
+                      name="ConDtUltAlt" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConSenha]"
+                      dataType="bytes"
+                      length="50"
+                      name="ConSenha" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConDtValidadeSenha]"
+                      dataType="dbTimeStamp"
+                      name="ConDtValidadeSenha" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConDtCriaSenha]"
+                      dataType="dbTimeStamp"
+                      name="ConDtCriaSenha" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[conFonetizado]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="conFonetizado" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[ConIDNacionalidade]"
+                      dataType="i4"
+                      name="ConIDNacionalidade" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[tmpConFoneAuxiliar]"
+                      codePage="1252"
+                      dataType="str"
+                      length="13"
+                      name="tmpConFoneAuxiliar" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input].ExternalColumns[tmpTipoPessoa]"
+                      codePage="1252"
+                      dataType="str"
+                      length="20"
+                      name="tmpTipoPessoa" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Outputs[Saída de Erro de Destino OLE DB]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Saída de Erro de Destino OLE DB"
+                  synchronousInputId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="Origem OLE DB;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos os Direitos Reservados; http://www.microsoft.com/sql/support;7"
+              description="Origem OLE DB"
+              name="Origem - Contribuintes"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="O tempo em segundos antes que um comando expire. Zero indica uma expiração infinita."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica o nome do objeto de banco de dados usado para abrir um conjunto de linhas."
+                  name="OpenRowset">[dbo].[Contribuintes]</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica a variável que contém o nome do objeto de banco de dados usado para abrir um conjunto de linhas."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="O comando SQL a ser executado."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="A variável que contém o comando SQL a ser executado."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica a página de código de coluna a ser usada quando não há informações de página de código disponíveis a partir da fonte de dados."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forca o uso do valor da propriedade DefaultCodePage durante a descrição dos dados de caractere."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica o modo usado para acessar o banco de dados."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="Os mapeamentos entre os parâmetros no comando SQL e as variáveis."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[SourceConnectionOLEDB]"
+                  connectionManagerRefId="Package.ConnectionManagers[SourceConnectionOLEDB]"
+                  description="A conexão de tempo de execução OLE DB usada para acessar o banco de dados."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB]"
+                  name="Saída de Origem OLE DB">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConId]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConId]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConId]"
+                      name="ConId"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTipoPessoa]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConTipoPessoa]"
+                      length="20"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTipoPessoa]"
+                      name="ConTipoPessoa"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNome]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConNome]"
+                      length="255"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNome]"
+                      name="ConNome"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCNPJCPF]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConCNPJCPF]"
+                      length="14"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCNPJCPF]"
+                      name="ConCNPJCPF"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNomeFantasia]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConNomeFantasia]"
+                      length="255"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNomeFantasia]"
+                      name="ConNomeFantasia"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConInscrEstadual]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConInscrEstadual]"
+                      length="30"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConInscrEstadual]"
+                      name="ConInscrEstadual"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCargo]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConCargo]"
+                      length="60"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCargo]"
+                      name="ConCargo"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConFuncao]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConFuncao]"
+                      length="60"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConFuncao]"
+                      name="ConFuncao"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCMC]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConCMC]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCMC]"
+                      name="ConCMC"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConDtNasc]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConDtNasc]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConDtNasc]"
+                      name="ConDtNasc"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConSexo]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConSexo]"
+                      length="10"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConSexo]"
+                      name="ConSexo"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRG]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConRG]"
+                      length="20"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRG]"
+                      name="ConRG"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRGDtEmissao]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConRGDtEmissao]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRGDtEmissao]"
+                      name="ConRGDtEmissao"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRGOrgaoExp]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConRGOrgaoExp]"
+                      length="10"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRGOrgaoExp]"
+                      name="ConRGOrgaoExp"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRGUFExp]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConRGUFExp]"
+                      length="2"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRGUFExp]"
+                      name="ConRGUFExp"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNumTitulo]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConNumTitulo]"
+                      length="30"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNumTitulo]"
+                      name="ConNumTitulo"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNumHabilitacao]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConNumHabilitacao]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNumHabilitacao]"
+                      name="ConNumHabilitacao"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCatHabilitacao]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConCatHabilitacao]"
+                      length="5"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCatHabilitacao]"
+                      name="ConCatHabilitacao"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConIDTipoDocumento]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConIDTipoDocumento]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConIDTipoDocumento]"
+                      name="ConIDTipoDocumento"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNrDocumento]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConNrDocumento]"
+                      length="50"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNrDocumento]"
+                      name="ConNrDocumento"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConUFDocumento]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConUFDocumento]"
+                      length="2"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConUFDocumento]"
+                      name="ConUFDocumento"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNacionalidade]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConNacionalidade]"
+                      length="30"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNacionalidade]"
+                      name="ConNacionalidade"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNacCorrigida]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConNacCorrigida]"
+                      length="30"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNacCorrigida]"
+                      name="ConNacCorrigida"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConEstadoCivil]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConEstadoCivil]"
+                      length="30"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConEstadoCivil]"
+                      name="ConEstadoCivil"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConProfissao]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConProfissao]"
+                      length="100"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConProfissao]"
+                      name="ConProfissao"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTelefones]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConTelefones]"
+                      length="80"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTelefones]"
+                      name="ConTelefones"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTelefoneResidencial]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConTelefoneResidencial]"
+                      length="11"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTelefoneResidencial]"
+                      name="ConTelefoneResidencial"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTelefoneComercial]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConTelefoneComercial]"
+                      length="11"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTelefoneComercial]"
+                      name="ConTelefoneComercial"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTelefoneCelular]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConTelefoneCelular]"
+                      length="11"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTelefoneCelular]"
+                      name="ConTelefoneCelular"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConEMail]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConEMail]"
+                      length="50"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConEMail]"
+                      name="ConEMail"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCEP]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConCEP]"
+                      length="9"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCEP]"
+                      name="ConCEP"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTipoLograd]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConTipoLograd]"
+                      length="25"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTipoLograd]"
+                      name="ConTipoLograd"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConEndereco]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConEndereco]"
+                      length="75"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConEndereco]"
+                      name="ConEndereco"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNumero]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConNumero]"
+                      length="10"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNumero]"
+                      name="ConNumero"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConComplemento]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConComplemento]"
+                      length="120"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConComplemento]"
+                      name="ConComplemento"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConBairroId]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConBairroId]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConBairroId]"
+                      name="ConBairroId"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCidadeId]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConCidadeId]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCidadeId]"
+                      name="ConCidadeId"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCidNascId]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConCidNascId]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConCidNascId]"
+                      name="ConCidNascId"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRespRG]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConRespRG]"
+                      length="15"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRespRG]"
+                      name="ConRespRG"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRespNome]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConRespNome]"
+                      length="50"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRespNome]"
+                      name="ConRespNome"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConFoto]"
+                      dataType="image"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConFoto]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConFoto]"
+                      name="ConFoto"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConIDConjuge]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConIDConjuge]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConIDConjuge]"
+                      name="ConIDConjuge"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConSite]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConSite]"
+                      length="100"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConSite]"
+                      name="ConSite"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConIDAnterior]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConIDAnterior]"
+                      length="30"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConIDAnterior]"
+                      name="ConIDAnterior"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRendaMensal]"
+                      dataType="cy"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConRendaMensal]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConRendaMensal]"
+                      name="ConRendaMensal"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConFalecido]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConFalecido]"
+                      length="3"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConFalecido]"
+                      name="ConFalecido"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConGrafica]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConGrafica]"
+                      length="3"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConGrafica]"
+                      name="ConGrafica"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConDtBaseTCE]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConDtBaseTCE]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConDtBaseTCE]"
+                      name="ConDtBaseTCE"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConIDCBO]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConIDCBO]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConIDCBO]"
+                      name="ConIDCBO"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNomeMae]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConNomeMae]"
+                      length="100"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConNomeMae]"
+                      name="ConNomeMae"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTecUltAlt]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConTecUltAlt]"
+                      length="255"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConTecUltAlt]"
+                      name="ConTecUltAlt"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConDtUltAlt]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConDtUltAlt]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConDtUltAlt]"
+                      name="ConDtUltAlt"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConSenha]"
+                      dataType="bytes"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConSenha]"
+                      length="50"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConSenha]"
+                      name="ConSenha"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConDtValidadeSenha]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConDtValidadeSenha]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConDtValidadeSenha]"
+                      name="ConDtValidadeSenha"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConDtCriaSenha]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConDtCriaSenha]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConDtCriaSenha]"
+                      name="ConDtCriaSenha"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[conFonetizado]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[conFonetizado]"
+                      length="100"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[conFonetizado]"
+                      name="conFonetizado"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConIDNacionalidade]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConIDNacionalidade]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[ConIDNacionalidade]"
+                      name="ConIDNacionalidade"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[tmpConFoneAuxiliar]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[tmpConFoneAuxiliar]"
+                      length="13"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[tmpConFoneAuxiliar]"
+                      name="tmpConFoneAuxiliar"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[tmpTipoPessoa]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[tmpTipoPessoa]"
+                      length="20"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].Columns[tmpTipoPessoa]"
+                      name="tmpTipoPessoa"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConId]"
+                      dataType="i8"
+                      name="ConId" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConTipoPessoa]"
+                      codePage="1252"
+                      dataType="str"
+                      length="20"
+                      name="ConTipoPessoa" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConNome]"
+                      codePage="1252"
+                      dataType="str"
+                      length="255"
+                      name="ConNome" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConCNPJCPF]"
+                      codePage="1252"
+                      dataType="str"
+                      length="14"
+                      name="ConCNPJCPF" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConNomeFantasia]"
+                      codePage="1252"
+                      dataType="str"
+                      length="255"
+                      name="ConNomeFantasia" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConInscrEstadual]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      name="ConInscrEstadual" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConCargo]"
+                      codePage="1252"
+                      dataType="str"
+                      length="60"
+                      name="ConCargo" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConFuncao]"
+                      codePage="1252"
+                      dataType="str"
+                      length="60"
+                      name="ConFuncao" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConCMC]"
+                      dataType="i8"
+                      name="ConCMC" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConDtNasc]"
+                      dataType="dbTimeStamp"
+                      name="ConDtNasc" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConSexo]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="ConSexo" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConRG]"
+                      codePage="1252"
+                      dataType="str"
+                      length="20"
+                      name="ConRG" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConRGDtEmissao]"
+                      dataType="dbTimeStamp"
+                      name="ConRGDtEmissao" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConRGOrgaoExp]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="ConRGOrgaoExp" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConRGUFExp]"
+                      codePage="1252"
+                      dataType="str"
+                      length="2"
+                      name="ConRGUFExp" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConNumTitulo]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      name="ConNumTitulo" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConNumHabilitacao]"
+                      dataType="i8"
+                      name="ConNumHabilitacao" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConCatHabilitacao]"
+                      codePage="1252"
+                      dataType="str"
+                      length="5"
+                      name="ConCatHabilitacao" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConIDTipoDocumento]"
+                      dataType="i4"
+                      name="ConIDTipoDocumento" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConNrDocumento]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="ConNrDocumento" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConUFDocumento]"
+                      codePage="1252"
+                      dataType="str"
+                      length="2"
+                      name="ConUFDocumento" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConNacionalidade]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      name="ConNacionalidade" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConNacCorrigida]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      name="ConNacCorrigida" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConEstadoCivil]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      name="ConEstadoCivil" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConProfissao]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="ConProfissao" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConTelefones]"
+                      codePage="1252"
+                      dataType="str"
+                      length="80"
+                      name="ConTelefones" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConTelefoneResidencial]"
+                      codePage="1252"
+                      dataType="str"
+                      length="11"
+                      name="ConTelefoneResidencial" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConTelefoneComercial]"
+                      codePage="1252"
+                      dataType="str"
+                      length="11"
+                      name="ConTelefoneComercial" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConTelefoneCelular]"
+                      codePage="1252"
+                      dataType="str"
+                      length="11"
+                      name="ConTelefoneCelular" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConEMail]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="ConEMail" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConCEP]"
+                      codePage="1252"
+                      dataType="str"
+                      length="9"
+                      name="ConCEP" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConTipoLograd]"
+                      codePage="1252"
+                      dataType="str"
+                      length="25"
+                      name="ConTipoLograd" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConEndereco]"
+                      codePage="1252"
+                      dataType="str"
+                      length="75"
+                      name="ConEndereco" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConNumero]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      name="ConNumero" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConComplemento]"
+                      codePage="1252"
+                      dataType="str"
+                      length="120"
+                      name="ConComplemento" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConBairroId]"
+                      dataType="i4"
+                      name="ConBairroId" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConCidadeId]"
+                      dataType="i4"
+                      name="ConCidadeId" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConCidNascId]"
+                      dataType="i4"
+                      name="ConCidNascId" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConRespRG]"
+                      codePage="1252"
+                      dataType="str"
+                      length="15"
+                      name="ConRespRG" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConRespNome]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      name="ConRespNome" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConFoto]"
+                      dataType="image"
+                      name="ConFoto" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConIDConjuge]"
+                      dataType="i8"
+                      name="ConIDConjuge" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConSite]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="ConSite" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConIDAnterior]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      name="ConIDAnterior" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConRendaMensal]"
+                      dataType="cy"
+                      name="ConRendaMensal" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConFalecido]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="ConFalecido" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConGrafica]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="ConGrafica" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConDtBaseTCE]"
+                      dataType="dbTimeStamp"
+                      name="ConDtBaseTCE" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConIDCBO]"
+                      dataType="i4"
+                      name="ConIDCBO" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConNomeMae]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="ConNomeMae" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConTecUltAlt]"
+                      codePage="1252"
+                      dataType="str"
+                      length="255"
+                      name="ConTecUltAlt" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConDtUltAlt]"
+                      dataType="dbTimeStamp"
+                      name="ConDtUltAlt" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConSenha]"
+                      dataType="bytes"
+                      length="50"
+                      name="ConSenha" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConDtValidadeSenha]"
+                      dataType="dbTimeStamp"
+                      name="ConDtValidadeSenha" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConDtCriaSenha]"
+                      dataType="dbTimeStamp"
+                      name="ConDtCriaSenha" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[conFonetizado]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      name="conFonetizado" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[ConIDNacionalidade]"
+                      dataType="i4"
+                      name="ConIDNacionalidade" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[tmpConFoneAuxiliar]"
+                      codePage="1252"
+                      dataType="str"
+                      length="13"
+                      name="tmpConFoneAuxiliar" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB].ExternalColumns[tmpTipoPessoa]"
+                      codePage="1252"
+                      dataType="str"
+                      length="20"
+                      name="tmpTipoPessoa" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB]"
+                  isErrorOut="true"
+                  name="Saída de Erro de Origem OLE DB">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConId]"
+                      dataType="i8"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConId]"
+                      name="ConId" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConTipoPessoa]"
+                      codePage="1252"
+                      dataType="str"
+                      length="20"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConTipoPessoa]"
+                      name="ConTipoPessoa" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConNome]"
+                      codePage="1252"
+                      dataType="str"
+                      length="255"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConNome]"
+                      name="ConNome" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConCNPJCPF]"
+                      codePage="1252"
+                      dataType="str"
+                      length="14"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConCNPJCPF]"
+                      name="ConCNPJCPF" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConNomeFantasia]"
+                      codePage="1252"
+                      dataType="str"
+                      length="255"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConNomeFantasia]"
+                      name="ConNomeFantasia" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConInscrEstadual]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConInscrEstadual]"
+                      name="ConInscrEstadual" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConCargo]"
+                      codePage="1252"
+                      dataType="str"
+                      length="60"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConCargo]"
+                      name="ConCargo" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConFuncao]"
+                      codePage="1252"
+                      dataType="str"
+                      length="60"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConFuncao]"
+                      name="ConFuncao" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConCMC]"
+                      dataType="i8"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConCMC]"
+                      name="ConCMC" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConDtNasc]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConDtNasc]"
+                      name="ConDtNasc" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConSexo]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConSexo]"
+                      name="ConSexo" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConRG]"
+                      codePage="1252"
+                      dataType="str"
+                      length="20"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConRG]"
+                      name="ConRG" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConRGDtEmissao]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConRGDtEmissao]"
+                      name="ConRGDtEmissao" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConRGOrgaoExp]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConRGOrgaoExp]"
+                      name="ConRGOrgaoExp" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConRGUFExp]"
+                      codePage="1252"
+                      dataType="str"
+                      length="2"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConRGUFExp]"
+                      name="ConRGUFExp" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConNumTitulo]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConNumTitulo]"
+                      name="ConNumTitulo" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConNumHabilitacao]"
+                      dataType="i8"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConNumHabilitacao]"
+                      name="ConNumHabilitacao" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConCatHabilitacao]"
+                      codePage="1252"
+                      dataType="str"
+                      length="5"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConCatHabilitacao]"
+                      name="ConCatHabilitacao" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConIDTipoDocumento]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConIDTipoDocumento]"
+                      name="ConIDTipoDocumento" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConNrDocumento]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConNrDocumento]"
+                      name="ConNrDocumento" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConUFDocumento]"
+                      codePage="1252"
+                      dataType="str"
+                      length="2"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConUFDocumento]"
+                      name="ConUFDocumento" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConNacionalidade]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConNacionalidade]"
+                      name="ConNacionalidade" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConNacCorrigida]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConNacCorrigida]"
+                      name="ConNacCorrigida" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConEstadoCivil]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConEstadoCivil]"
+                      name="ConEstadoCivil" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConProfissao]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConProfissao]"
+                      name="ConProfissao" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConTelefones]"
+                      codePage="1252"
+                      dataType="str"
+                      length="80"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConTelefones]"
+                      name="ConTelefones" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConTelefoneResidencial]"
+                      codePage="1252"
+                      dataType="str"
+                      length="11"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConTelefoneResidencial]"
+                      name="ConTelefoneResidencial" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConTelefoneComercial]"
+                      codePage="1252"
+                      dataType="str"
+                      length="11"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConTelefoneComercial]"
+                      name="ConTelefoneComercial" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConTelefoneCelular]"
+                      codePage="1252"
+                      dataType="str"
+                      length="11"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConTelefoneCelular]"
+                      name="ConTelefoneCelular" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConEMail]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConEMail]"
+                      name="ConEMail" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConCEP]"
+                      codePage="1252"
+                      dataType="str"
+                      length="9"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConCEP]"
+                      name="ConCEP" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConTipoLograd]"
+                      codePage="1252"
+                      dataType="str"
+                      length="25"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConTipoLograd]"
+                      name="ConTipoLograd" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConEndereco]"
+                      codePage="1252"
+                      dataType="str"
+                      length="75"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConEndereco]"
+                      name="ConEndereco" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConNumero]"
+                      codePage="1252"
+                      dataType="str"
+                      length="10"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConNumero]"
+                      name="ConNumero" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConComplemento]"
+                      codePage="1252"
+                      dataType="str"
+                      length="120"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConComplemento]"
+                      name="ConComplemento" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConBairroId]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConBairroId]"
+                      name="ConBairroId" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConCidadeId]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConCidadeId]"
+                      name="ConCidadeId" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConCidNascId]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConCidNascId]"
+                      name="ConCidNascId" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConRespRG]"
+                      codePage="1252"
+                      dataType="str"
+                      length="15"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConRespRG]"
+                      name="ConRespRG" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConRespNome]"
+                      codePage="1252"
+                      dataType="str"
+                      length="50"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConRespNome]"
+                      name="ConRespNome" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConFoto]"
+                      dataType="image"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConFoto]"
+                      name="ConFoto" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConIDConjuge]"
+                      dataType="i8"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConIDConjuge]"
+                      name="ConIDConjuge" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConSite]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConSite]"
+                      name="ConSite" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConIDAnterior]"
+                      codePage="1252"
+                      dataType="str"
+                      length="30"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConIDAnterior]"
+                      name="ConIDAnterior" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConRendaMensal]"
+                      dataType="cy"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConRendaMensal]"
+                      name="ConRendaMensal" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConFalecido]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConFalecido]"
+                      name="ConFalecido" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConGrafica]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConGrafica]"
+                      name="ConGrafica" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConDtBaseTCE]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConDtBaseTCE]"
+                      name="ConDtBaseTCE" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConIDCBO]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConIDCBO]"
+                      name="ConIDCBO" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConNomeMae]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConNomeMae]"
+                      name="ConNomeMae" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConTecUltAlt]"
+                      codePage="1252"
+                      dataType="str"
+                      length="255"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConTecUltAlt]"
+                      name="ConTecUltAlt" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConDtUltAlt]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConDtUltAlt]"
+                      name="ConDtUltAlt" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConSenha]"
+                      dataType="bytes"
+                      length="50"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConSenha]"
+                      name="ConSenha" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConDtValidadeSenha]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConDtValidadeSenha]"
+                      name="ConDtValidadeSenha" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConDtCriaSenha]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConDtCriaSenha]"
+                      name="ConDtCriaSenha" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[conFonetizado]"
+                      codePage="1252"
+                      dataType="str"
+                      length="100"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[conFonetizado]"
+                      name="conFonetizado" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConIDNacionalidade]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ConIDNacionalidade]"
+                      name="ConIDNacionalidade" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[tmpConFoneAuxiliar]"
+                      codePage="1252"
+                      dataType="str"
+                      length="13"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[tmpConFoneAuxiliar]"
+                      name="tmpConFoneAuxiliar" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[tmpTipoPessoa]"
+                      codePage="1252"
+                      dataType="str"
+                      length="20"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[tmpTipoPessoa]"
+                      name="tmpTipoPessoa" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Erro de Origem OLE DB].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Tarefa Fluxo de Dados 1.Paths[Saída de Origem OLE DB]"
+              endId="Package\Tarefa Fluxo de Dados 1\Destino - Contribuintes.Inputs[Destination Input]"
+              name="Saída de Origem OLE DB"
+              startId="Package\Tarefa Fluxo de Dados 1\Origem - Contribuintes.Outputs[Saída de Origem OLE DB]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+    <DTS:Executable
+      DTS:refId="Package\Tarefa SQL de Preparação 1"
+      DTS:CreationName="Microsoft.ExecuteSQLTask"
+      DTS:DTSID="{CC51314B-954E-440C-9637-8AB4FA0B80D9}"
+      DTS:ExecutableType="Microsoft.ExecuteSQLTask"
+      DTS:FailPackageOnFailure="True"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Tarefa SQL de Preparação 1"
+      DTS:ThreadHint="0">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <SQLTask:SqlTaskData
+          SQLTask:Connection="{F3274207-786B-4E2F-B580-A8FFFC180AD8}"
+          SQLTask:SqlStatementSource="CREATE TABLE [dbo].[Contribuintes] (&#xA;[ConId] bigint NOT NULL,&#xA;[ConTipoPessoa] varchar(20) NOT NULL,&#xA;[ConNome] varchar(255),&#xA;[ConCNPJCPF] char(14),&#xA;[ConNomeFantasia] varchar(255),&#xA;[ConInscrEstadual] varchar(30),&#xA;[ConCargo] varchar(60),&#xA;[ConFuncao] varchar(60),&#xA;[ConCMC] bigint,&#xA;[ConDtNasc] datetime,&#xA;[ConSexo] char(10),&#xA;[ConRG] varchar(20),&#xA;[ConRGDtEmissao] datetime,&#xA;[ConRGOrgaoExp] char(10),&#xA;[ConRGUFExp] char(2),&#xA;[ConNumTitulo] varchar(30),&#xA;[ConNumHabilitacao] bigint,&#xA;[ConCatHabilitacao] varchar(5),&#xA;[ConIDTipoDocumento] int,&#xA;[ConNrDocumento] varchar(50),&#xA;[ConUFDocumento] varchar(2),&#xA;[ConNacionalidade] varchar(30),&#xA;[ConNacCorrigida] varchar(30),&#xA;[ConEstadoCivil] varchar(30),&#xA;[ConProfissao] varchar(100),&#xA;[ConTelefones] varchar(80),&#xA;[ConTelefoneResidencial] varchar(11),&#xA;[ConTelefoneComercial] varchar(11),&#xA;[ConTelefoneCelular] varchar(11),&#xA;[ConEMail] varchar(50),&#xA;[ConCEP] char(9),&#xA;[ConTipoLograd] varchar(25),&#xA;[ConEndereco] varchar(75),&#xA;[ConNumero] varchar(10),&#xA;[ConComplemento] varchar(120),&#xA;[ConBairroId] int,&#xA;[ConCidadeId] int,&#xA;[ConCidNascId] int,&#xA;[ConRespRG] varchar(15),&#xA;[ConRespNome] varchar(50),&#xA;[ConFoto] image,&#xA;[ConIDConjuge] bigint,&#xA;[ConSite] varchar(100),&#xA;[ConIDAnterior] varchar(30),&#xA;[ConRendaMensal] money,&#xA;[ConFalecido] varchar(3),&#xA;[ConGrafica] varchar(3),&#xA;[ConDtBaseTCE] datetime,&#xA;[ConIDCBO] int,&#xA;[ConNomeMae] varchar(100),&#xA;[ConTecUltAlt] varchar(255),&#xA;[ConDtUltAlt] datetime,&#xA;[ConSenha] varbinary(50),&#xA;[ConDtValidadeSenha] datetime,&#xA;[ConDtCriaSenha] datetime,&#xA;[conFonetizado] varchar(100),&#xA;[ConIDNacionalidade] int,&#xA;[tmpConFoneAuxiliar] varchar(13),&#xA;[tmpTipoPessoa] varchar(20)&#xA;)&#xA;GO&#xA;" xmlns:SQLTask="www.microsoft.com/sqlserver/dts/tasks/sqltask" />
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+  <DTS:PrecedenceConstraints>
+    <DTS:PrecedenceConstraint
+      DTS:refId="Package.PrecedenceConstraints[{AADFBF82-6756-4A17-B326-A81793AA12E3\}]"
+      DTS:CreationName=""
+      DTS:DTSID="{AADFBF82-6756-4A17-B326-A81793AA12E3}"
+      DTS:From="Package\Tarefa SQL de Preparação 1"
+      DTS:LogicalAnd="True"
+      DTS:ObjectName="{AADFBF82-6756-4A17-B326-A81793AA12E3}"
+      DTS:To="Package\Tarefa Fluxo de Dados 1" />
+  </DTS:PrecedenceConstraints>
+</DTS:Executable>

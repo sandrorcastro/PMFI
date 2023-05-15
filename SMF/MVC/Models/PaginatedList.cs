@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using MVC.ViewModels;
-
 namespace MVC.Models
 {
     public class PaginatedList<T> : List<T>, IPaginatedList where T:class
@@ -17,7 +16,6 @@ namespace MVC.Models
             AddRange(items);
             //AddRange(source);
         }
-
         public int CurrentPage { get; private set; }
         public int PageSize { get; private set; }
         public int TotalPages { get; private set; }

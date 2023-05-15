@@ -13,7 +13,10 @@ namespace Infra.Context
         public ContextoAplicacao CreateDbContext(string[] args)
         {
             var optionsBuilder = new DbContextOptionsBuilder<ContextoAplicacao>();
-            optionsBuilder.UseSqlServer("Data Source=SANDRO-ASPIRE-4\\SQLEXPRESS;Initial Catalog=SMF_Processo;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            //Home
+            //optionsBuilder.UseSqlServer("Data Source=SANDRO-ASPIRE-4\\SQLEXPRESS;Initial Catalog=SMF_Processo;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False");
+            //SMTI
+            optionsBuilder.UseSqlServer("Data Source=172.27.84.102;Initial Catalog=SMF_Processo;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Persist Security Info=True;User ID=rpdesenv;Password=visual");
 
             return new ContextoAplicacao(optionsBuilder.Options);
         }
