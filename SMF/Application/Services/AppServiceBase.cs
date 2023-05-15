@@ -1,6 +1,8 @@
 ﻿
 using Application.Interfaces.Base;
+using Domain.Entities;
 using Domain.Interfaces.Base;
+using System;
 
 namespace Application.Services
 {
@@ -55,6 +57,19 @@ namespace Application.Services
 
             
         }
+        public IQueryable<TEntity> GetById()
+        {
+            return _serviceBase.GetById();
+        }
+        public IQueryable<TEntity> GetById(Func<TEntity, bool> predicate)
+        {
+            return _serviceBase.GetById(predicate);
+        }
+        public IQueryable<TEntity> GetById(params object[] key)
+        {
+            return _serviceBase.GetById(key);
+        }
+
 
         public IQueryable<TEntity> Get(Func<TEntity, bool> predicate)
         {

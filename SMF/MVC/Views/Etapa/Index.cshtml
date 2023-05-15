@@ -1,0 +1,155 @@
+﻿@model IEnumerable<Domain.Entities.Etapa>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.EtapaId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SituacaoEtapa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataInicio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataFim)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Servidor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Imovel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Economia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoEtapa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Endereco)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pessoa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PessoaProprietariaResponsavel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.PessoaTerceira)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ano)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.antigo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.protocolo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.anoprotocolo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Observacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.emailEnviado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.emailRecebido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.whatsEnviado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.whatsRecebido)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EtapaId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SituacaoEtapa.SituacaoEtapaId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataInicio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataFim)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Servidor.ServidorId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Imovel.ImovelId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Economia.ImovelId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoEtapa.TipoEtapaId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Endereco.EnderecoId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pessoa.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PessoaProprietariaResponsavel.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.PessoaTerceira.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ano)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.antigo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.protocolo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.anoprotocolo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Observacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.emailEnviado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.emailRecebido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.whatsEnviado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.whatsRecebido)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

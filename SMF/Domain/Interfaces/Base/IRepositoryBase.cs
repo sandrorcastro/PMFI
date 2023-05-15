@@ -2,23 +2,28 @@
 {
     public interface IRepositoryBase<TEntity> where TEntity : class
     {
-        void Add(TEntity obj);
-        TEntity GetById(int id);
-        TEntity GetById(long id);
-        IEnumerable<TEntity> GetAll();
-        void Update(TEntity obj);
-        void Remove(TEntity obj);
-        void Dispose();
+        public void Add(TEntity obj);
+        public TEntity GetById(int id);
+        public TEntity GetById(long id);
+        public IEnumerable<TEntity> GetAll();
+        public void Update(TEntity obj);
+        public void Remove(TEntity obj);
+        public void Dispose();
         ///////////////////
-        IQueryable<TEntity> GetTodos();
-        IQueryable<TEntity> Get(Func<TEntity, bool> predicate);
+        
+        public IQueryable<TEntity> GetById();
+        public IQueryable<TEntity> GetById(Func<TEntity, bool> predicate);
+        public IQueryable<TEntity> GetById(params object[] key);
+
+        public IQueryable<TEntity> GetTodos();
+        public IQueryable<TEntity> Get(Func<TEntity, bool> predicate);
         
         public TEntity GetRelacoes(Func<TEntity, bool> predicate);
         
         public TEntity Find(Func<TEntity, bool> predicate);
-        TEntity Find(params object[] key);
+        public TEntity Find(params object[] key);
         
-        void SalvarTodos();
-        void Remove(Func<TEntity, bool> predicate);
+        public void SalvarTodos();
+        public void Remove(Func<TEntity, bool> predicate);
     }
 }

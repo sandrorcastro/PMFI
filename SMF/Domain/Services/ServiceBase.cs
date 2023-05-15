@@ -1,4 +1,6 @@
-﻿using Domain.Interfaces.Base;
+﻿using Domain.Entities;
+using Domain.Interfaces.Base;
+using System;
 
 namespace Domain.Services
 {
@@ -46,6 +48,20 @@ namespace Domain.Services
             _repository.Dispose();
         }
         /////////////////////////
+
+        public IQueryable<TEntity> GetById()
+        {
+            return _repository.GetById();
+        }
+        public IQueryable<TEntity> GetById(Func<TEntity, bool> predicate)
+        {
+            return _repository.GetById(predicate);
+        }
+        public IQueryable<TEntity> GetById(params object[] key)
+        {
+            //return (IQueryable<TEntity>)contexto.Set<TEntity>().Find(key);
+            return _repository.GetById(key);
+        }
         public IQueryable<TEntity> GetTodos()
         {
             try

@@ -16,9 +16,9 @@ namespace MVC.ViewModels
         public string Descricao { get; set; }
         public int TipoProcessoId { get; set; }
       //  [BindProperty]
-        public TipoProcesso? TipoProcesso { get; set; }
+        public TipoProcessoViewModel? TipoProcesso { get; set; }
         public int TipoEtapaId { get; set; }
-        public TipoEtapa? TipoEtapa { get; set; }
+        public TipoEtapaViewModel? TipoEtapa { get; set; }
 
     }
 }

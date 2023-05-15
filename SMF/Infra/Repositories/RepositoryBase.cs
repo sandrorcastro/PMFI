@@ -40,9 +40,10 @@ namespace Infra.Repositories
             //using (var contexto = db.CreateDbContext())
             //{
 
-                return contexto.Set<TEntity>().Find(id);
+            return contexto.Set<TEntity>().Find(id);
             //}
         }
+        
         public TEntity GetById(long id)
         {
             //using (var contexto = db.CreateDbContext())
@@ -116,6 +117,24 @@ namespace Infra.Repositories
 
         }
 
+        public IQueryable<TEntity> GetById()
+        {
+            return contexto.Set<TEntity>();
+        }
+        public IQueryable<TEntity> GetById(Func<TEntity, bool> predicate)
+        {
+            return contexto.Set<TEntity>().Where(predicate).AsQueryable();
+        }
+        public IQueryable<TEntity> GetById(params object[] key)
+        {
+            return (IQueryable<TEntity>)contexto.Set<TEntity>().Find(key);
+        }
+
+
+
+
+
+        
         public IQueryable<TEntity> Get(Func<TEntity, bool> predicate)
         {
             try

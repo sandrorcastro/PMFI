@@ -74,13 +74,14 @@ namespace IOC
                         services.AddScoped<IImovelAppService, ImovelAppService>();
                         services.AddScoped<IServidorAppService, ServidorAppService>();
                         services.AddScoped<IEtapaAppService, EtapaAppService>();
+           */
                         services.AddScoped<ITipoEtapaAppService, TipoEtapaAppService>();
-                        services.AddScoped<ISituacaoEtapaAppService, SituacaoEtapaAppService>();
+            /*            services.AddScoped<ISituacaoEtapaAppService, SituacaoEtapaAppService>();
                         services.AddScoped<IProcessoAppService, ProcessoAppService>();    
             */
                         services.AddScoped<IFluxoProcessoAppService, FluxoProcessoAppService>();
-            /*
                         services.AddScoped<ITipoProcessoAppService, TipoProcessoAppService>();
+            /* 
                         services.AddScoped<ISituacaoProcessoAppService, SituacaoProcessoAppService>();
                         services.AddScoped<IImageAppService, ImageAppService>();
                         services.AddScoped<IPerspectivaAppService, PerspectivaAppService>();
@@ -111,14 +112,15 @@ namespace IOC
                       services.AddScoped<IImovelService, ImovelService>();
                       services.AddScoped<IServidorService, ServidorService>();
                       services.AddScoped<IEtapaService, EtapaService>();
-                      services.AddScoped<ITipoEtapaService, TipoEtapaService>();
-                      services.AddScoped<ISituacaoEtapaService, SituacaoEtapaService>();
-          */
+            */
+                        services.AddScoped<ITipoEtapaService, TipoEtapaService>();
+          //            services.AddScoped<ISituacaoEtapaService, SituacaoEtapaService>();
+          
                       services.AddScoped<IFluxoProcessoService, FluxoProcessoService>();
-            /*
-                        services.AddScoped<IProcessoService, ProcessoService>();
+            
+            //            services.AddScoped<IProcessoService, ProcessoService>();
                         services.AddScoped<ITipoProcessoService, TipoProcessoService>();
-                        services.AddScoped<ISituacaoProcessoService, SituacaoProcessoService>();
+             /*           services.AddScoped<ISituacaoProcessoService, SituacaoProcessoService>();
                         services.AddScoped<IImageService, ImageService>();
                         services.AddScoped<IPerspectivaService, PerspectivaService>();
                         services.AddScoped<ITextoAutuacaoService, TextoAutuacaoService>();
@@ -150,13 +152,15 @@ namespace IOC
                       services.AddScoped<IImovelRepository, ImovelRepository>();
                       services.AddScoped<IServidorRepository, ServidorRepository>();
                       services.AddScoped<IEtapaRepository, EtapaRepository>();
+            */
                       services.AddScoped<ITipoEtapaRepository, TipoEtapaRepository>();
-                      services.AddScoped<ISituacaoEtapaRepository, SituacaoEtapaRepository>();
+             /*
+                        services.AddScoped<ISituacaoEtapaRepository, SituacaoEtapaRepository>();
                       services.AddScoped<IProcessoRepository, ProcessoRepository>();
             */
                       services.AddScoped<IFluxoProcessoRepository, FluxoProcessoRepository>();
-             /*         services.AddScoped<ITipoProcessoRepository, TipoProcessoRepository>();
-                      services.AddScoped<ISituacaoProcessoRepository, SituacaoProcessoRepository>();
+                      services.AddScoped<ITipoProcessoRepository, TipoProcessoRepository>();
+             /*         services.AddScoped<ISituacaoProcessoRepository, SituacaoProcessoRepository>();
                       services.AddScoped<IImageRepository, ImageRepository>();
                       services.AddScoped<IPerspectivaRepository, PerspectivaRepository>();
                       services.AddScoped<ITextoAutuacaoRepository, TextoAutuacaoRepository>();*/

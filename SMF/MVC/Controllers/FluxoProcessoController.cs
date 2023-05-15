@@ -9,52 +9,63 @@ using Domain.Entities;
 using Infra.Context;
 using MVC.ViewModels;
 using AutoMapper;
+using Application.Interfaces;
+using MVC.Extensions;
+using MVC.Models;
 
 namespace MVC.Controllers
 {
     public class FluxoProcessoController : Controller
     {
-        private readonly ContextoAplicacao _context;
+        //private readonly ContextoAplicacao fluxoProcessoAppService;
+        private readonly IFluxoProcessoAppService fluxoProcessoAppService;
+        private readonly ITipoProcessoAppService tipoProcessoAppService;
+        private readonly ITipoEtapaAppService tipoEtapaAppService;
         private IMapper mapper;
 
-        public FluxoProcessoController(ContextoAplicacao context, IMapper mapper)
+        public FluxoProcessoController(IMapper mapper, IFluxoProcessoAppService fluxoProcessoAppService, ITipoProcessoAppService tipoProcessoAppService, ITipoEtapaAppService tipoEtapaAppService)
         {
-            _context = context;
+            //fluxoProcessoAppService = context;
             this.mapper = mapper;
+            this.fluxoProcessoAppService = fluxoProcessoAppService;
+            this.tipoProcessoAppService = tipoProcessoAppService;
+            this.tipoEtapaAppService = tipoEtapaAppService;
         }
 
         // GET: FluxoProcesso
         public async Task<IActionResult> Index()
         {
-            var contextoAplicacao = _context.dbSFluxosProcesso.Include(f => f.TipoEtapa).Include(f => f.TipoProcesso);
-            return View(await contextoAplicacao.ToListAsync());
+            //var contextoAplicacao = fluxoProcessoAppService.dbSFluxosProcesso.Include(f => f.TipoEtapa).Include(f => f.TipoProcesso);
+            ///var contextoAplicacao = fluxoProcessoAppService.GetTodos().Include(f => f.TipoEtapa).Include(f => f.TipoProcesso);
+            var contextoAplicacao = from s in fluxoProcessoAppService.GetTodos().Filter("").OrderBy("FluxoProcessoId", SortDirection.Desc) select s;
+            return View(mapper.Map<IEnumerable<FluxoProcessoViewModel>>(contextoAplicacao.ToList()));
         }
 
         // GET: FluxoProcesso/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(int id)
         {
-            if (id == null || _context.dbSFluxosProcesso == null)
+            //if (id == null || fluxoProcessoAppService.dbSFluxosProcesso == null)
+            if (id == null || fluxoProcessoAppService.Find(id) == null)
             {
                 return NotFound();
             }
-
-            var fluxoProcesso = await _context.dbSFluxosProcesso
-                .Include(f => f.TipoEtapa)
-                .Include(f => f.TipoProcesso)
-                .FirstOrDefaultAsync(m => m.FluxoProcessoId == id);
+            var fluxoProcesso = fluxoProcessoAppService.GetById().Filter(id.ToString());//.FirstOrDefault();
+            //var fluxoProcesso = from s in fluxoProcessoAppService.GetById(fp=>fp.FluxoProcessoId==id).Include(te=>te.TipoEtapa).Include(tp=>tp.TipoProcesso) select s;
             if (fluxoProcesso == null)
             {
                 return NotFound();
             }
 
-            return View(mapper.Map<FluxoProcessoViewModel>(fluxoProcesso));
+            return View(mapper.Map<FluxoProcessoViewModel>(fluxoProcesso.FirstOrDefault()));
         }
 
         // GET: FluxoProcesso/Create
         public IActionResult Create()
         {
-            ViewData["TipoEtapaId"] = new SelectList(_context.dbSTiposEtapa, "TipoEtapaId", "Descricao");
-            ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso, "TipoProcessoId", "Descricao");
+            //ViewData["TipoEtapaId"] = new SelectList(fluxoProcessoAppService.dbSTiposEtapa, "TipoEtapaId", "Descricao");
+            //ViewData["TipoProcessoId"] = new SelectList(fluxoProcessoAppService.dbSTiposProcesso, "TipoProcessoId", "Descricao");
+            ViewData["TipoEtapaId"] = new SelectList(tipoEtapaAppService.GetTodos(), "TipoEtapaId", "Descricao");
+            ViewData["TipoProcessoId"] = new SelectList(tipoProcessoAppService.GetTodos(), "TipoProcessoId", "Descricao");
             return View();
         }
 
@@ -68,31 +79,38 @@ namespace MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(mapper.Map<FluxoProcesso>(fluxoProcesso));
-                await _context.SaveChangesAsync();
+                fluxoProcessoAppService.Add(mapper.Map<FluxoProcesso>(fluxoProcesso));
+                //await fluxoProcessoAppService.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TipoEtapaId"] = new SelectList(_context.dbSTiposEtapa, "TipoEtapaId", "Descricao", fluxoProcesso.TipoEtapaId);
-            ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso, "TipoProcessoId", "Descricao", fluxoProcesso.TipoProcessoId);
+            //ViewData["TipoEtapaId"] = new SelectList(fluxoProcessoAppService.dbSTiposEtapa, "TipoEtapaId", "Descricao", fluxoProcesso.TipoEtapaId);
+            //ViewData["TipoProcessoId"] = new SelectList(fluxoProcessoAppService.dbSTiposProcesso, "TipoProcessoId", "Descricao", fluxoProcesso.TipoProcessoId);
+            ViewData["TipoEtapaId"] = new SelectList(tipoEtapaAppService.GetTodos(), "TipoEtapaId", "Descricao", fluxoProcesso.TipoEtapaId);
+            ViewData["TipoProcessoId"] = new SelectList(tipoProcessoAppService.GetTodos(), "TipoProcessoId", "Descricao", fluxoProcesso.TipoProcessoId);
             return View(fluxoProcesso);
         }
 
         // GET: FluxoProcesso/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(int id)
         {
-            if (id == null || _context.dbSFluxosProcesso == null)
+            
+            if (id == null || fluxoProcessoAppService.GetById(id) == null)
             {
                 return NotFound();
             }
 
-            var fluxoProcesso = await _context.dbSFluxosProcesso.FindAsync(id);
+            //var fluxoProcesso = await fluxoProcessoAppService.dbSFluxosProcesso.FindAsync(id);
+            //var fluxoProcesso = fluxoProcessoAppService.Get(fp => fp.FluxoProcessoId == id);
+            var fluxoProcesso = fluxoProcessoAppService.GetById().Filter(id.ToString());
             if (fluxoProcesso == null)
             {
                 return NotFound();
             }
-            ViewData["TipoEtapaId"] = new SelectList(_context.dbSTiposEtapa, "TipoEtapaId", "Descricao", fluxoProcesso.TipoEtapaId);
-            ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso, "TipoProcessoId", "Descricao", fluxoProcesso.TipoProcessoId);
-            return View(mapper.Map<FluxoProcessoViewModel>(fluxoProcesso));
+            // ViewData["TipoEtapaId"] = new SelectList(fluxoProcessoAppService.dbSTiposEtapa, "TipoEtapaId", "Descricao", fluxoProcesso.TipoEtapaId);
+            //ViewData["TipoProcessoId"] = new SelectList(fluxoProcessoAppService.dbSTiposProcesso, "TipoProcessoId", "Descricao", fluxoProcesso.TipoProcessoId);
+            ViewData["TipoEtapaId"] = new SelectList(tipoEtapaAppService.GetTodos(), "TipoEtapaId", "Descricao"); //, fluxoProcesso.TipoEtapaId);
+            ViewData["TipoProcessoId"] = new SelectList(tipoProcessoAppService.GetTodos(), "TipoProcessoId", "Descricao");//, fluxoProcesso.TipoProcessoId);
+            return View(mapper.Map<FluxoProcessoViewModel>(fluxoProcesso.FirstOrDefault()));
         }
 
         // POST: FluxoProcesso/Edit/5
@@ -111,8 +129,8 @@ namespace MVC.Controllers
             {
                 try
                 {
-                    _context.Update(mapper.Map<FluxoProcesso>(fluxoProcesso));
-                    await _context.SaveChangesAsync();
+                    fluxoProcessoAppService.Update(mapper.Map<FluxoProcesso>(fluxoProcesso));
+                  //  await fluxoProcessoAppService.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -127,23 +145,28 @@ namespace MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["TipoEtapaId"] = new SelectList(_context.dbSTiposEtapa, "TipoEtapaId", "TipoEtapaId", fluxoProcesso.TipoEtapaId);
-            ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso, "TipoProcessoId", "TipoProcessoId", fluxoProcesso.TipoProcessoId);
+            // ViewData["TipoEtapaId"] = new SelectList(fluxoProcessoAppService.dbSTiposEtapa, "TipoEtapaId", "TipoEtapaId", fluxoProcesso.TipoEtapaId);
+            // ViewData["TipoProcessoId"] = new SelectList(fluxoProcessoAppService.dbSTiposProcesso, "TipoProcessoId", "TipoProcessoId", fluxoProcesso.TipoProcessoId);
+            ViewData["TipoEtapaId"] = new SelectList(tipoEtapaAppService.GetTodos(), "TipoEtapaId", "TipoEtapaId", fluxoProcesso.TipoEtapaId);
+            ViewData["TipoProcessoId"] = new SelectList(tipoProcessoAppService.GetTodos(), "TipoProcessoId", "TipoProcessoId", fluxoProcesso.TipoProcessoId);
             return View(fluxoProcesso);
         }
 
         // GET: FluxoProcesso/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null || _context.dbSFluxosProcesso == null)
+            //if (id == null || fluxoProcessoAppService.dbSFluxosProcesso == null)
+            if (id == null || fluxoProcessoAppService == null)
             {
                 return NotFound();
             }
 
-            var fluxoProcesso = await _context.dbSFluxosProcesso
-                .Include(f => f.TipoEtapa)
-                .Include(f => f.TipoProcesso)
-                .FirstOrDefaultAsync(m => m.FluxoProcessoId == id);
+            //var fluxoProcesso = await fluxoProcessoAppService.dbSFluxosProcesso
+            //var fluxoProcesso = fluxoProcessoAppService.Get(fp=>fp.FluxoProcessoId==id)
+            var fluxoProcesso = fluxoProcessoAppService.GetById().Filter(id.ToString()).FirstOrDefault();
+                //.Include(f => f.TipoEtapa)
+                //.Include(f => f.TipoProcesso)
+                //.FirstOrDefaultAsync(m => m.FluxoProcessoId == id);
             if (fluxoProcesso == null)
             {
                 return NotFound();
@@ -157,23 +180,28 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            if (_context.dbSFluxosProcesso == null)
+            //if (fluxoProcessoAppService.dbSFluxosProcesso == null)
+            if (fluxoProcessoAppService == null)
             {
                 return Problem("Entity set 'ContextoAplicacao.dbSFluxosProcesso'  is null.");
             }
-            var fluxoProcesso = await _context.dbSFluxosProcesso.FindAsync(id);
+            //var fluxoProcesso = await fluxoProcessoAppService.dbSFluxosProcesso.FindAsync(id);
+            //var fluxoProcesso = fluxoProcessoAppService.Find(id);
+            var fluxoProcesso = fluxoProcessoAppService.GetById(id);
             if (fluxoProcesso != null)
             {
-                _context.dbSFluxosProcesso.Remove(fluxoProcesso);
+                //fluxoProcessoAppService.dbSFluxosProcesso.Remove(fluxoProcesso);
+                fluxoProcessoAppService.Remove(fluxoProcesso);
             }
             
-            await _context.SaveChangesAsync();
+            //await fluxoProcessoAppService.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool FluxoProcessoExists(int id)
         {
-          return (_context.dbSFluxosProcesso?.Any(e => e.FluxoProcessoId == id)).GetValueOrDefault();
+            //return (fluxoProcessoAppService.dbSFluxosProcesso?.Any(e => e.FluxoProcessoId == id)).GetValueOrDefault();
+            return (fluxoProcessoAppService.Get(fp=>fp.FluxoProcessoId==id)?.Any(e => e.FluxoProcessoId == id)).GetValueOrDefault();
         }
     }
 }
