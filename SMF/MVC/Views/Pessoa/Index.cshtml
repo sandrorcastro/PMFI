@@ -1,5 +1,5 @@
-﻿@model IEnumerable<Domain.Entities.Pessoa>
-
+﻿@*@model IEnumerable<Domain.Entities.Pessoa>*@
+@model MVC.ViewModels.PessoaViewModel
 @{
     ViewData["Title"] = "Index";
 }
@@ -31,7 +31,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Pessoas) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Nome)
@@ -57,3 +57,5 @@
 }
     </tbody>
 </table>
+
+@await Component.InvokeAsync("Pagination", new { values = Model.Pessoas, routeData=Model.LinkData})

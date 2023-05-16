@@ -7,23 +7,40 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
 using Infra.Context;
+using AutoMapper;
+using MVC.ViewModels;
+using MVC.Extensions;
+using MVC.Models;
 
 namespace MVC.Controllers
 {
     public class PessoaController : Controller
     {
         private readonly ContextoAplicacao _context;
+        private IMapper mapper;
 
-        public PessoaController(ContextoAplicacao context)
+        public PessoaController(ContextoAplicacao context, IMapper mapper)
         {
             _context = context;
+            this.mapper = mapper;
         }
 
         // GET: Pessoa
         public async Task<IActionResult> Index()
         {
-            var contextoAplicacao = _context.dbSPessoas.Include(p => p.TipoPessoa);
-            return View(await contextoAplicacao.ToListAsync());
+            /*var contextoAplicacao = _context.dbSPessoas.Include(p => p.TipoPessoa);
+            //return View(await contextoAplicacao.ToListAsync());
+            return View(mapper.Map<PessoaViewModel>( contextoAplicacao.ToListAsync()));*/
+
+            var query = from s in _context.dbSPessoas select s;// ToPagedList(1,1,10) ;
+            PaginatedList<Pessoa> pessoas = new PaginatedList<Pessoa>(await query.ToPagedList(), 1, 1, 10);
+            PessoaViewModel pvm = new PessoaViewModel();
+            pvm.Pessoas = pessoas;
+            return View(pvm);
+
+
+
+
         }
 
         // GET: Pessoa/Details/5

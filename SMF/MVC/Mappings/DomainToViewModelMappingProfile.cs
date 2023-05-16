@@ -12,26 +12,27 @@ namespace MVC.Mappings
         public DomainToViewModelMappingProfile() {
 
           //  CreateMap<TipoPessoa,TipoPessoaViewModel>();
-          //  CreateMap<Pessoa, PessoaViewModel>();
-            
-           // CreateMap<Pessoa, PessoaFisicaViewModel>();
-           // CreateMap<Pessoa, PessoaJuridicaViewModel>();
-           // CreateMap<PessoaFisica, PessoaViewModel>();
-           // CreateMap<PessoaJuridica, PessoaViewModel>();
+            CreateMap<Pessoa, PessoaViewModel>();
+            CreateMap<Imovel, ImovelViewModel>();
 
-           // CreateMap<PessoaFisica, PessoaFisicaViewModel>();
-           // CreateMap<PessoaJuridica, PessoaJuridicaViewModel>();
-        
+            // CreateMap<Pessoa, PessoaFisicaViewModel>();
+            // CreateMap<Pessoa, PessoaJuridicaViewModel>();
+            // CreateMap<PessoaFisica, PessoaViewModel>();
+            // CreateMap<PessoaJuridica, PessoaViewModel>();
+
+            // CreateMap<PessoaFisica, PessoaFisicaViewModel>();
+            // CreateMap<PessoaJuridica, PessoaJuridicaViewModel>();
+
             //   CreateMap<EnderecoPessoa, EnderecoPessoaViewModel>();
             //CreateMap<EnderecoEntidade, EnderecoEntidadeViewModel>();
-         //   CreateMap<Endereco, EnderecoRepositoyI>();
+            //   CreateMap<Endereco, EnderecoRepositoyI>();
 
 
             //CreateMap<Endereco, EnderecoViewModel>();
-         //   CreateMap<IQueryable<Endereco>, EnderecoViewModelX>();
-         //   CreateMap<Endereco,IQueryable<EnderecoViewModelX>>();
-         //   CreateMap<IQueryable<Endereco>, IQueryable<EnderecoViewModelX>>();
-         //   CreateMap<IQueryable<Endereco>, IQueryable<IServiceViewModel<Endereco,EnderecoViewModelX>>>();
+            //   CreateMap<IQueryable<Endereco>, EnderecoViewModelX>();
+            //   CreateMap<Endereco,IQueryable<EnderecoViewModelX>>();
+            //   CreateMap<IQueryable<Endereco>, IQueryable<EnderecoViewModelX>>();
+            //   CreateMap<IQueryable<Endereco>, IQueryable<IServiceViewModel<Endereco,EnderecoViewModelX>>>();
 
 
 
@@ -39,8 +40,8 @@ namespace MVC.Mappings
 
 
 
-         //   CreateMap<Endereco, PaginatedList<EnderecoRepositoyI>>();
-         //   CreateMap<Endereco, PaginatedList<Endereco>>();
+            //   CreateMap<Endereco, PaginatedList<EnderecoRepositoyI>>();
+            //   CreateMap<Endereco, PaginatedList<Endereco>>();
 
             //CreateMap<Logradouro, LogradouroViewModel>();
             //CreateMap<TipoLogradouro, TipoLogradouroViewModel>();
@@ -59,20 +60,20 @@ namespace MVC.Mappings
             // CreateMap<Notificacao2ViewModel, ImovelViewModel>();
             //      CreateMap<Etapa, NotificacaoViewModel>();
 
-              // CreateMap<Imovel, ImovelViewModel>();
-              // CreateMap<TipoResponsabilidade, TipoResponsabilidadeViewModel>();
-             
-                  //CreateMap<Economia, EconomiaViewModel>();
-                  
-           // CreateMap<EconomiaPessoa, EconomiaPessoaViewModel>();
+            // CreateMap<Imovel, ImovelViewModel>();
+            // CreateMap<TipoResponsabilidade, TipoResponsabilidadeViewModel>();
+
+            //CreateMap<Economia, EconomiaViewModel>();
+
+            // CreateMap<EconomiaPessoa, EconomiaPessoaViewModel>();
             /*    CreateMap<Economia, NotificacaoViewModel>();
 
                 CreateMap<EconomiaPessoa, EconomiaPessoaViewModel>();
                 CreateMap<EconomiaPessoa, NotificacaoViewModel>();
           */
-             //    CreateMap<Etapa, EtapaViewModel>();
-               //  CreateMap<Etapa, PaginatedListVC<Etapa>>();
-               // CreateMap<Etapa, PaginatedListVC<EtapaViewModel>>();
+            //    CreateMap<Etapa, EtapaViewModel>();
+            //  CreateMap<Etapa, PaginatedListVC<Etapa>>();
+            // CreateMap<Etapa, PaginatedListVC<EtapaViewModel>>();
 
             //CreateMap<IEnumerable<Etapa>, EtapaViewModel>();
             //CreateMap<IEnumerable<Etapa>, PaginatedListVC<Etapa>>();

@@ -15,21 +15,22 @@ namespace MVC.Mappings
           //  CreateMap<IEnumerable<TipoPessoaViewModel>, IQueryable<TipoPessoa>>();
 //            CreateMap<TipoPessoaViewModel,TipoPessoa>();
            
- //           CreateMap<PessoaViewModel, Pessoa>();
-   //         CreateMap<PessoaFisicaViewModel,PessoaFisica>();
-     //       CreateMap<PessoaJuridicaViewModel,PessoaJuridica>();
+            CreateMap<PessoaViewModel, Pessoa>();
+            CreateMap<ImovelViewModel, Imovel>();
+            //         CreateMap<PessoaFisicaViewModel,PessoaFisica>();
+            //       CreateMap<PessoaJuridicaViewModel,PessoaJuridica>();
 
-       //     CreateMap<PessoaViewModel, PessoaFisica>();
-         //   CreateMap<PessoaViewModel, PessoaJuridica>();
+            //     CreateMap<PessoaViewModel, PessoaFisica>();
+            //   CreateMap<PessoaViewModel, PessoaJuridica>();
 
-           // CreateMap<PessoaFisicaViewModel, Pessoa>();
-           // CreateMap<PessoaJuridicaViewModel, Pessoa>();
+            // CreateMap<PessoaFisicaViewModel, Pessoa>();
+            // CreateMap<PessoaJuridicaViewModel, Pessoa>();
 
             //    CreateMap<EnderecoPessoaViewModel, EnderecoPessoa>();
-           // CreateMap<EnderecoEntidadeViewModel, EnderecoEntidade>();
+            // CreateMap<EnderecoEntidadeViewModel, EnderecoEntidade>();
             //    CreateMap<EnderecoRepositoyI, Endereco>();
 
-           // CreateMap<EnderecoViewModel, Endereco>();
+            // CreateMap<EnderecoViewModel, Endereco>();
             //            CreateMap<EnderecoViewModelX, IQueryable<Endereco>>();
             //            CreateMap<IQueryable<EnderecoViewModelX>, Endereco >();
             //            CreateMap<IQueryable<EnderecoViewModelX>, IQueryable<Endereco>>();
@@ -42,16 +43,16 @@ namespace MVC.Mappings
             //           CreateMap<PaginatedList<Endereco>, Endereco>();
 
             //CreateMap<BairroViewModel, Bairro>();
-           // CreateMap<CidadeViewModel, Cidade>();
-           // CreateMap<PaisViewModel, Pais>();
-           // CreateMap<LogradouroViewModel, Logradouro>();
-           // CreateMap<TipoLogradouroViewModel, TipoLogradouro>();
-           // CreateMap<EstadoViewModel, Estado>();
-           // CreateMap<DDDViewModel, DDD>();
+            // CreateMap<CidadeViewModel, Cidade>();
+            // CreateMap<PaisViewModel, Pais>();
+            // CreateMap<LogradouroViewModel, Logradouro>();
+            // CreateMap<TipoLogradouroViewModel, TipoLogradouro>();
+            // CreateMap<EstadoViewModel, Estado>();
+            // CreateMap<DDDViewModel, DDD>();
 
-           // CreateMap<EtapaViewModel, Etapa>();
-           // CreateMap<PaginatedListVC<Etapa>,Etapa>();
-           // CreateMap<PaginatedListVC<EtapaViewModel>,Etapa>();
+            // CreateMap<EtapaViewModel, Etapa>();
+            // CreateMap<PaginatedListVC<Etapa>,Etapa>();
+            // CreateMap<PaginatedListVC<EtapaViewModel>,Etapa>();
             //CreateMap<EtapaViewModel, IEnumerable<Etapa>>();
             //CreateMap<PaginatedListVC<Etapa>, IEnumerable<Etapa>>();
             //CreateMap<PaginatedListVC<EtapaViewModel>, IEnumerable<Etapa>>();
@@ -68,12 +69,12 @@ namespace MVC.Mappings
             // -CreateMap<ImovelViewModel, Notificacao2ViewModel>();
             //       CreateMap<Notificacao2ViewModel, Etapa>();
             //      
-           // CreateMap<ImovelViewModel, Imovel>();
+            // CreateMap<ImovelViewModel, Imovel>();
 
-             //      CreateMap<TipoResponsabilidadeViewModel, TipoResponsabilidade>();
+            //      CreateMap<TipoResponsabilidadeViewModel, TipoResponsabilidade>();
 
-               //        CreateMap<EconomiaViewModel, Economia>();
-                 //      CreateMap<EconomiaPessoaViewModel,EconomiaPessoa>();
+            //        CreateMap<EconomiaViewModel, Economia>();
+            //      CreateMap<EconomiaPessoaViewModel,EconomiaPessoa>();
             /*     //       CreateMap<NotificacaoViewModel, Economia>();
 
             //            CreateMap<EconomiaPessoaViewModel, EconomiaPessoa>();
@@ -82,7 +83,7 @@ namespace MVC.Mappings
                 //        CreateMap<EconomiaPessoaViewModel, EconomiaPessoa>();
                   //      CreateMap<NotificacaoViewModel, EconomiaPessoa>();
             */
-                        CreateMap<ProcessoViewModel, Processo>();
+            CreateMap<ProcessoViewModel, Processo>();
             CreateMap<FluxoProcessoViewModel, FluxoProcesso>();
                  CreateMap<TipoProcessoViewModel, TipoProcesso>();
             //   CreateMap<SituacaoProcessoViewModel, SituacaoProcesso>();

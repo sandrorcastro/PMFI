@@ -1,4 +1,6 @@
-﻿@model IEnumerable<Domain.Entities.Imovel>
+﻿@*@model IEnumerable<Domain.Entities.Imovel>*@
+@*@model IEnumerable<MVC.ViewModels.ImovelViewModel>*@
+@model MVC.ViewModels.ImovelViewModel
 
 @{
     ViewData["Title"] = "Index";
@@ -13,7 +15,12 @@
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.ImovelId)
+
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Matricula)
+                
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Latitude)
@@ -40,8 +47,11 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Imoveis) {
         <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ImovelId)
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Matricula)
             </td>
@@ -75,3 +85,4 @@
 }
     </tbody>
 </table>
+@await Component.InvokeAsync("Pagination", new { values = Model.Imoveis, routeData=Model.LinkData})

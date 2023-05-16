@@ -7,24 +7,33 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
 using Infra.Context;
+using MVC.ViewModels;
+using AutoMapper;
+using MVC.Extensions;
+using Application.Services;
+using MVC.Models;
 
 namespace MVC.Controllers
 {
     public class ImovelController : Controller
     {
         private readonly ContextoAplicacao _context;
-
-        public ImovelController(ContextoAplicacao context)
+        private IMapper mapper;
+        public ImovelController(ContextoAplicacao context, IMapper mapper)
         {
             _context = context;
+            this.mapper = mapper;
         }
 
         // GET: Imovel
         public async Task<IActionResult> Index()
         {
-              return _context.dbSImoveis != null ? 
-                          View(await _context.dbSImoveis.ToListAsync()) :
-                          Problem("Entity set 'ContextoAplicacao.dbSImoveis'  is null.");
+            //return _context.dbSImoveis != null ? View(await _context.dbSImoveis.ToListAsync()) : Problem("Entity set 'ContextoAplicacao.dbSImoveis'  is null.");
+            var query = from s in _context.dbSImoveis select s;// ToPagedList(1,1,10) ;
+            PaginatedList<Imovel> imoveis =  new PaginatedList<Imovel>(await query.ToPagedList(),1,1,10);
+            ImovelViewModel ivm = new ImovelViewModel();
+            ivm.Imoveis = imoveis;
+            return View(ivm);
         }
 
         // GET: Imovel/Details/5
