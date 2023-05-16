@@ -9,23 +9,45 @@
 <p>
     <a asp-action="Create">Create New</a>
 </p>
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Nome)
+                @*@Html.DisplayNameFor(model => model.Nome)*@
+                @*<a asp-action="Index" asp-route-sort="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Nome)</a>*@
+                @*<a class="page-link" asp-all-route-data="Model.LinkData" >@Html.DisplayNameFor(model => model.Nome)</a>*@
+                <a asp-route-filter="@Model.Filter" asp-route-sort="Nome" asp-route-direction="@Model.GetNextSortDirection("Nome", SortDirection.Asc)">@Html.DisplayNameFor(model => model.Nome)</a>
+
+                @*<a class="page-link" asp-all-route-data="Model.LinkData" asp-route-pagina="@(Model.List.CurrentPage - 1)" tabindex="-1" title="Anterior">*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TipoPessoa)
+                @*@Html.DisplayNameFor(model => model.TipoPessoa)*@
+                @*<a class="page-link" asp-all-route-data="Model.LinkData">@Html.DisplayNameFor(model => model.TipoPessoa)</a>*@
+                <a asp-route-filter="@Model.Filter" asp-route-sort="TipoPessoa" asp-route-direction="@Model.GetNextSortDirection("TipoPessoa", SortDirection.Asc)">Tipo Pessoa</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.DataCadastro)
+                @*@Html.DisplayNameFor(model => model.DataCadastro)*@
+                @*<a class="page-link" asp-all-route-data="Model.LinkData">@Html.DisplayNameFor(model => model.DataCadastro)</a>*@
+                <a asp-route-filter="@Model.Filter" asp-route-sort="DataCadastro" asp-route-direction="@Model.GetNextSortDirection("DataCadastro", SortDirection.Asc)">@Html.DisplayNameFor(model => model.DataCadastro)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Ativo)
+                @*@Html.DisplayNameFor(model => model.Ativo)*@
+                @*<a class="page-link" asp-all-route-data="Model.LinkData">@Html.DisplayNameFor(model => model.Ativo)</a>*@
+                <a asp-route-filter="@Model.Filter" asp-route-sort="Ativo" asp-route-direction="@Model.GetNextSortDirection("Ativo", SortDirection.Asc)">@Html.DisplayNameFor(model => model.Ativo)</a>
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.conId)
+                @*@Html.DisplayNameFor(model => model.conId)*@
+                @*<a class="page-link" asp-all-route-data="Model.LinkData">@Html.DisplayNameFor(model => model.conId)</a>*@
+                <a asp-route-filter="@Model.Filter" asp-route-sort="conId" asp-route-direction="@Model.GetNextSortDirection("ConId", SortDirection.Asc)">@Html.DisplayNameFor(model => model.conId)</a>
             </th>
             <th></th>
         </tr>
@@ -35,6 +57,7 @@
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Nome)
+
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TipoPessoa.Descricao)

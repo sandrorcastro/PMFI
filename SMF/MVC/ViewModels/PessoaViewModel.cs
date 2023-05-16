@@ -7,12 +7,12 @@ using MVC.Models;
 
 namespace MVC.ViewModels
 {
-    public class PessoaViewModel 
+    public class PessoaViewModel // PaginatedList<Pessoa>
         
     {
         public PessoaViewModel()
         {
-            Sort = "Nome";
+            Sort = "PessoaId";
         }
         public long PessoaId { get; set; }
         public string? Nome { get; set; }
@@ -47,7 +47,7 @@ namespace MVC.ViewModels
            new()
            {
                 {"filter", Filter},
-                {"p", Pessoas.CurrentPage.ToString()},
+                {"pagina", Pessoas.CurrentPage.ToString()},
                 {"sort", Sort},
                 {"direction", Direction.ToString()}
            };
@@ -59,8 +59,6 @@ namespace MVC.ViewModels
             {
                 return defaultOrder;
             }
-
-
             return Direction == SortDirection.Asc ? SortDirection.Desc : SortDirection.Asc;
         }
     }

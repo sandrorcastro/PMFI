@@ -26,16 +26,36 @@ namespace MVC.Controllers
         }
 
         // GET: Pessoa
-        public async Task<IActionResult> Index()
+        //public async Task<IActionResult> Index(PessoaViewModel p)
+
+        //public async Task<IActionResult> Index(string filter, string sort, SortDirection direction)
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber, SortDirection direction)
         {
+
+            if (searchString != null)
+            {
+                pageNumber = 1;
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+        
+
+        
+
+
+
             /*var contextoAplicacao = _context.dbSPessoas.Include(p => p.TipoPessoa);
             //return View(await contextoAplicacao.ToListAsync());
             return View(mapper.Map<PessoaViewModel>( contextoAplicacao.ToListAsync()));*/
 
-            var query = from s in _context.dbSPessoas select s;// ToPagedList(1,1,10) ;
-            PaginatedList<Pessoa> pessoas = new PaginatedList<Pessoa>(await query.ToPagedList(), 1, 1, 10);
+        //
+            var query = from s in _context.dbSPessoas.Filter(searchString).OrderBy(sortOrder??"",direction) select s;// ToPagedList(1,1,10) ;
+            //PaginatedList<Pessoa> pessoas = new PaginatedList<Pessoa>(await query.ToPagedList(), 2,2, 15);
+            //
             PessoaViewModel pvm = new PessoaViewModel();
-            pvm.Pessoas = pessoas;
+            pvm.Pessoas = new PaginatedList<Pessoa>(await query.ToPagedList(),pageNumber??1, 10, 15); 
             return View(pvm);
 
 
