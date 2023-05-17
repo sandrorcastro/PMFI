@@ -71,7 +71,7 @@ namespace MVC.Mappings
                 CreateMap<EconomiaPessoa, EconomiaPessoaViewModel>();
                 CreateMap<EconomiaPessoa, NotificacaoViewModel>();
           */
-            //    CreateMap<Etapa, EtapaViewModel>();
+                CreateMap<Etapa, EtapaViewModel>();
             //  CreateMap<Etapa, PaginatedListVC<Etapa>>();
             // CreateMap<Etapa, PaginatedListVC<EtapaViewModel>>();
 

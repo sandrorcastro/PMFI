@@ -1,4 +1,4 @@
-﻿@model Domain.Entities.Processo
+﻿@model MVC.ViewModels.ProcessoViewModel
 
 @{
     ViewData["Title"] = "Details";
@@ -27,6 +27,12 @@
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.TipoProcesso.TipoProcessoId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.SituacaoProcesso)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.SituacaoProcesso.SituacaoProcessoId)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.OrgaoRemetente)

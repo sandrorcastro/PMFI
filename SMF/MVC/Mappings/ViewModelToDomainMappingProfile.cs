@@ -50,7 +50,7 @@ namespace MVC.Mappings
             // CreateMap<EstadoViewModel, Estado>();
             // CreateMap<DDDViewModel, DDD>();
 
-            // CreateMap<EtapaViewModel, Etapa>();
+             CreateMap<EtapaViewModel, Etapa>();
             // CreateMap<PaginatedListVC<Etapa>,Etapa>();
             // CreateMap<PaginatedListVC<EtapaViewModel>,Etapa>();
             //CreateMap<EtapaViewModel, IEnumerable<Etapa>>();

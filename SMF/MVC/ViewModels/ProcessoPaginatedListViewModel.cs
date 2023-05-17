@@ -8,10 +8,17 @@ using System.Threading.Tasks;
 
 namespace MVC.ViewModels
 {
-    public class ProcessoViewModel 
+    public class ProcessoPaginatedListViewModel : PaginatedList<Processo>
     {
-        //   public int ProtocoloId { get; set; }
-        // public Protocolo? Protocolo { get; set; }
+        public ProcessoPaginatedListViewModel()
+        {
+            //  Sort = "Nome";
+        }
+        public ProcessoPaginatedListViewModel(string sort, string filter)
+        {
+            Sort = sort;
+            Filter = Filter;
+        }
         public int OrgaoId { get; set; }
         public Orgao? Orgao { get; set; }
 

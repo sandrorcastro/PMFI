@@ -1,36 +1,21 @@
-﻿@model MVC.ViewModels.ProcessoPaginatedListViewModel
+﻿@model Domain.Entities.Processo
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
-<h1>Create</h1>
+<h1>Edit</h1>
 
 <h4>Processo</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="OrgaoId" class="control-label"></label>
-                <select asp-for="OrgaoId" class ="form-control" asp-items="ViewBag.OrgaoId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="SequenciaNumerica" class="control-label"></label>
-                <input asp-for="SequenciaNumerica" class="form-control" />
-                <span asp-validation-for="SequenciaNumerica" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Ano" class="control-label"></label>
-                <input asp-for="Ano" class="form-control" />
-                <span asp-validation-for="Ano" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DigitoVerificador" class="control-label"></label>
-                <input asp-for="DigitoVerificador" class="form-control" />
-                <span asp-validation-for="DigitoVerificador" class="text-danger"></span>
-            </div>
+            <input type="hidden" asp-for="OrgaoId" />
+            <input type="hidden" asp-for="SequenciaNumerica" />
+            <input type="hidden" asp-for="Ano" />
+            <input type="hidden" asp-for="DigitoVerificador" />
             <div class="form-group">
                 <label asp-for="DataCadastro" class="control-label"></label>
                 <input asp-for="DataCadastro" class="form-control" />
@@ -38,31 +23,33 @@
             </div>
             <div class="form-group">
                 <label asp-for="TipoProcessoId" class="control-label"></label>
-                <select asp-for="TipoProcessoId" class ="form-control" asp-items="ViewBag.TipoProcessoId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="SituacaoProcessoId" class="control-label"></label>
-                <select asp-for="SituacaoProcessoId" class ="form-control" asp-items="ViewBag.SituacaoProcessoId"></select>
+                <select asp-for="TipoProcessoId" class="form-control" asp-items="ViewBag.TipoProcessoId"></select>
+                <span asp-validation-for="TipoProcessoId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="OrgaoRemetenteId" class="control-label"></label>
-                <select asp-for="OrgaoRemetenteId" class ="form-control" asp-items="ViewBag.OrgaoRemetenteId"></select>
+                <select asp-for="OrgaoRemetenteId" class="form-control" asp-items="ViewBag.OrgaoRemetenteId"></select>
+                <span asp-validation-for="OrgaoRemetenteId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="UnidadeRemetenteId" class="control-label"></label>
-                <select asp-for="UnidadeRemetenteId" class ="form-control" asp-items="ViewBag.UnidadeRemetenteId"></select>
+                <select asp-for="UnidadeRemetenteId" class="form-control" asp-items="ViewBag.UnidadeRemetenteId"></select>
+                <span asp-validation-for="UnidadeRemetenteId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="OrgaoDestinatarioId" class="control-label"></label>
-                <select asp-for="OrgaoDestinatarioId" class ="form-control" asp-items="ViewBag.OrgaoDestinatarioId"></select>
+                <select asp-for="OrgaoDestinatarioId" class="form-control" asp-items="ViewBag.OrgaoDestinatarioId"></select>
+                <span asp-validation-for="OrgaoDestinatarioId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="UnidadeDestinatarioId" class="control-label"></label>
-                <select asp-for="UnidadeDestinatarioId" class ="form-control" asp-items="ViewBag.UnidadeDestinatarioId"></select>
+                <select asp-for="UnidadeDestinatarioId" class="form-control" asp-items="ViewBag.UnidadeDestinatarioId"></select>
+                <span asp-validation-for="UnidadeDestinatarioId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="FluxoProcessoId" class="control-label"></label>
-                <select asp-for="FluxoProcessoId" class ="form-control" asp-items="ViewBag.FluxoProcessoId"></select>
+                <select asp-for="FluxoProcessoId" class="form-control" asp-items="ViewBag.FluxoProcessoId"></select>
+                <span asp-validation-for="FluxoProcessoId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ObservacaoProcesso" class="control-label"></label>
@@ -80,7 +67,7 @@
                 </label>
             </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>

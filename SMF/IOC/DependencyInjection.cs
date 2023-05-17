@@ -72,13 +72,13 @@ namespace IOC
                         services.AddScoped<IEconomiaAppService, EconomiaAppService>();
                         services.AddScoped<IEconomiaPessoaAppService, EconomiaPessoaAppService>();
                      */   services.AddScoped<IImovelAppService, ImovelAppService>();
-                       /* services.AddScoped<IServidorAppService, ServidorAppService>();
+                       // services.AddScoped<IServidorAppService, ServidorAppService>();
                         services.AddScoped<IEtapaAppService, EtapaAppService>();
-           */
+           
                         services.AddScoped<ITipoEtapaAppService, TipoEtapaAppService>();
-            /*            services.AddScoped<ISituacaoEtapaAppService, SituacaoEtapaAppService>();
+            //            services.AddScoped<ISituacaoEtapaAppService, SituacaoEtapaAppService>();
                         services.AddScoped<IProcessoAppService, ProcessoAppService>();    
-            */
+            
                         services.AddScoped<IFluxoProcessoAppService, FluxoProcessoAppService>();
                         services.AddScoped<ITipoProcessoAppService, TipoProcessoAppService>();
             /* 
@@ -110,15 +110,15 @@ namespace IOC
                       services.AddScoped<IEconomiaService, EconomiaService>();
                       services.AddScoped<IEconomiaPessoaService, EconomiaPessoaService>();
                    */   services.AddScoped<IImovelService, ImovelService>();
-                     /* services.AddScoped<IServidorService, ServidorService>();
+                     // services.AddScoped<IServidorService, ServidorService>();
                       services.AddScoped<IEtapaService, EtapaService>();
-            */
+            
                         services.AddScoped<ITipoEtapaService, TipoEtapaService>();
           //            services.AddScoped<ISituacaoEtapaService, SituacaoEtapaService>();
           
                       services.AddScoped<IFluxoProcessoService, FluxoProcessoService>();
             
-            //            services.AddScoped<IProcessoService, ProcessoService>();
+                        services.AddScoped<IProcessoService, ProcessoService>();
                         services.AddScoped<ITipoProcessoService, TipoProcessoService>();
              /*           services.AddScoped<ISituacaoProcessoService, SituacaoProcessoService>();
                         services.AddScoped<IImageService, ImageService>();
@@ -150,14 +150,13 @@ namespace IOC
                       services.AddScoped<IEconomiaRepository, EconomiaRepository>();
                       services.AddScoped<IEconomiaPessoaRepository, EconomiaPessoaRepository>();
                     */  services.AddScoped<IImovelRepository, ImovelRepository>();
-                     /* services.AddScoped<IServidorRepository, ServidorRepository>();
+                     // services.AddScoped<IServidorRepository, ServidorRepository>();
                       services.AddScoped<IEtapaRepository, EtapaRepository>();
-            */
+            
                       services.AddScoped<ITipoEtapaRepository, TipoEtapaRepository>();
-             /*
-                        services.AddScoped<ISituacaoEtapaRepository, SituacaoEtapaRepository>();
+             
+            //            services.AddScoped<ISituacaoEtapaRepository, SituacaoEtapaRepository>();
                       services.AddScoped<IProcessoRepository, ProcessoRepository>();
-            */
                       services.AddScoped<IFluxoProcessoRepository, FluxoProcessoRepository>();
                       services.AddScoped<ITipoProcessoRepository, TipoProcessoRepository>();
              /*         services.AddScoped<ISituacaoProcessoRepository, SituacaoProcessoRepository>();

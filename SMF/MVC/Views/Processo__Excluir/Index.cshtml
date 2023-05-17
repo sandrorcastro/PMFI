@@ -1,25 +1,16 @@
-﻿@model MVC.ViewModels.ProcessoPaginatedListViewModel
+﻿@*@model IEnumerable<Domain.Entities.Processo>*@
+@model IEnumerable<MVC.ViewModels.ProcessoViewModel>
 
 @{
     ViewData["Title"] = "Index";
 }
 
-<h4>Index</h4>
+<h1>Index</h1>
 
-
-<div class="card">
-    <div class="card-header">
-        <h4>Lista de Processos</h4>
-    </div>
-    <div class="card-body">
-        <div class="card">
-            <div class="card-header">
-                @{
-                    await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);
-                }
-            </div>
-            <div class="card-body">
-                            <table class="table">
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
     <thead>
         <tr>
             <th>
@@ -30,9 +21,6 @@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.TipoProcesso)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SituacaoProcesso)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.OrgaoRemetente)
@@ -62,7 +50,7 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.values) {
+@foreach (var item in Model) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Orgao.OrgaoId)
@@ -72,9 +60,6 @@
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.TipoProcesso.TipoProcessoId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SituacaoProcesso.SituacaoProcessoId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.OrgaoRemetente.OrgaoId)
@@ -101,26 +86,12 @@
                 @Html.DisplayFor(modelItem => item.ProcessoRecebido)
             </td>
             <td>
-                @{
-                                    await Html.RenderPartialAsync("~/Views/Shared/Partials/_AcoesIndex.cshtml", @ViewData["Id"]=@item.SequenciaNumerica);
-                                }
-
-
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>
         </tr>
 }
     </tbody>
 </table>
-            </div>
-            <div class="card-footer">
-                @await Component.InvokeAsync("Pagination", new { values = Model.values, routeData=Model.LinkData})
-            </div>
-        </div>
-    </div>
-    <div class="card-footer">
-        @{
-            await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoAdicionar.cshtml");
-        }
-    </div>
-
-</div>
+@*@await Component.InvokeAsync("Pagination",new { ProcessoId= @ServidorId,sortOrder=ViewBag.sortOrder,currentFilter=ViewBag.currentFilter,searchString=@ViewBag.searchString,pageNumber=@ViewBag.pageNumber})*@

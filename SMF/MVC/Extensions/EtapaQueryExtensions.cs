@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using MVC.Models;
 using System.Linq.Expressions;
 
@@ -14,7 +15,7 @@ namespace MVC.Extensions
             if (string.IsNullOrWhiteSpace(filter))
             {
                 //return query.Where(s=>s.ServidorId==long.Parse("2289401"));
-                return query;
+                return query.Include(tp=>tp.TipoEtapa).Include(se=>se.SituacaoEtapa).Include(s=>s.Servidor).Include(p=>p.Pessoa).Take(1000);
             }
             long number1 = 0;
             if (long.TryParse(filter, out number1))
@@ -28,34 +29,43 @@ namespace MVC.Extensions
                                         || s.PessoaId == long.Parse(filter)
                                         || s.ServidorId == long.Parse(filter)
 
-                                          );
+                                          ).Include(tp => tp.TipoEtapa).Include(se => se.SituacaoEtapa).Include(s => s.Servidor).Include(p => p.Pessoa).Take(1000);
             }
             else
             {
                 filter = filter.ToLower();
-                return query.Where(s => s.ServidorId == long.Parse("2289401") && ( s.Ano.Contains(filter)
+                return query.Where(s=> s.Ano.Contains(filter)
                                                                                 || s.TipoEtapa.Descricao.Contains(filter)
                                                                                 || s.SituacaoEtapa.Descricao.Contains(filter)
                                                                                 || s.Servidor.Nome.Contains(filter)
                                                                                 || s.Pessoa.Nome.Contains(filter))
-                                        );
+                                        .Include(tp => tp.TipoEtapa).Include(se => se.SituacaoEtapa).Include(s => s.Servidor).Include(p => p.Pessoa).Take(1000);
             }
         }
 
-        public static IQueryable<Etapa> OrderBy(this IQueryable<Etapa> query, string name, SortDirection? direction = SortDirection.Asc)
+        public static IQueryable<Etapa> OrderBy(this IQueryable<Etapa> query, string sort, SortDirection? direction = SortDirection.Asc)
         {
-            Expression<Func<Etapa, object>> exp = name /*? ToLower()*/ switch
+            if (string.IsNullOrWhiteSpace(sort))
             {
-                "ProcessoId" => x => x.ProcessoId,
-                "EtapaId" => x => x.EtapaId,
-                "TipoEtapaId" => x => x.TipoEtapaId,
-                "SituacaoEtapaId" => x => x.SituacaoEtapaId,
-                "ImovelId" => x => x.ImovelId,
-                "EconomiaId" => x => x.EconomiaId,
-                "ServidorId" => x => x.ServidorId,
-                "DataInicio" => x => x.DataInicio,
-                "DataFim" => x => x.DataFim,
-                "PessoaId" => x => x.PessoaId
+                sort = "";
+            }
+            Expression<Func<Etapa, object>> exp = sort?.ToLower() switch
+            {
+                "" => x => x.ProcessoId,
+                "processoid" => x => x.ProcessoId,
+                "etapaid" => x => x.EtapaId,
+                "tipoetapaid" => x => x.TipoEtapaId,
+                "tipoetapa" => x => x.TipoEtapa.Descricao,
+                "situacaoetapaid" => x => x.SituacaoEtapaId,
+                "situacaoetapa" => x => x.SituacaoEtapa.Descricao,
+                "imovelid" => x => x.ImovelId,
+                "economiaid" => x => x.EconomiaId,
+                "servidorid" => x => x.ServidorId,
+                "datainicio" => x => x.DataInicio,
+                "datafim" => x => x.DataFim,
+                "pessoaid" => x => x.PessoaId,
+                "pessoa" => x => x.Pessoa.Nome
+
             };
 
             return direction == SortDirection.Asc ? query.OrderBy(exp) : query.OrderByDescending(exp);

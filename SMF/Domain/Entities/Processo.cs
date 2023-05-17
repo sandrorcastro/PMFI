@@ -20,6 +20,9 @@ namespace Domain.Entities
         public int TipoProcessoId { get; set; }
         public TipoProcesso? TipoProcesso { get; set; }
 
+        public int SituacaoProcessoId { get; set; }
+        public SituacaoProcesso? SituacaoProcesso { get; set; }
+
         public int OrgaoRemetenteId { get; set; }
         public Orgao? OrgaoRemetente { get; set; }
 

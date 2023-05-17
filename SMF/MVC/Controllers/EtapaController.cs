@@ -7,24 +7,52 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
 using Infra.Context;
+using Application.Services;
+using MVC.Models;
+using MVC.ViewModels;
+using Application.Interfaces;
+using AutoMapper;
+using MVC.Extensions;
 
 namespace MVC.Controllers
 {
     public class EtapaController : Controller
     {
         private readonly ContextoAplicacao _context;
+        private readonly IEtapaAppService etapaAppService;
+        IMapper mapper;
 
-        public EtapaController(ContextoAplicacao context)
+        public EtapaController(ContextoAplicacao context, IEtapaAppService etapaAppService, IMapper mapper)
         {
             _context = context;
+            this.etapaAppService = etapaAppService;
+            this.mapper = mapper;
         }
 
-        // GET: Etapa
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort, string filter, int p, SortDirection direction)
         {
-            var contextoAplicacao = _context.dbSEtapas.Include(e => e.Economia).Include(e => e.Endereco).Include(e => e.Imovel).Include(e => e.Pessoa).Include(e => e.PessoaProprietariaResponsavel).Include(e => e.PessoaTerceira).Include(e => e.Servidor).Include(e => e.SituacaoEtapa).Include(e => e.TipoEtapa);
-            return View(await contextoAplicacao.ToListAsync());
+            var query = from s in etapaAppService.GetIQueryable().Filter(filter).OrderBy(sort, direction) select s;
+            EtapaPaginatedListViewModel evm = new EtapaPaginatedListViewModel(sort, filter);
+            evm.values = await EtapaPaginatedListViewModel.CreateAsync(query, p == 0 ? 1 : p, 10);
+            evm.Filter = filter;
+            evm.Sort = sort;
+            return View(evm);
         }
+
+
+
+
+
+
+
+
+
+        // GET: Etapa
+        /*public async Task<IActionResult> Index()
+        {
+            //var contextoAplicacao = _context.dbSEtapas.Include(e => e.Economia).Include(e => e.Endereco).Include(e => e.Imovel).Include(e => e.Pessoa).Include(e => e.PessoaProprietariaResponsavel).Include(e => e.PessoaTerceira).Include(e => e.Servidor).Include(e => e.SituacaoEtapa).Include(e => e.TipoEtapa);
+            //return View(await contextoAplicacao.ToListAsync());
+        }*/
 
         // GET: Etapa/Details/5
         public async Task<IActionResult> Details(long? id)
