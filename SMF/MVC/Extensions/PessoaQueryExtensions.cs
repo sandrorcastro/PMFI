@@ -20,27 +20,33 @@ namespace MVC.Extensions
             long number1 = 0;
             if (long.TryParse(filter, out number1))
             {
-               return query.Where(s => s.PessoaId == long.Parse(filter) ).Include(tp=>tp.TipoPessoa);
+               return query.Where(  s => s.PessoaId == long.Parse(filter) 
+                                      || s.conId == long.Parse(filter)
+                                 ).Include(tp=>tp.TipoPessoa);
             }
             else
             {
-                return query.Where(s => s.Nome.Contains(filter)).Include(tp => tp.TipoPessoa);
+                return query.Where( s => s.Nome.Contains(filter)
+                                      || s.TipoPessoa.Descricao.Contains(filter)
+                                  ).Include(tp => tp.TipoPessoa);
             }
             
         }
 
-        public static IQueryable<Pessoa> OrderBy(this IQueryable<Pessoa> query, string name, SortDirection? direction = SortDirection.Asc)
+        public static IQueryable<Pessoa> OrderBy(this IQueryable<Pessoa> query, string sort, SortDirection? direction = SortDirection.Asc)
         {
-            Expression<Func<Pessoa, object>> exp = name?.ToLower() switch
+            if (string.IsNullOrWhiteSpace(sort)) {
+                sort = "";
+            }
+             Expression<Func<Pessoa, object>> exp = sort?.ToLower() switch
             {
                 "" => x => x.Nome,
-                "DataCadastro" => x => x.DataCadastro,
-                "PessoaId" => x => x.PessoaId,
-                "Nome" => x => x.Nome,
-                "TipoPessoa" => x => x.TipoPessoa.Descricao,
-                "conId" => x => x.conId,
-
-
+                "datacadastro" => x => x.DataCadastro,
+                "pessoaid" => x => x.PessoaId,
+                "nome" => x => x.Nome,
+                "tipopessoa" => x => x.TipoPessoa.Descricao,
+                "conid" => x => x.conId,
+                "ativo" => x => x.Ativo,
             };
 
             return direction == SortDirection.Asc ? query.OrderBy(exp) : query.OrderByDescending(exp);

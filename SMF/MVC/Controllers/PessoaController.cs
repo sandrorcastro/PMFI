@@ -11,6 +11,7 @@ using AutoMapper;
 using MVC.ViewModels;
 using MVC.Extensions;
 using MVC.Models;
+using Mono.TextTemplating;
 
 namespace MVC.Controllers
 {
@@ -26,41 +27,15 @@ namespace MVC.Controllers
         }
 
         // GET: Pessoa
-        //public async Task<IActionResult> Index(PessoaViewModel p)
-
-        //public async Task<IActionResult> Index(string filter, string sort, SortDirection direction)
-        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber, SortDirection direction)
+        
+        public async Task<IActionResult> Index(string sort,string  filter, int p, SortDirection direction)
         {
-
-            if (searchString != null)
-            {
-                pageNumber = 1;
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-        
-
-        
-
-
-
-            /*var contextoAplicacao = _context.dbSPessoas.Include(p => p.TipoPessoa);
-            //return View(await contextoAplicacao.ToListAsync());
-            return View(mapper.Map<PessoaViewModel>( contextoAplicacao.ToListAsync()));*/
-
-        //
-            var query = from s in _context.dbSPessoas.Filter(searchString).OrderBy(sortOrder??"",direction) select s;// ToPagedList(1,1,10) ;
-            //PaginatedList<Pessoa> pessoas = new PaginatedList<Pessoa>(await query.ToPagedList(), 2,2, 15);
-            //
-            PessoaViewModel pvm = new PessoaViewModel();
-            pvm.Pessoas = new PaginatedList<Pessoa>(await query.ToPagedList(),pageNumber??1, 10, 15); 
+            var query = from s in _context.dbSPessoas.Filter(filter).OrderBy(sort,direction) select s;// ToPagedList(1,1,10) ;
+            PessoaViewModel pvm = new PessoaViewModel(sort,filter);
+            pvm.values = await PessoaViewModel.CreateAsync(query,p==0?1:p,10);
+            pvm.Filter = filter;
+            pvm.Sort= sort; 
             return View(pvm);
-
-
-
-
         }
 
         // GET: Pessoa/Details/5
