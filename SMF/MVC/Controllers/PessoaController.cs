@@ -31,8 +31,8 @@ namespace MVC.Controllers
         public async Task<IActionResult> Index(string sort,string  filter, int p, SortDirection direction)
         {
             var query = from s in _context.dbSPessoas.Filter(filter).OrderBy(sort,direction) select s;// ToPagedList(1,1,10) ;
-            PessoaViewModel pvm = new PessoaViewModel(sort,filter);
-            pvm.values = await PessoaViewModel.CreateAsync(query,p==0?1:p,10);
+            PessoaPaginatedListViewModel pvm = new PessoaPaginatedListViewModel(sort,filter);
+            pvm.values = await PessoaPaginatedListViewModel.CreateAsync(query,p==0?1:p,10);
             pvm.Filter = filter;
             pvm.Sort= sort; 
             return View(pvm);
@@ -95,7 +95,7 @@ namespace MVC.Controllers
                 return NotFound();
             }
             ViewData["TipoPessoaId"] = new SelectList(_context.dbSTiposPessoa, "TipoPessoaId", "Descricao", pessoa.TipoPessoaId);
-            return View(pessoa);
+            return View(mapper.Map<PessoaViewModel>(pessoa));
         }
 
         // POST: Pessoa/Edit/5
@@ -103,7 +103,8 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("PessoaId,Nome,TipoPessoaId,DataCadastro,Ativo,conId")] Pessoa pessoa)
+        public async Task<IActionResult> Edit(long id, [Bind("PessoaId,Nome,TipoPessoaId,DataCadastro,Ativo,conId")] PessoaViewModel pessoa)
+        //public async Task<IActionResult> Edit(long id,  PessoaViewMode pessoa)
         {
             if (id != pessoa.PessoaId)
             {
@@ -114,7 +115,7 @@ namespace MVC.Controllers
             {
                 try
                 {
-                    _context.Update(pessoa);
+                    _context.Update(mapper.Map<Pessoa>(pessoa));
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)

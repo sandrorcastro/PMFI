@@ -26,7 +26,22 @@ namespace MVC.Controllers
         }
 
         // GET: Imovel
-        public async Task<IActionResult> Index()
+
+        public async Task<IActionResult> Index(string sort, string filter, int p, SortDirection direction)
+        {
+            var query = from s in _context.dbSImoveis.Filter(filter).OrderBy(sort, direction) select s;
+            ImovelPaginatedListViewModel ivm = new ImovelPaginatedListViewModel(sort, filter);
+            ivm.values = await ImovelPaginatedListViewModel.CreateAsync(query, p == 0 ? 1 : p, 10);
+            ivm.Filter = filter;
+            ivm.Sort = sort;
+            return View(ivm);
+        }
+
+
+
+
+
+        /* public async Task<IActionResult> Index()
         {
             //return _context.dbSImoveis != null ? View(await _context.dbSImoveis.ToListAsync()) : Problem("Entity set 'ContextoAplicacao.dbSImoveis'  is null.");
             var query = from s in _context.dbSImoveis select s;// ToPagedList(1,1,10) ;
@@ -34,7 +49,7 @@ namespace MVC.Controllers
             ImovelViewModel ivm = new ImovelViewModel();
             ivm.Imoveis = imoveis;
             return View(ivm);
-        }
+        }*/
 
         // GET: Imovel/Details/5
         public async Task<IActionResult> Details(long? id)
@@ -51,7 +66,7 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            return View(imovel);
+            return View(mapper.Map<ImovelViewModel>(imovel));
         }
 
         // GET: Imovel/Create
@@ -65,11 +80,11 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ImovelId,Matricula,Latitude,Longitude,Complemento,AreaTerreno,AreaConstruida,AnoConstrucao,Caracteristica")] Imovel imovel)
+        public async Task<IActionResult> Create([Bind("ImovelId,Matricula,Latitude,Longitude,Complemento,AreaTerreno,AreaConstruida,AnoConstrucao,Caracteristica")] ImovelViewModel imovel)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(imovel);
+                _context.Add(mapper.Map<Imovel>(imovel));
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
@@ -89,7 +104,7 @@ namespace MVC.Controllers
             {
                 return NotFound();
             }
-            return View(imovel);
+            return View(mapper.Map<ImovelViewModel>(imovel));
         }
 
         // POST: Imovel/Edit/5
@@ -97,7 +112,7 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("ImovelId,Matricula,Latitude,Longitude,Complemento,AreaTerreno,AreaConstruida,AnoConstrucao,Caracteristica")] Imovel imovel)
+        public async Task<IActionResult> Edit(long id, [Bind("ImovelId,Matricula,Latitude,Longitude,Complemento,AreaTerreno,AreaConstruida,AnoConstrucao,Caracteristica")] ImovelViewModel imovel)
         {
             if (id != imovel.ImovelId)
             {
@@ -108,7 +123,7 @@ namespace MVC.Controllers
             {
                 try
                 {
-                    _context.Update(imovel);
+                    _context.Update(mapper.Map<Imovel>(imovel));
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
@@ -142,7 +157,7 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            return View(imovel);
+            return View(mapper.Map<ImovelViewModel>(imovel));
         }
 
         // POST: Imovel/Delete/5

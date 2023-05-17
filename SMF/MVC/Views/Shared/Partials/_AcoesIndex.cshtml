@@ -1,0 +1,30 @@
+﻿@{
+    var controllerAtual = ViewContext.RouteData.Values["controller"].ToString();
+    var actionAtual = ViewContext.RouteData.Values["action"].ToString();
+}
+<div class="row">
+    <div class="col">
+        @*
+
+            <a class="btn btn-primary mr-1" asp-action="Edit" asp-controller=@controllerAtual asp-route-Id=@ViewData["Id"]>Editar</a>
+        *@
+        @{
+            await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoEditar.cshtml");
+        }
+    </div>
+    <div class="col">
+        @*
+                    <a class="btn btn-success mr-1" asp-action="Details" asp-controller=@controllerAtual asp-route-Id=@ViewData["Id"]>Detalhes </a>
+
+        *@
+        @{
+            await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoDetalhes.cshtml");
+        }
+    </div>
+    <div class="col">
+        @*
+            <a class="btn btn-danger mr-1" asp-action="Delete" asp-controller=@controllerAtual asp-route-Id=@ViewData["Id"]>Excluir</a>
+        *@
+           @{ await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoExcluir.cshtml");}
+    </div>
+</div>

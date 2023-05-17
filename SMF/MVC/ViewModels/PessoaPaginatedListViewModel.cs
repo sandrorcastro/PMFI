@@ -7,15 +7,15 @@ using MVC.Models;
 
 namespace MVC.ViewModels
 {
-    public class PessoaViewModel //: PaginatedList<Pessoa>
+    public class PessoaPaginatedListViewModel : PaginatedList<Pessoa>
 
     {
-       /* public PessoaViewModel() { }
-        public PessoaViewModel(string sort, string filter)
+        public PessoaPaginatedListViewModel() { }
+        public PessoaPaginatedListViewModel(string sort, string filter)
         {
             Sort = sort;
             Filter = Filter;
-        }*/
+        }
         public long PessoaId { get; set; }
         public string? Nome { get; set; }
         public int TipoPessoaId { get; set; }

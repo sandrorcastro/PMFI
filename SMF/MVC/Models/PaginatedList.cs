@@ -17,32 +17,32 @@ namespace MVC.Models
             AddRange(items);
             //AddRange(source);
         }
-        public int CurrentPage { get; private set; } 
-        public int PageSize { get; private set; }
-        public int TotalPages { get; private set; }
-        public int TotalItems { get; private set; }
+        public int? CurrentPage { get; private set; } 
+        public int? PageSize { get; private set; }
+        public int? TotalPages { get; private set; }
+        public int? TotalItems { get; private set; }
         public bool HasPrevious => CurrentPage > 1;
         public bool HasNext => CurrentPage < TotalPages;
 
         
         /// ///////////////////////
         
-        public PaginatedList<T> values { get; set; }
+        public PaginatedList<T>? values { get; set; }
 
         [BindProperty(SupportsGet = true, Name = "p")]
-        public int PageIndex { get; set; }
+        public int? PageIndex { get; set; }
         //public int PageIndex { get; set; }
 
         //[BindProperty(SupportsGet = true)]
-        public string Filter { get; set; }
+        public string? Filter { get; set; }
 
         //[BindProperty(SupportsGet = true)]
-        public string Sort { get; set; }
+        public string? Sort { get; set; }
 
         //[BindProperty(SupportsGet = true)]
-        public SortDirection Direction { get; set; }
+        public SortDirection? Direction { get; set; }
 
-        public Dictionary<string, string> LinkData =>
+        public Dictionary<string, string>? LinkData =>
            new()
            {
                 {"filter", Filter},
@@ -50,7 +50,7 @@ namespace MVC.Models
                 {"sort", Sort},
                 {"direction", Direction.ToString()}
            };
-        public SortDirection GetNextSortDirection(string name, SortDirection defaultOrder)
+        public SortDirection? GetNextSortDirection(string name, SortDirection defaultOrder)
         {
             if (Sort?.ToLower() != name?.ToLower())
             {
@@ -66,7 +66,7 @@ namespace MVC.Models
 
 
 
-        public static async Task<PaginatedList<T>> CreateAsync(IQueryable<T> source, int currentPage, int pageSize)
+        public static async Task<PaginatedList<T>>? CreateAsync(IQueryable<T> source, int currentPage, int pageSize)
         {
             var count = await source.CountAsync();
             var items = await source.Skip((currentPage - 1) * pageSize).Take(pageSize).ToListAsync();

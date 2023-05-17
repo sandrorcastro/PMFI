@@ -1,85 +1,95 @@
 ﻿@*@model IEnumerable<Domain.Entities.Pessoa>*@
-@model MVC.ViewModels.PessoaViewModel
+@model MVC.ViewModels.PessoaPaginatedListViewModel
 @{
     ViewData["Title"] = "Index";
 }
-
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<form asp-action="Index" method="get">
-    <div class="form-actions no-color">
-        <p>
-            @*Find by name: <input type="text" name="filter" value="@ViewData["CurrentFilter"]" />*@
-            Pesquisar: <input type="text" name="filter" value="@Model.Filter" />
-            <input type="submit" value="Search" class="btn btn-default" /> |
-            <a asp-action="Index">Back to Full List</a>
-        </p>
+<div class="card">
+    <div class="card-header">
+            <h4>Lista de Pessoas</h4>
     </div>
-</form>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @*@Html.DisplayNameFor(model => model.Nome)*@
-                @*<a asp-action="Index" asp-route-sort="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Nome)</a>*@
-                @*<a class="page-link" asp-all-route-data="Model.LinkData" >@Html.DisplayNameFor(model => model.Nome)</a>*@
-                <a asp-route-filter="@Model.Filter" asp-route-sort="Nome" asp-route-direction="@Model.GetNextSortDirection("Nome", SortDirection.Asc)">@Html.DisplayNameFor(model => model.Nome)</a>
+    <div class="card-body">
+        <div class="card">
+            <div class="card-header">
+                @{
+                    await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml",@Model);
+                }
+            </div>
+            <div class="card-body">
+                <table class="table">
+                <thead>
+                    <tr>
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.Nome)*@
+                            @*<a asp-action="Index" asp-route-sort="@ViewData["NameSortParm"]">@Html.DisplayNameFor(model => model.Nome)</a>*@
+                            @*<a class="page-link" asp-all-route-data="Model.LinkData" >@Html.DisplayNameFor(model => model.Nome)</a>*@
+                            <a asp-route-filter="@Model.Filter" asp-route-sort="Nome" asp-route-direction="@Model.GetNextSortDirection("Nome", SortDirection.Asc)">@Html.DisplayNameFor(model => model.Nome)</a>
 
-                @*<a class="page-link" asp-all-route-data="Model.LinkData" asp-route-pagina="@(Model.List.CurrentPage - 1)" tabindex="-1" title="Anterior">*@
-            </th>
-            <th>
-                @*@Html.DisplayNameFor(model => model.TipoPessoa)*@
-                @*<a class="page-link" asp-all-route-data="Model.LinkData">@Html.DisplayNameFor(model => model.TipoPessoa)</a>*@
-                <a asp-route-filter="@Model.Filter" asp-route-sort="TipoPessoa" asp-route-direction="@Model.GetNextSortDirection("TipoPessoa", SortDirection.Asc)">Tipo Pessoa</a>
-            </th>
-            <th>
-                @*@Html.DisplayNameFor(model => model.DataCadastro)*@
-                @*<a class="page-link" asp-all-route-data="Model.LinkData">@Html.DisplayNameFor(model => model.DataCadastro)</a>*@
-                <a asp-route-filter="@Model.Filter" asp-route-sort="DataCadastro" asp-route-direction="@Model.GetNextSortDirection("DataCadastro", SortDirection.Asc)">@Html.DisplayNameFor(model => model.DataCadastro)</a>
-            </th>
-            <th>
-                @*@Html.DisplayNameFor(model => model.Ativo)*@
-                @*<a class="page-link" asp-all-route-data="Model.LinkData">@Html.DisplayNameFor(model => model.Ativo)</a>*@
-                <a asp-route-filter="@Model.Filter" asp-route-sort="Ativo" asp-route-direction="@Model.GetNextSortDirection("Ativo", SortDirection.Asc)">@Html.DisplayNameFor(model => model.Ativo)</a>
-            </th>
-            <th>
-                @*@Html.DisplayNameFor(model => model.conId)*@
-                @*<a class="page-link" asp-all-route-data="Model.LinkData">@Html.DisplayNameFor(model => model.conId)</a>*@
-                <a asp-route-filter="@Model.Filter" asp-route-sort="conId" asp-route-direction="@Model.GetNextSortDirection("ConId", SortDirection.Asc)">@Html.DisplayNameFor(model => model.conId)</a>
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model.values) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Nome)
+                            @*<a class="page-link" asp-all-route-data="Model.LinkData" asp-route-pagina="@(Model.List.CurrentPage - 1)" tabindex="-1" title="Anterior">*@
+                        </th>
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.TipoPessoa)*@
+                            @*<a class="page-link" asp-all-route-data="Model.LinkData">@Html.DisplayNameFor(model => model.TipoPessoa)</a>*@
+                            <a asp-route-filter="@Model.Filter" asp-route-sort="TipoPessoa" asp-route-direction="@Model.GetNextSortDirection("TipoPessoa", SortDirection.Asc)">Tipo Pessoa</a>
+                        </th>
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.DataCadastro)*@
+                            @*<a class="page-link" asp-all-route-data="Model.LinkData">@Html.DisplayNameFor(model => model.DataCadastro)</a>*@
+                            <a asp-route-filter="@Model.Filter" asp-route-sort="DataCadastro" asp-route-direction="@Model.GetNextSortDirection("DataCadastro", SortDirection.Asc)">@Html.DisplayNameFor(model => model.DataCadastro)</a>
+                        </th>
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.Ativo)*@
+                            @*<a class="page-link" asp-all-route-data="Model.LinkData">@Html.DisplayNameFor(model => model.Ativo)</a>*@
+                            <a asp-route-filter="@Model.Filter" asp-route-sort="Ativo" asp-route-direction="@Model.GetNextSortDirection("Ativo", SortDirection.Asc)">@Html.DisplayNameFor(model => model.Ativo)</a>
+                        </th>
+                        <th>
+                            @*@Html.DisplayNameFor(model => model.conId)*@
+                            @*<a class="page-link" asp-all-route-data="Model.LinkData">@Html.DisplayNameFor(model => model.conId)</a>*@
+                            <a asp-route-filter="@Model.Filter" asp-route-sort="conId" asp-route-direction="@Model.GetNextSortDirection("ConId", SortDirection.Asc)">@Html.DisplayNameFor(model => model.conId)</a>
+                        </th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+            @foreach (var item in Model.values) {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Nome)
 
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TipoPessoa.Descricao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataCadastro)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Ativo)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.conId)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.PessoaId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.PessoaId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.PessoaId">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TipoPessoa.Descricao)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DataCadastro)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Ativo)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.conId)
+                        </td>
+                        <td>
+                                @{
+                                    await Html.RenderPartialAsync("~/Views/Shared/Partials/_AcoesIndex.cshtml", @ViewData["Id"]=@item.PessoaId);
+                                }
+                            @*
+                            <a asp-action="Edit" asp-route-id="@item.PessoaId">Edit</a> |
+                            <a asp-action="Details" asp-route-id="@item.PessoaId">Details</a> |
+                            <a asp-action="Delete" asp-route-id="@item.PessoaId">Delete</a>
+                            *@
+                        </td>
+                    </tr>
+            }
+                </tbody>
+            </table>
+            </div>
+            <div class="card-footer">
+                @await Component.InvokeAsync("Pagination", new { values = Model.values, routeData=Model.LinkData})
 
-@await Component.InvokeAsync("Pagination", new { values = Model.values, routeData=Model.LinkData})
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        @{await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoAdicionar.cshtml");}
+    </div>
+</div>

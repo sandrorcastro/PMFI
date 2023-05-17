@@ -14,7 +14,7 @@ namespace MVC.Extensions
             if (string.IsNullOrWhiteSpace(filter))
             {
                 //return query.Where(s=>s.ServidorId==long.Parse("2289401"));
-                return query;
+                return query.Take(100);
             }
             long number1 = 0;
             //if (long.TryParse(filter, out number1))
@@ -24,11 +24,16 @@ namespace MVC.Extensions
             
         }
 
-        public static IQueryable<Imovel> OrderBy(this IQueryable<Imovel> query, string name, SortDirection? direction = SortDirection.Asc)
+        public static IQueryable<Imovel> OrderBy(this IQueryable<Imovel> query, string sort, SortDirection? direction = SortDirection.Asc)
         {
-            Expression<Func<Imovel, object>> exp = name /*? ToLower()*/ switch
+            if (string.IsNullOrWhiteSpace(sort))
             {
-                "ImovelId" => x => x.ImovelId
+                sort = "";
+            }
+            Expression<Func<Imovel, object>> exp = sort?.ToLower() switch
+            {
+                "" => x => x.ImovelId,
+                "imovelid" => x => x.ImovelId
                 
             };
 

@@ -1,54 +1,67 @@
-﻿@model Domain.Entities.Pessoa
+﻿@model MVC.ViewModels.PessoaViewModel
 
 @{
     ViewData["Title"] = "Edit";
 }
-
-<h1>Edit</h1>
-
-<h4>Pessoa</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="PessoaId" />
-            <div class="form-group">
-                <label asp-for="Nome" class="control-label"></label>
-                <input asp-for="Nome" class="form-control" />
-                <span asp-validation-for="Nome" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="TipoPessoaId" class="control-label"></label>
-                <select asp-for="TipoPessoaId" class="form-control" asp-items="ViewBag.TipoPessoaId"></select>
-                <span asp-validation-for="TipoPessoaId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="DataCadastro" class="control-label"></label>
-                <input asp-for="DataCadastro" class="form-control" />
-                <span asp-validation-for="DataCadastro" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Ativo" class="control-label"></label>
-                <input asp-for="Ativo" class="form-control" />
-                <span asp-validation-for="Ativo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="conId" class="control-label"></label>
-                <input asp-for="conId" class="form-control" />
-                <span asp-validation-for="conId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+<div class="card"> 
+    <div class="card-header">
+                    <h4>Editar</h4>
     </div>
-</div>
+    <div class="card-body">
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+                    <h5>Pessoa</h5>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-4">
+                            <form asp-action="Edit" method="post">
+                                <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                                <input type="hidden" asp-for="PessoaId" />
+                                <div class="form-group">
+                                    <label asp-for="Nome" class="control-label"></label>
+                                    <input asp-for="Nome" class="form-control" />
+                                    <span asp-validation-for="Nome" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="TipoPessoaId" class="control-label"></label>
+                                    <select asp-for="TipoPessoaId" class="form-control" asp-items="ViewBag.TipoPessoaId"></select>
+                                    <span asp-validation-for="TipoPessoaId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="DataCadastro" class="control-label"></label>
+                                    <input asp-for="DataCadastro" class="form-control" />
+                                    <span asp-validation-for="DataCadastro" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="Ativo" class="control-label"></label>
+                                    <input asp-for="Ativo" class="form-control" />
+                                    <span asp-validation-for="Ativo" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <label asp-for="conId" class="control-label"></label>
+                                    <input asp-for="conId" class="form-control" />
+                                    <span asp-validation-for="conId" class="text-danger"></span>
+                                </div>
+                                <div class="form-group">
+                                    <input type="submit" value="Salvar" class="btn btn-primary" />
+                                </div>
+                            </form>
+                        </div>
+                    </div>
 
+                    <div>
+        </div>
+    </div>
+    <div class="card-footer">
+        @{
+            await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoVoltar.cshtml");
+        }
+        @{
+            await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoSalvar.cshtml");
+        }
+         @* <a asp-action="Index">Back to List</a>*@
+    </div>
+
+</div>
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
 }

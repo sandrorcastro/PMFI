@@ -1,0 +1,23 @@
+﻿@{
+    var controllerAtual = ViewContext.RouteData.Values["controller"].ToString();
+    
+}
+@*<form asp-action="Index" asp-controller="@ViewBag.FiltroPesquisa" method="get">*@
+
+ <div class="col-md-5 form-group">
+        <form asp-action="Index" asp-controller=@controllerAtual method="get">
+            <div class="form-actions no-color">
+                <p>
+                    Localizar: <input type="text" name="filter" value="@Model.Filter" />
+                    <input type="submit" value="Buscar" class="btn btn-success"></> |
+                    <a asp-action="Index">Voltar à Lista</a>
+                </p>
+            </div>
+        </form>
+</div>
+@*
+
+<div class="col-md-2 form-group" >
+    <a class="btn btn-primary mr-1" asp-action="Create" asp-controller=@controllerAtual style="text-align: right;"> <i class="fa fa-plus-circle"></i> Adcionar</a>
+</div>
+*@

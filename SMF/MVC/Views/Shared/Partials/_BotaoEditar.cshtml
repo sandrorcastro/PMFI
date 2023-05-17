@@ -1,0 +1,5 @@
+﻿@{
+    var controllerAtual = ViewContext.RouteData.Values["controller"].ToString();
+    var actionAtual = ViewContext.RouteData.Values["action"].ToString();
+}
+<a class="btn btn-primary mr-1" asp-action="Edit" asp-controller=@controllerAtual asp-route-Id=@ViewData["Id"]>Editar</a>

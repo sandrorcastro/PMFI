@@ -15,7 +15,7 @@ namespace MVC.Extensions
             if (string.IsNullOrWhiteSpace(filter))
             {
                 //return query.Where(s=>s.ServidorId==long.Parse("2289401"));
-                return query.Include(tp=>tp.TipoPessoa);
+                return query.Include(tp=>tp.TipoPessoa).Take(100);
             }
             long number1 = 0;
             if (long.TryParse(filter, out number1))
