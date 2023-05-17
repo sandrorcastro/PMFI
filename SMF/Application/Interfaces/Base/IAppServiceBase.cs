@@ -4,8 +4,13 @@
         public interface IAppServiceBase<TEntity> where TEntity : class
         {
             public void Add(TEntity obj);
+
+             public IQueryable<TEntity> GetIQueryable();
+             public IQueryable<TEntity> GetIQueryable(Func<TEntity, bool> predicate);
+             public IQueryable<TEntity> GetIQueryable(params object[] key);
+            
             public TEntity GetById(int id);
-            public TEntity GetById(long id);
+             public TEntity GetById(long id);
             public IEnumerable<TEntity> GetAll();
             public void Update(TEntity obj);
             public void Remove(TEntity obj);

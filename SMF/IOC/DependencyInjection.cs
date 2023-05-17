@@ -65,14 +65,14 @@ namespace IOC
                         services.AddScoped<IEnderecoAppService, EnderecoAppService>();
                         services.AddScoped<IEnderecoEntidadeAppService, EnderecoEntidadeAppService>();
                         services.AddScoped<ITipoPessoaAppService, TipoPessoaAppService>();
-                        services.AddScoped<IPessoaAppService, PessoaAppService>();
-                        services.AddScoped<IPessoaFisicaAppService, PessoaFisicaAppService>();
+                   */     services.AddScoped<IPessoaAppService, PessoaAppService>();
+                     /*   services.AddScoped<IPessoaFisicaAppService, PessoaFisicaAppService>();
                         services.AddScoped<IPessoaJuridicaAppService, PessoaJuridicaAppService>();
                         services.AddScoped<ITipoResponsabilidadeAppService, TipoResponsabilidadeAppService>();
                         services.AddScoped<IEconomiaAppService, EconomiaAppService>();
                         services.AddScoped<IEconomiaPessoaAppService, EconomiaPessoaAppService>();
-                        services.AddScoped<IImovelAppService, ImovelAppService>();
-                        services.AddScoped<IServidorAppService, ServidorAppService>();
+                     */   services.AddScoped<IImovelAppService, ImovelAppService>();
+                       /* services.AddScoped<IServidorAppService, ServidorAppService>();
                         services.AddScoped<IEtapaAppService, EtapaAppService>();
            */
                         services.AddScoped<ITipoEtapaAppService, TipoEtapaAppService>();
@@ -103,14 +103,14 @@ namespace IOC
                       services.AddScoped<IEnderecoService, EnderecoService>();
                       services.AddScoped<IEnderecoEntidadeService, EnderecoEntidadeService>();
                       services.AddScoped<ITipoPessoaService, TipoPessoaService>();
-                      services.AddScoped<IPessoaService, PessoaService>();
-                      services.AddScoped<IPessoaFisicaService, PessoaFisicaService>();
+                     */ services.AddScoped<IPessoaService, PessoaService>();
+                      /*services.AddScoped<IPessoaFisicaService, PessoaFisicaService>();
                       services.AddScoped<IPessoaJuridicaService, PessoaJuridicaService>();
                       services.AddScoped<ITipoResponsabilidadeService, TipoResponsabilidadeService>();
                       services.AddScoped<IEconomiaService, EconomiaService>();
                       services.AddScoped<IEconomiaPessoaService, EconomiaPessoaService>();
-                      services.AddScoped<IImovelService, ImovelService>();
-                      services.AddScoped<IServidorService, ServidorService>();
+                   */   services.AddScoped<IImovelService, ImovelService>();
+                     /* services.AddScoped<IServidorService, ServidorService>();
                       services.AddScoped<IEtapaService, EtapaService>();
             */
                         services.AddScoped<ITipoEtapaService, TipoEtapaService>();
@@ -143,14 +143,14 @@ namespace IOC
                       services.AddScoped<IEnderecoRepository, EnderecoRepository>();
                       services.AddScoped<IEnderecoEntidadeRepository, EnderecoEntidadeRepository>();
                       services.AddScoped<ITipoPessoaRepository, TipoPessoaRepository>();
-                      services.AddScoped<IPessoaRepository, PessoaRepository>();
-                      services.AddScoped<IPessoaFisicaRepository, PessoaFisicaRepository>();
+                     */ services.AddScoped<IPessoaRepository, PessoaRepository>();
+                      /*services.AddScoped<IPessoaFisicaRepository, PessoaFisicaRepository>();
                       services.AddScoped<IPessoaJuridicaRepository, PessoaJuridicaRepository>();
                       services.AddScoped<ITipoResponsabilidadeRepository, TipoResponsabilidadeRepository>();
                       services.AddScoped<IEconomiaRepository, EconomiaRepository>();
                       services.AddScoped<IEconomiaPessoaRepository, EconomiaPessoaRepository>();
-                      services.AddScoped<IImovelRepository, ImovelRepository>();
-                      services.AddScoped<IServidorRepository, ServidorRepository>();
+                    */  services.AddScoped<IImovelRepository, ImovelRepository>();
+                     /* services.AddScoped<IServidorRepository, ServidorRepository>();
                       services.AddScoped<IEtapaRepository, EtapaRepository>();
             */
                       services.AddScoped<ITipoEtapaRepository, TipoEtapaRepository>();

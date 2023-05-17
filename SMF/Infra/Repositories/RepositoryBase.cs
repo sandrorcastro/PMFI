@@ -3,6 +3,7 @@
 using Domain.Interfaces.Base;
 using Infra.Context;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 
 namespace Infra.Repositories
 {
@@ -23,6 +24,38 @@ namespace Infra.Repositories
                 this.contexto = contexto;
 
             //}
+        }
+        public IQueryable<TEntity> GetIQueryable()
+        {
+            try
+            {
+                return contexto.Set<TEntity>();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public DbSet<TEntity> GetDbSet()
+        {
+            try
+            {
+                return contexto.Set<TEntity>();
+                //return contexto;
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
+        public IQueryable<TEntity> GetIQueryable(Func<TEntity, bool> predicate)
+        {
+            return contexto.Set<TEntity>().Where(predicate).AsQueryable();
+        }
+        public IQueryable<TEntity> GetIQueryable(params object[] key)
+        {
+            return (IQueryable<TEntity>)contexto.Set<TEntity>().Find(key);
         }
 
         public void Add(TEntity obj)

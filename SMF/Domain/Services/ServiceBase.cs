@@ -18,6 +18,26 @@ namespace Domain.Services
         {
             _repository.Add(obj);
         }
+        public IQueryable<TEntity> GetIQueryable()
+        {
+            try
+            {
+                return _repository.GetIQueryable();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public IQueryable<TEntity> GetIQueryable(Func<TEntity, bool> predicate)
+        {
+            return _repository.GetIQueryable(predicate);
+            
+        }
+        public IQueryable<TEntity> GetIQueryable(params object[] key)
+        {
+            return _repository.GetIQueryable(key);
+        }
 
         public TEntity GetById(int id)
         {

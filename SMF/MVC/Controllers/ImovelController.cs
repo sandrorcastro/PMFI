@@ -12,24 +12,28 @@ using AutoMapper;
 using MVC.Extensions;
 using Application.Services;
 using MVC.Models;
+using Application.Interfaces;
 
 namespace MVC.Controllers
 {
     public class ImovelController : Controller
     {
         private readonly ContextoAplicacao _context;
+        private readonly IImovelAppService imovelAppService;
         private IMapper mapper;
-        public ImovelController(ContextoAplicacao context, IMapper mapper)
+        public ImovelController(ContextoAplicacao context, IMapper mapper, IImovelAppService imovelAppService)
         {
             _context = context;
             this.mapper = mapper;
+            this.imovelAppService = imovelAppService;
         }
 
         // GET: Imovel
 
         public async Task<IActionResult> Index(string sort, string filter, int p, SortDirection direction)
         {
-            var query = from s in _context.dbSImoveis.Filter(filter).OrderBy(sort, direction) select s;
+            // var query = from s in _context.dbSImoveis.Filter(filter).OrderBy(sort, direction) select s;
+            var query = from s in imovelAppService.GetIQueryable().Filter(filter).OrderBy(sort, direction) select s;
             ImovelPaginatedListViewModel ivm = new ImovelPaginatedListViewModel(sort, filter);
             ivm.values = await ImovelPaginatedListViewModel.CreateAsync(query, p == 0 ? 1 : p, 10);
             ivm.Filter = filter;
@@ -52,15 +56,17 @@ namespace MVC.Controllers
         }*/
 
         // GET: Imovel/Details/5
-        public async Task<IActionResult> Details(long? id)
+        public async Task<IActionResult> Details(long id)
         {
-            if (id == null || _context.dbSImoveis == null)
+             if (id == null || _context.dbSImoveis == null)
+            //if (id == null || imovelAppService.GetIQueryable == null)
             {
                 return NotFound();
             }
 
-            var imovel = await _context.dbSImoveis
-                .FirstOrDefaultAsync(m => m.ImovelId == id);
+            //var imovel = await _context.dbSImoveis
+            var imovel = imovelAppService.Find(id);
+            //.FirstOrDefaultAsync(m => m.ImovelId == id);
             if (imovel == null)
             {
                 return NotFound();
@@ -84,8 +90,9 @@ namespace MVC.Controllers
         {
             if (ModelState.IsValid)
             {
-                _context.Add(mapper.Map<Imovel>(imovel));
-                await _context.SaveChangesAsync();
+                //_context.Add(mapper.Map<Imovel>(imovel));
+                imovelAppService.Add(mapper.Map<Imovel>(imovel));
+                // await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(imovel);
@@ -99,7 +106,8 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var imovel = await _context.dbSImoveis.FindAsync(id);
+            //var imovel = await _context.dbSImoveis.FindAsync(id);
+            var imovel = imovelAppService.Find(id);
             if (imovel == null)
             {
                 return NotFound();
@@ -123,8 +131,10 @@ namespace MVC.Controllers
             {
                 try
                 {
-                    _context.Update(mapper.Map<Imovel>(imovel));
-                    await _context.SaveChangesAsync();
+                    //_context.Update(mapper.Map<Imovel>(imovel));
+                    imovelAppService.Update(mapper.Map<Imovel>(imovel));
+
+                    //await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -150,8 +160,8 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var imovel = await _context.dbSImoveis
-                .FirstOrDefaultAsync(m => m.ImovelId == id);
+            //var imovel = await _context.dbSImoveis.FirstOrDefaultAsync(m => m.ImovelId == id);
+            var imovel = imovelAppService.Find(id);
             if (imovel == null)
             {
                 return NotFound();
@@ -169,19 +179,23 @@ namespace MVC.Controllers
             {
                 return Problem("Entity set 'ContextoAplicacao.dbSImoveis'  is null.");
             }
-            var imovel = await _context.dbSImoveis.FindAsync(id);
+            //var imovel = await _context.dbSImoveis.FindAsync(id);
+            var imovel = imovelAppService.Find(id);
             if (imovel != null)
             {
-                _context.dbSImoveis.Remove(imovel);
+                //_context.dbSImoveis.Remove(imovel);
+                imovelAppService.Remove(imovel);
             }
             
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool ImovelExists(long id)
         {
-          return (_context.dbSImoveis?.Any(e => e.ImovelId == id)).GetValueOrDefault();
+            //return (_context.dbSImoveis?.Any(e => e.ImovelId == id)).GetValueOrDefault();
+            return (imovelAppService?.GetTodos().Any(e => e.ImovelId == id)).GetValueOrDefault();
         }
     }
 }
+

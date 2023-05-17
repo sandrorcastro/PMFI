@@ -20,6 +20,25 @@ namespace Application.Services
         {
             _serviceBase.Add(obj);
         }
+        public IQueryable<TEntity> GetIQueryable()
+        {
+            try
+            {
+                return _serviceBase.GetIQueryable();
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        public IQueryable<TEntity> GetIQueryable(Func<TEntity, bool> predicate)
+        {
+            return _serviceBase.GetIQueryable(predicate);
+        }
+        public IQueryable<TEntity> GetIQueryable(params object[] key)
+        {
+            return _serviceBase.GetIQueryable(key);
+        }
 
         public TEntity GetById(int id)
         {
