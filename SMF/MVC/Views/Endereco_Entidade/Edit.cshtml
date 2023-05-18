@@ -1,0 +1,62 @@
+﻿@model Domain.Entities.Endereco_Entidade
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>Endereco_Entidade</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="EntidadeId" />
+            <input type="hidden" asp-for="EnderecoId" />
+            <input type="hidden" asp-for="Numero" />
+            <div class="form-group">
+                <label asp-for="DataCadastro" class="control-label"></label>
+                <input asp-for="DataCadastro" class="form-control" />
+                <span asp-validation-for="DataCadastro" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataUltimaAlteracao" class="control-label"></label>
+                <input asp-for="DataUltimaAlteracao" class="form-control" />
+                <span asp-validation-for="DataUltimaAlteracao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="CEP" class="control-label"></label>
+                <input asp-for="CEP" class="form-control" />
+                <span asp-validation-for="CEP" class="text-danger"></span>
+            </div>
+            <input type="hidden" asp-for="TipoEntidadeId" />
+            <div class="form-group">
+                <label asp-for="Correspondencia" class="control-label"></label>
+                <input asp-for="Correspondencia" class="form-control" />
+                <span asp-validation-for="Correspondencia" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Principal" class="control-label"></label>
+                <input asp-for="Principal" class="form-control" />
+                <span asp-validation-for="Principal" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ativo" class="control-label"></label>
+                <input asp-for="Ativo" class="form-control" />
+                <span asp-validation-for="Ativo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}
