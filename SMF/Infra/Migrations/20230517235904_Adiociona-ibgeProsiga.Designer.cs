@@ -4,6 +4,7 @@ using Infra.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.Migrations
 {
     [DbContext(typeof(ContextoAplicacao))]
-    partial class ContextoAplicacaoModelSnapshot : ModelSnapshot
+    [Migration("20230517235904_Adiociona-ibgeProsiga")]
+    partial class AdiocionaibgeProsiga
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -60,16 +63,6 @@ namespace Infra.Migrations
                         .HasColumnType("nvarchar(500)");
 
                     b.Property<int?>("EstadoId")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IDCidadeProsiga")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UFProsiga")
-                        .HasMaxLength(3)
-                        .HasColumnType("nvarchar(3)");
-
-                    b.Property<int?>("ibge")
                         .HasColumnType("int");
 
                     b.Property<int?>("ibgeProsiga")

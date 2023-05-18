@@ -1,0 +1,539 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="5/17/2023 10:32:00 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="SANDRO-ASPIRE-4"
+  DTS:CreatorName="SANDRO-ASPIRE-4\sandr"
+  DTS:Description="Importa Bairro DBProsiga_IPTU para Bairro SMF_Processo"
+  DTS:DTSID="{43C428A1-81D1-473A-A199-09AEE299EAF3}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.229"
+  DTS:LocaleID="1046"
+  DTS:MaxErrorCount="0"
+  DTS:ObjectName="PacoteBairro"
+  DTS:VersionGUID="{76C1D4CC-55B8-4965-8C13-EAA5B175DF1C}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[DestinationConnectionOLEDB]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{B1945EA6-FDE3-4735-A56C-1D3C3943D716}"
+      DTS:ObjectName="DestinationConnectionOLEDB">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=localhost\SQLEXPRESS;Initial Catalog=SMF_Processo;Provider=SQLNCLI11;Integrated Security=SSPI;Auto Translate=false;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[SourceConnectionOLEDB]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{330679BF-6DEE-40D5-A8E7-79C29C97530A}"
+      DTS:ObjectName="SourceConnectionOLEDB">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=localhost\sqlserver;User ID=sa;Initial Catalog=DBProSIGA_IPTU;Provider=SQLNCLI11;Auto Translate=false;">
+          <DTS:Password
+            DTS:Name="Password"
+            Sensitive="1"
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAARZp+IWDU+UulM78lXp4YbwAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAACHPvxe+ZbV2m4Ml/1QlbVXNQ11+jCwSiREzYhfErC6RAAAAAAOgAAAAAIAACAAAADieUvPl/Ema4RKCT/8trN6D9z9e5r4ASDzDql8Lg89nSAAAAATQ5bSGEuGcKwUV66Oso/zKm3QeV89GDuMN4aTS1QK6UAAAAARdyg3BLrb05XUEqk94g5F+uofccprEMDCsIO16lsgEK586aidA5tiw03HtChhqRHhEpxGGKdrriGGJsmftU88</DTS:Password>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Tarefa Fluxo de Dados 1"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:DTSID="{F362D43D-557B-420A-8F4C-07AC47811ED5}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:FailPackageOnFailure="True"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Tarefa Fluxo de Dados 1"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          defaultBufferSize="3145728"
+          version="1">
+          <components>
+            <component
+              refId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0"
+              componentClassID="Microsoft.DataConvert"
+              contactInfo="Conversão de Dados;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos os Direitos Reservados; http://www.microsoft.com/sql/support;0"
+              description="Conversão de Dados"
+              name="Conversão de dados 0 - 0"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Inputs[Entrada de Conversão de Dados]"
+                  name="Entrada de Conversão de Dados">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Inputs[Entrada de Conversão de Dados].Columns[BairroId]"
+                      cachedDataType="i4"
+                      cachedName="BairroId"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].Columns[BairroId]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Inputs[Entrada de Conversão de Dados].Columns[BaiNome]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="80"
+                      cachedName="BaiNome"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].Columns[BaiNome]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Conversão de Dados]"
+                  exclusionGroup="1"
+                  name="Saída de Conversão de Dados"
+                  synchronousInputId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Inputs[Entrada de Conversão de Dados]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Conversão de Dados].Columns[BairroId]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Conversão de Dados].Columns[BairroId]"
+                      name="BairroId"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica a coluna de entrada usada como a origem dois dados para a conversão."
+                          name="SourceInputColumnLineageID">#{Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].Columns[BairroId]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indica se a coluna usa as rotinas de análise de localidade neutro mais rápidas."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Conversão de Dados].Columns[BaiNome]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      length="150"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Conversão de Dados].Columns[BaiNome]"
+                      name="BaiNome"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica a coluna de entrada usada como a origem dois dados para a conversão."
+                          name="SourceInputColumnLineageID">#{Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].Columns[BaiNome]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indica se a coluna usa as rotinas de análise de localidade neutro mais rápidas."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Erro de Conversão de Dados]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Saída de Erro de Conversão de Dados"
+                  synchronousInputId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Inputs[Entrada de Conversão de Dados]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Erro de Conversão de Dados].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Erro de Conversão de Dados].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Erro de Conversão de Dados].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Erro de Conversão de Dados].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="Destino OLE DB;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos os Direitos Reservados; http://www.microsoft.com/sql/support;4"
+              description="Destino OLE DB"
+              name="Destino - Bairro"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="O tempo em segundos antes que um comando expire. Zero indica uma expiração infinita."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica o nome do objeto de banco de dados usado para abrir um conjunto de linhas."
+                  name="OpenRowset">[dbo].[Bairro]</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica a variável que contém o nome do objeto de banco de dados usado para abrir um conjunto de linhas."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="O comando SQL a ser executado."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica a página de código de coluna a ser usada quando não há informações de página de código disponíveis a partir da fonte de dados."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forca o uso do valor da propriedade DefaultCodePage durante a descrição dos dados de caractere."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica o modo usado para acessar o banco de dados."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica se os valores fornecidos para colunas de identidade serão copiados no destino. Se false, os valores para colunas de identidade serão gerados automaticamente no destino. Aplicável apenas se o carregamento rápido estiver ativado."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica se as colunas que contêm null terão null inserido no destino. Se false, as colunas que contêm null terão seus valores padrão inseridos no destino. Aplicável apenas se o carregamento rápido estiver ativado."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica as opções a serem usadas com o carregamento rápido. Aplicável apenas se o carregamento rápido estiver ativado."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica quando confirmações são emitidas durante a inserção de dados. Um valor de 0 especifica que uma confirmação será emitida ao final da inserção de dados. Aplicável somente se o carregamento rápido estiver ativado."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DestinationConnectionOLEDB]"
+                  connectionManagerRefId="Package.ConnectionManagers[DestinationConnectionOLEDB]"
+                  description="A conexão de tempo de execução OLE DB usada para acessar o banco de dados."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Inputs[Destination Input]"
+                  errorOrTruncationOperation="Inserir"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Inputs[Destination Input].Columns[BairroId]"
+                      cachedDataType="i8"
+                      cachedName="BairroId"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Inputs[Destination Input].ExternalColumns[BairroId]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Conversão de Dados].Columns[BairroId]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Inputs[Destination Input].Columns[BaiNome]"
+                      cachedDataType="wstr"
+                      cachedLength="150"
+                      cachedName="BaiNome"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Inputs[Destination Input].ExternalColumns[Descricao]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Conversão de Dados].Columns[BaiNome]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Inputs[Destination Input].Columns[IDRegiao]"
+                      cachedDataType="i8"
+                      cachedName="IDRegiao"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Inputs[Destination Input].ExternalColumns[RegiaoId]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].Columns[IDRegiao]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Inputs[Destination Input].ExternalColumns[BairroId]"
+                      dataType="i8"
+                      name="BairroId" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Inputs[Destination Input].ExternalColumns[Descricao]"
+                      dataType="wstr"
+                      length="150"
+                      name="Descricao" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Inputs[Destination Input].ExternalColumns[RegiaoId]"
+                      dataType="i8"
+                      name="RegiaoId" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Inputs[Destination Input].ExternalColumns[CidadeId]"
+                      dataType="i4"
+                      name="CidadeId" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Outputs[Saída de Erro de Destino OLE DB]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Saída de Erro de Destino OLE DB"
+                  synchronousInputId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Inputs[Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="Origem OLE DB;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos os Direitos Reservados; http://www.microsoft.com/sql/support;7"
+              description="Origem OLE DB"
+              name="Origem - Bairro"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="O tempo em segundos antes que um comando expire. Zero indica uma expiração infinita."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica o nome do objeto de banco de dados usado para abrir um conjunto de linhas."
+                  name="OpenRowset">[dbo].[Bairro]</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica a variável que contém o nome do objeto de banco de dados usado para abrir um conjunto de linhas."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="O comando SQL a ser executado."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="A variável que contém o comando SQL a ser executado."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica a página de código de coluna a ser usada quando não há informações de página de código disponíveis a partir da fonte de dados."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forca o uso do valor da propriedade DefaultCodePage durante a descrição dos dados de caractere."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica o modo usado para acessar o banco de dados."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="Os mapeamentos entre os parâmetros no comando SQL e as variáveis."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[SourceConnectionOLEDB]"
+                  connectionManagerRefId="Package.ConnectionManagers[SourceConnectionOLEDB]"
+                  description="A conexão de tempo de execução OLE DB usada para acessar o banco de dados."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB]"
+                  name="Saída de Origem OLE DB">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].Columns[BairroId]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].ExternalColumns[BairroId]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].Columns[BairroId]"
+                      name="BairroId"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].Columns[BaiNome]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].ExternalColumns[BaiNome]"
+                      length="80"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].Columns[BaiNome]"
+                      name="BaiNome"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].Columns[UsuarioInclusao]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].ExternalColumns[UsuarioInclusao]"
+                      length="255"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].Columns[UsuarioInclusao]"
+                      name="UsuarioInclusao"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].Columns[DataInclusao]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].ExternalColumns[DataInclusao]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].Columns[DataInclusao]"
+                      name="DataInclusao"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].Columns[Host]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].ExternalColumns[Host]"
+                      length="255"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].Columns[Host]"
+                      name="Host"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].Columns[IDRegiao]"
+                      dataType="i8"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].ExternalColumns[IDRegiao]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].Columns[IDRegiao]"
+                      name="IDRegiao"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].ExternalColumns[BairroId]"
+                      dataType="i4"
+                      name="BairroId" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].ExternalColumns[BaiNome]"
+                      codePage="1252"
+                      dataType="str"
+                      length="80"
+                      name="BaiNome" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].ExternalColumns[UsuarioInclusao]"
+                      codePage="1252"
+                      dataType="str"
+                      length="255"
+                      name="UsuarioInclusao" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].ExternalColumns[DataInclusao]"
+                      dataType="dbTimeStamp"
+                      name="DataInclusao" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].ExternalColumns[Host]"
+                      codePage="1252"
+                      dataType="str"
+                      length="255"
+                      name="Host" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB].ExternalColumns[IDRegiao]"
+                      dataType="i8"
+                      name="IDRegiao" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Erro de Origem OLE DB]"
+                  isErrorOut="true"
+                  name="Saída de Erro de Origem OLE DB">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Erro de Origem OLE DB].Columns[BairroId]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Erro de Origem OLE DB].Columns[BairroId]"
+                      name="BairroId" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Erro de Origem OLE DB].Columns[BaiNome]"
+                      codePage="1252"
+                      dataType="str"
+                      length="80"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Erro de Origem OLE DB].Columns[BaiNome]"
+                      name="BaiNome" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Erro de Origem OLE DB].Columns[UsuarioInclusao]"
+                      codePage="1252"
+                      dataType="str"
+                      length="255"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Erro de Origem OLE DB].Columns[UsuarioInclusao]"
+                      name="UsuarioInclusao" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Erro de Origem OLE DB].Columns[DataInclusao]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Erro de Origem OLE DB].Columns[DataInclusao]"
+                      name="DataInclusao" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Erro de Origem OLE DB].Columns[Host]"
+                      codePage="1252"
+                      dataType="str"
+                      length="255"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Erro de Origem OLE DB].Columns[Host]"
+                      name="Host" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Erro de Origem OLE DB].Columns[IDRegiao]"
+                      dataType="i8"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Erro de Origem OLE DB].Columns[IDRegiao]"
+                      name="IDRegiao" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Erro de Origem OLE DB].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Erro de Origem OLE DB].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Erro de Origem OLE DB].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Erro de Origem OLE DB].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Tarefa Fluxo de Dados 1.Paths[Saída de Conversão de Dados]"
+              endId="Package\Tarefa Fluxo de Dados 1\Destino - Bairro.Inputs[Destination Input]"
+              name="Saída de Conversão de Dados"
+              startId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Conversão de Dados]" />
+            <path
+              refId="Package\Tarefa Fluxo de Dados 1.Paths[Saída de Origem OLE DB]"
+              endId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Inputs[Entrada de Conversão de Dados]"
+              name="Saída de Origem OLE DB"
+              startId="Package\Tarefa Fluxo de Dados 1\Origem - Bairro.Outputs[Saída de Origem OLE DB]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+</DTS:Executable>

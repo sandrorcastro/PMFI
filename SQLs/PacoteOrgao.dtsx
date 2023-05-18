@@ -1,0 +1,482 @@
+<?xml version="1.0"?>
+<DTS:Executable xmlns:DTS="www.microsoft.com/SqlServer/Dts"
+  DTS:refId="Package"
+  DTS:CreationDate="5/17/2023 8:20:14 PM"
+  DTS:CreationName="Microsoft.Package"
+  DTS:CreatorComputerName="SANDRO-ASPIRE-4"
+  DTS:CreatorName="SANDRO-ASPIRE-4\sandr"
+  DTS:Description="Importa Orgaos DbProsiga_IPTU para Orgao SMF_Processo"
+  DTS:DTSID="{4D23AA7C-6B3E-402D-B8C2-8A39E9A53BB4}"
+  DTS:ExecutableType="Microsoft.Package"
+  DTS:LastModifiedProductVersion="15.0.2000.229"
+  DTS:LocaleID="1046"
+  DTS:MaxErrorCount="0"
+  DTS:ObjectName="PacoteOrgao"
+  DTS:VersionGUID="{979BDB72-4D44-492F-B4AB-1387D53450CC}">
+  <DTS:Property
+    DTS:Name="PackageFormatVersion">8</DTS:Property>
+  <DTS:ConnectionManagers>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[DestinationConnectionOLEDB]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{6E39FE29-4BB3-4318-9645-13006FA8FC5B}"
+      DTS:ObjectName="DestinationConnectionOLEDB">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=localhost\SQLEXPRESS;Initial Catalog=SMF_Processo;Provider=SQLNCLI11;Integrated Security=SSPI;Auto Translate=false;" />
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+    <DTS:ConnectionManager
+      DTS:refId="Package.ConnectionManagers[SourceConnectionOLEDB]"
+      DTS:CreationName="OLEDB"
+      DTS:DTSID="{85EF22CC-2579-4867-9A65-F4D850425AC8}"
+      DTS:ObjectName="SourceConnectionOLEDB">
+      <DTS:ObjectData>
+        <DTS:ConnectionManager
+          DTS:ConnectRetryCount="1"
+          DTS:ConnectRetryInterval="5"
+          DTS:ConnectionString="Data Source=localhost\sqlserver;User ID=sa;Initial Catalog=DBProSIGA_IPTU;Provider=SQLNCLI11;Auto Translate=false;">
+          <DTS:Password
+            DTS:Name="Password"
+            Sensitive="1"
+            Encrypted="1">AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAARZp+IWDU+UulM78lXp4YbwAAAAAIAAAARABUAFMAAAAQZgAAAAEAACAAAAAoPc46/Y23UVh++y0T/EFBiLLu5q0wUNL9RvgMZ0imkQAAAAAOgAAAAAIAACAAAACgvpWi9csjoSYq+xF1sAyrkI843ISV5gm4we34+CU6oSAAAADaY1uJUxY8CvcsmAHs+focCByRhY5JqQwXkEFSd2gr3UAAAADTfmV5t0fQHS9WsltTzGd21MEgyDp+WiTles4++bNjiQ3AP98bdbz10RjPX/5JMFTSTqpWf/W6B8BmuE2b1HmA</DTS:Password>
+        </DTS:ConnectionManager>
+      </DTS:ObjectData>
+    </DTS:ConnectionManager>
+  </DTS:ConnectionManagers>
+  <DTS:Variables />
+  <DTS:Executables>
+    <DTS:Executable
+      DTS:refId="Package\Tarefa Fluxo de Dados 1"
+      DTS:CreationName="Microsoft.Pipeline"
+      DTS:DTSID="{5FEEF7C6-7C46-4DF6-A818-C60BE511DA50}"
+      DTS:ExecutableType="Microsoft.Pipeline"
+      DTS:FailPackageOnFailure="True"
+      DTS:LocaleID="-1"
+      DTS:ObjectName="Tarefa Fluxo de Dados 1"
+      DTS:TaskContact="Performs high-performance data extraction, transformation and loading;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; All Rights Reserved;http://www.microsoft.com/sql/support/default.asp;1">
+      <DTS:Variables />
+      <DTS:ObjectData>
+        <pipeline
+          defaultBufferSize="3145728"
+          version="1">
+          <components>
+            <component
+              refId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0"
+              componentClassID="Microsoft.DataConvert"
+              contactInfo="Conversão de Dados;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos os Direitos Reservados; http://www.microsoft.com/sql/support;0"
+              description="Conversão de Dados"
+              name="Conversão de dados 0 - 0"
+              usesDispositions="true">
+              <inputs>
+                <input
+                  refId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Inputs[Entrada de Conversão de Dados]"
+                  name="Entrada de Conversão de Dados">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Inputs[Entrada de Conversão de Dados].Columns[OrgNome]"
+                      cachedCodepage="1252"
+                      cachedDataType="str"
+                      cachedLength="255"
+                      cachedName="OrgNome"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].Columns[OrgNome]" />
+                  </inputColumns>
+                  <externalMetadataColumns />
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Conversão de Dados]"
+                  exclusionGroup="1"
+                  name="Saída de Conversão de Dados"
+                  synchronousInputId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Inputs[Entrada de Conversão de Dados]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Conversão de Dados].Columns[OrgNome]"
+                      dataType="wstr"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      length="100"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Conversão de Dados].Columns[OrgNome]"
+                      name="OrgNome"
+                      truncationRowDisposition="FailComponent">
+                      <properties>
+                        <property
+                          containsID="true"
+                          dataType="System.Int32"
+                          description="Especifica a coluna de entrada usada como a origem dois dados para a conversão."
+                          name="SourceInputColumnLineageID">#{Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].Columns[OrgNome]}</property>
+                        <property
+                          dataType="System.Boolean"
+                          description="Indica se a coluna usa as rotinas de análise de localidade neutro mais rápidas."
+                          name="FastParse">false</property>
+                      </properties>
+                    </outputColumn>
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+                <output
+                  refId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Erro de Conversão de Dados]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Saída de Erro de Conversão de Dados"
+                  synchronousInputId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Inputs[Entrada de Conversão de Dados]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Erro de Conversão de Dados].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Erro de Conversão de Dados].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Erro de Conversão de Dados].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Erro de Conversão de Dados].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Tarefa Fluxo de Dados 1\Destino - Orgao"
+              componentClassID="Microsoft.OLEDBDestination"
+              contactInfo="Destino OLE DB;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos os Direitos Reservados; http://www.microsoft.com/sql/support;4"
+              description="Destino OLE DB"
+              name="Destino - Orgao"
+              usesDispositions="true"
+              version="4">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="O tempo em segundos antes que um comando expire. Zero indica uma expiração infinita."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica o nome do objeto de banco de dados usado para abrir um conjunto de linhas."
+                  name="OpenRowset">[dbo].[Orgao]</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica a variável que contém o nome do objeto de banco de dados usado para abrir um conjunto de linhas."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="O comando SQL a ser executado."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica a página de código de coluna a ser usada quando não há informações de página de código disponíveis a partir da fonte de dados."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forca o uso do valor da propriedade DefaultCodePage durante a descrição dos dados de caractere."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica o modo usado para acessar o banco de dados."
+                  name="AccessMode"
+                  typeConverter="AccessMode">3</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica se os valores fornecidos para colunas de identidade serão copiados no destino. Se false, os valores para colunas de identidade serão gerados automaticamente no destino. Aplicável apenas se o carregamento rápido estiver ativado."
+                  name="FastLoadKeepIdentity">false</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Indica se as colunas que contêm null terão null inserido no destino. Se false, as colunas que contêm null terão seus valores padrão inseridos no destino. Aplicável apenas se o carregamento rápido estiver ativado."
+                  name="FastLoadKeepNulls">false</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica as opções a serem usadas com o carregamento rápido. Aplicável apenas se o carregamento rápido estiver ativado."
+                  name="FastLoadOptions">TABLOCK,CHECK_CONSTRAINTS</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica quando confirmações são emitidas durante a inserção de dados. Um valor de 0 especifica que uma confirmação será emitida ao final da inserção de dados. Aplicável somente se o carregamento rápido estiver ativado."
+                  name="FastLoadMaxInsertCommitSize">2147483647</property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Tarefa Fluxo de Dados 1\Destino - Orgao.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[DestinationConnectionOLEDB]"
+                  connectionManagerRefId="Package.ConnectionManagers[DestinationConnectionOLEDB]"
+                  description="A conexão de tempo de execução OLE DB usada para acessar o banco de dados."
+                  name="OleDbConnection" />
+              </connections>
+              <inputs>
+                <input
+                  refId="Package\Tarefa Fluxo de Dados 1\Destino - Orgao.Inputs[Destination Input]"
+                  errorOrTruncationOperation="Inserir"
+                  errorRowDisposition="FailComponent"
+                  hasSideEffects="true"
+                  name="Destination Input">
+                  <inputColumns>
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Orgao.Inputs[Destination Input].Columns[OrgId]"
+                      cachedDataType="i4"
+                      cachedName="OrgId"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Orgao.Inputs[Destination Input].ExternalColumns[OrgaoId]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].Columns[OrgId]" />
+                    <inputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Orgao.Inputs[Destination Input].Columns[OrgNome]"
+                      cachedDataType="wstr"
+                      cachedLength="100"
+                      cachedName="OrgNome"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Destino - Orgao.Inputs[Destination Input].ExternalColumns[Descricao]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Conversão de Dados].Columns[OrgNome]" />
+                  </inputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Orgao.Inputs[Destination Input].ExternalColumns[OrgaoId]"
+                      dataType="i4"
+                      name="OrgaoId" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Orgao.Inputs[Destination Input].ExternalColumns[Descricao]"
+                      dataType="wstr"
+                      length="100"
+                      name="Descricao" />
+                  </externalMetadataColumns>
+                </input>
+              </inputs>
+              <outputs>
+                <output
+                  refId="Package\Tarefa Fluxo de Dados 1\Destino - Orgao.Outputs[Saída de Erro de Destino OLE DB]"
+                  exclusionGroup="1"
+                  isErrorOut="true"
+                  name="Saída de Erro de Destino OLE DB"
+                  synchronousInputId="Package\Tarefa Fluxo de Dados 1\Destino - Orgao.Inputs[Destination Input]">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Orgao.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Destino - Orgao.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Destino - Orgao.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Destino - Orgao.Outputs[Saída de Erro de Destino OLE DB].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+            <component
+              refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos"
+              componentClassID="Microsoft.OLEDBSource"
+              contactInfo="Origem OLE DB;Microsoft Corporation; Microsoft SQL Server; (C) Microsoft Corporation; Todos os Direitos Reservados; http://www.microsoft.com/sql/support;7"
+              description="Origem OLE DB"
+              name="Origem - Orgaos"
+              usesDispositions="true"
+              version="7">
+              <properties>
+                <property
+                  dataType="System.Int32"
+                  description="O tempo em segundos antes que um comando expire. Zero indica uma expiração infinita."
+                  name="CommandTimeout">0</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica o nome do objeto de banco de dados usado para abrir um conjunto de linhas."
+                  name="OpenRowset">[dbo].[Orgaos]</property>
+                <property
+                  dataType="System.String"
+                  description="Especifica a variável que contém o nome do objeto de banco de dados usado para abrir um conjunto de linhas."
+                  name="OpenRowsetVariable"></property>
+                <property
+                  dataType="System.String"
+                  description="O comando SQL a ser executado."
+                  name="SqlCommand"
+                  UITypeEditor="Microsoft.DataTransformationServices.Controls.ModalMultilineStringEditor"></property>
+                <property
+                  dataType="System.String"
+                  description="A variável que contém o comando SQL a ser executado."
+                  name="SqlCommandVariable"></property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica a página de código de coluna a ser usada quando não há informações de página de código disponíveis a partir da fonte de dados."
+                  name="DefaultCodePage">1252</property>
+                <property
+                  dataType="System.Boolean"
+                  description="Forca o uso do valor da propriedade DefaultCodePage durante a descrição dos dados de caractere."
+                  name="AlwaysUseDefaultCodePage">false</property>
+                <property
+                  dataType="System.Int32"
+                  description="Especifica o modo usado para acessar o banco de dados."
+                  name="AccessMode"
+                  typeConverter="AccessMode">0</property>
+                <property
+                  dataType="System.String"
+                  description="Os mapeamentos entre os parâmetros no comando SQL e as variáveis."
+                  name="ParameterMapping"></property>
+              </properties>
+              <connections>
+                <connection
+                  refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Connections[OleDbConnection]"
+                  connectionManagerID="Package.ConnectionManagers[SourceConnectionOLEDB]"
+                  connectionManagerRefId="Package.ConnectionManagers[SourceConnectionOLEDB]"
+                  description="A conexão de tempo de execução OLE DB usada para acessar o banco de dados."
+                  name="OleDbConnection" />
+              </connections>
+              <outputs>
+                <output
+                  refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB]"
+                  name="Saída de Origem OLE DB">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].Columns[OrgId]"
+                      dataType="i4"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].ExternalColumns[OrgId]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].Columns[OrgId]"
+                      name="OrgId"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].Columns[OrgNome]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].ExternalColumns[OrgNome]"
+                      length="255"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].Columns[OrgNome]"
+                      name="OrgNome"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].Columns[OrgCNPJFilial]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].ExternalColumns[OrgCNPJFilial]"
+                      length="14"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].Columns[OrgCNPJFilial]"
+                      name="OrgCNPJFilial"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].Columns[OrgExtincao]"
+                      codePage="1252"
+                      dataType="str"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].ExternalColumns[OrgExtincao]"
+                      length="3"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].Columns[OrgExtincao]"
+                      name="OrgExtincao"
+                      truncationRowDisposition="FailComponent" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].Columns[OrgDtExtincao]"
+                      dataType="dbTimeStamp"
+                      errorOrTruncationOperation="Conversão"
+                      errorRowDisposition="FailComponent"
+                      externalMetadataColumnId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].ExternalColumns[OrgDtExtincao]"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].Columns[OrgDtExtincao]"
+                      name="OrgDtExtincao"
+                      truncationRowDisposition="FailComponent" />
+                  </outputColumns>
+                  <externalMetadataColumns
+                    isUsed="True">
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].ExternalColumns[OrgId]"
+                      dataType="i4"
+                      name="OrgId" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].ExternalColumns[OrgNome]"
+                      codePage="1252"
+                      dataType="str"
+                      length="255"
+                      name="OrgNome" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].ExternalColumns[OrgCNPJFilial]"
+                      codePage="1252"
+                      dataType="str"
+                      length="14"
+                      name="OrgCNPJFilial" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].ExternalColumns[OrgExtincao]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      name="OrgExtincao" />
+                    <externalMetadataColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB].ExternalColumns[OrgDtExtincao]"
+                      dataType="dbTimeStamp"
+                      name="OrgDtExtincao" />
+                  </externalMetadataColumns>
+                </output>
+                <output
+                  refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Erro de Origem OLE DB]"
+                  isErrorOut="true"
+                  name="Saída de Erro de Origem OLE DB">
+                  <outputColumns>
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Erro de Origem OLE DB].Columns[OrgId]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Erro de Origem OLE DB].Columns[OrgId]"
+                      name="OrgId" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Erro de Origem OLE DB].Columns[OrgNome]"
+                      codePage="1252"
+                      dataType="str"
+                      length="255"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Erro de Origem OLE DB].Columns[OrgNome]"
+                      name="OrgNome" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Erro de Origem OLE DB].Columns[OrgCNPJFilial]"
+                      codePage="1252"
+                      dataType="str"
+                      length="14"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Erro de Origem OLE DB].Columns[OrgCNPJFilial]"
+                      name="OrgCNPJFilial" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Erro de Origem OLE DB].Columns[OrgExtincao]"
+                      codePage="1252"
+                      dataType="str"
+                      length="3"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Erro de Origem OLE DB].Columns[OrgExtincao]"
+                      name="OrgExtincao" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Erro de Origem OLE DB].Columns[OrgDtExtincao]"
+                      dataType="dbTimeStamp"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Erro de Origem OLE DB].Columns[OrgDtExtincao]"
+                      name="OrgDtExtincao" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Erro de Origem OLE DB].Columns[ErrorCode]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Erro de Origem OLE DB].Columns[ErrorCode]"
+                      name="ErrorCode"
+                      specialFlags="1" />
+                    <outputColumn
+                      refId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Erro de Origem OLE DB].Columns[ErrorColumn]"
+                      dataType="i4"
+                      lineageId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Erro de Origem OLE DB].Columns[ErrorColumn]"
+                      name="ErrorColumn"
+                      specialFlags="2" />
+                  </outputColumns>
+                  <externalMetadataColumns />
+                </output>
+              </outputs>
+            </component>
+          </components>
+          <paths>
+            <path
+              refId="Package\Tarefa Fluxo de Dados 1.Paths[Saída de Conversão de Dados]"
+              endId="Package\Tarefa Fluxo de Dados 1\Destino - Orgao.Inputs[Destination Input]"
+              name="Saída de Conversão de Dados"
+              startId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Outputs[Saída de Conversão de Dados]" />
+            <path
+              refId="Package\Tarefa Fluxo de Dados 1.Paths[Saída de Origem OLE DB]"
+              endId="Package\Tarefa Fluxo de Dados 1\Conversão de dados 0 - 0.Inputs[Entrada de Conversão de Dados]"
+              name="Saída de Origem OLE DB"
+              startId="Package\Tarefa Fluxo de Dados 1\Origem - Orgaos.Outputs[Saída de Origem OLE DB]" />
+          </paths>
+        </pipeline>
+      </DTS:ObjectData>
+    </DTS:Executable>
+  </DTS:Executables>
+</DTS:Executable>
