@@ -21,6 +21,7 @@ namespace Infra.EntityConfig
             builder.Property(tp => tp.TipoLogradouroId).ValueGeneratedNever();
             builder.Property(tp => tp.CEP).ValueGeneratedNever();
             builder.Property<string>("Descricao").HasMaxLength(250); //.IsRequired();
+            builder.Property<string>("descricaoTipoLogradouro").HasMaxLength(250); //.IsRequired();
             builder.ToTable("Logradouro");
         }
     }

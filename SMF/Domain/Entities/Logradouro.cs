@@ -10,6 +10,7 @@
         public Bairro? Bairro { get; set; }
         public int? TipoLogradouroId { get; set; }   
         public TipoLogradouro? TipoLogradouro { get; set; }
+        public string? descricaoTipoLogradouro { get; set; }
         public ICollection<Endereco>? Enderecos { get; set; }
         public string? CEP { get; set; }
         public bool? Ativo { get; set; }

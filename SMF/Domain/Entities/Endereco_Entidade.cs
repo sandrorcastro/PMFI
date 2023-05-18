@@ -12,7 +12,7 @@
         public DateTime? DataUltimaAlteracao { get; set; }
         public string? CEP { get; set; }
         public int? TipoEntidadeId { get; set; }
-        public bool? Correnspondencia { get; set; }
+        public bool? Correspondencia { get; set; }
         public bool? Principal { get; set; }
         public bool? Ativo { get; set; }
 
