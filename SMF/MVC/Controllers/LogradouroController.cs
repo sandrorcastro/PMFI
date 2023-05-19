@@ -59,12 +59,13 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            //var logradouro = await _context.dbSLogradouros
-            var logradouro = logradouroAppService.GetById(id)
+            var logradouro = await _context.dbSLogradouros
+            //var logradouro = logradouroAppService.GetById(l=>l.LogradouroId==id)
+
                 .Include(l => l.Bairro)
                 .Include(l => l.Cidade)
-                .Include(l => l.TipoLogradouro)
-                .FirstOrDefault();
+                .Include(l => l.TipoLogradouro).FirstOrDefaultAsync();
+            //var logradouro = logradouroAppService.Find(l=>l.LogradouroId==id).Include(l => l.Bairro).Include(l => l.Cidade).Include(l => l.TipoLogradouro).FirstOrDefault();
             if (logradouro == null)
             {
                 return NotFound();
