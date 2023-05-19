@@ -13,11 +13,15 @@ using Infra.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Org.BouncyCastle.Tls;
+using System.Data.Common;
 
 namespace IOC
 {
     public static class DependencyInjection
     {
+        //private static string connectString;
+        
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
             //services.AddDbContextFactory<ContextoAplicacao>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
@@ -31,6 +35,7 @@ namespace IOC
 
             /////testes
             services.AddDbContext<ContextoAplicacao>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionHSS"),b => b.MigrationsAssembly(typeof(ContextoAplicacao).Assembly.FullName)));
+            //services.AddDbContext<ContextoAplicacao>(options => options.UseSqlServer(configuration.GetConnectionString(connectString), b => b.MigrationsAssembly(typeof(ContextoAplicacao).Assembly.FullName)));
             //services.AddDbContextFactory<ContextoAplicacaoFactory>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly(typeof(ContextoAplicacao).Assembly.FullName)));
             ///
 
