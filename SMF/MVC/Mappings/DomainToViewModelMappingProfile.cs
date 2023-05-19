@@ -23,12 +23,12 @@ namespace MVC.Mappings
             // CreateMap<PessoaFisica, PessoaFisicaViewModel>();
             // CreateMap<PessoaJuridica, PessoaJuridicaViewModel>();
 
-            //   CreateMap<EnderecoPessoa, EnderecoPessoaViewModel>();
+               //CreateMap<EnderecoPessoa, EnderecoPessoaViewModel>();
             //CreateMap<EnderecoEntidade, EnderecoEntidadeViewModel>();
             //   CreateMap<Endereco, EnderecoRepositoyI>();
 
 
-            //CreateMap<Endereco, EnderecoViewModel>();
+//            CreateMap<Endereco, EnderecoViewModel>();
             //   CreateMap<IQueryable<Endereco>, EnderecoViewModelX>();
             //   CreateMap<Endereco,IQueryable<EnderecoViewModelX>>();
             //   CreateMap<IQueryable<Endereco>, IQueryable<EnderecoViewModelX>>();
@@ -43,7 +43,7 @@ namespace MVC.Mappings
             //   CreateMap<Endereco, PaginatedList<EnderecoRepositoyI>>();
             //   CreateMap<Endereco, PaginatedList<Endereco>>();
 
-            //CreateMap<Logradouro, LogradouroViewModel>();
+            CreateMap<Logradouro, LogradouroViewModel>();
             //CreateMap<TipoLogradouro, TipoLogradouroViewModel>();
             //CreateMap<PagedList<TipoLogradouro>, TipoLogradouroViewModel>();
             //CreateMap<Regiao, RegiaoViewModel>();

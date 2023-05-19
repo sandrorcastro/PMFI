@@ -1,22 +1,24 @@
 <div class="card">
     <div class="card-header">
-
+		<h4>Lista de Logradouros</h4>
     </div>
     <div class="card-body">
         <div class="card">
             <div class="card-header">
-
+		 @{
+                    await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml",@Model);
+                }
             </div>
             <div class="card-body">
 
             </div>
             <div class="card-footer">
-
+			@await Component.InvokeAsync("Pagination", new { values = Model.values, routeData=Model.LinkData})
             </div>
         </div>
     </div>
     <div class="card-footer">
-
+		 @{await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoAdicionar.cshtml");}
     </div>
 
 </div>

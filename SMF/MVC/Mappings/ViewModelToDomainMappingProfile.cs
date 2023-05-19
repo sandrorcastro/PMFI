@@ -45,7 +45,7 @@ namespace MVC.Mappings
             //CreateMap<BairroViewModel, Bairro>();
             // CreateMap<CidadeViewModel, Cidade>();
             // CreateMap<PaisViewModel, Pais>();
-            // CreateMap<LogradouroViewModel, Logradouro>();
+             CreateMap<LogradouroViewModel, Logradouro>();
             // CreateMap<TipoLogradouroViewModel, TipoLogradouro>();
             // CreateMap<EstadoViewModel, Estado>();
             // CreateMap<DDDViewModel, DDD>();

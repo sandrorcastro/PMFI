@@ -61,8 +61,8 @@ namespace IOC
                         services.AddScoped<ICidadeAppService, CidadeAppService>();
                         services.AddScoped<IRegiaoAppService, RegiaoAppService>();
                         services.AddScoped<IBairroAppService, BairroAppService>();
-                        services.AddScoped<ILogradouroAppService, LogradouroAppService>();
-                        services.AddScoped<IEnderecoAppService, EnderecoAppService>();
+                     */ services.AddScoped<ILogradouroAppService, LogradouroAppService>();
+                        /*services.AddScoped<IEnderecoAppService, EnderecoAppService>();
                         services.AddScoped<IEnderecoEntidadeAppService, EnderecoEntidadeAppService>();
                         services.AddScoped<ITipoPessoaAppService, TipoPessoaAppService>();
                    */     services.AddScoped<IPessoaAppService, PessoaAppService>();
@@ -99,8 +99,8 @@ namespace IOC
                       services.AddScoped<ICidadeService, CidadeService>();
                       services.AddScoped<IRegiaoService, RegiaoService>();
                       services.AddScoped<IBairroService, BairroService>();
-                      services.AddScoped<ILogradouroService, LogradouroService>();
-                      services.AddScoped<IEnderecoService, EnderecoService>();
+         */           services.AddScoped<ILogradouroService, LogradouroService>();
+          /*            services.AddScoped<IEnderecoService, EnderecoService>();
                       services.AddScoped<IEnderecoEntidadeService, EnderecoEntidadeService>();
                       services.AddScoped<ITipoPessoaService, TipoPessoaService>();
                      */ services.AddScoped<IPessoaService, PessoaService>();
@@ -139,8 +139,8 @@ namespace IOC
                       services.AddScoped<ICidadeRepository, CidadeRepository>();
                       services.AddScoped<IRegiaoRepository, RegiaoRepository>();
                       services.AddScoped<IBairroRepository, BairroRepository>();
-                      services.AddScoped<ILogradouroRepository, LogradouroRepository>();
-                      services.AddScoped<IEnderecoRepository, EnderecoRepository>();
+          */            services.AddScoped<ILogradouroRepository, LogradouroRepository>();
+           /*           services.AddScoped<IEnderecoRepository, EnderecoRepository>();
                       services.AddScoped<IEnderecoEntidadeRepository, EnderecoEntidadeRepository>();
                       services.AddScoped<ITipoPessoaRepository, TipoPessoaRepository>();
                      */ services.AddScoped<IPessoaRepository, PessoaRepository>();

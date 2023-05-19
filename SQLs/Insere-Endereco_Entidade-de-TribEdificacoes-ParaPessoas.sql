@@ -19,7 +19,7 @@ SELECT
       (select (SUBSTRING(SMF_Processo.dbo.fncRecupera_Numeros(C.ConCNPJCPF), PATINDEX('%[^0]%',SMF_Processo.dbo.fncRecupera_Numeros(C.ConCNPJCPF)), LEN(SMF_Processo.dbo.fncRecupera_Numeros(C.ConCNPJCPF)))) from Contribuintes C where c.ConId= tec.ConId) as PessoaId
       ,enderecoId
 	  ,numero
-	  ,case when C_i.ConTipoPessoa='FISCA' then 1 else 2 end as TipoPessoaId
+	  ,case when C_i.ConTipoPessoa='FISICA' then 1 else 2 end as TipoPessoaId
 	  ,tee.CEP
 	  ,te.edifcep
 	  ,case when tee.Correspondencia='Sim' then 1 else 0 end as Correspondencia

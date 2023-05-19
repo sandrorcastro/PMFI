@@ -1,1 +1,1 @@
-DELETE T FROM (SELECT *, DupRank = ROW_NUMBER() OVER (PARTITION BY PessoaId ORDER BY (SELECT NULL)) FROM SMFCLEAN.dbo.PessoaTemp) AS T WHERE DupRank > 1 
+DELETE T FROM (SELECT *, DupRank = ROW_NUMBER() OVER (PARTITION BY EntidadeId,EnderecoId,Numero,TipoEntidadeId ORDER BY (SELECT NULL)) FROM SMF_Processo.dbo.Endereco_Entidade_TEMP) AS T WHERE DupRank > 1 

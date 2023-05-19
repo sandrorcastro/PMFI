@@ -7,24 +7,49 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
 using Infra.Context;
+using MVC.ViewModels;
+using MVC.Extensions;
+using MVC.Models;
+using Application.Interfaces;
+using AutoMapper;
 
 namespace MVC.Controllers
 {
     public class LogradouroController : Controller
     {
         private readonly ContextoAplicacao _context;
+        private readonly ILogradouroAppService logradouroAppService;
+        IMapper mapper;
 
-        public LogradouroController(ContextoAplicacao context)
+        public LogradouroController(ContextoAplicacao context, ILogradouroAppService logradouroAppService, IMapper mapper)
         {
             _context = context;
+            this.logradouroAppService = logradouroAppService;
+            this.mapper = mapper;
         }
 
         // GET: Logradouro
-        public async Task<IActionResult> Index()
+
+        public async Task<IActionResult> Index(string sort, string filter, int p, SortDirection direction)
         {
-            var contextoAplicacao = _context.dbSLogradouros.Include(l => l.Bairro).Include(l => l.Cidade).Include(l => l.TipoLogradouro);
-            return View(await contextoAplicacao.ToListAsync());
+            //var query = from s in _context.dbSLogradouros.Filter(filter).OrderBy(sort, direction) select s;// ToPagedList(1,1,10) ;
+            var query = from s in logradouroAppService.GetIQueryable().Filter(filter).OrderBy(sort, direction) select s;// ToPagedList(1,1,10) ;
+            LogradouroPaginatedListViewModel lvm = new LogradouroPaginatedListViewModel(sort, filter);
+            lvm.values = await LogradouroPaginatedListViewModel.CreateAsync(query, p == 0 ? 1 : p, 10);
+            lvm.Filter = filter;
+            lvm.Sort = sort;
+            return View(lvm);
         }
+
+
+
+
+
+        /* public async Task<IActionResult> Index()
+         {
+             var contextoAplicacao = _context.dbSLogradouros.Include(l => l.Bairro).Include(l => l.Cidade).Include(l => l.TipoLogradouro);
+             return View(await contextoAplicacao.ToListAsync());
+         }*/
 
         // GET: Logradouro/Details/5
         public async Task<IActionResult> Details(long? id)
@@ -34,17 +59,18 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var logradouro = await _context.dbSLogradouros
+            //var logradouro = await _context.dbSLogradouros
+            var logradouro = logradouroAppService.GetById(id)
                 .Include(l => l.Bairro)
                 .Include(l => l.Cidade)
                 .Include(l => l.TipoLogradouro)
-                .FirstOrDefaultAsync(m => m.LogradouroId == id);
+                .FirstOrDefault();
             if (logradouro == null)
             {
                 return NotFound();
             }
 
-            return View(logradouro);
+            return View(mapper.Map<LogradouroViewModel>(logradouro));
         }
 
         // GET: Logradouro/Create
@@ -61,12 +87,13 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("LogradouroId,Descricao,CidadeId,BairroId,TipoLogradouroId,descricaoTipoLogradouro,CEP,Ativo")] Logradouro logradouro)
+        public async Task<IActionResult> Create([Bind("LogradouroId,Descricao,CidadeId,BairroId,TipoLogradouroId,descricaoTipoLogradouro,CEP,Ativo")] LogradouroViewModel logradouro)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(logradouro);
-                await _context.SaveChangesAsync();
+                //_context.Add(logradouro);
+                logradouroAppService.Add(mapper.Map<Logradouro>(logradouro));
+               // await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             ViewData["BairroId"] = new SelectList(_context.dbSBairros, "BairroId", "BairroId", logradouro.BairroId);
@@ -83,7 +110,8 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var logradouro = await _context.dbSLogradouros.FindAsync(id);
+            //var logradouro = await _context.dbSLogradouros.FindAsync(id);
+            var logradouro = logradouroAppService.Find(id);
             if (logradouro == null)
             {
                 return NotFound();
@@ -91,7 +119,7 @@ namespace MVC.Controllers
             ViewData["BairroId"] = new SelectList(_context.dbSBairros, "BairroId", "BairroId", logradouro.BairroId);
             ViewData["CidadeId"] = new SelectList(_context.dbSCidades, "CidadeId", "Descricao", logradouro.CidadeId);
             ViewData["TipoLogradouroId"] = new SelectList(_context.dbSTiposLogradouro, "TipoLogradouroId", "TipoLogradouroId", logradouro.TipoLogradouroId);
-            return View(logradouro);
+            return View(mapper.Map<LogradouroViewModel>(logradouro));
         }
 
         // POST: Logradouro/Edit/5
@@ -99,7 +127,7 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("LogradouroId,Descricao,CidadeId,BairroId,TipoLogradouroId,descricaoTipoLogradouro,CEP,Ativo")] Logradouro logradouro)
+        public async Task<IActionResult> Edit(long id, [Bind("LogradouroId,Descricao,CidadeId,BairroId,TipoLogradouroId,descricaoTipoLogradouro,CEP,Ativo")] LogradouroViewModel logradouro)
         {
             if (id != logradouro.LogradouroId)
             {
@@ -110,8 +138,9 @@ namespace MVC.Controllers
             {
                 try
                 {
-                    _context.Update(logradouro);
-                    await _context.SaveChangesAsync();
+                    //_context.Update(logradouro);
+                    logradouroAppService.Update(mapper.Map<Logradouro>(logradouro));
+                    //await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
@@ -140,17 +169,18 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var logradouro = await _context.dbSLogradouros
+            //var logradouro = await _context.dbSLogradouros
+            var logradouro = logradouroAppService.GetById(id)
                 .Include(l => l.Bairro)
                 .Include(l => l.Cidade)
                 .Include(l => l.TipoLogradouro)
-                .FirstOrDefaultAsync(m => m.LogradouroId == id);
+                .FirstOrDefault(m => m.LogradouroId == id);
             if (logradouro == null)
             {
                 return NotFound();
             }
 
-            return View(logradouro);
+            return View(mapper.Map<LogradouroViewModel>(logradouro));
         }
 
         // POST: Logradouro/Delete/5
@@ -162,19 +192,22 @@ namespace MVC.Controllers
             {
                 return Problem("Entity set 'ContextoAplicacao.dbSLogradouros'  is null.");
             }
-            var logradouro = await _context.dbSLogradouros.FindAsync(id);
+            //var logradouro = await _context.dbSLogradouros.FindAsync(id);
+            var logradouro = logradouroAppService.Find(id);
             if (logradouro != null)
             {
-                _context.dbSLogradouros.Remove(logradouro);
+                //_context.dbSLogradouros.Remove(logradouro);
+                logradouroAppService.Remove(logradouro);
             }
             
-            await _context.SaveChangesAsync();
+            //await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
         private bool LogradouroExists(long id)
         {
           return (_context.dbSLogradouros?.Any(e => e.LogradouroId == id)).GetValueOrDefault();
+            //return (logradouroAppService?.Any(e => e.LogradouroId == id)).GetValueOrDefault();
         }
     }
 }
