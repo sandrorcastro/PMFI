@@ -20,7 +20,7 @@ namespace MVC
             var builder = WebApplication.CreateBuilder(args);
 
             // Add services to the container.
-            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionHSS") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 
 
             // services.AddDbContext<ContextoAplicacao>(options =>

@@ -23,9 +23,16 @@ namespace IOC
             //services.AddDbContextFactory<ContextoAplicacao>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
             //                                              b=> b.MigrationsAssembly(typeof(ContextoAplicacao).Assembly.FullName)));
 
-             services.AddDbContext<ContextoAplicacao>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                                                          b => b.MigrationsAssembly(typeof(ContextoAplicacao).Assembly.FullName)));
+            ////////////services.AddDbContext<ContextoAplicacao>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+            ///////////                                  b => b.MigrationsAssembly(typeof(ContextoAplicacao).Assembly.FullName)));
 
+
+
+
+            /////testes
+            services.AddDbContext<ContextoAplicacao>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionHSS"),b => b.MigrationsAssembly(typeof(ContextoAplicacao).Assembly.FullName)));
+            //services.AddDbContextFactory<ContextoAplicacaoFactory>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly(typeof(ContextoAplicacao).Assembly.FullName)));
+            ///
 
 
 
@@ -43,7 +50,7 @@ namespace IOC
             //services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ContextoAplicacao>();
             //services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ContextoAplicacao>();
             //services.Add .AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ContextoAplicacao>();
-                    
+
 
             ///////////////////////////////////////////////////////////////////////
             // services.Configure<SendinBlueSettings>(options => configuration.GetSection("SendinBlueSettings"));//    .GetSection("SendinBlueSettings"));
@@ -52,7 +59,7 @@ namespace IOC
 
 
             /////////////////////////////////////////////////////////////////////
-                        services.AddScoped(typeof(IAppServiceBase<>),typeof(AppServiceBase<>));
+            services.AddScoped(typeof(IAppServiceBase<>),typeof(AppServiceBase<>));
             /*            services.AddScoped<ITipoLogradouroAppService,TipoLogradouroAppService>();
                         services.AddScoped<IIncrementoTabelasAppService, IncrementoTabelasAppService>();
                         services.AddScoped<IEstadoAppService, EstadoAppService>();
