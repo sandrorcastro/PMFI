@@ -1,5 +1,6 @@
 ﻿using Domain.Entities;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.EntityFrameworkCore;
 using MVC.Models;
 using System.Linq.Expressions;
 
@@ -14,12 +15,12 @@ namespace MVC.Extensions
             if (string.IsNullOrWhiteSpace(filter))
             {
                 //return query.Where(s=>s.ServidorId==long.Parse("2289401"));
-                return query.Take(100);
+                return query.Take(100).Include(e=>e.Economias).Include(e=>e.Enderecos);
             }
             long number1 = 0;
             //if (long.TryParse(filter, out number1))
             //{
-                return query.Where(s => s.ImovelId == long.Parse(filter) );
+                return query.Where(s => s.ImovelId == long.Parse(filter) ).Include(e => e.Economias).Include(e => e.Enderecos);
             //}
             
         }

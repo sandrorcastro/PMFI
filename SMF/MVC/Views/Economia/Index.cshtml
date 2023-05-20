@@ -1,14 +1,11 @@
-﻿@model MVC.ViewModels.ImovelPaginatedListViewModel
+﻿@model MVC.ViewModels.EconomiaPaginatedListViewModel
 
 @{
     ViewData["Title"] = "Index";
 }
-
-
 <div class="card">
     <div class="card-header">
-        <h4>Lista de Imóveis</h4>
-
+        <h4>Lista de Economias</h4>
     </div>
     <div class="card-body">
         <div class="card">
@@ -22,19 +19,14 @@
                     <thead>
                         <tr>
                             <th>
-                                @Html.DisplayNameFor(model => model.ImovelId)
-
+                                @Html.DisplayNameFor(model => model.Imovel)
                             </th>
                             <th>
-                                @Html.DisplayNameFor(model => model.Matricula)
-
+                                @Html.DisplayNameFor(model => model.EconomiaId)
                             </th>
                           
                             <th>
                                 @Html.DisplayNameFor(model => model.Complemento)
-                            </th>
-                            <th>
-                                @Html.DisplayNameFor(model => model.AreaTerreno)
                             </th>
                             <th>
                                 @Html.DisplayNameFor(model => model.AreaConstruida)
@@ -43,7 +35,16 @@
                                 @Html.DisplayNameFor(model => model.AnoConstrucao)
                             </th>
                             <th>
+                                @Html.DisplayNameFor(model => model.Numeracao)
+                            </th>
+                            <th>
                                 @Html.DisplayNameFor(model => model.Caracteristica)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.Matricula)
+                            </th>
+                            <th>
+                                @Html.DisplayNameFor(model => model.TemProcessos)
                             </th>
                             <th></th>
                         </tr>
@@ -56,14 +57,10 @@
                                     @Html.DisplayFor(modelItem => item.ImovelId)
                                 </td>
                                 <td>
-                                    @Html.DisplayFor(modelItem => item.Matricula)
+                                    @Html.DisplayFor(modelItem => item.EconomiaId)
                                 </td>
-                               
                                 <td>
                                     @Html.DisplayFor(modelItem => item.Complemento)
-                                </td>
-                                <td>
-                                    @Html.DisplayFor(modelItem => item.AreaTerreno)
                                 </td>
                                 <td>
                                     @Html.DisplayFor(modelItem => item.AreaConstruida)
@@ -72,13 +69,21 @@
                                     @Html.DisplayFor(modelItem => item.AnoConstrucao)
                                 </td>
                                 <td>
+                                    @Html.DisplayFor(modelItem => item.Numeracao)
+                                </td>
+                                <td>
                                     @Html.DisplayFor(modelItem => item.Caracteristica)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.Matricula)
+                                </td>
+                                <td>
+                                    @Html.DisplayFor(modelItem => item.TemProcessos)
                                 </td>
                                 <td>
                                     @{
                                         await Html.RenderPartialAsync("~/Views/Shared/Partials/_AcoesIndex.cshtml", @ViewData["Id"] = @item.ImovelId);
                                     }
-                                   
                                 </td>
                             </tr>
                         }
@@ -86,7 +91,7 @@
                 </table>
             </div>
             <div class="card-footer">
-                        @await Component.InvokeAsync("Pagination", new { values = Model.values, routeData=Model.LinkData})
+                @await Component.InvokeAsync("Pagination", new { values = Model.values, routeData=Model.LinkData})
             </div>
         </div>
     </div>
@@ -95,4 +100,7 @@
             await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoAdicionar.cshtml");
         }
     </div>
+
 </div>
+
+

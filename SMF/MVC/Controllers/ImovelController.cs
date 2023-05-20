@@ -13,6 +13,7 @@ using MVC.Extensions;
 using Application.Services;
 using MVC.Models;
 using Application.Interfaces;
+using Mono.TextTemplating;
 
 namespace MVC.Controllers
 {
@@ -64,8 +65,13 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            //var imovel = await _context.dbSImoveis
+            //var imovel = _context.dbSImoveis.Find(id);
             var imovel = imovelAppService.Find(id);
+
+            //var query = from s in imovelAppService.GetIQueryable().Filter(id.ToString()) select s;
+            //var imovel = query.AsNoTracking();
+            //var query = imovelAppService.Find(id).FirstOrDefault()
+
             //.FirstOrDefaultAsync(m => m.ImovelId == id);
             if (imovel == null)
             {

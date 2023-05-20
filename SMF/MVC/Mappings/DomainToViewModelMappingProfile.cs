@@ -63,7 +63,7 @@ namespace MVC.Mappings
             // CreateMap<Imovel, ImovelViewModel>();
             // CreateMap<TipoResponsabilidade, TipoResponsabilidadeViewModel>();
 
-            //CreateMap<Economia, EconomiaViewModel>();
+            CreateMap<Economia, EconomiaViewModel>();
 
             // CreateMap<EconomiaPessoa, EconomiaPessoaViewModel>();
             /*    CreateMap<Economia, NotificacaoViewModel>();

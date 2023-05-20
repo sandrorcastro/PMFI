@@ -7,9 +7,9 @@ using MVC.Models;
 
 namespace MVC.ViewModels
 {
-    public class ImovelViewModel 
+    public class ImovelViewModel : Imovel
     {
-        public long ImovelId { get; set; }
+      /*  public long ImovelId { get; set; }
         //public ICollection<Economia>? Economias { get; set; }
         //public ICollection<EconomiaPessoa>? EconomiasPessoas { get; set; }
 
@@ -29,7 +29,7 @@ namespace MVC.ViewModels
         public ICollection<Endereco_Entidade>? Enderecos { get; set; }
         public ICollection<Economia_Entidade>? Economias { get; set; }
 
-
+        */
 
         
     }

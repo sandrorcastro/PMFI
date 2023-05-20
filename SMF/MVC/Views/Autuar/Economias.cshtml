@@ -1,0 +1,89 @@
+﻿@model IEnumerable<Domain.Entities.Economia>
+
+@{
+    ViewData["Title"] = "Economias";
+}
+
+<h1>Economias</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Imovel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Latitude)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Longitude)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Complemento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AreaConstruida)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AnoConstrucao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Numeracao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Caracteristica)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Matricula)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TemProcessos)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Imovel.ImovelId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Latitude)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Longitude)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Complemento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AreaConstruida)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AnoConstrucao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Numeracao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Caracteristica)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Matricula)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TemProcessos)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
