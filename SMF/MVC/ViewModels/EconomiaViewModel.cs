@@ -28,5 +28,6 @@ namespace MVC.ViewModels
         public string? Caracteristica { get; set; }
         public string? Matricula { get; set; }
         public bool? TemProcessos { get; set; }*/
+      //public IEnumerable<Pessoa> EconomiaProprietarios { get; set; }
     }
 }

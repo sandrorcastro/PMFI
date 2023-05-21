@@ -1,21 +1,20 @@
-﻿@*@model MVC.ViewModels.ImovelViewModel*@
-@model Domain.Entities.Imovel
+﻿@model MVC.ViewModels.EconomiaViewModel
 
 @{
-    ViewData["Title"] = "Details";
+    ViewData["Title"] = "Economia";
 }
 
-<h1>Details</h1>
+<h1>Economia</h1>
 
 <div>
-    <h4>Imovel</h4>
+    <h4>Economia</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Matricula)
+            @Html.DisplayNameFor(model => model.Imovel)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Matricula)
+            @Html.DisplayFor(model => model.Imovel.ImovelId)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Latitude)
@@ -36,12 +35,6 @@
             @Html.DisplayFor(model => model.Complemento)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AreaTerreno)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AreaTerreno)
-        </dd>
-        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.AreaConstruida)
         </dt>
         <dd class = "col-sm-10">
@@ -54,18 +47,33 @@
             @Html.DisplayFor(model => model.AnoConstrucao)
         </dd>
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Numeracao)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Numeracao)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Caracteristica)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Caracteristica)
         </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Matricula)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Matricula)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TemProcessos)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TemProcessos)
+        </dd>
     </dl>
 </div>
-
-@*@Html.Partial("~/Views/Autuar/Economia_Entidade.cshtml",Model.Economias)*@
-
-
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.ImovelId">Edit</a> |
+    @Html.ActionLink("Edit", "Edit", new { /* id = Model.PrimaryKey */ }) |
     <a asp-action="Index">Back to List</a>
 </div>
+@Html.Partial("~/Views/Autuar/Economia_Entidade.cshtml",Model.Pessoas)

@@ -5,22 +5,13 @@
 }
 
 <h1>Economias</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Imovel)
+                @Html.DisplayNameFor(model => model.EconomiaId)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Latitude)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Longitude)
-            </th>
+            
             <th>
                 @Html.DisplayNameFor(model => model.Complemento)
             </th>
@@ -36,9 +27,7 @@
             <th>
                 @Html.DisplayNameFor(model => model.Caracteristica)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Matricula)
-            </th>
+            
             <th>
                 @Html.DisplayNameFor(model => model.TemProcessos)
             </th>
@@ -46,17 +35,13 @@
         </tr>
     </thead>
     <tbody>
+
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Imovel.ImovelId)
+                @Html.DisplayFor(modelItem => item.EconomiaId)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Latitude)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Longitude)
-            </td>
+            
             <td>
                 @Html.DisplayFor(modelItem => item.Complemento)
             </td>
@@ -72,16 +57,16 @@
             <td>
                 @Html.DisplayFor(modelItem => item.Caracteristica)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Matricula)
-            </td>
+            
             <td>
                 @Html.DisplayFor(modelItem => item.TemProcessos)
             </td>
             <td>
-                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Proprietários", "Economia", new {  ImovelId=item.ImovelId,EconomiaId=item.EconomiaId}) |
+                @Html.ActionLink("Processos", "Processos", new {  ImovelId=item.ImovelId,EconomiaId=item.EconomiaId }) 
+               @* @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
                 @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
             </td>
         </tr>
 }

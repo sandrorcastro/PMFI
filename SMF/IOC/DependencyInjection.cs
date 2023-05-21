@@ -34,7 +34,8 @@ namespace IOC
 
 
             /////testes
-            services.AddDbContext<ContextoAplicacao>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionHSS"),b => b.MigrationsAssembly(typeof(ContextoAplicacao).Assembly.FullName)));
+            /////////////////services.AddDbContext<ContextoAplicacao>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionHSS"),b => b.MigrationsAssembly(typeof(ContextoAplicacao).Assembly.FullName)));
+            services.AddDbContextFactory<ContextoAplicacao>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionHSS"),b => b.MigrationsAssembly(typeof(ContextoAplicacao).Assembly.FullName)));
             //services.AddDbContext<ContextoAplicacao>(options => options.UseSqlServer(configuration.GetConnectionString(connectString), b => b.MigrationsAssembly(typeof(ContextoAplicacao).Assembly.FullName)));
             //services.AddDbContextFactory<ContextoAplicacaoFactory>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"), b => b.MigrationsAssembly(typeof(ContextoAplicacao).Assembly.FullName)));
             ///
@@ -82,6 +83,7 @@ namespace IOC
                        services.AddScoped<IPessoaJuridicaAppService, PessoaJuridicaAppService>();
                        services.AddScoped<ITipoResponsabilidadeAppService, TipoResponsabilidadeAppService>();
                        services.AddScoped<IEconomiaAppService, EconomiaAppService>();
+                       services.AddScoped<IEconomia_EntidadeAppService, Economia_EntidadeAppService>();
                        services.AddScoped<IImovelAppService, ImovelAppService>();
                        services.AddScoped<IServidorAppService, ServidorAppService>();
                        services.AddScoped<IEtapaAppService, EtapaAppService>();
@@ -113,6 +115,7 @@ namespace IOC
                        services.AddScoped<IPessoaJuridicaService, PessoaJuridicaService>();
                        services.AddScoped<ITipoResponsabilidadeService, TipoResponsabilidadeService>();
                        services.AddScoped<IEconomiaService, EconomiaService>();
+                       services.AddScoped<IEconomia_EntidadeService, Economia_EntidadeService>();
                        services.AddScoped<IImovelService, ImovelService>();
                        services.AddScoped<IServidorService, ServidorService>();
                        services.AddScoped<IEtapaService, EtapaService>();
@@ -144,6 +147,7 @@ namespace IOC
                        services.AddScoped<IPessoaJuridicaRepository, PessoaJuridicaRepository>();
                        services.AddScoped<ITipoResponsabilidadeRepository, TipoResponsabilidadeRepository>();
                        services.AddScoped<IEconomiaRepository, EconomiaRepository>();
+                       services.AddScoped<IEconomia_EntidadeRepository, Economia_EntidadeRepository>();
                        services.AddScoped<IImovelRepository, ImovelRepository>();
                        services.AddScoped<IServidorRepository, ServidorRepository>();
                        services.AddScoped<IEtapaRepository, EtapaRepository>();

@@ -66,10 +66,10 @@ namespace MVC.Controllers
             }
 
             //var imovel = _context.dbSImoveis.Find(id);
-            var imovel = imovelAppService.Find(id);
+           //// var imovel = imovelAppService.Find(id);
 
-            //var query = from s in imovelAppService.GetIQueryable().Filter(id.ToString()) select s;
-            //var imovel = query.AsNoTracking();
+            var query = from s in imovelAppService.GetIQueryable().Filter(id.ToString()) select s;
+            var imovel = query.AsNoTracking().FirstOrDefault();
             //var query = imovelAppService.Find(id).FirstOrDefault()
 
             //.FirstOrDefaultAsync(m => m.ImovelId == id);
@@ -78,7 +78,8 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            return View(mapper.Map<ImovelViewModel>(imovel));
+            //return View(mapper.Map<ImovelViewModel>(imovel));
+            return View(imovel);
         }
 
         // GET: Imovel/Create

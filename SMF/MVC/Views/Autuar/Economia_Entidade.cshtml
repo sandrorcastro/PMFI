@@ -1,34 +1,25 @@
 ﻿@model IEnumerable<Domain.Entities.Economia_Entidade>
+@*@model MVC.ViewModels.Economia_EntidadeViewModel*@
 
 @{
     ViewData["Title"] = "Economia_Entidade";
 }
 
-<h1>Economia_Entidade</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
+<h4>Economias</h4>
 <table class="table">
     <thead>
         <tr>
+            
             <th>
-                @Html.DisplayNameFor(model => model.Imovel)
+                @Html.DisplayNameFor(model => model.PessoaId)
+            </th>
+            
+          
+            <th>
+                @Html.DisplayNameFor(model => model.Pessoa.conId)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Economia)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Pessoa)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TipoResponsabilidade)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Proprietario)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Responsavel)
+                @Html.DisplayNameFor(model => model.Pessoa.Nome)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.CoResponsavel)
@@ -46,22 +37,14 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ImovelId)
+                @Html.DisplayFor(modelItem => item.PessoaId)
             </td>
+            
             <td>
-                @Html.DisplayFor(modelItem => item.Economia.ImovelId)
+                @Html.DisplayFor(modelItem => item.Pessoa.conId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Pessoa.Nome)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TipoResponsabilidade.TipoResponsabilidadeId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Proprietario)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Responsavel)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.CoResponsavel)

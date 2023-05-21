@@ -8,15 +8,15 @@ using Twilio.TwiML.Voice;
 namespace MVC.Extensions
 {
    // [Authorize]
-    public static class EconomiaQueryExtensions
+    public static class Economia_EntidadeQueryExtensions
     {
-        public static IQueryable<Economia> Filter(this IQueryable<Economia> query, Func<Economia, bool>  filter)
+        public static IQueryable<Economia_Entidade> Filter(this IQueryable<Economia_Entidade> query, Func<Economia_Entidade, bool>  filter)
         {
             
             if (filter==null)
             {
                 //return query.Where(s=>s.ServidorId==long.Parse("2289401"));
-                return query.Take(100).Include(p => p.Pessoas).Include(e => e.Enderecos);
+                return query.Take(100).Include(p => p.Pessoa);
             }
             long number1 = 0;
             //  if (long.TryParse(filter, out number1))
@@ -25,18 +25,18 @@ namespace MVC.Extensions
             //}
 
         }
-        public static IQueryable<Economia> Filter(this IQueryable<Economia> query, string filter)
+        public static IQueryable<Economia_Entidade> Filter(this IQueryable<Economia_Entidade> query, string filter)
         {
 
             if (string.IsNullOrWhiteSpace(filter))
             {
                 //return query.Where(s=>s.ServidorId==long.Parse("2289401"));
-                return query.Take(100).Include(p => p.Pessoas).Include(e => e.Enderecos);
+                return query.Take(100).Include(p => p.Pessoa);
             }
             long number1 = 0;
             //  if (long.TryParse(filter, out number1))
             // {
-            return query.Where(s => s.ImovelId == long.Parse(filter)).Include(p => p.Pessoas).Include(e => e.Enderecos);
+            return query.Where(s => s.ImovelId == long.Parse(filter)).Include(p => p.Pessoa);
             //}
 
         }
@@ -45,23 +45,24 @@ namespace MVC.Extensions
 
         
 
-        public static IQueryable<Economia> OrderBy(this IQueryable<Economia> query, string sort, SortDirection? direction = SortDirection.Asc)
+        public static IQueryable<Economia_Entidade> OrderBy(this IQueryable<Economia_Entidade> query, string sort, SortDirection? direction = SortDirection.Asc)
         {
             if (string.IsNullOrWhiteSpace(sort))
             {
                 sort = "";
             }
-            Expression<Func<Economia, object>> exp = sort?.ToLower() switch
+            Expression<Func<Economia_Entidade, object>> exp = sort?.ToLower() switch
             {
                 "" => x => x.ImovelId,
                 "imovelid" => x => x.ImovelId,
-                "economiaid" => x => x.EconomiaId
+                "economiaid" => x => x.EconomiaId,
+                "pessoaid"=> x => x.PessoaId
 
             };
 
             return direction == SortDirection.Asc ? query.OrderBy(exp) : query.OrderByDescending(exp);
         }
-        /*public static IQueryable<Economia> Permissao(this IQueryable<Economia> query, long permissao)
+        /*public static IQueryable<Economia_Entidade> Permissao(this IQueryable<Economia_Entidade> query, long permissao)
         {
             return query.Where(s=>s.ServidorId==permissao); 
         }*/

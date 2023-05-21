@@ -15,12 +15,12 @@ namespace MVC.Extensions
             if (string.IsNullOrWhiteSpace(filter))
             {
                 //return query.Where(s=>s.ServidorId==long.Parse("2289401"));
-                return query.Take(100).Include(e=>e.Economias).Include(e=>e.Enderecos);
+                return query.Take(1000).Include(e=>e.Economias).ThenInclude(p=>p.Pessoa).Include(e=>e.Enderecos).Include(e=>e.Economias).ThenInclude(e=>e.Economia);
             }
             long number1 = 0;
             //if (long.TryParse(filter, out number1))
             //{
-                return query.Where(s => s.ImovelId == long.Parse(filter) ).Include(e => e.Economias).Include(e => e.Enderecos);
+                return query.Where(s => s.ImovelId == long.Parse(filter) ).Include(e => e.Economias).ThenInclude(p => p.Pessoa).Include(e => e.Enderecos).Include(e => e.Economias).ThenInclude(e => e.Economia);
             //}
             
         }
@@ -36,6 +36,8 @@ namespace MVC.Extensions
                 "" => x => x.ImovelId,
                 "imovelid" => x => x.ImovelId
                 
+
+
             };
 
             return direction == SortDirection.Asc ? query.OrderBy(exp) : query.OrderByDescending(exp);
