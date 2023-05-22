@@ -1,0 +1,82 @@
+﻿@model MVC.ViewModels.AutuarViewModel
+
+@{
+    ViewData["Title"] = "Autuar";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h4>Autuar</h4>
+    </div>
+    <div class="card-body">
+        <div class="card">
+            <div class="card-header">
+                @{
+                   @* await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);*@
+                   <p> 
+                       Processor e Etapa
+                   </p>
+                }
+            </div>
+            <div class="card-body">
+                <p>
+                        campos do Processo e Etapa
+                    
+                </p>
+            </div>
+            <div class="card-footer">
+                @* @await Component.InvokeAsync("Pagination", new { values = Model.values, routeData=Model.LinkData})*@
+                <p>
+                    Rodapé do processo etapa
+                </p>
+            </div>
+        </div>
+        <!--Inicio Card Economia-->
+        <div class="card">
+            <div class="card-header">
+                @{
+                    <h6>IMÓVEL:ECONOMIA : @Html.DisplayFor(model => model.Economia.ImovelId) : @Html.DisplayFor(model => model.Economia.EconomiaId)</h6>
+                }
+            </div>
+            <div class="card-body">
+                    @*@await Html.PartialAsync("~/Views/Autuar/AutuarEconomia.cshtml",Model.Economia)*@
+                    @await Html.PartialAsync("~/Views/Autuar/AutuarEconomiaEndereco.cshtml",Model.Economia.Enderecos)
+            </div>
+            <!--
+            <div class="card-footer">
+                @* @await Component.InvokeAsync("Pagination", new { values = Model.values, routeData=Model.LinkData})*@
+                <p>
+                    Rodapé do processo/etap
+                </p>
+            </div>
+            -->
+        </div>
+        <!--FInal Card Economia-->
+        <!--Inicio Card Pessoa-->
+        <div class="card">
+            <div class="card-header">
+                <h6> CPF/CNPJ: @Html.DisplayFor(model => model.Pessoa.conId) </h6>
+            </div>
+            <div class="card-body">
+                    @await Html.PartialAsync("~/Views/Autuar/AutuarPessoaEndereco.cshtml",Model.Pessoa.Enderecos)
+            </div>
+            <!--
+            <div class="card-footer">
+                @* @await Component.InvokeAsync("Pagination", new { values = Model.values, routeData=Model.LinkData})*@
+                <p>
+                    Rodapé da Pessoa
+                </p>
+            </div>
+            -->
+        </div>
+        <!--Final Card Pessoa-->
+    </div>
+    <div class="card-footer">
+        @{
+            @*await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoAdicionar.cshtml");*@
+            <p>
+                    Rodapé do autuar
+            </p>
+        }
+    </div>
+</div>

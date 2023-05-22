@@ -32,7 +32,7 @@ namespace Infra.Context
             //optionsBuilder.UseSqlServer(DefaultConnection);
 
            // optionsBuilder.UseSqlServer(connectionString);
-            optionsBuilder.UseSqlServer(HSS);
+            optionsBuilder.UseSqlServer();
 
             //Local SQLSERVER
             //optionsBuilder.UseSqlServer("Data Source=localhost\\SQLSERVER;Initial Catalog=SMF_Processo;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Persist Security Info=True;User ID=sa;Password=sqlserver");

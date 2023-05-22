@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using MVC.Extensions;
 using MVC.ViewModels;
+using System.Runtime.Intrinsics.X86;
 
 namespace MVC.Controllers
 {
@@ -70,15 +71,21 @@ namespace MVC.Controllers
         }
         public ActionResult Autuar(long ImovelId, long EconomiaId,long PessoaId,long conId)
         {
-            var Pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(e=>e.Enderecos).FirstOrDefault();
-            var enderecos = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId==conId).ToList();
-
+            var  entidadeId = long.Parse(String.Concat(ImovelId.ToString() + EconomiaId.ToString().PadLeft(3, '0')));
+            //var economia = economiaAppService.GetIQueryable().Where(e => e.ImovelId==ImovelId && e.EconomiaId==EconomiaId).Include(e=>e.Enderecos.Where(ee=>ee.EntidadeId==entidadeId)) /*.ThenInclude(e => e.Endereco).ThenInclude(l => l.Logradouro).ThenInclude(tl => tl.TipoLogradouro)*/.FirstOrDefault();
+            var economia = economiaAppService.GetIQueryable().Where(e => e.ImovelId == ImovelId && e.EconomiaId == EconomiaId).FirstOrDefault();
+            var pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(e=>e.Enderecos).ThenInclude(e=>e.Endereco).ThenInclude(l=>l.Logradouro).ThenInclude(tl=>tl.TipoLogradouro).Include(tp=>tp.TipoPessoa).FirstOrDefault();
+            var enderecoseconomia = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId==entidadeId).ToList();
+           // var enderecospessoa = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == conId).ToList();
+            economia.Enderecos = enderecoseconomia;
+            //pessoa.Enderecos = enderecospessoa;
             //var endereco_filtrado = endereco_EntidadeAppService.GetTodos().Where(s=>s.EntidadeId==conId && s.imo)
 //            var query = from s in
              //var queryenderecos = from s in endereco_EntidadeAppService.GetAll().Where(i => i.i .ImovelId == ImovelId && i.EconomiaId == EconomiaId) select s;
             AutuarViewModel avm = new AutuarViewModel()
             {
-                
+                Economia = economia,
+                Pessoa = pessoa
                 
             };
             
