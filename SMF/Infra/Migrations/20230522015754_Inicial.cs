@@ -197,7 +197,7 @@ namespace Infra.Migrations
                 columns: table => new
                 {
                     TipoContatoId = table.Column<int>(type: "int", nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: false)
+                    Descricao = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -343,8 +343,8 @@ namespace Infra.Migrations
                 name: "AspNetUserLogins",
                 columns: table => new
                 {
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    ProviderKey = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    ProviderKey = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     ProviderDisplayName = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     UserId = table.Column<long>(type: "bigint", nullable: false)
                 },
@@ -388,8 +388,8 @@ namespace Infra.Migrations
                 columns: table => new
                 {
                     UserId = table.Column<long>(type: "bigint", nullable: false),
-                    LoginProvider = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(128)", maxLength: 128, nullable: false),
+                    LoginProvider = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     Value = table.Column<string>(type: "nvarchar(max)", nullable: true)
                 },
                 constraints: table =>
@@ -542,6 +542,10 @@ namespace Infra.Migrations
                     CidadeId = table.Column<int>(type: "int", nullable: false),
                     Descricao = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     EstadoId = table.Column<int>(type: "int", nullable: true),
+                    ibgeProsiga = table.Column<int>(type: "int", nullable: true),
+                    ibge = table.Column<int>(type: "int", nullable: true),
+                    IDCidadeProsiga = table.Column<int>(type: "int", nullable: true),
+                    UFProsiga = table.Column<string>(type: "nvarchar(3)", maxLength: 3, nullable: true),
                     DDDId = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
@@ -750,6 +754,7 @@ namespace Infra.Migrations
                     DigitoVerificador = table.Column<int>(type: "int", nullable: false),
                     DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TipoProcessoId = table.Column<int>(type: "int", nullable: false),
+                    SituacaoProcessoId = table.Column<int>(type: "int", nullable: false),
                     OrgaoRemetenteId = table.Column<int>(type: "int", nullable: false),
                     UnidadeRemetenteId = table.Column<int>(type: "int", nullable: false),
                     OrgaoDestinatarioId = table.Column<int>(type: "int", nullable: false),
@@ -783,6 +788,12 @@ namespace Infra.Migrations
                         column: x => x.OrgaoRemetenteId,
                         principalTable: "Orgao",
                         principalColumn: "OrgaoId");
+                    table.ForeignKey(
+                        name: "FK_Processo_SituacaoProcesso_SituacaoProcessoId",
+                        column: x => x.SituacaoProcessoId,
+                        principalTable: "SituacaoProcesso",
+                        principalColumn: "SituacaoProcessoId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Processo_TipoProcesso_TipoProcessoId",
                         column: x => x.TipoProcessoId,
@@ -1010,6 +1021,7 @@ namespace Infra.Migrations
                     CidadeId = table.Column<int>(type: "int", nullable: true),
                     BairroId = table.Column<long>(type: "bigint", nullable: true),
                     TipoLogradouroId = table.Column<int>(type: "int", nullable: true),
+                    descricaoTipoLogradouro = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
                     CEP = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Ativo = table.Column<bool>(type: "bit", nullable: true)
                 },
@@ -1078,10 +1090,9 @@ namespace Infra.Migrations
                     DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "getdate()"),
                     DataUltimaAlteracao = table.Column<DateTime>(type: "datetime2", nullable: true),
                     CEP = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
-                    Correnspondencia = table.Column<bool>(type: "bit", nullable: true),
+                    Correspondencia = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
                     Principal = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
                     Ativo = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
-                    Correspondencia = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
                     EconomiaId = table.Column<long>(type: "bigint", nullable: true),
                     EconomiaImovelId = table.Column<long>(type: "bigint", nullable: true),
                     ImovelId = table.Column<long>(type: "bigint", nullable: true),
@@ -1527,6 +1538,11 @@ namespace Infra.Migrations
                 column: "OrgaoRemetenteId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Processo_SituacaoProcessoId",
+                table: "Processo",
+                column: "SituacaoProcessoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Processo_TipoProcessoId",
                 table: "Processo",
                 column: "TipoProcessoId");
@@ -1657,9 +1673,6 @@ namespace Infra.Migrations
                 name: "SituacaoEtapa");
 
             migrationBuilder.DropTable(
-                name: "SituacaoProcesso");
-
-            migrationBuilder.DropTable(
                 name: "DocumentoPessoa");
 
             migrationBuilder.DropTable(
@@ -1679,6 +1692,9 @@ namespace Infra.Migrations
 
             migrationBuilder.DropTable(
                 name: "FluxoProcesso");
+
+            migrationBuilder.DropTable(
+                name: "SituacaoProcesso");
 
             migrationBuilder.DropTable(
                 name: "Unidade");

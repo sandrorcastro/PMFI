@@ -70,7 +70,7 @@ namespace MVC.Controllers
         }
         public ActionResult Autuar(long ImovelId, long EconomiaId,long PessoaId,long conId)
         {
-            var Pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).FirstOrDefault();
+            var Pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(e=>e.Enderecos).FirstOrDefault();
             var enderecos = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId==conId).ToList();
 
             //var endereco_filtrado = endereco_EntidadeAppService.GetTodos().Where(s=>s.EntidadeId==conId && s.imo)

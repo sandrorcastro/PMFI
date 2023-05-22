@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.Migrations
 {
     [DbContext(typeof(ContextoAplicacao))]
-    [Migration("20230518005000_Adiociona-ibge")]
-    partial class Adiocionaibge
+    [Migration("20230522015754_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -64,6 +64,13 @@ namespace Infra.Migrations
 
                     b.Property<int?>("EstadoId")
                         .HasColumnType("int");
+
+                    b.Property<int?>("IDCidadeProsiga")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UFProsiga")
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)");
 
                     b.Property<int?>("ibge")
                         .HasColumnType("int");
@@ -328,9 +335,6 @@ namespace Infra.Migrations
                     b.Property<string>("CEP")
                         .HasMaxLength(10)
                         .HasColumnType("nvarchar(10)");
-
-                    b.Property<bool?>("Correnspondencia")
-                        .HasColumnType("bit");
 
                     b.Property<bool?>("Correspondencia")
                         .ValueGeneratedOnAdd()
@@ -707,6 +711,10 @@ namespace Infra.Migrations
 
                     b.Property<int?>("TipoLogradouroId")
                         .HasColumnType("int");
+
+                    b.Property<string>("descricaoTipoLogradouro")
+                        .HasMaxLength(250)
+                        .HasColumnType("nvarchar(250)");
 
                     b.HasKey("LogradouroId");
 

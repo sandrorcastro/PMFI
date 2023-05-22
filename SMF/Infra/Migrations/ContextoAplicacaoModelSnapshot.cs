@@ -1750,11 +1750,9 @@ namespace Infra.Migrations
                         .WithMany("Enderecos")
                         .HasForeignKey("PessoaId");
 
-                    b.HasOne("Domain.Entities.Economia", "Economia")
+                    b.HasOne("Domain.Entities.Economia", null)
                         .WithMany("Enderecos")
                         .HasForeignKey("EconomiaImovelId", "EconomiaId");
-
-                    b.Navigation("Economia");
 
                     b.Navigation("Endereco");
                 });
