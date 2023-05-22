@@ -10,7 +10,7 @@ namespace Infra.EntityConfig
         public void Configure(EntityTypeBuilder<Pessoa> builder)
         {
            builder.HasKey("PessoaId");
-            
+           // builder.HasMany(e => e.Enderecos).WithMany();
             //builder.HasKey(p => new { p.ConId, p.PessoaId});
             //builder.Property<bigint>("PessoaId").HasColumnType("long");
             //builder.Property<string>("PessoaId").HasMaxLength(20);

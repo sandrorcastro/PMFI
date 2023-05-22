@@ -8,8 +8,21 @@ namespace Infra.EntityConfig
     {
         public void Configure(EntityTypeBuilder<Economia> builder)
         {
-            builder.HasKey(e => new {e.ImovelId, e.EconomiaId } ); //.HasName("ImovelId_EconomiaID");
-           // builder.HasOne(i => i.Imovel).WithMany().HasForeignKey(i=>new { i.ImovelId, i.EconomiaId});
+            /////builder.HasKey(e => new {e.ImovelId, e.EconomiaId } ); //.HasName("ImovelId_EconomiaID");
+            builder.HasKey(e => new { e.ImovelId, e.EconomiaId }); //.HasName("ImovelId_EconomiaID");
+            //builder.HasMany(e=>e.Enderecos).WithOne().HasPrincipalKey(e=> new { e.ImovelId, e.EconomiaId}).HasForeignKey(ee=> new { ee.ImovelId, ee.EconomiaId });
+
+
+
+
+
+
+
+
+
+
+
+            // builder.HasOne(i => i.Imovel).WithMany().HasForeignKey(i=>new { i.ImovelId, i.EconomiaId});
             builder.Property(e => e.ImovelId).ValueGeneratedNever();
             builder.Property(e => e.EconomiaId).ValueGeneratedNever();
             builder.Property<string>("Complemento").HasMaxLength(500); //.IsRequired();

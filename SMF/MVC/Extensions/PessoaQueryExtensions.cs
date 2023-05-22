@@ -22,7 +22,8 @@ namespace MVC.Extensions
             {
                return query.Where(  s => s.PessoaId == long.Parse(filter) 
                                       || s.conId == long.Parse(filter)
-                                 ).Include(tp=>tp.TipoPessoa);
+                                 ).Include(tp=>tp.TipoPessoa)
+                                  .Include(e=>e.Enderecos);
             }
             else
             {

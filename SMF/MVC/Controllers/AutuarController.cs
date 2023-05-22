@@ -15,14 +15,18 @@ namespace MVC.Controllers
         private readonly IImovelAppService imovelAppService;
         private readonly IEconomiaAppService economiaAppService;
         private readonly IEconomia_EntidadeAppService economia_EntidadeAppService;
+        private readonly IEndereco_EntidadeAppService endereco_EntidadeAppService;
+        private readonly IPessoaAppService pessoaAppService;
         IMapper mapper;
 
-        public AutuarController(IImovelAppService imovelAppService, IMapper mapper, IEconomiaAppService economiaAppService, IEconomia_EntidadeAppService economia_EntidadeAppService)
+        public AutuarController(IImovelAppService imovelAppService, IMapper mapper, IEconomiaAppService economiaAppService, IEconomia_EntidadeAppService economia_EntidadeAppService, IPessoaAppService pessoaAppService, IEndereco_EntidadeAppService endereco_EntidadeAppService)
         {
             this.imovelAppService = imovelAppService;
             this.mapper = mapper;
             this.economiaAppService = economiaAppService;
             this.economia_EntidadeAppService = economia_EntidadeAppService;
+            this.pessoaAppService = pessoaAppService;
+            this.endereco_EntidadeAppService = endereco_EntidadeAppService;
         }
         public ActionResult Index()
         {
@@ -60,9 +64,26 @@ namespace MVC.Controllers
             var economiaDO = queryeconomia.AsNoTracking().FirstOrDefault();
             EconomiaViewModel evm = mapper.Map<EconomiaViewModel>(economiaDO);
             //evm.Pessoas = queryeconomia_Entidade.AsNoTracking().ToList();
-            evm.Pessoas = economia_EntidadeAppService.GetTodos().Where(i => i.ImovelId == ImovelId && i.EconomiaId == EconomiaId).Include(p => p.Pessoa).ToList();
+            evm.Pessoas = economia_EntidadeAppService.GetTodos().Where(i => i.ImovelId == ImovelId && i.EconomiaId == EconomiaId).Include(p => p.Pessoa).ThenInclude(tp=>tp.TipoPessoa).ToList();
             //var economiaDO = queryeconomia.AsNoTracking().ToList();
             return View(evm);
+        }
+        public ActionResult Autuar(long ImovelId, long EconomiaId,long PessoaId,long conId)
+        {
+            var Pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).FirstOrDefault();
+            var enderecos = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId==conId).ToList();
+
+            //var endereco_filtrado = endereco_EntidadeAppService.GetTodos().Where(s=>s.EntidadeId==conId && s.imo)
+//            var query = from s in
+             //var queryenderecos = from s in endereco_EntidadeAppService.GetAll().Where(i => i.i .ImovelId == ImovelId && i.EconomiaId == EconomiaId) select s;
+            AutuarViewModel avm = new AutuarViewModel()
+            {
+                
+                
+            };
+            
+            
+            return View(avm);
         }
         // GET: AutuarController/Details/5
         public ActionResult Details(int id)
