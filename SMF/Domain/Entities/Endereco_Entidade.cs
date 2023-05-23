@@ -16,9 +16,13 @@
         public bool? Principal { get; set; }
         public bool? Ativo { get; set; }
        // public long? EconomiaId { get; set; }
-       // public Economia? Economia { get; set; }
-        //public Imovel? Imovel { get; set;}
-       
+     
+        //Navegação de Teste
+        public Imovel? Imovel { get; set;}
+        public Economia? Economia { get; set; }
+        public Pessoa? Pessoa { get; set; }
+        ///
+
 
     }
 }

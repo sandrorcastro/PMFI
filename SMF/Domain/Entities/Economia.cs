@@ -7,9 +7,16 @@
         public Imovel Imovel { get; set; }
         // public ICollection<Economia_Pessoa> Pessoas { get; set; }
         public ICollection<Economia_Entidade> Pessoas { get; set; }
+
         public ICollection<Endereco_Entidade> Enderecos { get; set; }
+
+
+        //Navegação de Teste
+        public ICollection<Endereco> Enderecos_ { get; set; }
+        //
+
         //public string? EdificacaoIdTemp { get; set; }
-      
+
         //public string? TerrenoIdTemp { get; set; }
         public string? Latitude { get; set; }
         public string? Longitude { get; set; }
