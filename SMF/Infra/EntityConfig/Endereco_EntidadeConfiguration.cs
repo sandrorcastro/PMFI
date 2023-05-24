@@ -14,12 +14,12 @@ namespace Infra.EntityConfig
             //builder.HasOne(e => e.Economia).WithMany(x => x.Enderecos).HasPrincipalKey(x=> new { x.ImovelId,x.EconomiaId }).HasForeignKey(x=>x.EntidadeId);
             //builder.HasOne(e => e.Pessoa).WithMany(x => x.Enderecos).HasPrincipalKey(x => new { x.PessoaId}).HasForeignKey(x => x.ImovelId);
             //builder.HasOne(e => e.Economia).WithMany(e=>e.Enderecos).HasForeignKey(x=> x.EntidadeId );
-
-
-
-
+            builder.HasOne(e => e.Economia).WithMany(x => x.Enderecos).HasForeignKey(x => new { x.ImovelId, x.EconomiaId }).OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(e => e.Pessoa).WithMany(x => x.Enderecos).HasForeignKey(x =>  x.PessoaId ).OnDelete(DeleteBehavior.NoAction);
             builder.Property(ep => ep.EntidadeId).ValueGeneratedNever();
             builder.Property(ep => ep.EnderecoId).ValueGeneratedNever();
+            builder.Property(ep => ep.TipoEntidadeId).ValueGeneratedNever();
+            builder.Property(ep => ep.Numero).ValueGeneratedNever();
             builder.Property<string>("Numero").HasMaxLength(10); //.IsRequired();
             builder.Property<string>("CEP").HasMaxLength(10); //.IsRequired();
             builder.Property(p => p.DataCadastro).HasDefaultValueSql("getdate()").Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);

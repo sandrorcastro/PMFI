@@ -12,7 +12,7 @@
 
 
         //Navegação de Teste
-        public ICollection<Endereco> Enderecos_ { get; set; }
+       // public ICollection<Endereco> Enderecos_ { get; set; }
         //
 
         //public string? EdificacaoIdTemp { get; set; }

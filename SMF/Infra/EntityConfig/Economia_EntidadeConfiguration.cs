@@ -13,10 +13,8 @@ namespace Infra.EntityConfig
         {
             //  builder.HasKey(ep=> ep.Economia_EntidadeId);
             builder.HasKey(ep => new { ep.ImovelId, ep.EconomiaId, ep.PessoaId });
-            //builder.HasMany(e => e.EconomiaId).WithMany();
-            /// builder.HasOne(p => p.Pessoa).WithMany(ep => ep.Economias).HasForeignKey(ep => ep.PessoaId);
             builder.HasOne(i=>i.Imovel).WithMany(e => e.Economias).HasForeignKey(i=> i.ImovelId).OnDelete(DeleteBehavior.NoAction);
-            builder.HasOne(e => e.Economia).WithMany(p=>p.Pessoas).HasForeignKey(e=>new {e.ImovelId,e.EconomiaId}).OnDelete(DeleteBehavior.NoAction);
+            /////builder.HasOne(e => e.Economia).WithMany(p=>p.Pessoas).HasForeignKey(e=>new {e.ImovelId,e.EconomiaId}).OnDelete(DeleteBehavior.NoAction);
             //builder.HasOne(e => e.Economia).WithOne("Imovel").OnDelete(DeleteBehavior.NoAction);
             builder.HasOne(p => p.Pessoa).WithMany(e=>e.Economias).HasForeignKey(p=> p.PessoaId).OnDelete(DeleteBehavior.NoAction);
 

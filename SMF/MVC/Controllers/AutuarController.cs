@@ -76,9 +76,9 @@ namespace MVC.Controllers
             var economia = economiaAppService.GetIQueryable().Where(e => e.ImovelId == ImovelId && e.EconomiaId == EconomiaId).FirstOrDefault();
             var pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(e=>e.Enderecos).ThenInclude(e=>e.Endereco).ThenInclude(l=>l.Logradouro).ThenInclude(tl=>tl.TipoLogradouro).Include(tp=>tp.TipoPessoa).FirstOrDefault();
             var enderecoseconomia = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == entidadeId).ToList();
-            var enderecospessoa = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == conId).ToList();
+            //var enderecospessoa = endereco_EntidadeAppService.GetTodos().Where(s => s.EntidadeId == conId).Select(e=>e.ImovelId==ImovelId && e.EconomiaId==EconomiaId).FirstOrDefault();
             economia.Enderecos = enderecoseconomia;
-            pessoa.Enderecos = enderecospessoa.Where(i=>i.Economia.ImovelId==ImovelId).ToList();
+            //pessoa.Enderecos = enderecospessoa;
             //var endereco_filtrado = endereco_EntidadeAppService.GetTodos().Where(s=>s.EntidadeId==conId && s.imo)
 //            var query = from s in
              //var queryenderecos = from s in endereco_EntidadeAppService.GetAll().Where(i => i.i .ImovelId == ImovelId && i.EconomiaId == EconomiaId) select s;

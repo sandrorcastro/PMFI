@@ -12,7 +12,7 @@
         public ICollection<Endereco_Entidade>? Enderecos { get; set; }
        
         //Navegação de teste
-        public ICollection<Endereco>? Enderecos_ { get; set; }
+    //    public ICollection<Endereco>? Enderecos_ { get; set; }
         //
       
         public ICollection<DocumentoPessoa>? Documentos { get; set; }
