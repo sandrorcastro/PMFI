@@ -23,7 +23,7 @@ namespace Infra.Context
             var FSE = "Data Source=localhost\\SQLEXPRESS;Initial Catalog=SMF_Processo;Integrated Security=True;Connect Timeout=30;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False";
             var HSS = "Data Source=localhost\\SQLSERVER;Initial Catalog=SMF_Processo;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Persist Security Info=True;User ID=sa;Password=sqlserver";
             //var HSS = "Data Source=localhost\\SQLSERVER;Initial Catalog=SMF;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Persist Security Info=True;User ID=sa;Password=sqlserver";
-            var DefaultConnection = HSS;
+            var DefaultConnection = FSE;
 
             var optionsBuilder = new DbContextOptionsBuilder<ContextoAplicacao>();
             //Home

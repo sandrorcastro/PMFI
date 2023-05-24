@@ -57,11 +57,7 @@ namespace MVC.Controllers
         }
         public ActionResult Economia(long ImovelId, long EconomiaId)
         {
-            //var economiaDO = economiaAppService.GetTodos().Where(i=>i.ImovelId==ImovelId && i.EconomiaId==EconomiaId).ToList();
             var queryeconomia = from s in economiaAppService.GetIQueryable().Filter(i => i.ImovelId == ImovelId && i.EconomiaId == EconomiaId) select s;
-            //var queryeconomia_Entidade = from s in economia_EntidadeAppService.GetIQueryable().Filter(i => i.ImovelId == ImovelId && i.EconomiaId == EconomiaId) select s;
-            //var queryeconomia_Entidadeeconomia = economia_EntidadeAppService.GetTodos().Where(i=>i.ImovelId==ImovelId && i.EconomiaId==EconomiaId).Include(p=>p.Pessoa).ToList();
-            //var queryeconomias = from s in economiaAppService.GetIQueryable().Filter(imovel.ImovelId.ToString()) select s;
             var economiaDO = queryeconomia.AsNoTracking().FirstOrDefault();
             EconomiaViewModel evm = mapper.Map<EconomiaViewModel>(economiaDO);
             //evm.Pessoas = queryeconomia_Entidade.AsNoTracking().ToList();
@@ -72,16 +68,13 @@ namespace MVC.Controllers
         public ActionResult Autuar(long ImovelId, long EconomiaId,long PessoaId,long conId)
         {
             var  entidadeId = long.Parse(String.Concat(ImovelId.ToString() + EconomiaId.ToString().PadLeft(3, '0')));
-            //var economia = economiaAppService.GetIQueryable().Where(e => e.ImovelId==ImovelId && e.EconomiaId==EconomiaId).Include(e=>e.Enderecos.Where(ee=>ee.EntidadeId==entidadeId)) /*.ThenInclude(e => e.Endereco).ThenInclude(l => l.Logradouro).ThenInclude(tl => tl.TipoLogradouro)*/.FirstOrDefault();
             var economia = economiaAppService.GetIQueryable().Where(e => e.ImovelId == ImovelId && e.EconomiaId == EconomiaId).FirstOrDefault();
-            var pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(e=>e.Enderecos).ThenInclude(e=>e.Endereco).ThenInclude(l=>l.Logradouro).ThenInclude(tl=>tl.TipoLogradouro).Include(tp=>tp.TipoPessoa).FirstOrDefault();
-            var enderecoseconomia = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == entidadeId).ToList();
-            //var enderecospessoa = endereco_EntidadeAppService.GetTodos().Where(s => s.EntidadeId == conId).Select(e=>e.ImovelId==ImovelId && e.EconomiaId==EconomiaId).FirstOrDefault();
+            //var pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(e=>e.Enderecos).ThenInclude(e=>e.Endereco).ThenInclude(l=>l.Logradouro).ThenInclude(tl=>tl.TipoLogradouro).Include(tp=>tp.TipoPessoa).FirstOrDefault();
+            var pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(tp=>tp.TipoPessoa).FirstOrDefault();
+            var enderecoseconomia = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == entidadeId).Include(e=>e.Endereco).ThenInclude(l=>l.Logradouro).ThenInclude(tl => tl.TipoLogradouro).ToList();
+            var enderecospessoa = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == conId && s.ImovelId==ImovelId && s.EconomiaId==EconomiaId).Include(e => e.Endereco).ThenInclude(l => l.Logradouro).ThenInclude(tl => tl.TipoLogradouro).ToList();
             economia.Enderecos = enderecoseconomia;
-            //pessoa.Enderecos = enderecospessoa;
-            //var endereco_filtrado = endereco_EntidadeAppService.GetTodos().Where(s=>s.EntidadeId==conId && s.imo)
-//            var query = from s in
-             //var queryenderecos = from s in endereco_EntidadeAppService.GetAll().Where(i => i.i .ImovelId == ImovelId && i.EconomiaId == EconomiaId) select s;
+            pessoa.Enderecos = enderecospessoa;
             AutuarViewModel avm = new AutuarViewModel()
             {
                 Economia = economia,
@@ -90,6 +83,26 @@ namespace MVC.Controllers
             };
             
             
+            return View(avm);
+        }
+        public ActionResult Processos(long ImovelId, long EconomiaId, long PessoaId, long conId)
+        {
+            var entidadeId = long.Parse(String.Concat(ImovelId.ToString() + EconomiaId.ToString().PadLeft(3, '0')));
+            var economia = economiaAppService.GetIQueryable().Where(e => e.ImovelId == ImovelId && e.EconomiaId == EconomiaId).FirstOrDefault();
+            //var pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(e=>e.Enderecos).ThenInclude(e=>e.Endereco).ThenInclude(l=>l.Logradouro).ThenInclude(tl=>tl.TipoLogradouro).Include(tp=>tp.TipoPessoa).FirstOrDefault();
+            var pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(tp => tp.TipoPessoa).FirstOrDefault();
+            var enderecoseconomia = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == entidadeId).Include(e => e.Endereco).ThenInclude(l => l.Logradouro).ThenInclude(tl => tl.TipoLogradouro).ToList();
+            var enderecospessoa = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == conId && s.ImovelId == ImovelId && s.EconomiaId == EconomiaId).Include(e => e.Endereco).ThenInclude(l => l.Logradouro).ThenInclude(tl => tl.TipoLogradouro).ToList();
+            economia.Enderecos = enderecoseconomia;
+            pessoa.Enderecos = enderecospessoa;
+            AutuarViewModel avm = new AutuarViewModel()
+            {
+                Economia = economia,
+                Pessoa = pessoa
+
+            };
+
+
             return View(avm);
         }
         // GET: AutuarController/Details/5
