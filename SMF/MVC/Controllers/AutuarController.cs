@@ -22,7 +22,6 @@ namespace MVC.Controllers
         private readonly IEndereco_EntidadeAppService endereco_EntidadeAppService;
         private readonly IPessoaAppService pessoaAppService;
         IMapper mapper;
-
         public AutuarController(IImovelAppService imovelAppService, IMapper mapper, IEconomiaAppService economiaAppService, IEconomia_EntidadeAppService economia_EntidadeAppService, IPessoaAppService pessoaAppService, IEndereco_EntidadeAppService endereco_EntidadeAppService, ContextoAplicacao context)
         {
             this.imovelAppService = imovelAppService;
@@ -35,7 +34,7 @@ namespace MVC.Controllers
         }
         public ActionResult Index()
         {
-            return View(new ImovelViewModel());
+            return View(new ImovelViewModel() { });
         }
         // GET: AutuarController
 
@@ -78,8 +77,11 @@ namespace MVC.Controllers
             ViewData["SituacaoProcessoId"] = new SelectList(_context.dbSSituacoesProcesso, "SituacaoProcessoId", "Descricao");
             ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso, "TipoProcessoId", "Descricao");
             ViewData["UnidadeDestinatarioId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "Descricao");
-            ViewData["UnidadeRemetenteId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "UnidadeId");
-
+            ViewData["UnidadeRemetenteId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "Descricao");
+            //
+            ViewData["ServidorId"] = new SelectList(_context.dbSServidores, "ServidorId", "Descricao");
+            ViewData["SituacaoEtapaId"] = new SelectList(_context.dbSSituacoesEtapa, "SituacaoEtapaId", "Descricao");
+            ViewData["TipoEtapaId"] = new SelectList(_context.dbSTiposEtapa, "TipoEtapaId", "Descricao");
 
 
             var  entidadeId = long.Parse(String.Concat(ImovelId.ToString() + EconomiaId.ToString().PadLeft(3, '0')));
