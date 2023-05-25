@@ -12,6 +12,8 @@ namespace Infra.EntityConfig
             builder.Property(tp => tp.ServidorId).ValueGeneratedNever();
             builder.Property<string>("Nome").HasMaxLength(150);
             builder.Property<string>("Matricula").HasMaxLength(15);
+            builder.Property<string>("Cargo").HasMaxLength(100);
+            builder.Property<string>("Funcao").HasMaxLength(100);
             builder.Property<bool?>("Ativo").HasDefaultValue(true);
             builder.ToTable("Servidor");
             
