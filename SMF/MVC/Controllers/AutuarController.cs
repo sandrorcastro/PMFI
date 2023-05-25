@@ -2,8 +2,10 @@
 //using AspNetCore;
 using AutoMapper;
 using Domain.Entities;
+using Infra.Context;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVC.Extensions;
 using MVC.ViewModels;
@@ -13,6 +15,7 @@ namespace MVC.Controllers
 {
     public class AutuarController : Controller
     {
+        private readonly ContextoAplicacao _context;
         private readonly IImovelAppService imovelAppService;
         private readonly IEconomiaAppService economiaAppService;
         private readonly IEconomia_EntidadeAppService economia_EntidadeAppService;
@@ -20,7 +23,7 @@ namespace MVC.Controllers
         private readonly IPessoaAppService pessoaAppService;
         IMapper mapper;
 
-        public AutuarController(IImovelAppService imovelAppService, IMapper mapper, IEconomiaAppService economiaAppService, IEconomia_EntidadeAppService economia_EntidadeAppService, IPessoaAppService pessoaAppService, IEndereco_EntidadeAppService endereco_EntidadeAppService)
+        public AutuarController(IImovelAppService imovelAppService, IMapper mapper, IEconomiaAppService economiaAppService, IEconomia_EntidadeAppService economia_EntidadeAppService, IPessoaAppService pessoaAppService, IEndereco_EntidadeAppService endereco_EntidadeAppService, ContextoAplicacao context)
         {
             this.imovelAppService = imovelAppService;
             this.mapper = mapper;
@@ -28,6 +31,7 @@ namespace MVC.Controllers
             this.economia_EntidadeAppService = economia_EntidadeAppService;
             this.pessoaAppService = pessoaAppService;
             this.endereco_EntidadeAppService = endereco_EntidadeAppService;
+            _context = context;
         }
         public ActionResult Index()
         {
@@ -67,6 +71,17 @@ namespace MVC.Controllers
         }
         public ActionResult Autuar(long ImovelId, long EconomiaId,long PessoaId,long conId)
         {
+            ViewData["FluxoProcessoId"] = new SelectList(_context.dbSFluxosProcesso, "FluxoProcessoId", "Descricao");
+            ViewData["OrgaoId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao");
+            ViewData["OrgaoDestinatarioId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao");
+            ViewData["OrgaoRemetenteId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao");
+            ViewData["SituacaoProcessoId"] = new SelectList(_context.dbSSituacoesProcesso, "SituacaoProcessoId", "Descricao");
+            ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso, "TipoProcessoId", "Descricao");
+            ViewData["UnidadeDestinatarioId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "Descricao");
+            ViewData["UnidadeRemetenteId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "UnidadeId");
+
+
+
             var  entidadeId = long.Parse(String.Concat(ImovelId.ToString() + EconomiaId.ToString().PadLeft(3, '0')));
             var economia = economiaAppService.GetIQueryable().Where(e => e.ImovelId == ImovelId && e.EconomiaId == EconomiaId).FirstOrDefault();
             //var pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(e=>e.Enderecos).ThenInclude(e=>e.Endereco).ThenInclude(l=>l.Logradouro).ThenInclude(tl=>tl.TipoLogradouro).Include(tp=>tp.TipoPessoa).FirstOrDefault();
@@ -85,26 +100,7 @@ namespace MVC.Controllers
             
             return View(avm);
         }
-        public ActionResult Processos(long ImovelId, long EconomiaId, long PessoaId, long conId)
-        {
-            var entidadeId = long.Parse(String.Concat(ImovelId.ToString() + EconomiaId.ToString().PadLeft(3, '0')));
-            var economia = economiaAppService.GetIQueryable().Where(e => e.ImovelId == ImovelId && e.EconomiaId == EconomiaId).FirstOrDefault();
-            //var pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(e=>e.Enderecos).ThenInclude(e=>e.Endereco).ThenInclude(l=>l.Logradouro).ThenInclude(tl=>tl.TipoLogradouro).Include(tp=>tp.TipoPessoa).FirstOrDefault();
-            var pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(tp => tp.TipoPessoa).FirstOrDefault();
-            var enderecoseconomia = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == entidadeId).Include(e => e.Endereco).ThenInclude(l => l.Logradouro).ThenInclude(tl => tl.TipoLogradouro).ToList();
-            var enderecospessoa = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == conId && s.ImovelId == ImovelId && s.EconomiaId == EconomiaId).Include(e => e.Endereco).ThenInclude(l => l.Logradouro).ThenInclude(tl => tl.TipoLogradouro).ToList();
-            economia.Enderecos = enderecoseconomia;
-            pessoa.Enderecos = enderecospessoa;
-            AutuarViewModel avm = new AutuarViewModel()
-            {
-                Economia = economia,
-                Pessoa = pessoa
-
-            };
-
-
-            return View(avm);
-        }
+        
         // GET: AutuarController/Details/5
         public ActionResult Details(int id)
         {

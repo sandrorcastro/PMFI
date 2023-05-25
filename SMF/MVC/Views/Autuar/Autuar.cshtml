@@ -3,13 +3,14 @@
 @{
     ViewData["Title"] = "Autuar";
 }
-
-<div class="card">
+<form asp-action="Autuar" method="post">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <div class="card">
     <div class="card-header">
         <h4>Autuar</h4>
     </div>
     <div class="card-body">
-        <div class="card">
+         <div class="card">
             <div class="card-header">
                 @{
                    @* await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);*@
@@ -19,10 +20,7 @@
                 }
             </div>
             <div class="card-body">
-                <p>
-                        campos do Processo e Etapa
-                    
-                </p>
+                    @await Html.PartialAsync("~/Views/Autuar/Processo.cshtml",Model.Processo)
             </div>
             <div class="card-footer">
                 @* @await Component.InvokeAsync("Pagination", new { values = Model.values, routeData=Model.LinkData})*@
@@ -32,7 +30,7 @@
             </div>
         </div>
         <!--Inicio Card Economia-->
-        <div class="card">
+         <div class="card">
             <div class="card-header">
                 @{
                     <h6>IMÓVEL:ECONOMIA : @Html.DisplayFor(model => model.Economia.ImovelId) : @Html.DisplayFor(model => model.Economia.EconomiaId)</h6>
@@ -53,7 +51,7 @@
         </div>
         <!--FInal Card Economia-->
         <!--Inicio Card Pessoa-->
-        <div class="card">
+         <div class="card">
             <div class="card-header">
                 <h6> CPF/CNPJ: @Html.DisplayFor(model => model.Pessoa.conId) </h6>
             </div>
@@ -71,12 +69,13 @@
         </div>
         <!--Final Card Pessoa-->
     </div>
-    <div class="card-footer">
+        <div class="card-footer">
         @{
             @*await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoAdicionar.cshtml");*@
-            <p>
-                    Rodapé do autuar
-            </p>
+                <div class="form-group">
+                    <input type="submit" value="Crear" class="btn btn-primary" />
+                </div>
         }
     </div>
-</div>
+    </div>
+</form>

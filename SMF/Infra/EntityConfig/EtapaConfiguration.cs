@@ -16,7 +16,7 @@ namespace Infra.EntityConfig
             builder.Property<string>("Ano").HasMaxLength(4); //.IsRequired();
             builder.Property<string>("protocolo").HasMaxLength(20);
             builder.Property<string>("anoprotocolo").HasMaxLength(20);
-            builder.Property<string>("Observacao").HasMaxLength(5000); //.IsRequired();
+            builder.Property<string>("ObservacaoEtapa").HasMaxLength(5000); //.IsRequired();
             builder.ToTable("Etapa");
             
             

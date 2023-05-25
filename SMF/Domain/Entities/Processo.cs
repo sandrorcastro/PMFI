@@ -37,6 +37,9 @@ namespace Domain.Entities
         public int FluxoProcessoId { get; set; }
         public FluxoProcesso? FluxoProcesso { get; set; }
 
+        public long ServidorId { get; set; }
+        public Servidor? Servidor { get; set; }
+
         public string? ObservacaoProcesso { get; set; }
         public ICollection<Etapa>? Etapas { get; set; }
         public bool ProcessoEnviado { get; set; } = false;

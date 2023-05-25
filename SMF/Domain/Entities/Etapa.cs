@@ -45,7 +45,7 @@ namespace Domain.Entities
         public string? protocolo { get; set; }
         public string? anoprotocolo { get; set; }
 
-        public string? Observacao { get; set; }
+        public string? ObservacaoEtapa { get; set; }
 
         public bool? emailEnviado { get; set; }
         public bool? emailRecebido { get; set; }

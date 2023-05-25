@@ -4,6 +4,7 @@ using Infra.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.Migrations
 {
     [DbContext(typeof(ContextoAplicacao))]
-    partial class ContextoAplicacaoModelSnapshot : ModelSnapshot
+    [Migration("20230525011543_AdicionaCargoFunca-Servidor")]
+    partial class AdicionaCargoFuncaServidor
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -429,7 +432,7 @@ namespace Infra.Migrations
                     b.Property<int>("EtapaId")
                         .HasColumnType("int");
 
-                    b.Property<string>("ObservacaoEtapa")
+                    b.Property<string>("Observacao")
                         .HasMaxLength(5000)
                         .HasColumnType("nvarchar(max)");
 
@@ -900,9 +903,6 @@ namespace Infra.Migrations
                     b.Property<bool>("ProcessoRecebido")
                         .HasColumnType("bit");
 
-                    b.Property<long>("ServidorId")
-                        .HasColumnType("bigint");
-
                     b.Property<int>("SituacaoProcessoId")
                         .HasColumnType("int");
 
@@ -922,8 +922,6 @@ namespace Infra.Migrations
                     b.HasIndex("OrgaoDestinatarioId");
 
                     b.HasIndex("OrgaoRemetenteId");
-
-                    b.HasIndex("ServidorId");
 
                     b.HasIndex("SituacaoProcessoId");
 
@@ -1989,12 +1987,6 @@ namespace Infra.Migrations
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
-                    b.HasOne("Domain.Entities.Servidor", "Servidor")
-                        .WithMany()
-                        .HasForeignKey("ServidorId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.SituacaoProcesso", "SituacaoProcesso")
                         .WithMany()
                         .HasForeignKey("SituacaoProcessoId")
@@ -2026,8 +2018,6 @@ namespace Infra.Migrations
                     b.Navigation("OrgaoDestinatario");
 
                     b.Navigation("OrgaoRemetente");
-
-                    b.Navigation("Servidor");
 
                     b.Navigation("SituacaoProcesso");
 
