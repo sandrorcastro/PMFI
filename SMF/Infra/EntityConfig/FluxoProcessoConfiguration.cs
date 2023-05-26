@@ -9,10 +9,8 @@ namespace Infra.EntityConfig
         public void Configure(EntityTypeBuilder<FluxoProcesso> builder)
         {
             builder.HasKey(fp=> new { fp.FluxoProcessoId,fp.TipoProcessoId });
-            //builder.HasKey(fp=>new { fp.FluxoProcessoId,fp.TipoProcessoId });
             builder.Property(tp => tp.FluxoProcessoId).ValueGeneratedNever();
             builder.Property(tp => tp.TipoProcessoId).ValueGeneratedNever();
-            //builder.Property(tp => tp.TipoEtapaId).ValueGeneratedNever();
             builder.Property<string>("Descricao").HasMaxLength(50);
             builder.ToTable("FluxoProcesso");
             
