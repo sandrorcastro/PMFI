@@ -60,7 +60,7 @@ namespace Infra.Context
         public DbSet<DDD> dbSDDDs { get; set; } = default!;
         public DbSet<Endereco> dbSEnderecos { get; set; } = default!;
         public DbSet<FluxoProcesso> dbSFluxosProcesso { get; set; } = default!;
-        public DbSet<Image> dbSImages { get; set; } = default!;
+        public DbSet<Anexo> dbSAnexo { get; set; } = default!;
         public DbSet<IncrementoTabelas> dbSIncrementoTabelas { get; set; } = default!;
         public DbSet<Loteamento> dbSLoteamentos { get; set; } = default!;
         public DbSet<OperadoraTelefone> dbSOperadoraTelefoneS { get; set; } = default!;
@@ -111,7 +111,7 @@ public DbSet<Perspectiva> dbSPerspectivas { get; set; } = default!;
             builder.ApplyConfiguration(new DDDConfiguration());
             builder.ApplyConfiguration(new EnderecoConfiguration());
             builder.ApplyConfiguration(new FluxoProcessoConfiguration());
-            builder.ApplyConfiguration(new ImageConfiguration());
+            builder.ApplyConfiguration(new AnexoConfiguration());
             builder.ApplyConfiguration(new IncrementoTabelasConfiguration());
             builder.ApplyConfiguration(new LoteamentoConfiguration());
             builder.ApplyConfiguration(new OperadoraTelefoneConfiguration());

@@ -21,6 +21,9 @@ namespace Domain.Entities
         public long ServidorId { get; set; }
         public Servidor? Servidor { get; set; }
 
+
+        public ICollection<Anexo> Anexos { get; set; }
+
        // public long ImovelId { get; set; }
        // public Imovel? Imovel { get; set; }
      
