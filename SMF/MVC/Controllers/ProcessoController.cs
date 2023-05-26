@@ -7,46 +7,27 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
 using Infra.Context;
-using MVC.Extensions;
-using MVC.Models;
-using MVC.ViewModels;
-using Application.Services;
-using Application.Interfaces;
-using AutoMapper;
 
 namespace MVC.Controllers
 {
     public class ProcessoController : Controller
     {
         private readonly ContextoAplicacao _context;
-        private readonly IProcessoAppService processoAppService;
-        IMapper mapper;
 
-        public ProcessoController(ContextoAplicacao context, IProcessoAppService processoAppService, IMapper mapper)
+        public ProcessoController(ContextoAplicacao context)
         {
             _context = context;
-            this.processoAppService = processoAppService;
-            this.mapper = mapper;
         }
 
         // GET: Processo
-        public async Task<IActionResult> Index(string sort, string filter, int p, SortDirection direction)
+        public async Task<IActionResult> Index()
         {
-            var query = from s in processoAppService.GetIQueryable().Filter(filter).OrderBy(sort, direction) select s;
-            ProcessoPaginatedListViewModel pvm = new ProcessoPaginatedListViewModel(sort, filter);
-            pvm.values = await ProcessoPaginatedListViewModel.CreateAsync(query, p == 0 ? 1 : p, 10);
-            pvm.Filter = filter;
-            pvm.Sort = sort;
-            return View(pvm);
-        }
-        /*public async Task<IActionResult> Index()
-        {
-            var contextoAplicacao = _context.dbSProcessos.Include(p => p.FluxoProcesso).Include(p => p.Orgao).Include(p => p.OrgaoDestinatario).Include(p => p.OrgaoRemetente).Include(p => p.SituacaoProcesso).Include(p => p.TipoProcesso).Include(p => p.UnidadeDestinatario).Include(p => p.UnidadeRemetente);
+            var contextoAplicacao = _context.dbSProcessos.Include(p => p.Economia).Include(p => p.Imovel).Include(p => p.Orgao).Include(p => p.OrgaoDestinatario).Include(p => p.OrgaoRemetente).Include(p => p.Servidor).Include(p => p.SituacaoProcesso).Include(p => p.TipoProcesso).Include(p => p.UnidadeDestinatario).Include(p => p.UnidadeRemetente);
             return View(await contextoAplicacao.ToListAsync());
-        }*/
+        }
 
         // GET: Processo/Details/5
-        public async Task<IActionResult> Details(int? id)
+        public async Task<IActionResult> Details(long? id)
         {
             if (id == null || _context.dbSProcessos == null)
             {
@@ -54,15 +35,17 @@ namespace MVC.Controllers
             }
 
             var processo = await _context.dbSProcessos
-                .Include(p => p.FluxoProcesso)
+                .Include(p => p.Economia)
+                .Include(p => p.Imovel)
                 .Include(p => p.Orgao)
                 .Include(p => p.OrgaoDestinatario)
                 .Include(p => p.OrgaoRemetente)
+                .Include(p => p.Servidor)
                 .Include(p => p.SituacaoProcesso)
                 .Include(p => p.TipoProcesso)
                 .Include(p => p.UnidadeDestinatario)
                 .Include(p => p.UnidadeRemetente)
-                .FirstOrDefaultAsync(m => m.OrgaoId == id);
+                .FirstOrDefaultAsync(m => m.ProcessoId == id);
             if (processo == null)
             {
                 return NotFound();
@@ -74,14 +57,16 @@ namespace MVC.Controllers
         // GET: Processo/Create
         public IActionResult Create()
         {
-            ViewData["FluxoProcessoId"] = new SelectList(_context.dbSFluxosProcesso, "FluxoProcessoId", "Descricao");
-            ViewData["OrgaoId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "OrgaoId");
-            ViewData["OrgaoDestinatarioId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "OrgaoId");
-            ViewData["OrgaoRemetenteId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "OrgaoId");
-            ViewData["SituacaoProcessoId"] = new SelectList(_context.dbSSituacoesProcesso, "SituacaoProcessoId", "SituacaoProcessoId");
-            ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso, "TipoProcessoId", "TipoProcessoId");
-            ViewData["UnidadeDestinatarioId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "UnidadeId");
-            ViewData["UnidadeRemetenteId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "UnidadeId");
+            ViewData["ImovelId"] = new SelectList(_context.dbSEconomias, "ImovelId", "ImovelId");
+            ViewData["EconomiaId"] = new SelectList(_context.dbSImoveis, "EconomiaId", "EconomiaId");
+            ViewData["OrgaoId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao");
+            ViewData["OrgaoDestinatarioId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao");
+            ViewData["OrgaoRemetenteId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao");
+            ViewData["ServidorId"] = new SelectList(_context.dbSServidores, "ServidorId", "Nome");
+            ViewData["SituacaoProcessoId"] = new SelectList(_context.dbSSituacoesProcesso, "SituacaoProcessoId", "Descricao");
+            ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso, "TipoProcessoId", "Descricao");
+            ViewData["UnidadeDestinatarioId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "Descricao");
+            ViewData["UnidadeRemetenteId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "Descricao");
             return View();
         }
 
@@ -90,7 +75,7 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("OrgaoId,SequenciaNumerica,Ano,DigitoVerificador,DataCadastro,TipoProcessoId,SituacaoProcessoId,OrgaoRemetenteId,UnidadeRemetenteId,OrgaoDestinatarioId,UnidadeDestinatarioId,FluxoProcessoId,ObservacaoProcesso,ProcessoEnviado,ProcessoRecebido")] Processo processo)
+        public async Task<IActionResult> Create([Bind("ProcessoId,ImovelId,EconomiaId,OrgaoId,SequenciaNumerica,Ano,DigitoVerificador,DataInicio,DataFim,TipoProcessoId,SituacaoProcessoId,OrgaoRemetenteId,UnidadeRemetenteId,OrgaoDestinatarioId,UnidadeDestinatarioId,ServidorId,ObservacaoProcesso,ProcessoEnviado,ProcessoRecebido,ProcessoAntigo")] Processo processo)
         {
             if (ModelState.IsValid)
             {
@@ -98,10 +83,12 @@ namespace MVC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FluxoProcessoId"] = new SelectList(_context.dbSFluxosProcesso, "FluxoProcessoId", "Descricao", processo.FluxoProcessoId);
+            ViewData["ImovelId"] = new SelectList(_context.dbSEconomias, "ImovelId", "ImovelId", processo.ImovelId);
+            ViewData["ImovelId"] = new SelectList(_context.dbSImoveis, "ImovelId", "ImovelId", processo.ImovelId);
             ViewData["OrgaoId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "OrgaoId", processo.OrgaoId);
             ViewData["OrgaoDestinatarioId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "OrgaoId", processo.OrgaoDestinatarioId);
             ViewData["OrgaoRemetenteId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "OrgaoId", processo.OrgaoRemetenteId);
+            ViewData["ServidorId"] = new SelectList(_context.dbSServidores, "ServidorId", "ServidorId", processo.ServidorId);
             ViewData["SituacaoProcessoId"] = new SelectList(_context.dbSSituacoesProcesso, "SituacaoProcessoId", "SituacaoProcessoId", processo.SituacaoProcessoId);
             ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso, "TipoProcessoId", "TipoProcessoId", processo.TipoProcessoId);
             ViewData["UnidadeDestinatarioId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "UnidadeId", processo.UnidadeDestinatarioId);
@@ -110,7 +97,7 @@ namespace MVC.Controllers
         }
 
         // GET: Processo/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public async Task<IActionResult> Edit(long? id)
         {
             if (id == null || _context.dbSProcessos == null)
             {
@@ -122,10 +109,12 @@ namespace MVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["FluxoProcessoId"] = new SelectList(_context.dbSFluxosProcesso, "FluxoProcessoId", "Descricao", processo.FluxoProcessoId);
+            ViewData["ImovelId"] = new SelectList(_context.dbSEconomias, "ImovelId", "ImovelId", processo.ImovelId);
+            ViewData["ImovelId"] = new SelectList(_context.dbSImoveis, "ImovelId", "ImovelId", processo.ImovelId);
             ViewData["OrgaoId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "OrgaoId", processo.OrgaoId);
             ViewData["OrgaoDestinatarioId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "OrgaoId", processo.OrgaoDestinatarioId);
             ViewData["OrgaoRemetenteId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "OrgaoId", processo.OrgaoRemetenteId);
+            ViewData["ServidorId"] = new SelectList(_context.dbSServidores, "ServidorId", "ServidorId", processo.ServidorId);
             ViewData["SituacaoProcessoId"] = new SelectList(_context.dbSSituacoesProcesso, "SituacaoProcessoId", "SituacaoProcessoId", processo.SituacaoProcessoId);
             ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso, "TipoProcessoId", "TipoProcessoId", processo.TipoProcessoId);
             ViewData["UnidadeDestinatarioId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "UnidadeId", processo.UnidadeDestinatarioId);
@@ -138,9 +127,9 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("OrgaoId,SequenciaNumerica,Ano,DigitoVerificador,DataCadastro,TipoProcessoId,SituacaoProcessoId,OrgaoRemetenteId,UnidadeRemetenteId,OrgaoDestinatarioId,UnidadeDestinatarioId,FluxoProcessoId,ObservacaoProcesso,ProcessoEnviado,ProcessoRecebido")] Processo processo)
+        public async Task<IActionResult> Edit(long id, [Bind("ProcessoId,ImovelId,EconomiaId,OrgaoId,SequenciaNumerica,Ano,DigitoVerificador,DataInicio,DataFim,TipoProcessoId,SituacaoProcessoId,OrgaoRemetenteId,UnidadeRemetenteId,OrgaoDestinatarioId,UnidadeDestinatarioId,ServidorId,ObservacaoProcesso,ProcessoEnviado,ProcessoRecebido,ProcessoAntigo")] Processo processo)
         {
-            if (id != processo.OrgaoId)
+            if (id != processo.ProcessoId)
             {
                 return NotFound();
             }
@@ -154,7 +143,7 @@ namespace MVC.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProcessoExists(processo.OrgaoId))
+                    if (!ProcessoExists(processo.ProcessoId))
                     {
                         return NotFound();
                     }
@@ -165,10 +154,12 @@ namespace MVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["FluxoProcessoId"] = new SelectList(_context.dbSFluxosProcesso, "FluxoProcessoId", "Descricao", processo.FluxoProcessoId);
+            ViewData["ImovelId"] = new SelectList(_context.dbSEconomias, "ImovelId", "ImovelId", processo.ImovelId);
+            ViewData["ImovelId"] = new SelectList(_context.dbSImoveis, "ImovelId", "ImovelId", processo.ImovelId);
             ViewData["OrgaoId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "OrgaoId", processo.OrgaoId);
             ViewData["OrgaoDestinatarioId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "OrgaoId", processo.OrgaoDestinatarioId);
             ViewData["OrgaoRemetenteId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "OrgaoId", processo.OrgaoRemetenteId);
+            ViewData["ServidorId"] = new SelectList(_context.dbSServidores, "ServidorId", "ServidorId", processo.ServidorId);
             ViewData["SituacaoProcessoId"] = new SelectList(_context.dbSSituacoesProcesso, "SituacaoProcessoId", "SituacaoProcessoId", processo.SituacaoProcessoId);
             ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso, "TipoProcessoId", "TipoProcessoId", processo.TipoProcessoId);
             ViewData["UnidadeDestinatarioId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "UnidadeId", processo.UnidadeDestinatarioId);
@@ -177,7 +168,7 @@ namespace MVC.Controllers
         }
 
         // GET: Processo/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public async Task<IActionResult> Delete(long? id)
         {
             if (id == null || _context.dbSProcessos == null)
             {
@@ -185,15 +176,17 @@ namespace MVC.Controllers
             }
 
             var processo = await _context.dbSProcessos
-                .Include(p => p.FluxoProcesso)
+                .Include(p => p.Economia)
+                .Include(p => p.Imovel)
                 .Include(p => p.Orgao)
                 .Include(p => p.OrgaoDestinatario)
                 .Include(p => p.OrgaoRemetente)
+                .Include(p => p.Servidor)
                 .Include(p => p.SituacaoProcesso)
                 .Include(p => p.TipoProcesso)
                 .Include(p => p.UnidadeDestinatario)
                 .Include(p => p.UnidadeRemetente)
-                .FirstOrDefaultAsync(m => m.OrgaoId == id);
+                .FirstOrDefaultAsync(m => m.ProcessoId == id);
             if (processo == null)
             {
                 return NotFound();
@@ -205,7 +198,7 @@ namespace MVC.Controllers
         // POST: Processo/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public async Task<IActionResult> DeleteConfirmed(long id)
         {
             if (_context.dbSProcessos == null)
             {
@@ -221,9 +214,9 @@ namespace MVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool ProcessoExists(int id)
+        private bool ProcessoExists(long id)
         {
-          return (_context.dbSProcessos?.Any(e => e.OrgaoId == id)).GetValueOrDefault();
+          return (_context.dbSProcessos?.Any(e => e.ProcessoId == id)).GetValueOrDefault();
         }
     }
 }

@@ -23,6 +23,7 @@
         public ICollection<Endereco_Entidade>? Enderecos { get; set; }
        
         public ICollection<Economia_Entidade>? Economias { get; set; }
+        public ICollection<Processo>? Processos { get; set; }
 
 
 

@@ -14,18 +14,18 @@ namespace MVC.Extensions
             if (string.IsNullOrWhiteSpace(filter))
             {
                 //return query.Where(s=>s.ServidorId==long.Parse("2289401"));
-                return query.Include(tp=>tp.TipoProcesso).Include(te=>te.TipoEtapa);
+                return query.Include(tp=>tp.TipoProcesso);
             }
             long number1 = 0;
             if (long.TryParse(filter, out number1))
             {
-                return query.Where(s => s.FluxoProcessoId == long.Parse(filter)).Include(tp => tp.TipoProcesso).Include(te => te.TipoEtapa);
+                return query.Where(s => s.FluxoProcessoId == long.Parse(filter)).Include(tp => tp.TipoProcesso);
             }
             else
             {
                 filter = filter.ToLower();
-                return query.Where(fp=> fp.TipoProcesso.Descricao.Contains(filter) || fp.TipoEtapa.Descricao.Contains(filter))
-                                    .Include(tp => tp.TipoProcesso).Include(te => te.TipoEtapa);
+                return query.Where(fp=> fp.TipoProcesso.Descricao.Contains(filter) || fp.Descricao.Contains(filter))
+                                    .Include(tp => tp.TipoProcesso);
             }
         }
 
@@ -34,8 +34,8 @@ namespace MVC.Extensions
             Expression<Func<FluxoProcesso, object>> exp = name /*? ToLower()*/ switch
             {
                 "FluxoProcessoId" => x => x.FluxoProcessoId,
-                "TipoProcesso" => x => x.TipoProcessoId,
-                "TipoEtapa" => x => x.TipoEtapa
+                "TipoProcesso" => x => x.TipoProcessoId
+                
             };
 
             return direction == SortDirection.Asc ? query.OrderBy(exp) : query.OrderByDescending(exp);

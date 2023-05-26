@@ -15,31 +15,30 @@ namespace MVC.Extensions
             if (string.IsNullOrWhiteSpace(filter))
             {
                 //return query.Where(s=>s.ServidorId==long.Parse("2289401"));
-                return query.Include(tp=>tp.TipoEtapa).Include(se=>se.SituacaoEtapa).Include(s=>s.Servidor).Include(p=>p.Pessoa).Take(1000);
+                return query.Include(se=>se.SituacaoEtapa).Include(s=>s.Servidor).Include(p=>p.Pessoa).Take(1000);
             }
             long number1 = 0;
             if (long.TryParse(filter, out number1))
             {
-                return query.Where(s => s.EtapaId == long.Parse(filter)
-                                        || s.ProcessoId == long.Parse(filter)
-                                        || s.TipoEtapaId == long.Parse(filter)
+                return query.Where(s => //s.EtapaId == long.Parse(filter)
+                                         s.ProcessoId == long.Parse(filter)
+                                      //  || s.TipoEtapaId == long.Parse(filter)
                                         || s.SituacaoEtapaId == long.Parse(filter)
-                                        || s.ImovelId == long.Parse(filter)
-                                        || s.EconomiaId == long.Parse(filter)
+                                    
                                         || s.PessoaId == long.Parse(filter)
                                         || s.ServidorId == long.Parse(filter)
 
-                                          ).Include(tp => tp.TipoEtapa).Include(se => se.SituacaoEtapa).Include(s => s.Servidor).Include(p => p.Pessoa).Take(1000);
+                                          ).Include(se => se.SituacaoEtapa).Include(s => s.Servidor).Include(p => p.Pessoa).Take(1000);
             }
             else
             {
                 filter = filter.ToLower();
                 return query.Where(s=> s.Ano.Contains(filter)
-                                                                                || s.TipoEtapa.Descricao.Contains(filter)
+                                                                              //  || s.TipoEtapa.Descricao.Contains(filter)
                                                                                 || s.SituacaoEtapa.Descricao.Contains(filter)
                                                                                 || s.Servidor.Nome.Contains(filter)
                                                                                 || s.Pessoa.Nome.Contains(filter))
-                                        .Include(tp => tp.TipoEtapa).Include(se => se.SituacaoEtapa).Include(s => s.Servidor).Include(p => p.Pessoa).Take(1000);
+                                        .Include(se => se.SituacaoEtapa).Include(s => s.Servidor).Include(p => p.Pessoa).Take(1000);
             }
         }
 
@@ -53,13 +52,12 @@ namespace MVC.Extensions
             {
                 "" => x => x.ProcessoId,
                 "processoid" => x => x.ProcessoId,
-                "etapaid" => x => x.EtapaId,
-                "tipoetapaid" => x => x.TipoEtapaId,
-                "tipoetapa" => x => x.TipoEtapa.Descricao,
+               // "etapaid" => x => x.EtapaId,
+              //  "tipoetapaid" => x => x.TipoEtapaId,
+               // "tipoetapa" => x => x.TipoEtapa.Descricao,
                 "situacaoetapaid" => x => x.SituacaoEtapaId,
                 "situacaoetapa" => x => x.SituacaoEtapa.Descricao,
-                "imovelid" => x => x.ImovelId,
-                "economiaid" => x => x.EconomiaId,
+             
                 "servidorid" => x => x.ServidorId,
                 "datainicio" => x => x.DataInicio,
                 "datafim" => x => x.DataFim,

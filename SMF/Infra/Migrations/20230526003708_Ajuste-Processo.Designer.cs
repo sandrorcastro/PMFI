@@ -4,6 +4,7 @@ using Infra.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.Migrations
 {
     [DbContext(typeof(ContextoAplicacao))]
-    partial class ContextoAplicacaoModelSnapshot : ModelSnapshot
+    [Migration("20230526003708_Ajuste-Processo")]
+    partial class AjusteProcesso
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -857,12 +860,6 @@ namespace Infra.Migrations
                     b.Property<int>("DigitoVerificador")
                         .HasColumnType("int");
 
-                    b.Property<long?>("EconomiaId")
-                        .HasColumnType("bigint");
-
-                    b.Property<long?>("ImovelId")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("ObservacaoProcesso")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
@@ -920,8 +917,6 @@ namespace Infra.Migrations
                     b.HasIndex("UnidadeDestinatarioId");
 
                     b.HasIndex("UnidadeRemetenteId");
-
-                    b.HasIndex("ImovelId", "EconomiaId");
 
                     b.ToTable("Processo", (string)null);
                 });
@@ -1943,11 +1938,6 @@ namespace Infra.Migrations
 
             modelBuilder.Entity("Domain.Entities.Processo", b =>
                 {
-                    b.HasOne("Domain.Entities.Imovel", "Imovel")
-                        .WithMany("Processos")
-                        .HasForeignKey("ImovelId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
                     b.HasOne("Domain.Entities.Orgao", "OrgaoDestinatario")
                         .WithMany()
                         .HasForeignKey("OrgaoDestinatarioId")
@@ -1995,15 +1985,6 @@ namespace Infra.Migrations
                         .HasForeignKey("UnidadeRemetenteId")
                         .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
-
-                    b.HasOne("Domain.Entities.Economia", "Economia")
-                        .WithMany("Processos")
-                        .HasForeignKey("ImovelId", "EconomiaId")
-                        .OnDelete(DeleteBehavior.NoAction);
-
-                    b.Navigation("Economia");
-
-                    b.Navigation("Imovel");
 
                     b.Navigation("Orgao");
 
@@ -2215,8 +2196,6 @@ namespace Infra.Migrations
                     b.Navigation("Enderecos");
 
                     b.Navigation("Pessoas");
-
-                    b.Navigation("Processos");
                 });
 
             modelBuilder.Entity("Domain.Entities.Endereco", b =>
@@ -2234,8 +2213,6 @@ namespace Infra.Migrations
                     b.Navigation("Economias");
 
                     b.Navigation("Enderecos");
-
-                    b.Navigation("Processos");
                 });
 
             modelBuilder.Entity("Domain.Entities.Logradouro", b =>

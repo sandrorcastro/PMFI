@@ -9,10 +9,11 @@
         public ICollection<Economia_Entidade> Pessoas { get; set; }
 
         public ICollection<Endereco_Entidade> Enderecos { get; set; }
+        public ICollection<Processo> Processos { get; set; }
 
 
         //Navegação de Teste
-       // public ICollection<Endereco> Enderecos_ { get; set; }
+        // public ICollection<Endereco> Enderecos_ { get; set; }
         //
 
         //public string? EdificacaoIdTemp { get; set; }

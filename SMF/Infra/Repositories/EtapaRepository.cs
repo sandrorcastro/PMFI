@@ -21,9 +21,9 @@ namespace Infra.Repositories
             //using (var Db = contexto.CreateDbContext())
             //{
                 return contexto.dbSEtapas.Where(e => e.ProcessoId == ProcessoId
-                                           && e.ImovelId == ImovelId
-                                           && e.EconomiaId == EconomiaId
-                                           && e.TipoEtapaId == TipoEtapaId
+                                           //&& e.ImovelId == ImovelId
+                                           //&& e.EconomiaId == EconomiaId
+                                           //&& e.TipoEtapaId == TipoEtapaId
                                            && e.SituacaoEtapaId == SituacaoEtapaId)
                                     .Include(s => s.Servidor)
                                     .Include(p => p.Pessoa)

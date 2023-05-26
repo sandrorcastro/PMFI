@@ -17,9 +17,9 @@
             <input type="hidden" asp-for="Ano" />
             <input type="hidden" asp-for="DigitoVerificador" />
             <div class="form-group">
-                <label asp-for="DataCadastro" class="control-label"></label>
-                <input asp-for="DataCadastro" class="form-control" />
-                <span asp-validation-for="DataCadastro" class="text-danger"></span>
+                <label asp-for="DataInicio" class="control-label"></label>
+                <input asp-for="DataInicio" class="form-control" />
+                <span asp-validation-for="DataInicio" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="TipoProcessoId" class="control-label"></label>
@@ -46,16 +46,7 @@
                 <select asp-for="UnidadeDestinatarioId" class="form-control" asp-items="ViewBag.UnidadeDestinatarioId"></select>
                 <span asp-validation-for="UnidadeDestinatarioId" class="text-danger"></span>
             </div>
-            <div class="form-group">
-                <label asp-for="FluxoProcessoId" class="control-label"></label>
-                <select asp-for="FluxoProcessoId" class="form-control" asp-items="ViewBag.FluxoProcessoId"></select>
-                <span asp-validation-for="FluxoProcessoId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ObservacaoProcesso" class="control-label"></label>
-                <input asp-for="ObservacaoProcesso" class="form-control" />
-                <span asp-validation-for="ObservacaoProcesso" class="text-danger"></span>
-            </div>
+          
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="ProcessoEnviado" /> @Html.DisplayNameFor(model => model.ProcessoEnviado)

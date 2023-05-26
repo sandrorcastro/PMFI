@@ -1,4 +1,4 @@
-﻿@model MVC.ViewModels.ProcessoViewModel
+﻿@model Domain.Entities.Processo
 
 @{
     ViewData["Title"] = "Edit";
@@ -12,14 +12,46 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="OrgaoId" />
-            <input type="hidden" asp-for="SequenciaNumerica" />
-            <input type="hidden" asp-for="Ano" />
-            <input type="hidden" asp-for="DigitoVerificador" />
+            <input type="hidden" asp-for="ProcessoId" />
             <div class="form-group">
-                <label asp-for="DataCadastro" class="control-label"></label>
-                <input asp-for="DataCadastro" class="form-control" />
-                <span asp-validation-for="DataCadastro" class="text-danger"></span>
+                <label asp-for="ImovelId" class="control-label"></label>
+                <select asp-for="ImovelId" class="form-control" asp-items="ViewBag.ImovelId"></select>
+                <span asp-validation-for="ImovelId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EconomiaId" class="control-label"></label>
+                <select asp-for="EconomiaId" class="form-control" asp-items="ViewBag.EconomiaId"></select>
+                <span asp-validation-for="EconomiaId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OrgaoId" class="control-label"></label>
+                <select asp-for="OrgaoId" class="form-control" asp-items="ViewBag.OrgaoId"></select>
+                <span asp-validation-for="OrgaoId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SequenciaNumerica" class="control-label"></label>
+                <input asp-for="SequenciaNumerica" class="form-control" />
+                <span asp-validation-for="SequenciaNumerica" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ano" class="control-label"></label>
+                <input asp-for="Ano" class="form-control" />
+                <span asp-validation-for="Ano" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DigitoVerificador" class="control-label"></label>
+                <input asp-for="DigitoVerificador" class="form-control" />
+                <span asp-validation-for="DigitoVerificador" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataInicio" class="control-label"></label>
+                <input asp-for="DataInicio" class="form-control" />
+                <span asp-validation-for="DataInicio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataFim" class="control-label"></label>
+                <input asp-for="DataFim" class="form-control" />
+                <span asp-validation-for="DataFim" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="TipoProcessoId" class="control-label"></label>
@@ -52,9 +84,9 @@
                 <span asp-validation-for="UnidadeDestinatarioId" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="FluxoProcessoId" class="control-label"></label>
-                <select asp-for="FluxoProcessoId" class="form-control" asp-items="ViewBag.FluxoProcessoId"></select>
-                <span asp-validation-for="FluxoProcessoId" class="text-danger"></span>
+                <label asp-for="ServidorId" class="control-label"></label>
+                <select asp-for="ServidorId" class="form-control" asp-items="ViewBag.ServidorId"></select>
+                <span asp-validation-for="ServidorId" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <label asp-for="ObservacaoProcesso" class="control-label"></label>
@@ -69,6 +101,11 @@
             <div class="form-group form-check">
                 <label class="form-check-label">
                     <input class="form-check-input" asp-for="ProcessoRecebido" /> @Html.DisplayNameFor(model => model.ProcessoRecebido)
+                </label>
+            </div>
+            <div class="form-group form-check">
+                <label class="form-check-label">
+                    <input class="form-check-input" asp-for="ProcessoAntigo" /> @Html.DisplayNameFor(model => model.ProcessoAntigo)
                 </label>
             </div>
             <div class="form-group">

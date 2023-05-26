@@ -1,4 +1,4 @@
-﻿@model MVC.ViewModels.ProcessoPaginatedListViewModel
+﻿@model Domain.Entities.Processo
 
 @{
     ViewData["Title"] = "Delete";
@@ -12,16 +12,52 @@
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Imovel)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Imovel.ImovelId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Economia)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Economia.ImovelId)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.Orgao)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.Orgao.OrgaoId)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.DataCadastro)
+            @Html.DisplayNameFor(model => model.SequenciaNumerica)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.DataCadastro)
+            @Html.DisplayFor(model => model.SequenciaNumerica)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.Ano)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.Ano)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DigitoVerificador)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DigitoVerificador)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DataInicio)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DataInicio)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.DataFim)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.DataFim)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.TipoProcesso)
@@ -60,10 +96,10 @@
             @Html.DisplayFor(model => model.UnidadeDestinatario.UnidadeId)
         </dd>
         <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.FluxoProcesso)
+            @Html.DisplayNameFor(model => model.Servidor)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.FluxoProcesso.Descricao)
+            @Html.DisplayFor(model => model.Servidor.ServidorId)
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.ObservacaoProcesso)
@@ -83,13 +119,16 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.ProcessoRecebido)
         </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ProcessoAntigo)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ProcessoAntigo)
+        </dd>
     </dl>
     
     <form asp-action="Delete">
-        <input type="hidden" asp-for="OrgaoId" />
-        <input type="hidden" asp-for="SequenciaNumerica" />
-        <input type="hidden" asp-for="Ano" />
-        <input type="hidden" asp-for="DigitoVerificador" />
+        <input type="hidden" asp-for="ProcessoId" />
         <input type="submit" value="Delete" class="btn btn-danger" /> |
         <a asp-action="Index">Back to List</a>
     </form>

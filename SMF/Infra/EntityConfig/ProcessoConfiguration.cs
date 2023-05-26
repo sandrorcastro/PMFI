@@ -9,13 +9,19 @@ namespace Infra.EntityConfig
         public void Configure(EntityTypeBuilder<Processo> builder)
         {
             //builder.HasKey(p => p.ProtocoloId );
-            builder.HasKey(p => new { p.OrgaoId, p.SequenciaNumerica, p.Ano, p.DigitoVerificador });
+            //builder.HasKey(p => new { p.OrgaoId, p.SequenciaNumerica, p.Ano, p.DigitoVerificador });
+            builder.HasKey(p=>p.ProcessoId);
+
+
+            builder.Property(p => p.DataInicio).HasDefaultValueSql("getdate()");
             builder.HasOne(p => p.Orgao).WithMany().OnDelete(DeleteBehavior.NoAction);
             builder.HasOne(p => p.TipoProcesso).WithMany().OnDelete(DeleteBehavior.NoAction);
             builder.HasOne(p=>p.OrgaoRemetente).WithMany().OnDelete(DeleteBehavior.NoAction);
-              builder.HasOne(p => p.UnidadeRemetente).WithMany().OnDelete(DeleteBehavior.NoAction);
-              builder.HasOne(p => p.OrgaoDestinatario).WithMany().OnDelete(DeleteBehavior.NoAction);
-              builder.HasOne(p => p.UnidadeDestinatario).WithMany().OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(p => p.UnidadeRemetente).WithMany().OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(p => p.OrgaoDestinatario).WithMany().OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(p => p.UnidadeDestinatario).WithMany().OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(p => p.Imovel).WithMany(p=>p.Processos).HasForeignKey(i=>i.ImovelId).OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(p => p.Economia).WithMany(p => p.Processos).HasForeignKey(i => new { i.ImovelId ,i.EconomiaId }).OnDelete(DeleteBehavior.NoAction);
             //  builder.HasOne(p => p.Protocolo).WithMany().OnDelete(DeleteBehavior.NoAction);
             builder.Property<string>("ObservacaoProcesso").HasMaxLength(1000);
 
