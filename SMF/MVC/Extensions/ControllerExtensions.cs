@@ -1,6 +1,6 @@
 
 using Microsoft.AspNetCore.Mvc;
-using MVC.Models;
+using MVC.ViewModels;
 
 namespace MVC.Extensions
 {

@@ -1,0 +1,36 @@
+public class MinhaController : Controller
+{
+    private readonly IServiceProvider _serviceProvider;
+
+    public MinhaController(IServiceProvider serviceProvider)
+    {
+        _serviceProvider = serviceProvider;
+    }
+
+    public IActionResult Index()
+    {
+        // Exibir a página com as opções de seleção
+        return View();
+    }
+
+    [HttpPost]
+    public IActionResult SelecionarOpcao(string selecao)
+    {
+        // Aqui você recebe a seleção do usuário
+        // Com base nessa seleção, você pode instanciar a classe correspondente usando reflexão
+
+        Type tipoClasse = Type.GetType($"NomeDoSeuProjeto.MinhaClasse{selecao}");
+        if (tipoClasse != null)
+        {
+            object instancia = _serviceProvider.GetService(tipoClasse);
+            // Faça o que precisar com a instância da classe correspondente
+        }
+        else
+        {
+            // Tratamento de erro para seleção inválida
+        }
+
+        // Redirecione para outra página ou retorne a resposta adequada
+        return RedirectToAction("Index");
+    }
+}

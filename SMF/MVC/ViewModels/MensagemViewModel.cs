@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MVC.Models
+namespace MVC.ViewModels
 {
     public enum TipoMensagem
     {

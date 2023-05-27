@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MVC.ViewModels
+namespace MVC.ViewModels 
 {
-    public class ProcessoViewModel 
+    public class ProcessoViewModel  : Processo
     {
-        //   public int ProtocoloId { get; set; }
+      /*  //   public int ProtocoloId { get; set; }
         // public Protocolo? Protocolo { get; set; }
         public int OrgaoId { get; set; }
         public Orgao? Orgao { get; set; }
@@ -44,6 +44,6 @@ namespace MVC.ViewModels
         public bool ProcessoEnviado { get; set; } = false;
         public bool ProcessoRecebido { get; set; } = false;
         
-        //public NivelAcesso //Sigiloso| Restrito| Publico
+        //public NivelAcesso //Sigiloso| Restrito| Publico*/
     }
 }

@@ -1,45 +1,58 @@
-﻿@*@model IEnumerable<Domain.Entities.FluxoProcesso>*@
-@model IEnumerable<MVC.ViewModels.FluxoProcessoViewModel>
+﻿@model IEnumerable<Domain.Entities.FluxoProcesso>
+
 @{
     ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Lista de FluxoProcesso</h1>
+<h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Criar Novo</a>
+    <a asp-action="Create">Create New</a>
 </p>
 <table class="table">
     <thead>
         <tr>
             <th>
+                @Html.DisplayNameFor(model => model.TipoProcessoId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoProcesso.Descricao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FluxoProcessoId)
+            </th>
+            <th>
                 @Html.DisplayNameFor(model => model.Descricao)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.TipoProcesso)
+                @Html.DisplayNameFor(model => model.TempoTramitacao)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TipoEtapa)
-            </th>
-            <th>Ações</th>
+            <th></th>
         </tr>
     </thead>
     <tbody>
 @foreach (var item in Model) {
         <tr>
             <td>
+                @Html.DisplayFor(modelItem => item.TipoProcesso.TipoProcessoId)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoProcesso.Descricao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FluxoProcessoId)
+                </td>
+            <td>
                 @Html.DisplayFor(modelItem => item.Descricao)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TipoProcesso.Descricao)
+                @Html.DisplayFor(modelItem => item.TempoTramitacao)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TipoEtapa.Descricao)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.FluxoProcessoId">Editar</a> |
-                <a asp-action="Details" asp-route-id="@item.FluxoProcessoId">Detalhes</a> |
-                <a asp-action="Delete" asp-route-id="@item.FluxoProcessoId">Deletar</a>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
             </td>
         </tr>
 }

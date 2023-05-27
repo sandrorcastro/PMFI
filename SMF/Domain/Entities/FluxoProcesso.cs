@@ -16,7 +16,7 @@ namespace Domain.Entities
         //public int TipoEtapaId { get; set; }
         //public TipoEtapa? TipoEtapa { get; set; }  
         public int? TempoTramitacao { get; set; }   
-        public ICollection<Etapa> Etapas { get; set; }
+        public ICollection<Etapa>? Etapas { get; set; }
 
     }
 }

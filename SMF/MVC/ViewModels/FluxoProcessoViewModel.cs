@@ -9,9 +9,9 @@ using System.Threading.Tasks;
 namespace MVC.ViewModels
 {
     //[Bind("FluxoProcessoId,Descricao,TipoProcessoId,")]
-    public class FluxoProcessoViewModel
+    public class FluxoProcessoViewModel : FluxoProcesso
     {
-        
+        /*
         public int FluxoProcessoId { get; set; }
         public string Descricao { get; set; }
         public int TipoProcessoId { get; set; }
@@ -19,6 +19,6 @@ namespace MVC.ViewModels
         public TipoProcessoViewModel? TipoProcesso { get; set; }
         public int TipoEtapaId { get; set; }
         public TipoEtapaViewModel? TipoEtapa { get; set; }
-
+        */
     }
 }

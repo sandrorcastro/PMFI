@@ -9,7 +9,8 @@ namespace Infra.EntityConfig
     {
         public void Configure(EntityTypeBuilder<Anexo> builder)
         {
-            builder.HasKey("ProcessoId,FluxoProcessoId,TipoProcessoId,AnexoId");
+            builder.HasKey(a=>new {a.ProcessoId,a.FluxoProcessoId,a.TipoProcessoId,a.AnexoId});
+            builder.HasOne(a => a.TipoProcesso).WithMany().HasForeignKey(a => a.TipoProcessoId).OnDelete(DeleteBehavior.NoAction);
             builder.Property(p => p.DataCadastro).HasDefaultValueSql("getdate()").Metadata.SetAfterSaveBehavior(PropertySaveBehavior.Ignore);
             builder.Property<string>("AnexoId").HasMaxLength(256);
             builder.Property<string>("NomeArquivo").HasMaxLength(150);
