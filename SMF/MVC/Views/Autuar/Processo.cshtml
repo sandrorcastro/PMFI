@@ -10,11 +10,7 @@
                 <label asp-for="OrgaoId" class="control-label"></label>
                 <select asp-for="OrgaoId" class ="form-control" asp-items="ViewBag.OrgaoId"></select>
             </div>
-            <div class="col form-group">
-                <label asp-for="SequenciaNumerica" class="control-label"></label>
-                <input asp-for="SequenciaNumerica" class="form-control" />
-                <span asp-validation-for="SequenciaNumerica" class="text-danger"></span>
-            </div>
+           
             <div class="col form-group">
                 <label asp-for="TipoProcessoId" class="control-label"></label>
                 <select asp-for="TipoProcessoId" class ="form-control" asp-items="ViewBag.TipoProcessoId"></select>

@@ -9,7 +9,7 @@
         public ICollection<Economia_Entidade> Pessoas { get; set; }
 
         public ICollection<Endereco_Entidade> Enderecos { get; set; }
-        public ICollection<Processo> Processos { get; set; }
+        public ICollection<ObjetoProcesso>? ObjetoProcessos { get; set; }
 
 
         //Navegação de Teste

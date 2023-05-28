@@ -20,8 +20,7 @@ namespace MVC.Extensions
             long number1 = 0;
             if (long.TryParse(filter, out number1))
             {
-                return query.Where(s =>  s.SequenciaNumerica == long.Parse(filter)
-                                        || s.SituacaoProcessoId == long.Parse(filter)
+                return query.Where(s =>  s.SituacaoProcessoId == long.Parse(filter)
 
                                           ).Include(tp => tp.TipoProcesso).Include(se => se.SituacaoProcesso).Take(1000) ;
             }
@@ -42,8 +41,8 @@ namespace MVC.Extensions
             }
             Expression<Func<Processo, object>> exp = sort?.ToLower() switch
             {
-                "" => x => x.SequenciaNumerica,
-                "processoid" => x => x.SequenciaNumerica,
+                "" => x => x.ProcessoId,
+                //"processoid" => x => x.SequenciaNumerica,
                 "tipoprocesso" => x => x.TipoProcesso.Descricao,
                 "tipoprocessoid" => x => x.TipoProcessoId ,
                 "situacaoprocessoid" => x => x.SituacaoProcessoId,

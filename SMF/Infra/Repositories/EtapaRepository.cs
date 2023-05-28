@@ -26,8 +26,9 @@ namespace Infra.Repositories
                                            //&& e.TipoEtapaId == TipoEtapaId
                                            && e.SituacaoEtapaId == SituacaoEtapaId)
                                     .Include(s => s.Servidor)
-                                    .Include(p => p.Pessoa)
-                                    .Include(e => e.Endereco).FirstOrDefault();
+                                    //.Include(p => p.Pessoa)
+                                    //.Include(e => e.Endereco)
+                                    .FirstOrDefault();
             //}
         }
 

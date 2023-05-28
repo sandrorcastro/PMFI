@@ -1,0 +1,127 @@
+﻿@model Domain.Entities.Etapa
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>Etapa</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ProcessoId" class="control-label"></label>
+                <select asp-for="ProcessoId" class ="form-control" asp-items="ViewBag.ProcessoId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="FluxoProcessoId" class="control-label"></label>
+                <select asp-for="FluxoProcessoId" class ="form-control" asp-items="ViewBag.FluxoProcessoId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="TipoProcessoId" class="control-label"></label>
+                <select asp-for="TipoProcessoId" class ="form-control" asp-items="ViewBag.TipoProcessoId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="SituacaoEtapaId" class="control-label"></label>
+                <select asp-for="SituacaoEtapaId" class ="form-control" asp-items="ViewBag.SituacaoEtapaId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataFim" class="control-label"></label>
+                <input asp-for="DataFim" class="form-control" />
+                <span asp-validation-for="DataFim" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ServidorId" class="control-label"></label>
+                <select asp-for="ServidorId" class ="form-control" asp-items="ViewBag.ServidorId"></select>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ano" class="control-label"></label>
+                <input asp-for="Ano" class="form-control" />
+                <span asp-validation-for="Ano" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="antigo" class="control-label"></label>
+                <input asp-for="antigo" class="form-control" />
+                <span asp-validation-for="antigo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="protocolo" class="control-label"></label>
+                <input asp-for="protocolo" class="form-control" />
+                <span asp-validation-for="protocolo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="anoprotocolo" class="control-label"></label>
+                <input asp-for="anoprotocolo" class="form-control" />
+                <span asp-validation-for="anoprotocolo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ObservacaoEtapa" class="control-label"></label>
+                <input asp-for="ObservacaoEtapa" class="form-control" />
+                <span asp-validation-for="ObservacaoEtapa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="emailEnviado" class="control-label"></label>
+                <input asp-for="emailEnviado" class="form-control" />
+                <span asp-validation-for="emailEnviado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="emailRecebido" class="control-label"></label>
+                <input asp-for="emailRecebido" class="form-control" />
+                <span asp-validation-for="emailRecebido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="whatsEnviado" class="control-label"></label>
+                <input asp-for="whatsEnviado" class="form-control" />
+                <span asp-validation-for="whatsEnviado" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="whatsRecebido" class="control-label"></label>
+                <input asp-for="whatsRecebido" class="form-control" />
+                <span asp-validation-for="whatsRecebido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+    <script>
+
+                document.getElementById('TipoProcessoId').addEventListener('change', function () {
+                var TipoProcessoId = this.value;
+
+                // Fazer a chamada AJAX
+                var xhr = new XMLHttpRequest();
+                xhr.open('GET', '/Etapa/Create?TipoProcessoId=' + TipoProcessoId, true);
+                xhr.onload = function () {
+                    if (xhr.status >= 200 && xhr.status < 400) {
+                        // Processar a resposta JSON recebida do servidor
+                        var options = JSON.parse(xhr.responseText);
+
+                        // Atualizar o segundo select com as novas opções
+                        var FluxoProcessoId = document.getElementById('FluxoProcessoId');
+                        FluxoProcessoId.innerHTML = '';
+
+                        for (var i = 0; i < options.length; i++) {
+                            var option = document.createElement('option');
+                            option.value = options[i].value;
+                            option.text = options[i].text;
+                            FluxoProcessoId.appendChild(option);
+                        }
+                    }
+                };
+                   xhr.send();
+                });
+    </script>
+}

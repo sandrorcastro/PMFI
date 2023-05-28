@@ -4,6 +4,7 @@ using Infra.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.Migrations
 {
     [DbContext(typeof(ContextoAplicacao))]
-    partial class ContextoAplicacaoModelSnapshot : ModelSnapshot
+    [Migration("20230528022819_Ajustes-Etapa03")]
+    partial class AjustesEtapa03
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -1805,7 +1808,7 @@ namespace Infra.Migrations
                         .HasForeignKey("SituacaoEtapaId");
 
                     b.HasOne("Domain.Entities.TipoProcesso", "TipoProcesso")
-                        .WithMany("Etapas")
+                        .WithMany()
                         .HasForeignKey("TipoProcessoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -1830,7 +1833,7 @@ namespace Infra.Migrations
             modelBuilder.Entity("Domain.Entities.FluxoProcesso", b =>
                 {
                     b.HasOne("Domain.Entities.TipoProcesso", "TipoProcesso")
-                        .WithMany("FluxoProcessos")
+                        .WithMany()
                         .HasForeignKey("TipoProcessoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -2232,13 +2235,6 @@ namespace Infra.Migrations
                     b.Navigation("Etapas");
 
                     b.Navigation("ObjetoProcesso");
-                });
-
-            modelBuilder.Entity("Domain.Entities.TipoProcesso", b =>
-                {
-                    b.Navigation("Etapas");
-
-                    b.Navigation("FluxoProcessos");
                 });
 
             modelBuilder.Entity("Domain.Entities.Unidade", b =>

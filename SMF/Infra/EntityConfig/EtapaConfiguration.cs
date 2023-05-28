@@ -10,6 +10,9 @@ namespace Infra.EntityConfig
         {
             //builder.HasKey(e => new { e.ProcessoId, e.TipoEtapaId,e.SituacaoEtapaId ,e.ImovelId,e.EconomiaId});
             builder.HasKey(e => new { e.ProcessoId, e.FluxoProcessoId,e.TipoProcessoId});
+            builder.Property(p => p.ProcessoId).ValueGeneratedNever();
+            builder.Property(p => p.FluxoProcessoId).ValueGeneratedNever();
+            builder.Property(p => p.TipoProcessoId).ValueGeneratedNever();
             builder.HasOne(d => d.FluxoProcesso).WithMany(e=>e.Etapas).HasForeignKey(e => new { e.FluxoProcessoId ,e.TipoProcessoId}).OnDelete(DeleteBehavior.NoAction);
             builder.HasOne(d => d.Processo).WithMany(e=>e.Etapas).HasForeignKey(p=>p.ProcessoId).OnDelete(DeleteBehavior.NoAction);
             builder.HasMany(d => d.Anexos).WithOne(e=>e.Etapa).HasForeignKey(p=> new { p.ProcessoId,p.FluxoProcessoId,p.TipoProcessoId }).OnDelete(DeleteBehavior.NoAction);

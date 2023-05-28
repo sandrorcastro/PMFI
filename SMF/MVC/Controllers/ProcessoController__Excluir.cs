@@ -124,7 +124,7 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("OrgaoId,SequenciaNumerica,Ano,DigitoVerificador,DataCadastro,TipoProcessoId,OrgaoRemetenteId,UnidadeRemetenteId,OrgaoDestinatarioId,UnidadeDestinatarioId,FluxoProcessoId,ObservacaoProcesso,ProcessoEnviado,ProcessoRecebido")] Processo processo)
         {
-            if (id != processo.OrgaoId)
+            if (id != processo?.OrgaoId)
             {
                 return NotFound();
             }
@@ -138,14 +138,14 @@ namespace MVC.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProcessoExists(processo.OrgaoId))
+               /*     if (!ProcessoExists(processo.OrgaoId?))
                     {
                         return NotFound();
                     }
                     else
-                    {
+                    {*/
                         throw;
-                    }
+                    //}
                 }
                 return RedirectToAction(nameof(Index));
             }

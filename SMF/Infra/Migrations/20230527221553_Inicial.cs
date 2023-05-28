@@ -155,20 +155,6 @@ namespace Infra.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Servidor",
-                columns: table => new
-                {
-                    ServidorId = table.Column<long>(type: "bigint", nullable: false),
-                    Nome = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
-                    Matricula = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
-                    Ativo = table.Column<bool>(type: "bit", nullable: true, defaultValue: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Servidor", x => x.ServidorId);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "SituacaoEtapa",
                 columns: table => new
                 {
@@ -514,25 +500,41 @@ namespace Infra.Migrations
                 columns: table => new
                 {
                     FluxoProcessoId = table.Column<int>(type: "int", nullable: false),
-                    Descricao = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     TipoProcessoId = table.Column<int>(type: "int", nullable: false),
-                    TipoEtapaId = table.Column<int>(type: "int", nullable: false)
+                    Descricao = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    TempoTramitacao = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_FluxoProcesso", x => x.FluxoProcessoId);
-                    table.ForeignKey(
-                        name: "FK_FluxoProcesso_TipoEtapa_TipoEtapaId",
-                        column: x => x.TipoEtapaId,
-                        principalTable: "TipoEtapa",
-                        principalColumn: "TipoEtapaId",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_FluxoProcesso", x => new { x.FluxoProcessoId, x.TipoProcessoId });
                     table.ForeignKey(
                         name: "FK_FluxoProcesso_TipoProcesso_TipoProcessoId",
                         column: x => x.TipoProcessoId,
                         principalTable: "TipoProcesso",
                         principalColumn: "TipoProcessoId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Servidor",
+                columns: table => new
+                {
+                    ServidorId = table.Column<long>(type: "bigint", nullable: false),
+                    Nome = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    Matricula = table.Column<string>(type: "nvarchar(15)", maxLength: 15, nullable: true),
+                    UnidadeId = table.Column<int>(type: "int", nullable: true),
+                    Cargo = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Funcao = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Ativo = table.Column<bool>(type: "bit", nullable: true, defaultValue: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Servidor", x => x.ServidorId);
+                    table.ForeignKey(
+                        name: "FK_Servidor_Unidade_UnidadeId",
+                        column: x => x.UnidadeId,
+                        principalTable: "Unidade",
+                        principalColumn: "UnidadeId");
                 });
 
             migrationBuilder.CreateTable(
@@ -675,7 +677,8 @@ namespace Infra.Migrations
                         name: "FK_Economia_Entidade_Economia_ImovelId_EconomiaId",
                         columns: x => new { x.ImovelId, x.EconomiaId },
                         principalTable: "Economia",
-                        principalColumns: new[] { "ImovelId", "EconomiaId" });
+                        principalColumns: new[] { "ImovelId", "EconomiaId" },
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Economia_Entidade_Imovel_ImovelId",
                         column: x => x.ImovelId,
@@ -748,31 +751,26 @@ namespace Infra.Migrations
                 name: "Processo",
                 columns: table => new
                 {
-                    OrgaoId = table.Column<int>(type: "int", nullable: false),
-                    SequenciaNumerica = table.Column<long>(type: "bigint", nullable: false),
-                    Ano = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    DigitoVerificador = table.Column<int>(type: "int", nullable: false),
-                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    TipoProcessoId = table.Column<int>(type: "int", nullable: false),
-                    SituacaoProcessoId = table.Column<int>(type: "int", nullable: false),
-                    OrgaoRemetenteId = table.Column<int>(type: "int", nullable: false),
-                    UnidadeRemetenteId = table.Column<int>(type: "int", nullable: false),
-                    OrgaoDestinatarioId = table.Column<int>(type: "int", nullable: false),
-                    UnidadeDestinatarioId = table.Column<int>(type: "int", nullable: false),
-                    FluxoProcessoId = table.Column<int>(type: "int", nullable: false),
+                    ProcessoId = table.Column<long>(type: "bigint", nullable: false),
+                    OrgaoId = table.Column<int>(type: "int", nullable: true),
+                    Ano = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "getdate()"),
+                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    TipoProcessoId = table.Column<int>(type: "int", nullable: true),
+                    SituacaoProcessoId = table.Column<int>(type: "int", nullable: true),
+                    OrgaoRemetenteId = table.Column<int>(type: "int", nullable: true),
+                    UnidadeRemetenteId = table.Column<int>(type: "int", nullable: true),
+                    OrgaoDestinatarioId = table.Column<int>(type: "int", nullable: true),
+                    UnidadeDestinatarioId = table.Column<int>(type: "int", nullable: true),
+                    ServidorId = table.Column<long>(type: "bigint", nullable: true),
                     ObservacaoProcesso = table.Column<string>(type: "nvarchar(1000)", maxLength: 1000, nullable: true),
-                    ProcessoEnviado = table.Column<bool>(type: "bit", nullable: false),
-                    ProcessoRecebido = table.Column<bool>(type: "bit", nullable: false)
+                    ProcessoEnviado = table.Column<bool>(type: "bit", nullable: true),
+                    ProcessoRecebido = table.Column<bool>(type: "bit", nullable: true),
+                    ProcessoAntigo = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Processo", x => new { x.OrgaoId, x.SequenciaNumerica, x.Ano, x.DigitoVerificador });
-                    table.ForeignKey(
-                        name: "FK_Processo_FluxoProcesso_FluxoProcessoId",
-                        column: x => x.FluxoProcessoId,
-                        principalTable: "FluxoProcesso",
-                        principalColumn: "FluxoProcessoId",
-                        onDelete: ReferentialAction.Cascade);
+                    table.PrimaryKey("PK_Processo", x => x.ProcessoId);
                     table.ForeignKey(
                         name: "FK_Processo_Orgao_OrgaoDestinatarioId",
                         column: x => x.OrgaoDestinatarioId,
@@ -789,11 +787,15 @@ namespace Infra.Migrations
                         principalTable: "Orgao",
                         principalColumn: "OrgaoId");
                     table.ForeignKey(
+                        name: "FK_Processo_Servidor_ServidorId",
+                        column: x => x.ServidorId,
+                        principalTable: "Servidor",
+                        principalColumn: "ServidorId");
+                    table.ForeignKey(
                         name: "FK_Processo_SituacaoProcesso_SituacaoProcessoId",
                         column: x => x.SituacaoProcessoId,
                         principalTable: "SituacaoProcesso",
-                        principalColumn: "SituacaoProcessoId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "SituacaoProcessoId");
                     table.ForeignKey(
                         name: "FK_Processo_TipoProcesso_TipoProcessoId",
                         column: x => x.TipoProcessoId,
@@ -908,65 +910,57 @@ namespace Infra.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Image",
+                name: "Etapa",
                 columns: table => new
                 {
-                    ImageId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
-                    ImageBase64String = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    CreateDate = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "getdate()"),
-                    ProcessoId = table.Column<long>(type: "bigint", nullable: true),
-                    ProcessoOrgaoId = table.Column<int>(type: "int", nullable: true),
-                    ProcessoSequenciaNumerica = table.Column<long>(type: "bigint", nullable: true),
-                    ProcessoAno = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ProcessoDigitoVerificador = table.Column<int>(type: "int", nullable: true),
-                    TipoProcessoId = table.Column<int>(type: "int", nullable: true),
-                    SituacaoProcessoId = table.Column<int>(type: "int", nullable: true),
-                    ImovelId = table.Column<long>(type: "bigint", nullable: true),
-                    EconomiaId = table.Column<long>(type: "bigint", nullable: true),
-                    SituacaoEtapaId = table.Column<int>(type: "int", nullable: true),
-                    TipoEtapaId = table.Column<int>(type: "int", nullable: true),
-                    PerspectivaId = table.Column<int>(type: "int", nullable: true),
-                    NomeArquivo = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
-                    Caminho = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true)
+                    ProcessoId = table.Column<long>(type: "bigint", nullable: false),
+                    FluxoProcessoId = table.Column<int>(type: "int", nullable: false),
+                    TipoProcessoId = table.Column<int>(type: "int", nullable: false),
+                    SituacaoEtapaId = table.Column<int>(type: "int", nullable: false),
+                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "getdate()"),
+                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    ServidorId = table.Column<long>(type: "bigint", nullable: false),
+                    Ano = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
+                    antigo = table.Column<bool>(type: "bit", nullable: true),
+                    protocolo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    anoprotocolo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    ObservacaoEtapa = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
+                    emailEnviado = table.Column<bool>(type: "bit", nullable: true),
+                    emailRecebido = table.Column<bool>(type: "bit", nullable: true),
+                    whatsEnviado = table.Column<bool>(type: "bit", nullable: true),
+                    whatsRecebido = table.Column<bool>(type: "bit", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Image", x => x.ImageId);
+                    table.PrimaryKey("PK_Etapa", x => new { x.ProcessoId, x.FluxoProcessoId, x.TipoProcessoId });
                     table.ForeignKey(
-                        name: "FK_Image_Imovel_ImovelId",
-                        column: x => x.ImovelId,
-                        principalTable: "Imovel",
-                        principalColumn: "ImovelId");
+                        name: "FK_Etapa_FluxoProcesso_FluxoProcessoId_TipoProcessoId",
+                        columns: x => new { x.FluxoProcessoId, x.TipoProcessoId },
+                        principalTable: "FluxoProcesso",
+                        principalColumns: new[] { "FluxoProcessoId", "TipoProcessoId" });
                     table.ForeignKey(
-                        name: "FK_Image_Perspectiva_PerspectivaId",
-                        column: x => x.PerspectivaId,
-                        principalTable: "Perspectiva",
-                        principalColumn: "PerspectivaId");
-                    table.ForeignKey(
-                        name: "FK_Image_Processo_ProcessoOrgaoId_ProcessoSequenciaNumerica_ProcessoAno_ProcessoDigitoVerificador",
-                        columns: x => new { x.ProcessoOrgaoId, x.ProcessoSequenciaNumerica, x.ProcessoAno, x.ProcessoDigitoVerificador },
+                        name: "FK_Etapa_Processo_ProcessoId",
+                        column: x => x.ProcessoId,
                         principalTable: "Processo",
-                        principalColumns: new[] { "OrgaoId", "SequenciaNumerica", "Ano", "DigitoVerificador" });
+                        principalColumn: "ProcessoId");
                     table.ForeignKey(
-                        name: "FK_Image_SituacaoEtapa_SituacaoEtapaId",
+                        name: "FK_Etapa_Servidor_ServidorId",
+                        column: x => x.ServidorId,
+                        principalTable: "Servidor",
+                        principalColumn: "ServidorId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Etapa_SituacaoEtapa_SituacaoEtapaId",
                         column: x => x.SituacaoEtapaId,
                         principalTable: "SituacaoEtapa",
-                        principalColumn: "SituacaoEtapaId");
+                        principalColumn: "SituacaoEtapaId",
+                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_Image_SituacaoProcesso_SituacaoProcessoId",
-                        column: x => x.SituacaoProcessoId,
-                        principalTable: "SituacaoProcesso",
-                        principalColumn: "SituacaoProcessoId");
-                    table.ForeignKey(
-                        name: "FK_Image_TipoEtapa_TipoEtapaId",
-                        column: x => x.TipoEtapaId,
-                        principalTable: "TipoEtapa",
-                        principalColumn: "TipoEtapaId");
-                    table.ForeignKey(
-                        name: "FK_Image_TipoProcesso_TipoProcessoId",
+                        name: "FK_Etapa_TipoProcesso_TipoProcessoId",
                         column: x => x.TipoProcessoId,
                         principalTable: "TipoProcesso",
-                        principalColumn: "TipoProcessoId");
+                        principalColumn: "TipoProcessoId",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -1010,6 +1004,47 @@ namespace Infra.Migrations
                         column: x => x.RegiaoId,
                         principalTable: "Regiao",
                         principalColumn: "RegiaoId");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Anexo",
+                columns: table => new
+                {
+                    ProcessoId = table.Column<long>(type: "bigint", nullable: false),
+                    FluxoProcessoId = table.Column<int>(type: "int", nullable: false),
+                    TipoProcessoId = table.Column<int>(type: "int", nullable: false),
+                    AnexoId = table.Column<string>(type: "nvarchar(256)", maxLength: 256, nullable: false),
+                    ImageBase64String = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    DataCadastro = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "getdate()"),
+                    NomeArquivo = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: true),
+                    Caminho = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    TipoAnexo = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Anexo", x => new { x.ProcessoId, x.FluxoProcessoId, x.TipoProcessoId, x.AnexoId });
+                    table.ForeignKey(
+                        name: "FK_Anexo_Etapa_ProcessoId_FluxoProcessoId_TipoProcessoId",
+                        columns: x => new { x.ProcessoId, x.FluxoProcessoId, x.TipoProcessoId },
+                        principalTable: "Etapa",
+                        principalColumns: new[] { "ProcessoId", "FluxoProcessoId", "TipoProcessoId" });
+                    table.ForeignKey(
+                        name: "FK_Anexo_FluxoProcesso_FluxoProcessoId_TipoProcessoId",
+                        columns: x => new { x.FluxoProcessoId, x.TipoProcessoId },
+                        principalTable: "FluxoProcesso",
+                        principalColumns: new[] { "FluxoProcessoId", "TipoProcessoId" },
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Anexo_Processo_ProcessoId",
+                        column: x => x.ProcessoId,
+                        principalTable: "Processo",
+                        principalColumn: "ProcessoId",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Anexo_TipoProcesso_TipoProcessoId",
+                        column: x => x.TipoProcessoId,
+                        principalTable: "TipoProcesso",
+                        principalColumn: "TipoProcessoId");
                 });
 
             migrationBuilder.CreateTable(
@@ -1093,17 +1128,16 @@ namespace Infra.Migrations
                     Correspondencia = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
                     Principal = table.Column<bool>(type: "bit", nullable: true, defaultValue: false),
                     Ativo = table.Column<bool>(type: "bit", nullable: true, defaultValue: true),
-                    EconomiaId = table.Column<long>(type: "bigint", nullable: true),
-                    EconomiaImovelId = table.Column<long>(type: "bigint", nullable: true),
                     ImovelId = table.Column<long>(type: "bigint", nullable: true),
+                    EconomiaId = table.Column<long>(type: "bigint", nullable: true),
                     PessoaId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Endereco_Entidade", x => new { x.EntidadeId, x.EnderecoId, x.TipoEntidadeId, x.Numero });
                     table.ForeignKey(
-                        name: "FK_Endereco_Entidade_Economia_EconomiaImovelId_EconomiaId",
-                        columns: x => new { x.EconomiaImovelId, x.EconomiaId },
+                        name: "FK_Endereco_Entidade_Economia_ImovelId_EconomiaId",
+                        columns: x => new { x.ImovelId, x.EconomiaId },
                         principalTable: "Economia",
                         principalColumns: new[] { "ImovelId", "EconomiaId" });
                     table.ForeignKey(
@@ -1125,93 +1159,45 @@ namespace Infra.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Etapa",
+                name: "ObjetoProcesso",
                 columns: table => new
                 {
                     ProcessoId = table.Column<long>(type: "bigint", nullable: false),
-                    SituacaoEtapaId = table.Column<int>(type: "int", nullable: false),
-                    ImovelId = table.Column<long>(type: "bigint", nullable: false),
-                    EconomiaId = table.Column<long>(type: "bigint", nullable: false),
-                    TipoEtapaId = table.Column<int>(type: "int", nullable: false),
-                    EtapaId = table.Column<int>(type: "int", nullable: false),
-                    ProcessoOrgaoId = table.Column<int>(type: "int", nullable: true),
-                    ProcessoSequenciaNumerica = table.Column<long>(type: "bigint", nullable: true),
-                    ProcessoAno = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ProcessoDigitoVerificador = table.Column<int>(type: "int", nullable: true),
-                    DataInicio = table.Column<DateTime>(type: "datetime2", nullable: true, defaultValueSql: "getdate()"),
-                    DataFim = table.Column<DateTime>(type: "datetime2", nullable: true),
-                    ServidorId = table.Column<long>(type: "bigint", nullable: false),
-                    EnderecoId = table.Column<long>(type: "bigint", nullable: true),
+                    TipoObjetoProcesso = table.Column<int>(type: "int", nullable: false),
+                    DescricaoObjetoProcesso = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     PessoaId = table.Column<long>(type: "bigint", nullable: true),
-                    PessoaProprietariaResponsavelId = table.Column<long>(type: "bigint", nullable: true),
-                    PessoaTerceiraID = table.Column<long>(type: "bigint", nullable: true),
-                    Ano = table.Column<string>(type: "nvarchar(4)", maxLength: 4, nullable: true),
-                    antigo = table.Column<bool>(type: "bit", nullable: true),
-                    protocolo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    anoprotocolo = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Observacao = table.Column<string>(type: "nvarchar(max)", maxLength: 5000, nullable: true),
-                    emailEnviado = table.Column<bool>(type: "bit", nullable: true),
-                    emailRecebido = table.Column<bool>(type: "bit", nullable: true),
-                    whatsEnviado = table.Column<bool>(type: "bit", nullable: true),
-                    whatsRecebido = table.Column<bool>(type: "bit", nullable: true)
+                    EconomiaId = table.Column<long>(type: "bigint", nullable: true),
+                    ImovelId = table.Column<long>(type: "bigint", nullable: true),
+                    EnderecoId = table.Column<long>(type: "bigint", nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Etapa", x => new { x.ProcessoId, x.TipoEtapaId, x.SituacaoEtapaId, x.ImovelId, x.EconomiaId });
+                    table.PrimaryKey("PK_ObjetoProcesso", x => x.ProcessoId);
                     table.ForeignKey(
-                        name: "FK_Etapa_Economia_ImovelId_EconomiaId",
+                        name: "FK_ObjetoProcesso_Economia_ImovelId_EconomiaId",
                         columns: x => new { x.ImovelId, x.EconomiaId },
                         principalTable: "Economia",
-                        principalColumns: new[] { "ImovelId", "EconomiaId" },
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumns: new[] { "ImovelId", "EconomiaId" });
                     table.ForeignKey(
-                        name: "FK_Etapa_Endereco_EnderecoId",
+                        name: "FK_ObjetoProcesso_Endereco_EnderecoId",
                         column: x => x.EnderecoId,
                         principalTable: "Endereco",
                         principalColumn: "EnderecoId");
                     table.ForeignKey(
-                        name: "FK_Etapa_Imovel_ImovelId",
+                        name: "FK_ObjetoProcesso_Imovel_ImovelId",
                         column: x => x.ImovelId,
                         principalTable: "Imovel",
                         principalColumn: "ImovelId");
                     table.ForeignKey(
-                        name: "FK_Etapa_Pessoa_PessoaId",
+                        name: "FK_ObjetoProcesso_Pessoa_PessoaId",
                         column: x => x.PessoaId,
                         principalTable: "Pessoa",
                         principalColumn: "PessoaId");
                     table.ForeignKey(
-                        name: "FK_Etapa_Pessoa_PessoaProprietariaResponsavelId",
-                        column: x => x.PessoaProprietariaResponsavelId,
-                        principalTable: "Pessoa",
-                        principalColumn: "PessoaId");
-                    table.ForeignKey(
-                        name: "FK_Etapa_Pessoa_PessoaTerceiraID",
-                        column: x => x.PessoaTerceiraID,
-                        principalTable: "Pessoa",
-                        principalColumn: "PessoaId");
-                    table.ForeignKey(
-                        name: "FK_Etapa_Processo_ProcessoOrgaoId_ProcessoSequenciaNumerica_ProcessoAno_ProcessoDigitoVerificador",
-                        columns: x => new { x.ProcessoOrgaoId, x.ProcessoSequenciaNumerica, x.ProcessoAno, x.ProcessoDigitoVerificador },
+                        name: "FK_ObjetoProcesso_Processo_ProcessoId",
+                        column: x => x.ProcessoId,
                         principalTable: "Processo",
-                        principalColumns: new[] { "OrgaoId", "SequenciaNumerica", "Ano", "DigitoVerificador" });
-                    table.ForeignKey(
-                        name: "FK_Etapa_Servidor_ServidorId",
-                        column: x => x.ServidorId,
-                        principalTable: "Servidor",
-                        principalColumn: "ServidorId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Etapa_SituacaoEtapa_SituacaoEtapaId",
-                        column: x => x.SituacaoEtapaId,
-                        principalTable: "SituacaoEtapa",
-                        principalColumn: "SituacaoEtapaId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Etapa_TipoEtapa_TipoEtapaId",
-                        column: x => x.TipoEtapaId,
-                        principalTable: "TipoEtapa",
-                        principalColumn: "TipoEtapaId",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "ProcessoId");
                 });
 
             migrationBuilder.InsertData(
@@ -1262,6 +1248,16 @@ namespace Infra.Migrations
                     { 2, "Responsável" },
                     { 3, "Co-Responsável" }
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Anexo_FluxoProcessoId_TipoProcessoId",
+                table: "Anexo",
+                columns: new[] { "FluxoProcessoId", "TipoProcessoId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Anexo_TipoProcessoId",
+                table: "Anexo",
+                column: "TipoProcessoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -1378,19 +1374,14 @@ namespace Infra.Migrations
                 column: "LogradouroId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Endereco_Entidade_EconomiaImovelId_EconomiaId",
-                table: "Endereco_Entidade",
-                columns: new[] { "EconomiaImovelId", "EconomiaId" });
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Endereco_Entidade_EnderecoId",
                 table: "Endereco_Entidade",
                 column: "EnderecoId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Endereco_Entidade_ImovelId",
+                name: "IX_Endereco_Entidade_ImovelId_EconomiaId",
                 table: "Endereco_Entidade",
-                column: "ImovelId");
+                columns: new[] { "ImovelId", "EconomiaId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Endereco_Entidade_PessoaId",
@@ -1403,34 +1394,9 @@ namespace Infra.Migrations
                 column: "PaisId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Etapa_EnderecoId",
+                name: "IX_Etapa_FluxoProcessoId_TipoProcessoId",
                 table: "Etapa",
-                column: "EnderecoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Etapa_ImovelId_EconomiaId",
-                table: "Etapa",
-                columns: new[] { "ImovelId", "EconomiaId" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Etapa_PessoaId",
-                table: "Etapa",
-                column: "PessoaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Etapa_PessoaProprietariaResponsavelId",
-                table: "Etapa",
-                column: "PessoaProprietariaResponsavelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Etapa_PessoaTerceiraID",
-                table: "Etapa",
-                column: "PessoaTerceiraID");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Etapa_ProcessoOrgaoId_ProcessoSequenciaNumerica_ProcessoAno_ProcessoDigitoVerificador",
-                table: "Etapa",
-                columns: new[] { "ProcessoOrgaoId", "ProcessoSequenciaNumerica", "ProcessoAno", "ProcessoDigitoVerificador" });
+                columns: new[] { "FluxoProcessoId", "TipoProcessoId" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_Etapa_ServidorId",
@@ -1443,53 +1409,13 @@ namespace Infra.Migrations
                 column: "SituacaoEtapaId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Etapa_TipoEtapaId",
+                name: "IX_Etapa_TipoProcessoId",
                 table: "Etapa",
-                column: "TipoEtapaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_FluxoProcesso_TipoEtapaId",
-                table: "FluxoProcesso",
-                column: "TipoEtapaId");
+                column: "TipoProcessoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_FluxoProcesso_TipoProcessoId",
                 table: "FluxoProcesso",
-                column: "TipoProcessoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Image_ImovelId",
-                table: "Image",
-                column: "ImovelId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Image_PerspectivaId",
-                table: "Image",
-                column: "PerspectivaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Image_ProcessoOrgaoId_ProcessoSequenciaNumerica_ProcessoAno_ProcessoDigitoVerificador",
-                table: "Image",
-                columns: new[] { "ProcessoOrgaoId", "ProcessoSequenciaNumerica", "ProcessoAno", "ProcessoDigitoVerificador" });
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Image_SituacaoEtapaId",
-                table: "Image",
-                column: "SituacaoEtapaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Image_SituacaoProcessoId",
-                table: "Image",
-                column: "SituacaoProcessoId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Image_TipoEtapaId",
-                table: "Image",
-                column: "TipoEtapaId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Image_TipoProcessoId",
-                table: "Image",
                 column: "TipoProcessoId");
 
             migrationBuilder.CreateIndex(
@@ -1513,6 +1439,21 @@ namespace Infra.Migrations
                 column: "RegiaoId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ObjetoProcesso_EnderecoId",
+                table: "ObjetoProcesso",
+                column: "EnderecoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ObjetoProcesso_ImovelId_EconomiaId",
+                table: "ObjetoProcesso",
+                columns: new[] { "ImovelId", "EconomiaId" });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ObjetoProcesso_PessoaId",
+                table: "ObjetoProcesso",
+                column: "PessoaId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Pessoa_TipoPessoaId",
                 table: "Pessoa",
                 column: "TipoPessoaId");
@@ -1523,19 +1464,24 @@ namespace Infra.Migrations
                 column: "PaisId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_Processo_FluxoProcessoId",
-                table: "Processo",
-                column: "FluxoProcessoId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Processo_OrgaoDestinatarioId",
                 table: "Processo",
                 column: "OrgaoDestinatarioId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Processo_OrgaoId",
+                table: "Processo",
+                column: "OrgaoId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Processo_OrgaoRemetenteId",
                 table: "Processo",
                 column: "OrgaoRemetenteId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Processo_ServidorId",
+                table: "Processo",
+                column: "ServidorId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Processo_SituacaoProcessoId",
@@ -1568,6 +1514,11 @@ namespace Infra.Migrations
                 column: "EstadoEmissorId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Servidor_UnidadeId",
+                table: "Servidor",
+                column: "UnidadeId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Telefone_DDDId",
                 table: "Telefone",
                 column: "DDDId");
@@ -1591,6 +1542,9 @@ namespace Infra.Migrations
         /// <inheritdoc />
         protected override void Down(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.DropTable(
+                name: "Anexo");
+
             migrationBuilder.DropTable(
                 name: "AspNetRoleClaims");
 
@@ -1622,16 +1576,16 @@ namespace Infra.Migrations
                 name: "Endereco_Entidade");
 
             migrationBuilder.DropTable(
-                name: "Etapa");
-
-            migrationBuilder.DropTable(
-                name: "Image");
-
-            migrationBuilder.DropTable(
                 name: "IncrementoTabelas");
 
             migrationBuilder.DropTable(
                 name: "Loteamento");
+
+            migrationBuilder.DropTable(
+                name: "ObjetoProcesso");
+
+            migrationBuilder.DropTable(
+                name: "Perspectiva");
 
             migrationBuilder.DropTable(
                 name: "PessoaFisica");
@@ -1644,6 +1598,12 @@ namespace Infra.Migrations
 
             migrationBuilder.DropTable(
                 name: "Telefone");
+
+            migrationBuilder.DropTable(
+                name: "TipoEtapa");
+
+            migrationBuilder.DropTable(
+                name: "Etapa");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -1661,18 +1621,6 @@ namespace Infra.Migrations
                 name: "Endereco");
 
             migrationBuilder.DropTable(
-                name: "Servidor");
-
-            migrationBuilder.DropTable(
-                name: "Perspectiva");
-
-            migrationBuilder.DropTable(
-                name: "Processo");
-
-            migrationBuilder.DropTable(
-                name: "SituacaoEtapa");
-
-            migrationBuilder.DropTable(
                 name: "DocumentoPessoa");
 
             migrationBuilder.DropTable(
@@ -1685,19 +1633,19 @@ namespace Infra.Migrations
                 name: "TipoTelefone");
 
             migrationBuilder.DropTable(
+                name: "FluxoProcesso");
+
+            migrationBuilder.DropTable(
+                name: "Processo");
+
+            migrationBuilder.DropTable(
+                name: "SituacaoEtapa");
+
+            migrationBuilder.DropTable(
                 name: "Imovel");
 
             migrationBuilder.DropTable(
                 name: "Logradouro");
-
-            migrationBuilder.DropTable(
-                name: "FluxoProcesso");
-
-            migrationBuilder.DropTable(
-                name: "SituacaoProcesso");
-
-            migrationBuilder.DropTable(
-                name: "Unidade");
 
             migrationBuilder.DropTable(
                 name: "Pessoa");
@@ -1709,25 +1657,31 @@ namespace Infra.Migrations
                 name: "TipoContato");
 
             migrationBuilder.DropTable(
+                name: "Servidor");
+
+            migrationBuilder.DropTable(
+                name: "SituacaoProcesso");
+
+            migrationBuilder.DropTable(
+                name: "TipoProcesso");
+
+            migrationBuilder.DropTable(
                 name: "Bairro");
 
             migrationBuilder.DropTable(
                 name: "TipoLogradouro");
 
             migrationBuilder.DropTable(
-                name: "TipoEtapa");
-
-            migrationBuilder.DropTable(
-                name: "TipoProcesso");
-
-            migrationBuilder.DropTable(
-                name: "Orgao");
-
-            migrationBuilder.DropTable(
                 name: "TipoPessoa");
 
             migrationBuilder.DropTable(
+                name: "Unidade");
+
+            migrationBuilder.DropTable(
                 name: "Regiao");
+
+            migrationBuilder.DropTable(
+                name: "Orgao");
 
             migrationBuilder.DropTable(
                 name: "Cidade");

@@ -1,0 +1,69 @@
+﻿@model Domain.Entities.IncrementoTabelas
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Create</h1>
+
+<h4>IncrementoTabelas</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="IncrementoTabelasId" class="control-label"></label>
+                <input asp-for="IncrementoTabelasId" class="form-control" />
+                <span asp-validation-for="IncrementoTabelasId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Tabela" class="control-label"></label>
+                <input asp-for="Tabela" class="form-control" />
+                <span asp-validation-for="Tabela" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Parametro" class="control-label"></label>
+                <input asp-for="Parametro" class="form-control" />
+                <span asp-validation-for="Parametro" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="valorAtual" class="control-label"></label>
+                <input asp-for="valorAtual" class="form-control" />
+                <span asp-validation-for="valorAtual" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Ano" class="control-label"></label>
+                <input asp-for="Ano" class="form-control" />
+                <span asp-validation-for="Ano" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="valorInicial" class="control-label"></label>
+                <input asp-for="valorInicial" class="form-control" />
+                <span asp-validation-for="valorInicial" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="valorFinal" class="control-label"></label>
+                <input asp-for="valorFinal" class="form-control" />
+                <span asp-validation-for="valorFinal" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="valorincrementar" class="control-label"></label>
+                <input asp-for="valorincrementar" class="form-control" />
+                <span asp-validation-for="valorincrementar" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -6,7 +6,7 @@ namespace MVC.ViewModels
 {
     public class EtapaViewModel
     {
-        public int EtapaId { get; set; }
+      /*  public int EtapaId { get; set; }
         public long ProcessoId { get; set; }
         public Processo? Processo { get; set; }
         public int SituacaoEtapaId { get; set; }
@@ -42,6 +42,6 @@ namespace MVC.ViewModels
         public bool? emailEnviado { get; set; }
         public bool? emailRecebido { get; set; }
         public bool? whatsEnviado { get; set; }
-        public bool? whatsRecebido { get; set; }
+        public bool? whatsRecebido { get; set; }*/
     }
 }

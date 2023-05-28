@@ -15,7 +15,7 @@ namespace MVC.Extensions
             if (string.IsNullOrWhiteSpace(filter))
             {
                 //return query.Where(s=>s.ServidorId==long.Parse("2289401"));
-                return query.Include(se=>se.SituacaoEtapa).Include(s=>s.Servidor).Include(p=>p.Pessoa).Take(1000);
+                return query.Include(se=>se.SituacaoEtapa).Include(s=>s.Servidor).Take(1000);
             }
             long number1 = 0;
             if (long.TryParse(filter, out number1))
@@ -25,10 +25,10 @@ namespace MVC.Extensions
                                       //  || s.TipoEtapaId == long.Parse(filter)
                                         || s.SituacaoEtapaId == long.Parse(filter)
                                     
-                                        || s.PessoaId == long.Parse(filter)
+                                      //  || s.PessoaId == long.Parse(filter)
                                         || s.ServidorId == long.Parse(filter)
 
-                                          ).Include(se => se.SituacaoEtapa).Include(s => s.Servidor).Include(p => p.Pessoa).Take(1000);
+                                          ).Include(se => se.SituacaoEtapa).Include(s => s.Servidor).Take(1000);
             }
             else
             {
@@ -37,8 +37,9 @@ namespace MVC.Extensions
                                                                               //  || s.TipoEtapa.Descricao.Contains(filter)
                                                                                 || s.SituacaoEtapa.Descricao.Contains(filter)
                                                                                 || s.Servidor.Nome.Contains(filter)
-                                                                                || s.Pessoa.Nome.Contains(filter))
-                                        .Include(se => se.SituacaoEtapa).Include(s => s.Servidor).Include(p => p.Pessoa).Take(1000);
+                                                                              //  || s.Pessoa.Nome.Contains(filter))
+                                        //.Include(se => se.SituacaoEtapa).Include(s => s.Servidor).Include(p => p.Pessoa)
+                                        ).Take(1000);
             }
         }
 
@@ -60,9 +61,9 @@ namespace MVC.Extensions
              
                 "servidorid" => x => x.ServidorId,
                 "datainicio" => x => x.DataInicio,
-                "datafim" => x => x.DataFim,
-                "pessoaid" => x => x.PessoaId,
-                "pessoa" => x => x.Pessoa.Nome
+                "datafim" => x => x.DataFim
+               // "pessoaid" => x => x.PessoaId,
+               // "pessoa" => x => x.Pessoa.Nome
 
             };
 

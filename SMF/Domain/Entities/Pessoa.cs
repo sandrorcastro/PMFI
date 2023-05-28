@@ -18,6 +18,8 @@
         public ICollection<DocumentoPessoa>? Documentos { get; set; }
         public ICollection<Economia_Entidade>? Economias { get; set; }
         public ICollection<Contato_Pessoa>? Contatos { get; set; }
+        public ICollection<ObjetoProcesso>? ObjetoProcessos { get; set; }
+
 
     }
 }

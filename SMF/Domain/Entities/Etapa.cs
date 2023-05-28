@@ -10,30 +10,20 @@ namespace Domain.Entities
         public int FluxoProcessoId { get; set; }
         public FluxoProcesso? FluxoProcesso { get; set; }
         public int TipoProcessoId { get; set; }
-        public TipoProcesso TipoProcesso { get; set; }
-        public int SituacaoEtapaId { get; set; }
+        public TipoProcesso? TipoProcesso { get; set; }
+        public int? SituacaoEtapaId { get; set; }
         public SituacaoEtapa? SituacaoEtapa { get; set; }
         //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? DataInicio { get; set; }
         //[DisplayFormat(DataFormatString = "{0:dd/MM/yyyy}")]
         public DateTime? DataFim { get; set; }
 
-        public long ServidorId { get; set; }
+        public long? ServidorId { get; set; }
         public Servidor? Servidor { get; set; }
 
 
-        public ICollection<Anexo> Anexos { get; set; }
-
-       // public long ImovelId { get; set; }
-       // public Imovel? Imovel { get; set; }
-     
-        //public long EconomiaId { get; set; }
-        //public Economia? Economia { get; set; }
-
-        public long? EnderecoId { get; set; }
-        public Endereco? Endereco { get; set; }
-        public long? PessoaId { get; set; }
-        public Pessoa? Pessoa { get; set; }
+        public ICollection<Anexo>? Anexos { get; set; }
+       
         public string? Ano { get; set; }
         public bool? antigo { get; set; }
         public string? protocolo { get; set; }

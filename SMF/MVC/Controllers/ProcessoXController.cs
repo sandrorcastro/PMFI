@@ -154,14 +154,14 @@ namespace MVC.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!ProcessoExists(processo.OrgaoId))
+                  /*  if (!ProcessoExists(processo.OrgaoId))
                     {
                         return NotFound();
                     }
                     else
-                    {
+                    {*/
                         throw;
-                    }
+                    //}
                 }
                 return RedirectToAction(nameof(Index));
             }

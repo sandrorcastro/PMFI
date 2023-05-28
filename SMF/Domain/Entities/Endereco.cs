@@ -13,12 +13,13 @@ namespace Domain.Entities
         public string? Complemento { get; set; }
         public string? Referencia { get; set; }
         public ICollection<Endereco_Entidade>? Entidades { get; set; }
+        public ICollection<ObjetoProcesso>? ObjetoProcessos { get; set; }
 
 
         /// <summary>
         /// Navegação Teste
-       // public ICollection<Pessoa>? Pessoas { get; set; }
-       // public ICollection<Economia>? Economias { get; set; }
+        // public ICollection<Pessoa>? Pessoas { get; set; }
+        // public ICollection<Economia>? Economias { get; set; }
         /// </summary>
 
         public bool? Ativo { get; set; }    

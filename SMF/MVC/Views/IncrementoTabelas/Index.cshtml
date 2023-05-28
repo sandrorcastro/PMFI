@@ -1,0 +1,72 @@
+﻿@model IEnumerable<Domain.Entities.IncrementoTabelas>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Tabela)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Parametro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.valorAtual)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ano)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.valorInicial)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.valorFinal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.valorincrementar)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Tabela)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Parametro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.valorAtual)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ano)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.valorInicial)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.valorFinal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.valorincrementar)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IncrementoTabelasId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IncrementoTabelasId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IncrementoTabelasId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

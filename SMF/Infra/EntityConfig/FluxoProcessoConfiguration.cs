@@ -12,6 +12,7 @@ namespace Infra.EntityConfig
             builder.Property(tp => tp.FluxoProcessoId).ValueGeneratedNever();
             builder.Property(tp => tp.TipoProcessoId).ValueGeneratedNever();
             builder.Property<string>("Descricao").HasMaxLength(50);
+            //builder.HasMany(e=>e.Etapas).WithOne(fp=>fp.FluxoProcesso).HasForeignKey()
             builder.ToTable("FluxoProcesso");
             
         }
