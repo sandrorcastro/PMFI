@@ -126,12 +126,13 @@ public DbSet<Perspectiva> dbSPerspectivas { get; set; } = default!;
             builder.ApplyConfiguration(new TipoDocumentoConfiguration());
             builder.ApplyConfiguration(new TipoTelefoneConfiguration());
             builder.ApplyConfiguration(new DocumentoPessoaConfiguration());
+            builder.ApplyConfiguration(new ApplicationUserConfiguration());
             //builder.ApplyConfiguration(new Configuration());
 
-/*            foreach (var property in builder.Model.GetEntityTypes().SelectMany(t => t.GetProperties()).Where(p => p.ClrType == typeof(string)))
-            {
-                property.SetColumnType("varchar");
-            }*/
+            /*            foreach (var property in builder.Model.GetEntityTypes().SelectMany(t => t.GetProperties()).Where(p => p.ClrType == typeof(string)))
+                        {
+                            property.SetColumnType("varchar");
+                        }*/
         }
 
         public override int SaveChanges()

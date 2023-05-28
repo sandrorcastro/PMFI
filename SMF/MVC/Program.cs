@@ -18,32 +18,13 @@ namespace MVC
 
         {
             var builder = WebApplication.CreateBuilder(args);
+            //var connectionString = builder.Configuration.GetConnectionString("ContextoAplicacaoConnection") ?? throw new InvalidOperationException("Connection string 'ContextoAplicacaoConnection' not found.");
+            var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'ContextoAplicacaoConnection' not found.");
 
-            // Add services to the container.
-            //var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionHSS") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
-            
-
-            // services.AddDbContext<ContextoAplicacao>(options =>
-          
-
-           /*---builder.Services.AddDbContext<ContextoAplicacao>(options => options.UseSqlServer(connectionString)
-                                                                                    //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)
-                                                                                    );*/
-
-            //builder.Services.AddDbContext<ContextoAplicacao>();
-
-            //builder.Services.AddDbContextFactory<ContextoAplicacao>(options => options.UseSqlServer(connectionString));
-            /* builder.Services.AddDbContext<ApplicationDbContext>(options =>
-                 options.UseSqlServer(connectionString));
-             builder.Services.AddDatabaseDeveloperPageExceptionFilter();
-            */
-            ///builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false);
-            //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false);//.AddEntityFrameworkStores<ContextoAplicacao>();
-
-            // Minhas Adi��es
-
-            builder.Services.AddInfrastructure(builder.Configuration);
+            //--------28052023 builder.Services.AddDbContext<ContextoAplicacao>(options => options.UseSqlServer(connectionString));
+            builder.Services.AddDbContextFactory<ContextoAplicacao>(options => options.UseSqlServer(connectionString));
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ContextoAplicacao>();
+            builder.Services.AddInfrastructure(builder.Configuration);
 
             // builder.Services.Configure<SendinBlueSettings>(builder.Configuration.GetSection("SendinBlueSettings"));
             //builder.Services.AddSingleton<IEmailService, SendinBlueService>();
