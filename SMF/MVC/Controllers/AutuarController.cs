@@ -68,6 +68,7 @@ namespace MVC.Controllers
             //var economiaDO = queryeconomia.AsNoTracking().ToList();
             return View(evm);
         }
+        
         public ActionResult Autuar(long ImovelId, long EconomiaId,long PessoaId,long conId)
         {
             ViewData["FluxoProcessoId"] = new SelectList(_context.dbSFluxosProcesso, "FluxoProcessoId", "Descricao");
@@ -102,7 +103,7 @@ namespace MVC.Controllers
             
             return View(avm);
         }
-        
+
         // GET: AutuarController/Details/5
         public ActionResult Details(int id)
         {

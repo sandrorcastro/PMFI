@@ -1219,10 +1219,7 @@ namespace Infra.Migrations
             modelBuilder.Entity("Infra.Context.ApplicationUser", b =>
                 {
                     b.Property<long>("Id")
-                        .ValueGeneratedOnAdd()
                         .HasColumnType("bigint");
-
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<long>("Id"));
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
@@ -2008,7 +2005,7 @@ namespace Infra.Migrations
                     b.HasOne("Domain.Entities.Servidor", "Servidor")
                         .WithMany()
                         .HasForeignKey("ServidorId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
 
                     b.Navigation("Servidor");
