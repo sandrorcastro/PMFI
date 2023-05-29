@@ -35,7 +35,7 @@ namespace IOC
 
             /////testes
             /////////////////services.AddDbContext<ContextoAplicacao>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionHSS"),b => b.MigrationsAssembly(typeof(ContextoAplicacao).Assembly.FullName)));
-            services.AddDbContextFactory<ContextoAplicacao>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),b => b.MigrationsAssembly(typeof(ContextoAplicacao).Assembly.FullName)));
+            //---28052023 services.AddDbContextFactory<ContextoAplicacao>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),b => b.MigrationsAssembly(typeof(ContextoAplicacao).Assembly.FullName)));
 
            // services.AddDbContext<ContextoAplicacao>(options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionHSS"))
                                                                                     //.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking)

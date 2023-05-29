@@ -4,6 +4,8 @@ using Infra.Context;
 using Infra.EntityConfig;
 using IOC;
 using Microsoft.AspNetCore.Identity;
+//using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using MVC.MappingConfig;
 
@@ -21,16 +23,17 @@ namespace MVC
             //var connectionString = builder.Configuration.GetConnectionString("ContextoAplicacaoConnection") ?? throw new InvalidOperationException("Connection string 'ContextoAplicacaoConnection' not found.");
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'ContextoAplicacaoConnection' not found.");
 
-            //--------28052023 builder.Services.AddDbContext<ContextoAplicacao>(options => options.UseSqlServer(connectionString));
+            //builder.Services.AddDbContext<ContextoAplicacao>(options => options.UseSqlServer(connectionString));
             builder.Services.AddDbContextFactory<ContextoAplicacao>(options => options.UseSqlServer(connectionString));
-            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ContextoAplicacao>();
-            builder.Services.AddInfrastructure(builder.Configuration);
+            builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ContextoAplicacao>().AddSignInManager<SignInManager<ApplicationUser>>().AddDefaultUI();
+            builder.Services.AddScoped<SignInManager<ApplicationUser>>();
+            // outras configura��es
 
+            builder.Services.AddInfrastructure(builder.Configuration);
             // builder.Services.Configure<SendinBlueSettings>(builder.Configuration.GetSection("SendinBlueSettings"));
             //builder.Services.AddSingleton<IEmailService, SendinBlueService>();
             //builder.Services.AddSingleton<IWhatsappService, TwilioWhatsappService>();
             builder.Services.AddAutoMapperConfig();
-            /// builder.Services.AddDbContext<CameraDatabaseContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
             builder.Services.AddControllersWithViews().AddRazorOptions(options =>
             {
                 options.ViewLocationFormats.Add("/{0}.cshtml");

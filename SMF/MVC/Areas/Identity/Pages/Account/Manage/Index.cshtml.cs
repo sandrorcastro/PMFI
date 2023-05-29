@@ -18,16 +18,16 @@ namespace MVC.Areas.Identity.Pages.Account.Manage
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly ContextoAplicacao context;
+        private readonly ContextoAplicacao contexto;
 
         public IndexModel(
             UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            ContextoAplicacao _context)
+            ContextoAplicacao _contexto)
         {
             _userManager = userManager;
             _signInManager = signInManager;
-            context = _context;
+            contexto = _contexto;
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace MVC.Areas.Identity.Pages.Account.Manage
 
             Input = new InputModel
             {
-              //  Servidor
+                Servidor = contexto.dbSServidores.Where(m => m.Matricula == user.Id.ToString() && m.Ativo == true).FirstOrDefault(),
                 PhoneNumber = phoneNumber
             };
         }

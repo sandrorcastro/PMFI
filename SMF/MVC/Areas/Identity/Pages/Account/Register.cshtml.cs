@@ -138,7 +138,7 @@ namespace MVC.Areas.Identity.Pages.Account
                 {
                     user.ServidorId = servidor.ServidorId;
                     user.UserName = servidor.Matricula;
-                    //user.UserName = servidor.Nome.ToString();
+                    //user.UserName = servidor.Nome;
                 }
 
 
