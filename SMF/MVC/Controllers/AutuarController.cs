@@ -99,8 +99,6 @@ namespace MVC.Controllers
                 Pessoa = pessoa
                 
             };
-            
-            
             return View(avm);
         }
 

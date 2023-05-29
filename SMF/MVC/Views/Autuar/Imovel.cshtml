@@ -5,64 +5,95 @@
     ViewData["Title"] = "Imovel";
 }
 
-<h1>Imovel</h1>
-
-<div>
-    <h4>@Html.DisplayNameFor(model => model.ImovelId) : @Html.DisplayFor(model => model.ImovelId)</h4>
-    <hr />
-    <dl class="row">
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Matricula)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Matricula)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Latitude)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Latitude)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Longitude)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Longitude)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Complemento)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Complemento)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AreaTerreno)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AreaTerreno)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AreaConstruida)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AreaConstruida)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.AnoConstrucao)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.AnoConstrucao)
-        </dd>
-        <dt class = "col-sm-2">
-            @Html.DisplayNameFor(model => model.Caracteristica)
-        </dt>
-        <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Caracteristica)
-        </dd>
-    </dl>
-</div>
 <div>
     <a asp-action="Edit" asp-route-id="@Model?.ImovelId">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
-@Html.Partial("~/Views/Autuar/Economias.cshtml",Model.EconomiasImovel)
+
+
+<div class="card">
+    <div class="card-header">
+        <h4>Imóvel</h4>
+    </div>
+    <div class="card-body">
+        <div class="card">
+            <div class="card-header">
+                    <h4>@Html.DisplayNameFor(model => model.ImovelId) : @Html.DisplayFor(model => model.ImovelId)</h4>
+            </div>
+            <div class="card-body">
+                <div>
+                    <dl class="row">
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Matricula)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Matricula)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Latitude)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Latitude)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Longitude)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Longitude)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Complemento)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Complemento)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.AreaTerreno)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.AreaTerreno)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.AreaConstruida)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.AreaConstruida)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.AnoConstrucao)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.AnoConstrucao)
+                        </dd>
+                        <dt class="col-sm-2">
+                            @Html.DisplayNameFor(model => model.Caracteristica)
+                        </dt>
+                        <dd class="col-sm-10">
+                            @Html.DisplayFor(model => model.Caracteristica)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="card-footer">
+               
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h4>Economias</h4>
+            </div>
+            <div class="card-body">
+                @Html.Partial("~/Views/Autuar/Economias.cshtml",Model.EconomiasImovel)
+            </div>
+            <div class="card-footer">
+                
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        @{
+            await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoVoltar.cshtml");
+        }
+    </div>
+
+</div>
