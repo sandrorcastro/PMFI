@@ -9,6 +9,7 @@ namespace Infra.EntityConfig
         public void Configure(EntityTypeBuilder<Servidor> builder)
         {
             builder.HasKey("ServidorId");
+            builder.HasOne(u=>u.Divisao).WithMany(s=>s.Servidores).HasForeignKey(u=>u.DivisaoId);
             builder.Property(tp => tp.ServidorId).ValueGeneratedNever();
             builder.Property<string>("Nome").HasMaxLength(150);
             builder.Property<string>("Matricula").HasMaxLength(15);

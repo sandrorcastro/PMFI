@@ -9,6 +9,7 @@ namespace Infra.EntityConfig
         public void Configure(EntityTypeBuilder<Unidade> builder)
         {
             builder.HasKey(u=> u.UnidadeId);
+            builder.HasOne(o=>o.Orgao).WithMany(u=>u.Unidades).HasForeignKey(u=>u.OrgaoId);
             builder.Property(u => u.UnidadeId).ValueGeneratedNever();
             builder.Property<string>("Descricao").HasMaxLength(100);
           /*  builder.Property<string>("Unidade").HasMaxLength(20);

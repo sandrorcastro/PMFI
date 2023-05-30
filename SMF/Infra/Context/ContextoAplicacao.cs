@@ -35,6 +35,7 @@ namespace Infra.Context
         public DbSet<Orgao> dbSOrgaos { get; set; }
        // public DbSet<Protocolo> dbSProtocolos { get; set; }
         public DbSet<Unidade> dbSUnidades { get; set; }
+        public DbSet<Divisao> dbSDivisoes { get; set; }
         public DbSet<TipoProcesso> dbSTiposProcesso { get; set; }
         public DbSet<SituacaoProcesso> dbSSituacoesProcesso { get; set; }
         public DbSet<TipoEtapa> dbSTiposEtapa { get; set; }
@@ -87,6 +88,7 @@ public DbSet<Perspectiva> dbSPerspectivas { get; set; } = default!;
             //builder.ApplyConfiguration(new ProtocoloConfiguration());
             builder.ApplyConfiguration(new OrgaoConfiguration());
             builder.ApplyConfiguration(new UnidadeConfiguration());
+            builder.ApplyConfiguration(new DivisaoConfiguration());
             builder.ApplyConfiguration(new TipoProcessoConfiguration());
             builder.ApplyConfiguration(new SituacaoProcessoConfiguration());
             builder.ApplyConfiguration(new TipoEtapaConfiguration());

@@ -1,0 +1,20 @@
+﻿@model dynamic
+@{
+    var controllerAtual = ViewContext.RouteData.Values["controller"].ToString();
+    var actionAtual = ViewContext.RouteData.Values["action"].ToString();
+    long imovelId = Model.ImovelId;
+    long economiaId = Model.EconomiaId;
+}
+<div class="row">
+    <div class="col">
+        @{
+            await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoProprietarios.cshtml");
+        }
+    </div>
+    <div class="col">
+        @{
+            await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoProcessos.cshtml");
+        }
+    </div>
+    
+</div>

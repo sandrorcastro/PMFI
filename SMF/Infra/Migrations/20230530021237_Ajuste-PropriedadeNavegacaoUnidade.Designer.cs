@@ -4,6 +4,7 @@ using Infra.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.Migrations
 {
     [DbContext(typeof(ContextoAplicacao))]
-    partial class ContextoAplicacaoModelSnapshot : ModelSnapshot
+    [Migration("20230530021237_Ajuste-PropriedadeNavegacaoUnidade")]
+    partial class AjustePropriedadeNavegacaoUnidade
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -192,21 +195,6 @@ namespace Infra.Migrations
                     b.HasKey("DDDId");
 
                     b.ToTable("DDD", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Entities.Divisao", b =>
-                {
-                    b.Property<int>("DivisaoId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("UnidadeId")
-                        .HasColumnType("int");
-
-                    b.HasKey("DivisaoId");
-
-                    b.HasIndex("UnidadeId");
-
-                    b.ToTable("Divisao", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.DocumentoPessoa", b =>
@@ -893,9 +881,6 @@ namespace Infra.Migrations
                     b.Property<int?>("UnidadeDestinatarioId")
                         .HasColumnType("int");
 
-                    b.Property<int>("UnidadeId")
-                        .HasColumnType("int");
-
                     b.Property<int?>("UnidadeRemetenteId")
                         .HasColumnType("int");
 
@@ -914,8 +899,6 @@ namespace Infra.Migrations
                     b.HasIndex("TipoProcessoId");
 
                     b.HasIndex("UnidadeDestinatarioId");
-
-                    b.HasIndex("UnidadeId");
 
                     b.HasIndex("UnidadeRemetenteId");
 
@@ -967,9 +950,6 @@ namespace Infra.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("DivisaoId")
-                        .HasColumnType("int");
-
                     b.Property<string>("Funcao")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -986,8 +966,6 @@ namespace Infra.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ServidorId");
-
-                    b.HasIndex("DivisaoId");
 
                     b.HasIndex("UnidadeId");
 
@@ -1691,17 +1669,6 @@ namespace Infra.Migrations
                     b.Navigation("Pessoa");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Divisao", b =>
-                {
-                    b.HasOne("Domain.Entities.Unidade", "Unidade")
-                        .WithMany("Divisoes")
-                        .HasForeignKey("UnidadeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Unidade");
-                });
-
             modelBuilder.Entity("Domain.Entities.DocumentoPessoa", b =>
                 {
                     b.HasOne("Domain.Entities.Pessoa", "Pessoa")
@@ -1987,12 +1954,6 @@ namespace Infra.Migrations
                         .HasForeignKey("UnidadeDestinatarioId")
                         .OnDelete(DeleteBehavior.NoAction);
 
-                    b.HasOne("Domain.Entities.Unidade", "Unidade")
-                        .WithMany()
-                        .HasForeignKey("UnidadeId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("Domain.Entities.Unidade", "UnidadeRemetente")
                         .WithMany()
                         .HasForeignKey("UnidadeRemetenteId")
@@ -2010,8 +1971,6 @@ namespace Infra.Migrations
 
                     b.Navigation("TipoProcesso");
 
-                    b.Navigation("Unidade");
-
                     b.Navigation("UnidadeDestinatario");
 
                     b.Navigation("UnidadeRemetente");
@@ -2028,15 +1987,9 @@ namespace Infra.Migrations
 
             modelBuilder.Entity("Domain.Entities.Servidor", b =>
                 {
-                    b.HasOne("Domain.Entities.Divisao", "Divisao")
-                        .WithMany("Servidores")
-                        .HasForeignKey("DivisaoId");
-
                     b.HasOne("Domain.Entities.Unidade", "Unidade")
-                        .WithMany()
+                        .WithMany("Servidores")
                         .HasForeignKey("UnidadeId");
-
-                    b.Navigation("Divisao");
 
                     b.Navigation("Unidade");
                 });
@@ -2222,11 +2175,6 @@ namespace Infra.Migrations
                     b.Navigation("Pessoas");
                 });
 
-            modelBuilder.Entity("Domain.Entities.Divisao", b =>
-                {
-                    b.Navigation("Servidores");
-                });
-
             modelBuilder.Entity("Domain.Entities.Economia", b =>
                 {
                     b.Navigation("Enderecos");
@@ -2311,7 +2259,7 @@ namespace Infra.Migrations
 
             modelBuilder.Entity("Domain.Entities.Unidade", b =>
                 {
-                    b.Navigation("Divisoes");
+                    b.Navigation("Servidores");
                 });
 #pragma warning restore 612, 618
         }

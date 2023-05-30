@@ -96,8 +96,10 @@
         </div>
     </div>
     <div class="card-footer">
-        
-            Html.PartialAsync("~/Views/Shared/Partials/_BotaoVoltar.cshtml")
+
+        @{
+            await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoVoltar.cshtml");
+        }
     </div>
         
     </div>

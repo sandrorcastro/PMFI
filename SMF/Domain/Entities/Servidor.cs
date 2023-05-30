@@ -9,9 +9,12 @@ namespace Domain.Entities
         public string? Nome { get; set; }
         public string? Matricula { get; set; }
         public int? UnidadeId { get; set; }
+        public Unidade? Unidade { get; set; }    
+        
+        public int? DivisaoId { get; set; }
+        public Divisao? Divisao { get; set; }
         public string? Cargo { get; set; }
         public string? Funcao { get; set; }
-        public Unidade? Unidade { get; set; }    
         public bool? Ativo { get; set; }
     }
 }

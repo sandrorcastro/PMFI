@@ -60,11 +60,19 @@
                 @Html.DisplayFor(modelItem => item.TemProcessos)
             </td>
             <td>
-                @Html.ActionLink("Proprietários", "Economia", new {  ImovelId=item.ImovelId,EconomiaId=item.EconomiaId}) |
-                @Html.ActionLink("Processos", "Processos", new {  ImovelId=item.ImovelId,EconomiaId=item.EconomiaId }) 
-               @* @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
-                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })*@
+               @* @Html.ActionLink("Proprietários", "Economia", new {  ImovelId=item.ImovelId,EconomiaId=item.EconomiaId}) |
+                @Html.ActionLink("Processos", "Processos", new {  ImovelId=item.ImovelId,EconomiaId=item.EconomiaId })*@
+                    @{
+                        //var viewDataIID = new ViewDataDictionary(,);
+                        
+                        //{ { "ImovelId", item.ImovelId } };
+                        //var viewDataEID = new ViewDataDictionary { { "EconomiaId", item.EconomiaId } };
+                    }
+                    @{
+                        //await Html.RenderPartialAsync("~/Views/Shared/Partials/_AcoesEconomias.cshtml",new { ImovelId = viewDataIID, EconomiaId = viewDataEID });
+                        await Html.RenderPartialAsync("~/Views/Shared/Partials/_AcoesEconomias.cshtml", new { ImovelId = @item.ImovelId, EconomiaId = @item.EconomiaId });
+                    }
+               
             </td>
         </tr>
 }
