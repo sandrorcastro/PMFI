@@ -15,13 +15,15 @@ namespace MVC.ViewModels
             this.pessoaAppService = new PessoaAppService();
             Pessoa = pessoaAppService.GetIQueryable().Filter(PessoaId.ToString()).FirstOrDefault();
         }*/
-        public Processo Processo { get; set; }
-        public Etapa Etapa { get; set; }
+        public Processo? Processo { get; set; }
+        public Etapa? Etapa { get; set; }
 
-        public Pessoa Pessoa { get; set; }
+        public Pessoa? Pessoa { get; set; }
         //public Imovel Imovel { get; set; }
 
-        public Economia Economia { get; set; }
+        public Economia? Economia { get; set; }
+
+        public Endereco_Entidade? Endereco_Entidade { get; set; }
 
                 
     }

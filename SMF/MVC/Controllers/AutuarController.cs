@@ -23,8 +23,9 @@ namespace MVC.Controllers
         private readonly IEconomia_EntidadeAppService economia_EntidadeAppService;
         private readonly IEndereco_EntidadeAppService endereco_EntidadeAppService;
         private readonly IPessoaAppService pessoaAppService;
+        private readonly IIncrementoTabelasAppService incrementoTabelasAppService;
         IMapper mapper;
-        public AutuarController(IImovelAppService imovelAppService, IMapper mapper, IEconomiaAppService economiaAppService, IEconomia_EntidadeAppService economia_EntidadeAppService, IPessoaAppService pessoaAppService, IEndereco_EntidadeAppService endereco_EntidadeAppService, ContextoAplicacao context)
+        public AutuarController(IImovelAppService imovelAppService, IMapper mapper, IEconomiaAppService economiaAppService, IEconomia_EntidadeAppService economia_EntidadeAppService, IPessoaAppService pessoaAppService, IEndereco_EntidadeAppService endereco_EntidadeAppService, ContextoAplicacao context, IIncrementoTabelasAppService incrementoTabelasAppService)
         {
             this.imovelAppService = imovelAppService;
             this.mapper = mapper;
@@ -33,6 +34,7 @@ namespace MVC.Controllers
             this.pessoaAppService = pessoaAppService;
             this.endereco_EntidadeAppService = endereco_EntidadeAppService;
             _context = context;
+            this.incrementoTabelasAppService = incrementoTabelasAppService;
         }
         public ActionResult Index()
         {
@@ -115,10 +117,51 @@ namespace MVC.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Autuar(AutuarViewModel avm)
         {
-            return View(avm);
+            var matriculaservidorId = User.Claims.FirstOrDefault().Value;
+            var Servidor = _context.dbSServidores.Where(m => m.Matricula == matriculaservidorId && m.Ativo == true).Include(tp => tp.PodeExecutar).ThenInclude(tp => tp.TipoProcesso).Include(d => d.Divisao).ThenInclude(u => u.Unidade).ThenInclude(o => o.Orgao).FirstOrDefault();
+            if (ModelState.IsValid)
+            {
+                //if(_context.dbSProcessos.Find())
+                Processo processo = new Processo()
+                {
+                    ProcessoId = incrementoTabelasAppService.Incrementar("Processo", "Sistema", "2023"),
+                    ObjetoProcesso = new ObjetoProcesso()
+                    {
+                        TipoObjetoProcesso = 1,
+                        DescricaoObjetoProcesso="Ainda não Definido!",
+                        ImovelId = avm.Economia.ImovelId,
+                        EconomiaId = avm.Economia.EconomiaId,
+                        PessoaId = avm.Pessoa.PessoaId
+
+                        //EnderecoId = avm.Pessoa.E
+
+
+                    },
+                    OrgaoId = Servidor.Divisao.Unidade.OrgaoId,
+                    UnidadeId = Servidor.Divisao.UnidadeId,
+                    DivisaoId = Servidor.DivisaoId,
+                    ServidorId = Servidor.ServidorId,
+                    OrgaoRemetenteId = Servidor.Divisao.Unidade.OrgaoId,
+                    UnidadeRemetenteId = Servidor.Divisao.UnidadeId,
+                    DivisaoRemetenteId = Servidor.DivisaoId,
+                    OrgaoDestinatarioId = Servidor.Divisao.Unidade.OrgaoId,
+                    UnidadeDestinatarioId = Servidor.Divisao.UnidadeId,
+                    DivisaoDestinatarioId = Servidor.DivisaoId,
+                    SituacaoProcessoId = avm.Processo.SituacaoProcessoId,
+                    TipoProcessoId = avm.Processo.TipoProcessoId,
+                    ObservacaoProcesso = avm.Etapa.ObservacaoEtapa
+
+                };
+                _context.Add(processo);
+
+                _context.SaveChangesAsync();
+            }
+
+
+            return View("Index",new ImovelViewModel());
         }
             // GET: AutuarController/Details/5
-            public ActionResult Details(int id)
+        public ActionResult Details(int id)
         {
             return View();
         }

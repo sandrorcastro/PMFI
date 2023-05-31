@@ -14,9 +14,9 @@
             <div class="card-header">
                 @{
                         @* await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);*@
-                        <p> 
-                            Processor e Etapa
-                        </p>
+                         
+                        <h5>Processor e Etapa</h5>
+                        
                     }
                 </div>
                 <div class="card-body">
@@ -26,7 +26,7 @@
             <div class="card-footer">
                 @* @await Component.InvokeAsync("Pagination", new { values = Model.values, routeData=Model.LinkData})*@
                 <p>
-                    Rodapé do processo etapa
+                    
                 </p>
             </div>
         </div>
@@ -34,41 +34,82 @@
          <div class="card">
             <div class="card-header">
                 @{
-                    <h6>IMÓVEL:ECONOMIA : @Html.DisplayFor(model => model.Economia.ImovelId) : @Html.DisplayFor(model => model.Economia.EconomiaId)</h6>
+                    <h5>IMÓVEL:ECONOMIA : @Html.DisplayFor(model => model.Economia.ImovelId) : @Html.DisplayFor(model => model.Economia.EconomiaId)</h5>
                 }
             </div>
             <div class="card-body">
                     @*@await Html.PartialAsync("~/Views/Autuar/AutuarEconomia.cshtml",Model.Economia)*@
                     @await Html.PartialAsync("~/Views/Autuar/AutuarEconomiaEndereco.cshtml",Model.Economia.Enderecos)
             </div>
-            <!--
+            
             <div class="card-footer">
                 @* @await Component.InvokeAsync("Pagination", new { values = Model.values, routeData=Model.LinkData})*@
                 <p>
-                    Rodapé do processo/etap
+            
                 </p>
             </div>
-            -->
+            
         </div>
         <!--FInal Card Economia-->
         <!--Inicio Card Pessoa-->
          <div class="card">
             <div class="card-header">
-                <h6> CPF/CNPJ: @Html.DisplayFor(model => model.Pessoa.conId) </h6>
+                <h5> Endereço CPF/CNPJ: @Html.DisplayFor(model => model.Pessoa.conId) </h5>
             </div>
             <div class="card-body">
-                    @await Html.PartialAsync("~/Views/Autuar/AutuarPessoaEndereco.cshtml",Model.Pessoa.Enderecos)
+                    @*@await Html.PartialAsync("~/Views/Autuar/AutuarPessoaEndereco.cshtml",Model.Pessoa.Enderecos)*@
+                    @await Html.PartialAsync("~/Views/Autuar/AutuarPessoaEndereco.cshtml",Model)
             </div>
-            <!--
+            
             <div class="card-footer">
                 @* @await Component.InvokeAsync("Pagination", new { values = Model.values, routeData=Model.LinkData})*@
                 <p>
-                    Rodapé da Pessoa
+            
                 </p>
             </div>
-            -->
+            
         </div>
         <!--Final Card Pessoa-->
+            <!--Inicio Card Observação -->
+            <div class="card">
+                <div class="card-header">
+                    <h5> Observação: </h5>
+                </div>
+                <div class="card-body">
+                    <div class="form-group">
+                        <label asp-for="Etapa.ObservacaoEtapa" class="control-label"></label>
+                        <input asp-for="Etapa.ObservacaoEtapa" class="form-control" />
+                        <span asp-validation-for="Etapa.ObservacaoEtapa" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="card-footer">
+                    @* @await Component.InvokeAsync("Pagination", new { values = Model.values, routeData=Model.LinkData})*@
+                    <p>
+
+                    </p>
+                </div>
+
+            </div>
+            <!--Final Card Observação-->
+            <!--Inicio Card Observação -->
+            <div class="card">
+                <div class="card-header">
+                    <h5> Anexos: </h5>
+                </div>
+                <div class="card-body">
+                    
+                </div>
+
+                <div class="card-footer">
+                    @* @await Component.InvokeAsync("Pagination", new { values = Model.values, routeData=Model.LinkData})*@
+                    <p>
+
+                    </p>
+                </div>
+
+            </div>
+            <!--Final Card Observação-->
     </div>
         <div class="card-footer">
         @{
