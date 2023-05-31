@@ -36,6 +36,7 @@ namespace Infra.Context
        // public DbSet<Protocolo> dbSProtocolos { get; set; }
         public DbSet<Unidade> dbSUnidades { get; set; }
         public DbSet<Divisao> dbSDivisoes { get; set; }
+        public DbSet<Local> dbSLocais { get; set; }
         public DbSet<TipoProcesso> dbSTiposProcesso { get; set; }
         public DbSet<SituacaoProcesso> dbSSituacoesProcesso { get; set; }
         public DbSet<TipoEtapa> dbSTiposEtapa { get; set; }
@@ -78,6 +79,7 @@ public DbSet<Perspectiva> dbSPerspectivas { get; set; } = default!;
         public DbSet<TipoContato> dbSTiposContato { get; set; } = default!;
         public DbSet<TipoDocumento> dbSTiposDocumento { get; set; } = default!;
         public DbSet<TipoTelefone> dbSTiposTelefone { get; set; } = default!;
+        public DbSet<Servidor_TipoProcesso> dbSServidores_TiposProcessos { get; set; } = default!;
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
@@ -89,6 +91,7 @@ public DbSet<Perspectiva> dbSPerspectivas { get; set; } = default!;
             builder.ApplyConfiguration(new OrgaoConfiguration());
             builder.ApplyConfiguration(new UnidadeConfiguration());
             builder.ApplyConfiguration(new DivisaoConfiguration());
+            builder.ApplyConfiguration(new LocalConfiguration());
             builder.ApplyConfiguration(new TipoProcessoConfiguration());
             builder.ApplyConfiguration(new SituacaoProcessoConfiguration());
             builder.ApplyConfiguration(new TipoEtapaConfiguration());
@@ -129,6 +132,7 @@ public DbSet<Perspectiva> dbSPerspectivas { get; set; } = default!;
             builder.ApplyConfiguration(new TipoTelefoneConfiguration());
             builder.ApplyConfiguration(new DocumentoPessoaConfiguration());
             builder.ApplyConfiguration(new ApplicationUserConfiguration());
+            builder.ApplyConfiguration(new Servidor_TipoProcessoConfiguration());
             //builder.ApplyConfiguration(new Configuration());
 
             /*            foreach (var property in builder.Model.GetEntityTypes().SelectMany(t => t.GetProperties()).Where(p => p.ClrType == typeof(string)))

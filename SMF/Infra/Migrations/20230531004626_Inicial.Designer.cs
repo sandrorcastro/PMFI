@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infra.Migrations
 {
     [DbContext(typeof(ContextoAplicacao))]
-    [Migration("20230530020838_Ajuste-PropriedadeNavegacaoServidor")]
-    partial class AjustePropriedadeNavegacaoServidor
+    [Migration("20230531004626_Inicial")]
+    partial class Inicial
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -195,6 +195,39 @@ namespace Infra.Migrations
                     b.HasKey("DDDId");
 
                     b.ToTable("DDD", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Divisao", b =>
+                {
+                    b.Property<int>("DivisaoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Atribuicao")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("Descricao")
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.Property<int?>("LocalId")
+                        .HasColumnType("int");
+
+                    b.Property<long?>("ServidorResponsavelId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int?>("UnidadeId")
+                        .HasColumnType("int");
+
+                    b.HasKey("DivisaoId");
+
+                    b.HasIndex("LocalId");
+
+                    b.HasIndex("ServidorResponsavelId");
+
+                    b.HasIndex("UnidadeId");
+
+                    b.ToTable("Divisao", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.DocumentoPessoa", b =>
@@ -607,6 +640,19 @@ namespace Infra.Migrations
                     b.ToTable("IncrementoTabelas", (string)null);
                 });
 
+            modelBuilder.Entity("Domain.Entities.Local", b =>
+                {
+                    b.Property<int>("LocalId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("LocalId"));
+
+                    b.HasKey("LocalId");
+
+                    b.ToTable("Local", (string)null);
+                });
+
             modelBuilder.Entity("Domain.Entities.Logradouro", b =>
                 {
                     b.Property<long>("LogradouroId")
@@ -847,6 +893,15 @@ namespace Infra.Migrations
                         .HasColumnType("datetime2")
                         .HasDefaultValueSql("getdate()");
 
+                    b.Property<int?>("DivisaoDestinatarioId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DivisaoId")
+                        .HasColumnType("int");
+
+                    b.Property<int?>("DivisaoRemetenteId")
+                        .HasColumnType("int");
+
                     b.Property<string>("ObservacaoProcesso")
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
@@ -881,10 +936,19 @@ namespace Infra.Migrations
                     b.Property<int?>("UnidadeDestinatarioId")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UnidadeId")
+                        .HasColumnType("int");
+
                     b.Property<int?>("UnidadeRemetenteId")
                         .HasColumnType("int");
 
                     b.HasKey("ProcessoId");
+
+                    b.HasIndex("DivisaoDestinatarioId");
+
+                    b.HasIndex("DivisaoId");
+
+                    b.HasIndex("DivisaoRemetenteId");
 
                     b.HasIndex("OrgaoDestinatarioId");
 
@@ -899,6 +963,8 @@ namespace Infra.Migrations
                     b.HasIndex("TipoProcessoId");
 
                     b.HasIndex("UnidadeDestinatarioId");
+
+                    b.HasIndex("UnidadeId");
 
                     b.HasIndex("UnidadeRemetenteId");
 
@@ -950,6 +1016,9 @@ namespace Infra.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
+                    b.Property<int?>("DivisaoId")
+                        .HasColumnType("int");
+
                     b.Property<string>("Funcao")
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
@@ -967,9 +1036,26 @@ namespace Infra.Migrations
 
                     b.HasKey("ServidorId");
 
+                    b.HasIndex("DivisaoId");
+
                     b.HasIndex("UnidadeId");
 
                     b.ToTable("Servidor", (string)null);
+                });
+
+            modelBuilder.Entity("Domain.Entities.Servidor_TipoProcesso", b =>
+                {
+                    b.Property<long>("ServidorId")
+                        .HasColumnType("bigint");
+
+                    b.Property<int>("TipoProcessoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("ServidorId", "TipoProcessoId");
+
+                    b.HasIndex("TipoProcessoId");
+
+                    b.ToTable("Servidor_TipoProcesso", (string)null);
                 });
 
             modelBuilder.Entity("Domain.Entities.SituacaoEtapa", b =>
@@ -1669,6 +1755,28 @@ namespace Infra.Migrations
                     b.Navigation("Pessoa");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Divisao", b =>
+                {
+                    b.HasOne("Domain.Entities.Local", "Local")
+                        .WithMany()
+                        .HasForeignKey("LocalId");
+
+                    b.HasOne("Domain.Entities.Servidor", "ServidorResponsavel")
+                        .WithMany()
+                        .HasForeignKey("ServidorResponsavelId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Domain.Entities.Unidade", "Unidade")
+                        .WithMany("Divisoes")
+                        .HasForeignKey("UnidadeId");
+
+                    b.Navigation("Local");
+
+                    b.Navigation("ServidorResponsavel");
+
+                    b.Navigation("Unidade");
+                });
+
             modelBuilder.Entity("Domain.Entities.DocumentoPessoa", b =>
                 {
                     b.HasOne("Domain.Entities.Pessoa", "Pessoa")
@@ -1921,6 +2029,21 @@ namespace Infra.Migrations
 
             modelBuilder.Entity("Domain.Entities.Processo", b =>
                 {
+                    b.HasOne("Domain.Entities.Divisao", "DivisaoDestinatario")
+                        .WithMany()
+                        .HasForeignKey("DivisaoDestinatarioId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Domain.Entities.Divisao", "Divisao")
+                        .WithMany("Processos")
+                        .HasForeignKey("DivisaoId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
+                    b.HasOne("Domain.Entities.Divisao", "DivisaoRemetente")
+                        .WithMany()
+                        .HasForeignKey("DivisaoRemetenteId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.HasOne("Domain.Entities.Orgao", "OrgaoDestinatario")
                         .WithMany()
                         .HasForeignKey("OrgaoDestinatarioId")
@@ -1937,7 +2060,7 @@ namespace Infra.Migrations
                         .OnDelete(DeleteBehavior.NoAction);
 
                     b.HasOne("Domain.Entities.Servidor", "Servidor")
-                        .WithMany()
+                        .WithMany("Processos")
                         .HasForeignKey("ServidorId");
 
                     b.HasOne("Domain.Entities.SituacaoProcesso", "SituacaoProcesso")
@@ -1954,10 +2077,21 @@ namespace Infra.Migrations
                         .HasForeignKey("UnidadeDestinatarioId")
                         .OnDelete(DeleteBehavior.NoAction);
 
+                    b.HasOne("Domain.Entities.Unidade", "Unidade")
+                        .WithMany("Processos")
+                        .HasForeignKey("UnidadeId")
+                        .OnDelete(DeleteBehavior.NoAction);
+
                     b.HasOne("Domain.Entities.Unidade", "UnidadeRemetente")
                         .WithMany()
                         .HasForeignKey("UnidadeRemetenteId")
                         .OnDelete(DeleteBehavior.NoAction);
+
+                    b.Navigation("Divisao");
+
+                    b.Navigation("DivisaoDestinatario");
+
+                    b.Navigation("DivisaoRemetente");
 
                     b.Navigation("Orgao");
 
@@ -1970,6 +2104,8 @@ namespace Infra.Migrations
                     b.Navigation("SituacaoProcesso");
 
                     b.Navigation("TipoProcesso");
+
+                    b.Navigation("Unidade");
 
                     b.Navigation("UnidadeDestinatario");
 
@@ -1987,11 +2123,36 @@ namespace Infra.Migrations
 
             modelBuilder.Entity("Domain.Entities.Servidor", b =>
                 {
-                    b.HasOne("Domain.Entities.Unidade", "Unidade")
+                    b.HasOne("Domain.Entities.Divisao", "Divisao")
                         .WithMany("Servidores")
+                        .HasForeignKey("DivisaoId");
+
+                    b.HasOne("Domain.Entities.Unidade", "Unidade")
+                        .WithMany()
                         .HasForeignKey("UnidadeId");
 
+                    b.Navigation("Divisao");
+
                     b.Navigation("Unidade");
+                });
+
+            modelBuilder.Entity("Domain.Entities.Servidor_TipoProcesso", b =>
+                {
+                    b.HasOne("Domain.Entities.Servidor", "Servidor")
+                        .WithMany("PodeExecutar")
+                        .HasForeignKey("ServidorId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("Domain.Entities.TipoProcesso", "TipoProcesso")
+                        .WithMany("ExecutadoPor")
+                        .HasForeignKey("TipoProcessoId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.Navigation("Servidor");
+
+                    b.Navigation("TipoProcesso");
                 });
 
             modelBuilder.Entity("Domain.Entities.Unidade", b =>
@@ -2175,6 +2336,13 @@ namespace Infra.Migrations
                     b.Navigation("Pessoas");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Divisao", b =>
+                {
+                    b.Navigation("Processos");
+
+                    b.Navigation("Servidores");
+                });
+
             modelBuilder.Entity("Domain.Entities.Economia", b =>
                 {
                     b.Navigation("Enderecos");
@@ -2250,16 +2418,27 @@ namespace Infra.Migrations
                     b.Navigation("ObjetoProcesso");
                 });
 
+            modelBuilder.Entity("Domain.Entities.Servidor", b =>
+                {
+                    b.Navigation("PodeExecutar");
+
+                    b.Navigation("Processos");
+                });
+
             modelBuilder.Entity("Domain.Entities.TipoProcesso", b =>
                 {
                     b.Navigation("Etapas");
+
+                    b.Navigation("ExecutadoPor");
 
                     b.Navigation("FluxoProcessos");
                 });
 
             modelBuilder.Entity("Domain.Entities.Unidade", b =>
                 {
-                    b.Navigation("Servidores");
+                    b.Navigation("Divisoes");
+
+                    b.Navigation("Processos");
                 });
 #pragma warning restore 612, 618
         }

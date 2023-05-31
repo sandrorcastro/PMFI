@@ -16,5 +16,8 @@ namespace Domain.Entities
         public string? Cargo { get; set; }
         public string? Funcao { get; set; }
         public bool? Ativo { get; set; }
+
+        public ICollection<Processo> Processos { get; set; }
+        public ICollection<Servidor_TipoProcesso> PodeExecutar { get; set; }
     }
 }

@@ -15,7 +15,8 @@ namespace Domain.Entities
         public Orgao? Orgao { get; set; }
 
         public ICollection<Divisao>  Divisoes { get; set; }
-        
+        public ICollection<Processo> Processos { get; set; }
+
         // public ICollection<Servidor> Servidores { get; set; }
 
     }

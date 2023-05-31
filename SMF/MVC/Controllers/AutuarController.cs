@@ -74,20 +74,22 @@ namespace MVC.Controllers
         public ActionResult Autuar(long ImovelId, long EconomiaId,long PessoaId,long conId)
         {
             var matriculaservidorId = User.Claims.FirstOrDefault().Value;
-            var Servidor = _context.dbSServidores.Where(m => m.Matricula == matriculaservidorId && m.Ativo == true).Include(u=>u.Unidade).ThenInclude(o=>o.Orgao).FirstOrDefault();
-            var UnidadeServidor = _context.dbSUnidades.Where(u => u.UnidadeId == Servidor.UnidadeId).FirstOrDefault();
+            var Servidor = _context.dbSServidores.Where(m => m.Matricula == matriculaservidorId && m.Ativo == true).Include(tp=>tp.PodeExecutar).ThenInclude(tp=>tp.TipoProcesso).Include(d=>d.Divisao).ThenInclude(u=>u.Unidade).ThenInclude(o=>o.Orgao).FirstOrDefault();
+            //var UnidadeServidor = _context.dbSUnidades.Where(u => u.UnidadeId == Servidor.UnidadeId).FirstOrDefault();
 
 
             ViewData["FluxoProcessoId"] = new SelectList(_context.dbSFluxosProcesso, "FluxoProcessoId", "Descricao");
-            ViewData["OrgaoId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao", 3);
-            ViewData["OrgaoDestinatarioId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao",3);
-            ViewData["OrgaoRemetenteId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao", 3);
+            ViewData["OrgaoId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao", Servidor.Divisao.Unidade.OrgaoId);
+            ViewData["OrgaoDestinatarioId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao", Servidor.Divisao.Unidade.OrgaoId);
+            ViewData["OrgaoRemetenteId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao", Servidor.Divisao.Unidade.OrgaoId);
             ViewData["SituacaoProcessoId"] = new SelectList(_context.dbSSituacoesProcesso, "SituacaoProcessoId", "Descricao");
             ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso, "TipoProcessoId", "Descricao");
-            ViewData["UnidadeDestinatarioId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "Descricao",173);
-            ViewData["UnidadeRemetenteId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "Descricao", 173);
+            //ViewData["TipoProcessoId"] = new SelectList(Servidor.PodeExecutar.ToList(), "TipoProcessoId", "Descricao");
+            ViewData["UnidadeId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "Descricao", Servidor.Divisao.UnidadeId);
+            ViewData["UnidadeDestinatarioId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "Descricao", Servidor.Divisao.UnidadeId);
+            ViewData["UnidadeRemetenteId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "Descricao", Servidor.Divisao.UnidadeId);
             //
-            ViewData["ServidorId"] = new SelectList(_context.dbSServidores, "ServidorId", "Descricao");
+            ViewData["ServidorId"] = new SelectList(_context.dbSServidores, "ServidorId", "Descricao",Servidor.ServidorId);
             ViewData["SituacaoEtapaId"] = new SelectList(_context.dbSSituacoesEtapa, "SituacaoEtapaId", "Descricao");
             ViewData["TipoEtapaId"] = new SelectList(_context.dbSTiposEtapa, "TipoEtapaId", "Descricao");
 
@@ -109,8 +111,14 @@ namespace MVC.Controllers
             return View(avm);
         }
 
-        // GET: AutuarController/Details/5
-        public ActionResult Details(int id)
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public ActionResult Autuar(AutuarViewModel avm)
+        {
+            return View(avm);
+        }
+            // GET: AutuarController/Details/5
+            public ActionResult Details(int id)
         {
             return View();
         }

@@ -10,10 +10,13 @@ namespace Domain.Entities
     {
         public int OrgaoId { get; set; }
         public Orgao? Orgao { get; set; }
+
+        public int? UnidadeId { get; set; }
+        public Unidade? Unidade { get; set; }
+
+        public int? DivisaoId { get; set; }
+        public Divisao? Divisao { get; set; }
         
-        public long SequenciaNumerica { get; set; }
-        public DateTime Ano  {get;set; }
-        public int DigitoVerificador { get; set; }
-        public DateTime DataCadastro { get; set; }
+        public DateTime Data { get; set; }
     }
 }

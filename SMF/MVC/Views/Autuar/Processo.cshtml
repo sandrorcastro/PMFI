@@ -1,4 +1,5 @@
-﻿@model Domain.Entities.Processo
+﻿@*@model Domain.Entities.Processo*@
+@model MVC.ViewModels.AutuarViewModel
 
 @{
     ViewData["Title"] = "Processo";
@@ -6,35 +7,21 @@
 
 <div class="row">
     
-            <div class="col form-group">
-                <label asp-for="Orgao" class="control-label"></label>
-                <select asp-for="OrgaoId" class ="form-control" asp-items="ViewBag.OrgaoId"></select>
-            </div>
            
+          
             <div class="col form-group">
-                <label asp-for="TipoProcesso" class="control-label"></label>
-                <select asp-for="TipoProcessoId" class ="form-control" asp-items="ViewBag.TipoProcessoId"></select>
+                <label asp-for="Processo.TipoProcesso" class="control-label"></label>
+                <select asp-for="Processo.TipoProcessoId" class ="form-control" asp-items="ViewBag.TipoProcessoId"></select>
             </div>
             <div class="col form-group">
-                <label asp-for="SituacaoProcesso" class="control-label"></label>
-                <select asp-for="SituacaoProcessoId" class ="form-control" asp-items="ViewBag.SituacaoProcessoId"></select>
+                <label asp-for="Processo.SituacaoProcesso" class="control-label"></label>
+                <select asp-for="Processo.SituacaoProcessoId" class ="form-control" asp-items="ViewBag.SituacaoProcessoId"></select>
             </div>
-            <div class="col form-group">
-                <label asp-for="OrgaoRemetente" class="control-label"></label>
-                <select asp-for="OrgaoRemetenteId" class ="form-control" asp-items="ViewBag.OrgaoRemetenteId"></select>
-            </div>
-            <div class="col form-group">
-                <label asp-for="UnidadeRemetente" class="control-label"></label>
-                <select asp-for="UnidadeRemetenteId" class ="form-control" asp-items="ViewBag.UnidadeRemetenteId"></select>
-            </div>
-            <div class="col form-group">
-                <label asp-for="OrgaoDestinatario" class="control-label"></label>
-                <select asp-for="OrgaoDestinatarioId" class ="form-control" asp-items="ViewBag.OrgaoDestinatarioId"></select>
-            </div>
-            <div class="col form-group">
-                <label asp-for="UnidadeDestinatario" class="control-label"></label>
-                <select asp-for="UnidadeDestinatarioId" class ="form-control" asp-items="ViewBag.UnidadeDestinatarioId"></select>
-            </div>
+
+           
+            
+            
+            
             
 @*            <div class="form-group">
                 <label asp-for="ObservacaoProcesso" class="control-label"></label>

@@ -13,14 +13,15 @@
          <div class="card">
             <div class="card-header">
                 @{
-                   @* await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);*@
-                   <p> 
-                       Processor e Etapa
-                   </p>
-                }
-            </div>
-            <div class="card-body">
-                    @await Html.PartialAsync("~/Views/Autuar/Processo.cshtml",Model.Processo)
+                        @* await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);*@
+                        <p> 
+                            Processor e Etapa
+                        </p>
+                    }
+                </div>
+                <div class="card-body">
+                        @await Html.PartialAsync("~/Views/Autuar/Processo.cshtml", Model)
+                    
             </div>
             <div class="card-footer">
                 @* @await Component.InvokeAsync("Pagination", new { values = Model.values, routeData=Model.LinkData})*@

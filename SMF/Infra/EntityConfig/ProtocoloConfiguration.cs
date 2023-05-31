@@ -8,11 +8,13 @@ namespace Infra.EntityConfig
     {
         public void Configure(EntityTypeBuilder<Protocolo> builder)
         {
-            builder.HasKey(p  => new {p.OrgaoId,p.SequenciaNumerica,p.Ano,p.DigitoVerificador});
+            builder.HasKey(p  => new {p.OrgaoId,p.UnidadeId,p.DivisaoId,});
             builder.Property(p => p.OrgaoId).ValueGeneratedNever();
-            builder.Property(p => p.SequenciaNumerica).ValueGeneratedNever();
-            builder.Property(p => p.Ano).ValueGeneratedNever();
-            builder.Property(p => p.DigitoVerificador).ValueGeneratedNever();
+            builder.Property(p => p.UnidadeId).ValueGeneratedNever();
+            builder.Property(p => p.DivisaoId).ValueGeneratedNever();
+
+
+
             /* builder.Property<string>("Ano").HasMaxLength(4);
              builder.Property<string>("protocolo").HasMaxLength(20);
              builder.Property<string>("anoprotocolo").HasMaxLength(20);
