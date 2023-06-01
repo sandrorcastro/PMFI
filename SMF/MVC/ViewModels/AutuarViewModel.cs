@@ -25,7 +25,10 @@ namespace MVC.ViewModels
 
         public Endereco_Entidade? Endereco_Entidade { get; set; }
 
-                
+        public Endereco? EnderecoPessoaAutuado { get; set; }
+        public Endereco? EnderecoEconomiaAutuado { get; set; }
+
+
     }
 
     

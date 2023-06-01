@@ -219,11 +219,11 @@ namespace MVC.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool EtapaExists(long ProcessoId, int FluxoProcessoId, int TipoProcessoId)
+        private bool EtapaExists(long? ProcessoId, int? FluxoProcessoId, int? TipoProcessoId)
         {
           return (_context.dbSEtapas?.Any(e => e.ProcessoId == ProcessoId && e.FluxoProcessoId==FluxoProcessoId && e.TipoProcessoId==TipoProcessoId)).GetValueOrDefault();
         }
-        private bool FluxoProcessoTipoProcessoExists(int TipoProcessoId)
+        private bool FluxoProcessoTipoProcessoExists(int? TipoProcessoId)
         {
             return (_context.dbSFluxosProcesso?.Any(fp => fp.TipoProcessoId == TipoProcessoId )).GetValueOrDefault();
         }

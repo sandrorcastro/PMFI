@@ -3,9 +3,9 @@
     public class Pessoa
     {
         public long PessoaId { get; set; }
-        public string Nome { get; set; }
-        public int TipoPessoaId { get; set; }
-        public TipoPessoa TipoPessoa { get; set; }
+        public string? Nome { get; set; }
+        public int? TipoPessoaId { get; set; }
+        public TipoPessoa? TipoPessoa { get; set; }
         public DateTime? DataCadastro { get; set; }
         public bool? Ativo { get; set; }
         public long? conId { get; set; }

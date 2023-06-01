@@ -4,11 +4,11 @@
     {
         public long ImovelId { get; set; }
         public long EconomiaId { get; set; }
-        public Imovel Imovel { get; set; }
+        public Imovel? Imovel { get; set; }
         // public ICollection<Economia_Pessoa> Pessoas { get; set; }
-        public ICollection<Economia_Entidade> Pessoas { get; set; }
+        public ICollection<Economia_Entidade>? Pessoas { get; set; }
 
-        public ICollection<Endereco_Entidade> Enderecos { get; set; }
+        public ICollection<Endereco_Entidade>? Enderecos { get; set; }
         public ICollection<ObjetoProcesso>? ObjetoProcessos { get; set; }
 
 

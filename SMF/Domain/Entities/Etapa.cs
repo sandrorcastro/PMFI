@@ -9,7 +9,7 @@ namespace Domain.Entities
         public Processo? Processo { get; set; }
         public int FluxoProcessoId { get; set; }
         public FluxoProcesso? FluxoProcesso { get; set; }
-        public int TipoProcessoId { get; set; }
+        public int? TipoProcessoId { get; set; }
         public TipoProcesso? TipoProcesso { get; set; }
         public int? SituacaoEtapaId { get; set; }
         public SituacaoEtapa? SituacaoEtapa { get; set; }

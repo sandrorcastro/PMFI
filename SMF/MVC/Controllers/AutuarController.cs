@@ -110,6 +110,7 @@ namespace MVC.Controllers
                 Pessoa = pessoa
                 
             };
+            //_context.DisposeAsync();
             return View(avm);
         }
 
@@ -131,12 +132,10 @@ namespace MVC.Controllers
                         DescricaoObjetoProcesso="Ainda não Definido!",
                         ImovelId = avm.Economia.ImovelId,
                         EconomiaId = avm.Economia.EconomiaId,
-                        PessoaId = avm.Pessoa.PessoaId
-
-                        //EnderecoId = avm.Pessoa.E
-
-
+                        PessoaId = avm.Pessoa.PessoaId,
+                        EnderecoId = avm.EnderecoPessoaAutuado.EnderecoId
                     },
+                    
                     OrgaoId = Servidor.Divisao.Unidade.OrgaoId,
                     UnidadeId = Servidor.Divisao.UnidadeId,
                     DivisaoId = Servidor.DivisaoId,
@@ -150,11 +149,26 @@ namespace MVC.Controllers
                     SituacaoProcessoId = avm.Processo.SituacaoProcessoId,
                     TipoProcessoId = avm.Processo.TipoProcessoId,
                     ObservacaoProcesso = avm.Etapa.ObservacaoEtapa
+                    
 
                 };
-                _context.Add(processo);
+                Etapa etapa = new Etapa() {
+                    ProcessoId = processo.ProcessoId,
+                    SituacaoEtapaId = avm.Etapa.SituacaoEtapaId,
+                    FluxoProcessoId = 1,   /////////////
+                    TipoProcessoId = processo.TipoProcessoId,
+                    ServidorId = Servidor.ServidorId,
+                    Ano="2023",
+                    antigo=false,
+                    ObservacaoEtapa=avm.Etapa.ObservacaoEtapa,
+                };
 
-                _context.SaveChangesAsync();
+
+                _context.Add(etapa);
+                _context.AddRange(processo);
+
+                _context.SaveChanges();
+                //_context.DisposeAsync();
             }
 
 
