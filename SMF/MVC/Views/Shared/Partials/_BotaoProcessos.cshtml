@@ -4,6 +4,12 @@
     var actionAtual = ViewContext.RouteData.Values["action"].ToString();
     long imovelId = Model.ImovelId;
     long economiaId = Model.EconomiaId;
+    bool temprocessos = Model.TemProcessos;
 }
-<a class="btn btn-primary mr-1" asp-action="Processos" asp-controller=@controllerAtual asp-route-ImovelId=@imovelId asp-route-EconomiaId=@economiaId>Processos</a>
+@if (temprocessos)
+{
+    <a class="btn btn-primary mr-1" asp-action="Processos" asp-controller=@controllerAtual asp-route-ImovelId=@imovelId asp-route-EconomiaId=@economiaId>Processos</a>
+}else{
+    <a class="btn btn-primary mr-1 disabled"  asp-action="Processos" asp-controller=@controllerAtual asp-route-ImovelId=@imovelId asp-route-EconomiaId=@economiaId>Processos</a>
+}
 

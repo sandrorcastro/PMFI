@@ -4,17 +4,33 @@
     var actionAtual = ViewContext.RouteData.Values["action"].ToString();
     long imovelId = Model.ImovelId;
     long economiaId = Model.EconomiaId;
+    bool temprocessos = Model.TemProcessos;
 }
 <div class="row">
-    <div class="col">
-        @{
-            await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoProprietarios.cshtml");
-        }
-    </div>
-    <div class="col">
-        @{
-            await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoProcessos.cshtml");
-        }
-    </div>
-    
+    @if (temprocessos)
+    {
+        <div class="col">
+            @{
+                await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoProprietarios.cshtml");
+            }
+        </div>
+        <div class="col">
+            @{
+                await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoProcessos.cshtml");
+            }
+        </div>
+    }
+    else
+    {
+            <div class="col">
+                @{
+                    await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoProprietarios.cshtml");
+                }
+            </div>
+            <div class="col">
+                @{
+                    await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoProcessos.cshtml");
+                }
+            </div>
+    }
 </div>

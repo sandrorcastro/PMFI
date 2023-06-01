@@ -26,10 +26,8 @@
                 @Html.DisplayNameFor(model => model.Caracteristica)
             </th>
             
-            <th>
-                @Html.DisplayNameFor(model => model.TemProcessos)
-            </th>
-            <th></th>
+          
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
@@ -56,9 +54,7 @@
                 @Html.DisplayFor(modelItem => item.Caracteristica)
             </td>
             
-            <td>
-                @Html.DisplayFor(modelItem => item.TemProcessos)
-            </td>
+            
             <td>
                @* @Html.ActionLink("Proprietários", "Economia", new {  ImovelId=item.ImovelId,EconomiaId=item.EconomiaId}) |
                 @Html.ActionLink("Processos", "Processos", new {  ImovelId=item.ImovelId,EconomiaId=item.EconomiaId })*@
@@ -70,7 +66,7 @@
                     }
                     @{
                         //await Html.RenderPartialAsync("~/Views/Shared/Partials/_AcoesEconomias.cshtml",new { ImovelId = viewDataIID, EconomiaId = viewDataEID });
-                        await Html.RenderPartialAsync("~/Views/Shared/Partials/_AcoesEconomias.cshtml", new { ImovelId = @item.ImovelId, EconomiaId = @item.EconomiaId });
+                        await Html.RenderPartialAsync("~/Views/Shared/Partials/_AcoesEconomias.cshtml", new { ImovelId = @item.ImovelId, EconomiaId = @item.EconomiaId,TemProcessos=@item.TemProcessos });
                     }
                
             </td>

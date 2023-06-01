@@ -98,6 +98,8 @@ namespace MVC.Controllers
 
             var  entidadeId = long.Parse(String.Concat(ImovelId.ToString() + EconomiaId.ToString().PadLeft(3, '0')));
             var economia = economiaAppService.GetIQueryable().Where(e => e.ImovelId == ImovelId && e.EconomiaId == EconomiaId).FirstOrDefault();
+          
+
             //var pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(e=>e.Enderecos).ThenInclude(e=>e.Endereco).ThenInclude(l=>l.Logradouro).ThenInclude(tl=>tl.TipoLogradouro).Include(tp=>tp.TipoPessoa).FirstOrDefault();
             var pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(tp=>tp.TipoPessoa).FirstOrDefault();
             var enderecoseconomia = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == entidadeId).Include(e=>e.Endereco).ThenInclude(l=>l.Logradouro).ThenInclude(tl => tl.TipoLogradouro).ToList();
@@ -123,6 +125,7 @@ namespace MVC.Controllers
             if (ModelState.IsValid)
             {
                 //if(_context.dbSProcessos.Find())
+                //if(ProcessoExists)
                 Processo processo = new Processo()
                 {
                     ProcessoId = incrementoTabelasAppService.Incrementar("Processo", "Sistema", "2023"),
@@ -154,9 +157,11 @@ namespace MVC.Controllers
                 };
                 Etapa etapa = new Etapa() {
                     ProcessoId = processo.ProcessoId,
+                    TipoProcessoId=avm.Processo.TipoProcessoId,
                     SituacaoEtapaId = avm.Etapa.SituacaoEtapaId,
-                    FluxoProcessoId = 1,   /////////////
-                    TipoProcessoId = processo.TipoProcessoId,
+
+                    FluxoProcessoId = 4,   /////////////
+                    //TipoProcessoId = processo.TipoProcessoId,
                     ServidorId = Servidor.ServidorId,
                     Ano="2023",
                     antigo=false,
@@ -174,7 +179,22 @@ namespace MVC.Controllers
 
             return View("Index",new ImovelViewModel());
         }
-            // GET: AutuarController/Details/5
+        // GET: AutuarController/Details/5
+        public ActionResult Processos(long ImovelId,long EconomiaId)
+        {
+            var processos = _context.dbSProcessos.Join(_context.dbSObjetosProcesso, processo => processo.ProcessoId,
+             objeto => objeto.ProcessoId,(processo, objetoprocesso) => new { Processo = processo, ObjetoProcesso = objetoprocesso })
+                .Where(resultado => resultado.ObjetoProcesso.ImovelId == ImovelId && resultado.ObjetoProcesso.EconomiaId==EconomiaId)
+               .Select(resultado => resultado.Processo).Include(o=>o.Orgao).Include(u=>u.Unidade).Include(d=>d.Divisao)
+                                                       .Include(o => o.OrgaoRemetente).Include(u => u.UnidadeRemetente).Include(d => d.DivisaoRemetente)
+                                                       .Include(o => o.OrgaoDestinatario).Include(u => u.UnidadeDestinatario).Include(d => d.DivisaoDestinatario)
+                                                       .Include(s=>s.Servidor)
+                                                       .Include(tp=>tp.TipoProcesso)
+                                                       .Include(sp=>sp.SituacaoProcesso)
+                                                        .ToList();  
+            return View(processos);
+        }
+        // GET: AutuarController/Details/5
         public ActionResult Details(int id)
         {
             return View();
@@ -242,5 +262,10 @@ namespace MVC.Controllers
                 return View();
             }
         }
+        private bool ProcessoExists(long id)
+        {
+            return (_context.dbSProcessos?.Any(e => e.ProcessoId == id)).GetValueOrDefault();
+        }
+        
     }
 }
