@@ -38,7 +38,7 @@ namespace MVC.Controllers
         }
         public ActionResult Index()
         {
-            return View(new ImovelViewModel() { });
+            return View(new ImovelViewModel() );
         }
         // GET: AutuarController
 
@@ -46,10 +46,17 @@ namespace MVC.Controllers
         public ActionResult Imovel(ImovelViewModel imovel)
         {
             //var contextoAplicacao = _context.dbSEnderecos.Include(e => e.Bairro).Include(e => e.Cidade).Include(e => e.Logradouro);
-
+            
             var queryimovel = from s in imovelAppService.GetIQueryable().Filter(imovel.ImovelId.ToString()) select s;
             var queryeconomias = from s in economiaAppService.GetIQueryable().Filter(imovel.ImovelId.ToString()) select s;
             var imovelDO = queryimovel.AsNoTracking().FirstOrDefault();
+            if (imovelDO == null)
+            {
+                this.MostrarMensagem("O Imóvel de inscrição: " + imovel.ImovelId + " Não Existe!");
+                return RedirectToAction("Index");
+            }
+            
+            
             //var economiasDO = queryeconomias.AsNoTracking().ToList();
             ImovelViewModel ivm = mapper.Map<ImovelViewModel>(imovelDO);
             ivm.EconomiasImovel = queryeconomias.AsNoTracking().ToList();
@@ -167,11 +174,11 @@ namespace MVC.Controllers
                     antigo=false,
                     ObservacaoEtapa=avm.Etapa.ObservacaoEtapa,
                 };
-
+                
 
                 _context.Add(etapa);
                 _context.AddRange(processo);
-
+                economiaAppService.UpdateEconomiaTemProcessos(new Economia() { ImovelId = avm.Economia.ImovelId, EconomiaId = avm.Economia.EconomiaId });
                 _context.SaveChanges();
                 //_context.DisposeAsync();
             }
@@ -179,6 +186,22 @@ namespace MVC.Controllers
 
             return View("Index",new ImovelViewModel());
         }
+
+        public ActionResult DetalhesProcesso(long ProcessoID)
+        {
+            var processo = _context.dbSProcessos.Where(p => p.ProcessoId== ProcessoID)
+                                                       .Include(o => o.Orgao).Include(u => u.Unidade).Include(d => d.Divisao)
+                                                       .Include(o => o.OrgaoRemetente).Include(u => u.UnidadeRemetente).Include(d => d.DivisaoRemetente)
+                                                       .Include(o => o.OrgaoDestinatario).Include(u => u.UnidadeDestinatario).Include(d => d.DivisaoDestinatario)
+                                                       .Include(s => s.Servidor)
+                                                       .Include(tp => tp.TipoProcesso)
+                                                       .Include(sp => sp.SituacaoProcesso)
+                                                       .Include(e => e.ObjetoProcesso).ThenInclude(e => e.Economia).FirstOrDefault();
+            return View(processo);
+
+            
+        }
+
         // GET: AutuarController/Details/5
         public ActionResult Processos(long ImovelId,long EconomiaId)
         {
@@ -191,6 +214,7 @@ namespace MVC.Controllers
                                                        .Include(s=>s.Servidor)
                                                        .Include(tp=>tp.TipoProcesso)
                                                        .Include(sp=>sp.SituacaoProcesso)
+                                                       .Include(e=>e.ObjetoProcesso).ThenInclude(e=>e.Economia)
                                                         .ToList();  
             return View(processos);
         }
