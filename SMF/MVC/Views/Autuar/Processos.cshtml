@@ -2,77 +2,68 @@
 
 @{
     ViewData["Title"] = "Processos";
+    
 }
-
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.ProcessoId)
-            </th>
-            
-            <th>
-                @Html.DisplayNameFor(model => model.Ano)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataInicio)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.DataFim)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.TipoProcesso)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.SituacaoProcesso)
-            </th>
-            <th>Ações</th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-                <td>
-                    @Html.DisplayFor(modelItem => item.ProcessoId)
-                </td>
-           
-            <td>
-                @Html.DisplayFor(modelItem => item.Ano)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataInicio)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.DataFim)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.TipoProcesso.Descricao)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.SituacaoProcesso.Descricao)
-            </td>
-             <td>
-                <a asp-action="DetalhesProcesso" asp-route-id="@item.ProcessoId">Details</a> |
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
-
 <div class="card">
     <div class="card-header">
-        <h4>Processos do Imóvel: </h4>
+        <h4>Processos do Imóvel: @ViewBag.ImovelId Economia: @ViewBag.EconomiaId </h4>
     </div>
     <div class="card-body">
-        <div class="card">
-            <div class="card-header">
-            </div>
-            <div class="card-body">
-            </div>
-            <div class="card-footer">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>
+                        @Html.DisplayNameFor(model => model.ProcessoId)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.Ano)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DataInicio)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.DataFim)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.TipoProcesso)
+                    </th>
+                    <th>
+                        @Html.DisplayNameFor(model => model.SituacaoProcesso)
+                    </th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.ProcessoId)
+                        </td>
 
-            </div>
-        </div>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.Ano)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DataInicio)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.DataFim)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.TipoProcesso.Descricao)
+                        </td>
+                        <td>
+                            @Html.DisplayFor(modelItem => item.SituacaoProcesso.Descricao)
+                        </td>
+                        <td>
+                            <a asp-action="DetalhesProcesso" asp-route-ProcessoId="@item.ProcessoId">Detalhes</a>
+                            <a asp-action="Autuar" asp-route-ProcessoId="@item.ProcessoId">Autuar</a>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
     </div>
     <div class="card-footer">
     </div>

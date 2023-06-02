@@ -187,16 +187,21 @@ namespace MVC.Controllers
             return View("Index",new ImovelViewModel());
         }
 
-        public ActionResult DetalhesProcesso(long ProcessoID)
+        public ActionResult DetalhesProcesso(long ProcessoId)
         {
-            var processo = _context.dbSProcessos.Where(p => p.ProcessoId== ProcessoID)
+            var processo = _context.dbSProcessos.Where(p => p.ProcessoId== ProcessoId)
                                                        .Include(o => o.Orgao).Include(u => u.Unidade).Include(d => d.Divisao)
                                                        .Include(o => o.OrgaoRemetente).Include(u => u.UnidadeRemetente).Include(d => d.DivisaoRemetente)
                                                        .Include(o => o.OrgaoDestinatario).Include(u => u.UnidadeDestinatario).Include(d => d.DivisaoDestinatario)
                                                        .Include(s => s.Servidor)
                                                        .Include(tp => tp.TipoProcesso)
                                                        .Include(sp => sp.SituacaoProcesso)
-                                                       .Include(e => e.ObjetoProcesso).ThenInclude(e => e.Economia).FirstOrDefault();
+                                                       .Include(e => e.ObjetoProcesso).ThenInclude(e => e.Economia)
+                                                       .Include(e => e.ObjetoProcesso).ThenInclude(e => e.Pessoa)
+                                                       .Include(e => e.ObjetoProcesso).ThenInclude(e => e.Endereco).ThenInclude(l=>l.Logradouro).ThenInclude(tp=>tp.TipoLogradouro)
+                                                       .FirstOrDefault();
+            //var processo2 = _context.dbSProcessos.Where(p => p.ProcessoId == ProcessoId).Include(s=>s.Servidor).Include(op => op.ObjetoProcesso).ThenInclude(e => e.Economia).FirstOrDefault();
+            
             return View(processo);
 
             
@@ -215,7 +220,10 @@ namespace MVC.Controllers
                                                        .Include(tp=>tp.TipoProcesso)
                                                        .Include(sp=>sp.SituacaoProcesso)
                                                        .Include(e=>e.ObjetoProcesso).ThenInclude(e=>e.Economia)
-                                                        .ToList();  
+                                                        .ToList();
+            ViewData["ImovelId"] = ImovelId.ToString();
+            ViewData["EconomiaId"] = EconomiaId.ToString();
+
             return View(processos);
         }
         // GET: AutuarController/Details/5
