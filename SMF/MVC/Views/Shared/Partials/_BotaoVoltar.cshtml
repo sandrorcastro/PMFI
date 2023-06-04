@@ -4,3 +4,32 @@
 }
 @*<a class="btn btn-success" href="javascript:history.back()"><i class="fa fa-arrow-rotate-back">RFA</a>*@
 <a class="btn btn-success" href="javascript:history.back()">Voltar</a>
+
+
+
+@*<a class="btn btn-success" onclick="voltar()">Voltar</a>*@
+@*
+
+<script>
+    function voltar() {
+        var previousUrl = sessionStorage.getItem('previousUrl');
+        if (previousUrl) {
+            window.location.href = previousUrl;
+        } else {
+            // Fallback para o comportamento padrão de voltar
+            history.back();
+        }
+    }
+</script>
+
+*@
+@*
+
+<script>
+    function voltar() {
+        window.history.back();
+    }
+</script>
+
+*@
+

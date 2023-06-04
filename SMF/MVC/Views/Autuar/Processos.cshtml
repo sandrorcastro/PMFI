@@ -57,8 +57,10 @@
                             @Html.DisplayFor(modelItem => item.SituacaoProcesso.Descricao)
                         </td>
                         <td>
+                            <a asp-action="Movimentos" asp-route-ProcessoId="@item.ProcessoId">Movimentos</a>
                             <a asp-action="DetalhesProcesso"  asp-route-ProcessoId="@item.ProcessoId">Detalhes</a>
-                            <a asp-action="Autuar" asp-route-ImovelId="@item.ObjetoProcesso.ImovelId" asp-route-EconomiaId="@item.ObjetoProcesso.EconomiaId" asp-route-PessoaId="@item.ObjetoProcesso.PessoaId" asp-route-conId="@item.ObjetoProcesso.Pessoa.conId" asp-route-ProcessoId="@item.ProcessoId">Autuar</a>
+                            <a asp-action="AutuarComProcesso" asp-route-ImovelId="@item.ObjetoProcesso.ImovelId" asp-route-EconomiaId="@item.ObjetoProcesso.EconomiaId" asp-route-PessoaId="@item.ObjetoProcesso.PessoaId" asp-route-conId="@item.ObjetoProcesso.Pessoa.conId" asp-route-ProcessoId="@item.ProcessoId">Próximo Fluxo</a>
+                            
                         </td>
                     </tr>
                 }
@@ -66,6 +68,20 @@
         </table>
     </div>
     <div class="card-footer">
+        
+            @await Html.PartialAsync("~/Views/Shared/Partials/_BotaoVoltar.cshtml")
+        
     </div>
 
 </div>
+@*
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+<script>
+        var currentUrl = window.location.href;
+    sessionStorage.setItem('previousUrl', currentUrl);
+</script>
+}
+*@

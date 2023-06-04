@@ -14,9 +14,21 @@
             <div class="card-header">
                 @{
                         @* await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);*@
-                         
-                        <h5>Processor e Etapa</h5>
-                        
+                        @if((bool) !Model.Economia.TemProcessos){
+                            <h5>Processo e Etapa</h5>
+                        }
+                        else{
+                            if (!(Model.Processo == null))
+                            {
+                                <h5>Processo: @Model.Processo.ProcessoId </h5>
+                            }
+                            else{
+
+                                <h5>Processo e Etapa  </h5>
+                            }
+
+                        }
+
                     }
                 </div>
                 <div class="card-body">
