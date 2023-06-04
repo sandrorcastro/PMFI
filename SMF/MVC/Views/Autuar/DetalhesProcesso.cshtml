@@ -114,6 +114,17 @@
                 <dd class="col-sm-10">
                     @Html.DisplayFor(model => model.ObjetoProcesso.Pessoa.conId) / @Html.DisplayFor(model => model.ObjetoProcesso.Pessoa.Nome)
                 </dd>
+                <dt class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.ObjetoProcesso.Endereco)
+                </dt>
+                <dd class="col-sm-10">
+                    @Html.DisplayFor(model => model.ObjetoProcesso.Endereco.Logradouro.TipoLogradouro.Descricao) 
+                    @Html.DisplayFor(model => model.ObjetoProcesso.Endereco.Logradouro.Descricao)
+                    @Html.DisplayFor(model => model.ObjetoProcesso.Endereco.Bairro.Descricao)
+                    @Html.DisplayFor(model => model.ObjetoProcesso.Endereco.Cidade.Descricao)
+                    
+
+                </dd>
                 
                 
                 <dt class="col-sm-2">

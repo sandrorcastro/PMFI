@@ -76,6 +76,7 @@
                 </td>
                 <td>
                     <input type="hidden" asp-for="Endereco_Entidade.EntidadeId" value=@item.Pessoa.PessoaId>
+                    <input type="hidden" asp-for="Pessoa.conId" value=@item.Pessoa.conId>
                     <input type="hidden" asp-for="Endereco_Entidade.EnderecoId" value=@item.EnderecoId>
                     <input type="hidden" asp-for="Endereco_Entidade.TipoEntidadeId" value=@item.Pessoa.TipoPessoaId>
                     <input type="hidden" asp-for="Endereco_Entidade.Numero" value=@item.Numero>

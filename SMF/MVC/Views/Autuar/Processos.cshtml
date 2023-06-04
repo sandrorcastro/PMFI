@@ -57,8 +57,8 @@
                             @Html.DisplayFor(modelItem => item.SituacaoProcesso.Descricao)
                         </td>
                         <td>
-                            <a asp-action="DetalhesProcesso" asp-route-ProcessoId="@item.ProcessoId">Detalhes</a>
-                            <a asp-action="Autuar" asp-route-ProcessoId="@item.ProcessoId">Autuar</a>
+                            <a asp-action="DetalhesProcesso"  asp-route-ProcessoId="@item.ProcessoId">Detalhes</a>
+                            <a asp-action="Autuar" asp-route-ImovelId="@item.ObjetoProcesso.ImovelId" asp-route-EconomiaId="@item.ObjetoProcesso.EconomiaId" asp-route-PessoaId="@item.ObjetoProcesso.PessoaId" asp-route-conId="@item.ObjetoProcesso.Pessoa.conId" asp-route-ProcessoId="@item.ProcessoId">Autuar</a>
                         </td>
                     </tr>
                 }

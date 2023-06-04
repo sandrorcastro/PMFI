@@ -14,25 +14,23 @@
 
             @if ((bool) !Model.Economia.TemProcessos)
             {       
-                    <div class="col form-group">
+                    <div class="col md md-05 form-group">
                     <label asp-for="Processo.TipoProcesso" class="control-label"></label>
                     <select asp-for="Processo.TipoProcessoId" class ="form-control" asp-items="ViewBag.TipoProcessoId"></select>
                     </div>
 
-
-
-        <div class="col form-group">
-            <label asp-for="Processo.SituacaoProcesso" class="control-label"></label>
-            <select asp-for="Processo.SituacaoProcessoId" class="form-control" asp-items="ViewBag.SituacaoProcessoId"></select>
-        </div>
-        <div class="col form-group">
-            <label asp-for="Etapa.FluxoProcessoId" class="control-label"></label>
-            <select asp-for="Etapa.FluxoProcessoId" class="form-control" asp-items="ViewBag.FluxoProcessoId"></select>
-        </div>
-        <div class="col form-group">
-            <label asp-for="Etapa.SituacaoEtapaId" class="control-label"></label>
-            <select asp-for="Etapa.SituacaoEtapaId" class="form-control" asp-items="ViewBag.SituacaoEtapaId"></select>
-        </div>
+                    <div hidden class="col form-group">
+                        <label asp-for="Processo.SituacaoProcesso" class="control-label"></label>
+                        <select asp-for="Processo.SituacaoProcessoId" class="form-control" asp-items="ViewBag.SituacaoProcessoId"></select>
+                    </div>
+                    <div hidden class="col form-group">
+                        <label asp-for="Etapa.FluxoProcessoId" class="control-label"></label>
+                        <select asp-for="Etapa.FluxoProcessoId" class="form-control" asp-items="ViewBag.FluxoProcessoId"></select>
+                    </div>
+                    <div hidden class="col form-group">
+                        <label asp-for="Etapa.SituacaoEtapaId" class="control-label"></label>
+                        <select asp-for="Etapa.SituacaoEtapaId" class="form-control" asp-items="ViewBag.SituacaoEtapaId"></select>
+                    </div>
 
 
 

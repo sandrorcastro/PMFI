@@ -1,0 +1,45 @@
+﻿@model IEnumerable<Domain.Entities.Servidor_TipoProcesso>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Servidor)
+            </th>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.TipoProcesso)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Servidor.Matricula)-
+                    @Html.DisplayFor(modelItem => item.Servidor.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoProcesso.TipoProcessoId)-
+                    @Html.DisplayFor(modelItem => item.TipoProcesso.Descricao)
+            </td>
+            <td>
+                @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

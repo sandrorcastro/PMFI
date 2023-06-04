@@ -79,11 +79,153 @@ namespace MVC.Controllers
             //var economiaDO = queryeconomia.AsNoTracking().ToList();
             return View(evm);
         }
-        
-        public ActionResult Autuar(long ImovelId, long EconomiaId,long PessoaId,long conId)
+         public ActionResult AutuarComProcesso(long ImovelId, long EconomiaId, long PessoaId, long conId, long? ProcessoId)
+        {
+            var processo = _context.dbSProcessos.Where(p => p.ProcessoId == ProcessoId)
+                                                      .Include(o => o.Orgao).Include(u => u.Unidade).Include(d => d.Divisao)
+                                                      .Include(o => o.OrgaoRemetente).Include(u => u.UnidadeRemetente).Include(d => d.DivisaoRemetente)
+                                                      .Include(o => o.OrgaoDestinatario).Include(u => u.UnidadeDestinatario).Include(d => d.DivisaoDestinatario)
+                                                      .Include(s => s.Servidor)
+                                                      .Include(tp => tp.TipoProcesso)
+                                                      .Include(sp => sp.SituacaoProcesso)
+                                                      .Include(e => e.ObjetoProcesso).ThenInclude(e => e.Economia)
+                                                      .Include(e => e.ObjetoProcesso).ThenInclude(e => e.Pessoa)
+                                                      .Include(e => e.ObjetoProcesso).ThenInclude(e => e.Endereco).ThenInclude(l => l.Logradouro).ThenInclude(tp => tp.TipoLogradouro)
+                                                      .FirstOrDefault();
+            
+            var matriculaservidorId = User.Claims.FirstOrDefault().Value;
+            var Servidor = _context.dbSServidores.Where(m => m.Matricula == matriculaservidorId && m.Ativo == true).Include(tp => tp.PodeExecutar).ThenInclude(tp => tp.TipoProcesso).Include(d => d.Divisao).ThenInclude(u => u.Unidade).ThenInclude(o => o.Orgao).FirstOrDefault();
+            //var UnidadeServidor = _context.dbSUnidades.Where(u => u.UnidadeId == Servidor.UnidadeId).FirstOrDefault();
+
+
+            var etapaAtual = _context.dbSEtapas.Where(p => p.ProcessoId == ProcessoId && p.TipoProcessoId == processo.TipoProcessoId).OrderBy(o=>o.FluxoProcessoId).Last();
+            var quantidadefluxoTipoProcesso = _context.dbSFluxosProcesso.Where(tp => tp.TipoProcessoId == etapaAtual.TipoProcessoId).Count();
+            if (etapaAtual.FluxoProcessoId < quantidadefluxoTipoProcesso)
+            {
+                if (!FluxoProcessoExists(etapaAtual.TipoProcessoId))
+                {
+                    this.MostrarMensagem("Este Tipo de Processo ainda não Possui Fluxo do Processo Definido. Contacte O Administrador do Sistema! ");
+                    return RedirectToAction(nameof(Autuar), new { ImovelId = ImovelId, EconomiaId = EconomiaId, PessoaId = PessoaId, conId = conId });
+                    //return View(avm);
+                }
+
+                Processo AtualizaProcesso = new Processo()
+                {
+                    ProcessoId = processo.ProcessoId
+                   /* ObjetoProcesso = new ObjetoProcesso()
+                    {
+                        TipoObjetoProcesso = 1,
+
+                        DescricaoObjetoProcesso = "Ainda não Definido!",
+                        ImovelId = ImovelId,
+                        EconomiaId = EconomiaId,
+                        PessoaId = PessoaId,
+                      //  EnderecoId = EnderecoId
+                    },
+                    //Ano = DateTime.Now,
+                    //OrgaoId = Servidor.Divisao.Unidade.OrgaoId,
+                    //UnidadeId = Servidor.Divisao.UnidadeId,
+                    //DivisaoId = Servidor.DivisaoId,
+                    //ServidorId = Servidor.ServidorId,
+                    //OrgaoRemetenteId = Servidor.Divisao.Unidade.OrgaoId,
+                    //UnidadeRemetenteId = Servidor.Divisao.UnidadeId,
+                    //DivisaoRemetenteId = Servidor.DivisaoId,
+                    //OrgaoDestinatarioId = Servidor.Divisao.Unidade.OrgaoId,
+                    UnidadeDestinatarioId = Servidor.Divisao.UnidadeId,
+                    DivisaoDestinatarioId = Servidor.DivisaoId,
+                    SituacaoProcessoId = Processo.SituacaoProcessoId,
+                    TipoProcessoId = avm.Processo.TipoProcessoId,
+                    ObservacaoProcesso = avm.Etapa.ObservacaoEtapa
+
+                    */
+                };
+                Etapa NovaEtapa = new Etapa()
+                {
+                    ProcessoId = processo.ProcessoId,
+                    TipoProcessoId = processo.TipoProcessoId,
+                    //SituacaoEtapaId = SituacaoEtapaId,
+
+                    FluxoProcessoId = etapaAtual.FluxoProcessoId + 1,   /////////////
+                    //TipoProcessoId = processo.TipoProcessoId,
+                    ServidorId = Servidor.ServidorId,
+                    Ano = "2023",
+                    antigo = false,
+                  //  ObservacaoEtapa = avm.Etapa.ObservacaoEtapa,
+                };
+
+
+                _context.Add(NovaEtapa);
+                //_context.AddRange(processo);
+                //economiaAppService.UpdateEconomiaTemProcessos(new Economia() { ImovelId = avm.Economia.ImovelId, EconomiaId = avm.Economia.EconomiaId });
+                _context.SaveChanges();
+                //_context.DisposeAsync();
+            }
+            return View("Index", new ImovelViewModel());
+        }
+        public ActionResult Autuar(long ImovelId, long EconomiaId,long PessoaId,long conId,long? ProcessoId)
         {
             var matriculaservidorId = User.Claims.FirstOrDefault().Value;
             var Servidor = _context.dbSServidores.Where(m => m.Matricula == matriculaservidorId && m.Ativo == true).Include(tp=>tp.PodeExecutar).ThenInclude(tp=>tp.TipoProcesso).Include(d=>d.Divisao).ThenInclude(u=>u.Unidade).ThenInclude(o=>o.Orgao).FirstOrDefault();
+            var entidadeId = long.Parse(String.Concat(ImovelId.ToString() + EconomiaId.ToString().PadLeft(3, '0')));
+            var economia = economiaAppService.GetIQueryable().Where(e => e.ImovelId == ImovelId && e.EconomiaId == EconomiaId).FirstOrDefault();
+            var pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(tp => tp.TipoPessoa).FirstOrDefault();
+            var enderecoseconomia = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == entidadeId).Include(e => e.Endereco).ThenInclude(l => l.Logradouro).ThenInclude(tl => tl.TipoLogradouro).ToList();
+            var enderecospessoa = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == conId && s.ImovelId == ImovelId && s.EconomiaId == EconomiaId).Include(e => e.Endereco).ThenInclude(l => l.Logradouro).ThenInclude(tl => tl.TipoLogradouro).ToList();
+            economia.Enderecos = enderecoseconomia;
+            pessoa.Enderecos = enderecospessoa;
+            
+            if (ProcessoId.HasValue)
+            {
+                //return AutuarComProcesso(ImovelId,EconomiaId,PessoaId,conId,ProcessoId);
+                var processo = _context.dbSProcessos.Where(p => p.ProcessoId == ProcessoId)
+                                             .Include(o => o.Orgao).Include(u => u.Unidade).Include(d => d.Divisao)
+                                             .Include(o => o.OrgaoRemetente).Include(u => u.UnidadeRemetente).Include(d => d.DivisaoRemetente)
+                                             .Include(o => o.OrgaoDestinatario).Include(u => u.UnidadeDestinatario).Include(d => d.DivisaoDestinatario)
+                                             .Include(s => s.Servidor)
+                                             .Include(tp => tp.TipoProcesso)
+                                             .Include(sp => sp.SituacaoProcesso)
+                                             .Include(e => e.ObjetoProcesso).ThenInclude(e => e.Economia)
+                                             .Include(e => e.ObjetoProcesso).ThenInclude(e => e.Pessoa)
+                                             .Include(e => e.ObjetoProcesso).ThenInclude(e => e.Endereco).ThenInclude(l => l.Logradouro).ThenInclude(tp => tp.TipoLogradouro)
+                                             .FirstOrDefault();
+                var etapaAtual = _context.dbSEtapas.Where(p => p.ProcessoId == ProcessoId && p.TipoProcessoId == processo.TipoProcessoId).OrderBy(o => o.FluxoProcessoId).Last();
+                var quantidadefluxoTipoProcesso = _context.dbSFluxosProcesso.Where(tp => tp.TipoProcessoId == etapaAtual.TipoProcessoId).Count();
+                if (etapaAtual.FluxoProcessoId < quantidadefluxoTipoProcesso)
+                {
+                    ViewData["FluxoProcessoId"] = new SelectList(_context.dbSFluxosProcesso, "FluxoProcessoId", "Descricao",etapaAtual.FluxoProcessoId+1);
+                }
+                ViewData["OrgaoId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao", processo.OrgaoId);
+                ViewData["OrgaoDestinatarioId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao",processo.OrgaoDestinatarioId );
+                ViewData["OrgaoRemetenteId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao", processo.OrgaoRemetenteId);
+                ViewData["SituacaoProcessoId"] = new SelectList(_context.dbSSituacoesProcesso, "SituacaoProcessoId", "Descricao");
+                ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso.Join(_context.dbSServidores_TiposProcessos, tipoprocesso => tipoprocesso.TipoProcessoId,
+                servidortipoprocesso => servidortipoprocesso.TipoProcessoId, (tipoprocesso, servidortipoprocesso) => new { TipoProcesso = tipoprocesso, ServidorTipoProcesso = servidortipoprocesso })
+                   .Where(resultado => resultado.ServidorTipoProcesso.ServidorId == Servidor.ServidorId)
+                   .Select(resultado => new { resultado.TipoProcesso.TipoProcessoId, resultado.TipoProcesso.Descricao }).ToList(), "TipoProcessoId", "Descricao",processo.TipoProcessoId);
+                ViewData["UnidadeId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "Descricao", processo.UnidadeId);
+                ViewData["UnidadeDestinatarioId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "Descricao", processo.UnidadeDestinatarioId);
+                ViewData["UnidadeRemetenteId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "Descricao", processo.UnidadeRemetenteId);
+                //
+                ViewData["ServidorId"] = new SelectList(_context.dbSServidores, "ServidorId", "Descricao", Servidor.ServidorId);
+                ViewData["SituacaoEtapaId"] = new SelectList(_context.dbSSituacoesEtapa, "SituacaoEtapaId", "Descricao");
+                ViewData["TipoEtapaId"] = new SelectList(_context.dbSTiposEtapa, "TipoEtapaId", "Descricao");
+
+
+                //var pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(e=>e.Enderecos).ThenInclude(e=>e.Endereco).ThenInclude(l=>l.Logradouro).ThenInclude(tl=>tl.TipoLogradouro).Include(tp=>tp.TipoPessoa).FirstOrDefault();
+                ///var pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(tp => tp.TipoPessoa).FirstOrDefault();
+                ///var enderecoseconomia = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == entidadeId).Include(e => e.Endereco).ThenInclude(l => l.Logradouro).ThenInclude(tl => tl.TipoLogradouro).ToList();
+                ///var enderecospessoa = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == conId && s.ImovelId == ImovelId && s.EconomiaId == EconomiaId).Include(e => e.Endereco).ThenInclude(l => l.Logradouro).ThenInclude(tl => tl.TipoLogradouro).ToList();
+                ///economia.Enderecos = enderecoseconomia;
+                ///pessoa.Enderecos = enderecospessoa;
+                AutuarViewModel avmcomProcesso = new AutuarViewModel()
+                {
+                    Economia = economia,
+                    Pessoa = pessoa
+
+                };
+                //_context.DisposeAsync();
+                return View(avmcomProcesso);
+            }
             //var UnidadeServidor = _context.dbSUnidades.Where(u => u.UnidadeId == Servidor.UnidadeId).FirstOrDefault();
 
 
@@ -92,7 +234,15 @@ namespace MVC.Controllers
             ViewData["OrgaoDestinatarioId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao", Servidor.Divisao.Unidade.OrgaoId);
             ViewData["OrgaoRemetenteId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao", Servidor.Divisao.Unidade.OrgaoId);
             ViewData["SituacaoProcessoId"] = new SelectList(_context.dbSSituacoesProcesso, "SituacaoProcessoId", "Descricao");
-            ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso, "TipoProcessoId", "Descricao");
+            //ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso, "TipoProcessoId", "Descricao");
+
+            ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso.Join(_context.dbSServidores_TiposProcessos, tipoprocesso => tipoprocesso.TipoProcessoId,
+            servidortipoprocesso => servidortipoprocesso.TipoProcessoId, (tipoprocesso, servidortipoprocesso) => new { TipoProcesso = tipoprocesso, ServidorTipoProcesso = servidortipoprocesso })
+               .Where(resultado => resultado.ServidorTipoProcesso.ServidorId == Servidor.ServidorId)
+              .Select(resultado => new { resultado.TipoProcesso.TipoProcessoId, resultado.TipoProcesso.Descricao }).ToList(), "TipoProcessoId", "Descricao");
+
+
+
             //ViewData["TipoProcessoId"] = new SelectList(Servidor.PodeExecutar.ToList(), "TipoProcessoId", "Descricao");
             ViewData["UnidadeId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "Descricao", Servidor.Divisao.UnidadeId);
             ViewData["UnidadeDestinatarioId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "Descricao", Servidor.Divisao.UnidadeId);
@@ -103,16 +253,16 @@ namespace MVC.Controllers
             ViewData["TipoEtapaId"] = new SelectList(_context.dbSTiposEtapa, "TipoEtapaId", "Descricao");
 
 
-            var  entidadeId = long.Parse(String.Concat(ImovelId.ToString() + EconomiaId.ToString().PadLeft(3, '0')));
-            var economia = economiaAppService.GetIQueryable().Where(e => e.ImovelId == ImovelId && e.EconomiaId == EconomiaId).FirstOrDefault();
+           // var  entidadeId = long.Parse(String.Concat(ImovelId.ToString() + EconomiaId.ToString().PadLeft(3, '0')));
+           // var economia = economiaAppService.GetIQueryable().Where(e => e.ImovelId == ImovelId && e.EconomiaId == EconomiaId).FirstOrDefault();
           
 
             //var pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(e=>e.Enderecos).ThenInclude(e=>e.Endereco).ThenInclude(l=>l.Logradouro).ThenInclude(tl=>tl.TipoLogradouro).Include(tp=>tp.TipoPessoa).FirstOrDefault();
-            var pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(tp=>tp.TipoPessoa).FirstOrDefault();
-            var enderecoseconomia = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == entidadeId).Include(e=>e.Endereco).ThenInclude(l=>l.Logradouro).ThenInclude(tl => tl.TipoLogradouro).ToList();
-            var enderecospessoa = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == conId && s.ImovelId==ImovelId && s.EconomiaId==EconomiaId).Include(e => e.Endereco).ThenInclude(l => l.Logradouro).ThenInclude(tl => tl.TipoLogradouro).ToList();
-            economia.Enderecos = enderecoseconomia;
-            pessoa.Enderecos = enderecospessoa;
+            ///var pessoa = pessoaAppService.GetIQueryable().Where(p => p.PessoaId == PessoaId).Include(tp=>tp.TipoPessoa).FirstOrDefault();
+            ///ar enderecoseconomia = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == entidadeId).Include(e=>e.Endereco).ThenInclude(l=>l.Logradouro).ThenInclude(tl => tl.TipoLogradouro).ToList();
+            ///var enderecospessoa = endereco_EntidadeAppService.GetIQueryable().Where(s => s.EntidadeId == conId && s.ImovelId==ImovelId && s.EconomiaId==EconomiaId).Include(e => e.Endereco).ThenInclude(l => l.Logradouro).ThenInclude(tl => tl.TipoLogradouro).ToList();
+            ///economia.Enderecos = enderecoseconomia;
+            ///pessoa.Enderecos = enderecospessoa;
             AutuarViewModel avm = new AutuarViewModel()
             {
                 Economia = economia,
@@ -133,19 +283,27 @@ namespace MVC.Controllers
             {
                 //if(_context.dbSProcessos.Find())
                 //if(ProcessoExists)
+                if (!FluxoProcessoExists(avm.Processo.TipoProcessoId))
+                {
+                    this.MostrarMensagem("Este Tipo de Processo ainda não Possui Fluxo do Processo Definido. Contacte O Administrador do Sistema! ");
+                    return RedirectToAction(nameof(Autuar), new { ImovelId = avm.Economia.ImovelId, EconomiaId=avm.Economia.EconomiaId,PessoaId=avm.Pessoa.PessoaId,conId=avm.Pessoa.conId});
+                    //return View(avm);
+                }
+                
                 Processo processo = new Processo()
                 {
                     ProcessoId = incrementoTabelasAppService.Incrementar("Processo", "Sistema", "2023"),
                     ObjetoProcesso = new ObjetoProcesso()
                     {
                         TipoObjetoProcesso = 1,
+                        
                         DescricaoObjetoProcesso="Ainda não Definido!",
                         ImovelId = avm.Economia.ImovelId,
                         EconomiaId = avm.Economia.EconomiaId,
                         PessoaId = avm.Pessoa.PessoaId,
                         EnderecoId = avm.EnderecoPessoaAutuado.EnderecoId
                     },
-                    
+                    Ano = DateTime.Now,
                     OrgaoId = Servidor.Divisao.Unidade.OrgaoId,
                     UnidadeId = Servidor.Divisao.UnidadeId,
                     DivisaoId = Servidor.DivisaoId,
@@ -167,7 +325,7 @@ namespace MVC.Controllers
                     TipoProcessoId=avm.Processo.TipoProcessoId,
                     SituacaoEtapaId = avm.Etapa.SituacaoEtapaId,
 
-                    FluxoProcessoId = 4,   /////////////
+                    FluxoProcessoId = 1,   /////////////
                     //TipoProcessoId = processo.TipoProcessoId,
                     ServidorId = Servidor.ServidorId,
                     Ano="2023",
@@ -220,6 +378,9 @@ namespace MVC.Controllers
                                                        .Include(tp=>tp.TipoProcesso)
                                                        .Include(sp=>sp.SituacaoProcesso)
                                                        .Include(e=>e.ObjetoProcesso).ThenInclude(e=>e.Economia)
+                                                       .Include(e => e.ObjetoProcesso).ThenInclude(e => e.Pessoa)
+                                                       .Include(e => e.ObjetoProcesso).ThenInclude(e => e.Endereco)
+
                                                         .ToList();
             ViewData["ImovelId"] = ImovelId.ToString();
             ViewData["EconomiaId"] = EconomiaId.ToString();
@@ -298,6 +459,10 @@ namespace MVC.Controllers
         {
             return (_context.dbSProcessos?.Any(e => e.ProcessoId == id)).GetValueOrDefault();
         }
-        
+        private bool FluxoProcessoExists(int? id)
+        {
+            return (_context.dbSFluxosProcesso?.Any(e => e.TipoProcessoId == id)).GetValueOrDefault();
+        }
+
     }
 }
