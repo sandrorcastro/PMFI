@@ -1,0 +1,14 @@
+﻿@model dynamic
+@{
+    var controllerAtual = ViewContext.RouteData.Values["controller"].ToString();
+    var actionAtual = ViewContext.RouteData.Values["action"].ToString();
+    long imovelId = Model.ImovelId;
+    long economiaId = Model.EconomiaId;
+    bool temprocessos = Model.TemProcessos;
+    long processoId = Model.ProcessoId;
+    long conId = Model.conId;
+    long pessoaId = Model.PessoaId;
+}
+<a class="btn btn-primary mr-1" asp-action="AutuarComProcesso" asp-controller=@controllerAtual asp-route-ProcessoId=@processoId asp-route-ImovelId="@imovelId" asp-route-EconomiaID="@economiaId" asp-route-PessoaId="@pessoaId" asp-route-conId="@conId">PróximoFluxo</a>
+
+

@@ -57,9 +57,15 @@
                             @Html.DisplayFor(modelItem => item.SituacaoProcesso.Descricao)
                         </td>
                         <td>
+                            @*
                             <a asp-action="Movimentos" asp-route-ProcessoId="@item.ProcessoId">Movimentos</a>
                             <a asp-action="DetalhesProcesso"  asp-route-ProcessoId="@item.ProcessoId">Detalhes</a>
                             <a asp-action="AutuarComProcesso" asp-route-ImovelId="@item.ObjetoProcesso.ImovelId" asp-route-EconomiaId="@item.ObjetoProcesso.EconomiaId" asp-route-PessoaId="@item.ObjetoProcesso.PessoaId" asp-route-conId="@item.ObjetoProcesso.Pessoa.conId" asp-route-ProcessoId="@item.ProcessoId">Próximo Fluxo</a>
+                            *@
+                            @{
+                                //await Html.RenderPartialAsync("~/Views/Shared/Partials/_AcoesEconomias.cshtml",new { ImovelId = viewDataIID, EconomiaId = viewDataEID });
+                                await Html.RenderPartialAsync("~/Views/Shared/Partials/_AcoesProcessos.cshtml", new { ProcessoId = item.ProcessoId, ImovelId = @item.ObjetoProcesso.ImovelId, EconomiaId = @item.ObjetoProcesso.EconomiaId, PessoaId = item.ObjetoProcesso.Pessoa.PessoaId, conId = item.ObjetoProcesso.Pessoa.conId, TemProcessos = @item.ObjetoProcesso.Economia.TemProcessos });
+                            }
                             
                         </td>
                     </tr>
@@ -85,3 +91,9 @@
 </script>
 }
 *@
+
+<script>
+    var currentUrl = window.location.href;
+    sessionStorage.setItem('previousUrl', currentUrl);
+</script>
+

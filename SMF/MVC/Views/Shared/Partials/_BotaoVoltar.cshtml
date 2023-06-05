@@ -1,16 +1,15 @@
 ﻿@{
     var controllerAtual = ViewContext.RouteData.Values["controller"].ToString();
     var actionAtual = ViewContext.RouteData.Values["action"].ToString();
+
+    
 }
 @*<a class="btn btn-success" href="javascript:history.back()"><i class="fa fa-arrow-rotate-back">RFA</a>*@
+
 <a class="btn btn-success" href="javascript:history.back()">Voltar</a>
 
-
-
-@*<a class="btn btn-success" onclick="voltar()">Voltar</a>*@
-@*
-
-<script>
+@*<a class="btn btn-success" onclick="voltar()">VoltarB</a>*@
+@*<script>
     function voltar() {
         var previousUrl = sessionStorage.getItem('previousUrl');
         if (previousUrl) {
@@ -21,15 +20,26 @@
         }
     }
 </script>
-
 *@
-@*
+
+
+@*<a class="btn btn-success" onclick="voltar()">Voltar2</a>*@
+
+
+
 
 <script>
-    function voltar() {
-        window.history.back();
-    }
+        function voltar() {
+            var previousUrl = sessionStorage.getItem('previousUrl');
+            if (previousUrl) {
+                window.location.href = previousUrl;
+            } else {
+                // Fallback para o comportamento padrão de voltar
+                history.back();
+            }
+        }
 </script>
 
-*@
+
+
 
