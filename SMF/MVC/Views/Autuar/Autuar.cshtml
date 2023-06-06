@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Autuar";
 }
-<form asp-action="Autuar" method="post">
+<form asp-action="Autuar" method="post" enctype="multipart/form-data">
     <div asp-validation-summary="ModelOnly" class="text-danger"></div>
     <div class="card">
     <div class="card-header">
@@ -107,10 +107,10 @@
             <!--Inicio Card Observação -->
             <div class="card">
                 <div class="card-header">
-                    <h5> Anexos: </h5>
+                    @await Html.PartialAsync("~/Views/Autuar/AutuarAnexoHeader.cshtml",Model)
                 </div>
                 <div class="card-body">
-                    
+                    @await Html.PartialAsync("~/Views/Autuar/AutuarAnexoBory.cshtml",Model)
                 </div>
 
                 <div class="card-footer">
@@ -133,3 +133,76 @@
     </div>
     </div>
 </form>
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}
+
+<script src="~/webcamjs/webcam.js"></script>
+<script>
+    debugger;
+    Webcam.set({ width: 320, height: 240, image_format: 'jpeg', jpeg_quality: 90 });
+    Webcam.attach('#my_camera');
+    /////fileInput = document.getElementById('Image_ImageBase64String');
+    fileInput = document.getElementById('Files');
+    //fileInputF = document.getElementById('FilesF');
+    let dataTransfer = new DataTransfer();
+    let formData = new FormData();
+    function cap() {
+        Webcam.snap(function (data_uri) { addFile(data_uri); addImageTable(data_uri); });
+    }
+   
+    async function addFile(data_uri) {
+        // var raw_image_data = data_uri.replace(/^data\:image\/\w+\;base64\,/,'');
+        let res = await fetch(data_uri);
+        let myBlob = await res.blob();
+        const newFIle = new File([myBlob], 'webcam.jpg', { type: 'image/jpeg', lastModified: new Date(), });
+        //const newFIle = new File([raw_image_data], 'webcam.jpg', { type: 'image/jpeg', lastModified: new Date(), });
+        //const newFIle = new File([raw_image_data], 'myFile.jpg', { type: 'image/jpeg', lastModified: new Date(), });
+        //const newFIle = new File([data_uri], 'myFile.jpg', { type: 'image/jpeg', lastModified: new Date(), });
+        dataTransfer.items.add(newFIle);
+        fileInput.files = dataTransfer.files;
+        console.log(fileInput);
+    }
+
+    function addImageTable(data_uri) {
+        imagenscapituradas = document.getElementById("tabelaImagens");
+        var qtdLinhas = imagenscapituradas.rows.length;
+        var linha = imagenscapituradas.insertRow(qtdLinhas);
+        var linhaParam;
+        var cellImageCapturada = linha.insertCell(0);
+        var cellPerspectivaId = linha.insertCell(1);
+        var cellPerspectiva = linha.insertCell(2);
+        //var inputimg = document.getElementById('ImageVM_ImageBase64String');
+        //inputimg.appendChild(data_uri);
+        ///document.getElementById('ImageVM_ImageBase64String').append(data_uri);
+        // document.getElementById('ImageBase64String').append(data_uri);
+        //document.getElementById('ImageVM_ImageBase64String').value = data_uri;
+        //document.getElementById('ImageBase64String1').value = data_uri;
+        //cellPerspectiva.innerHTML = perspectivaId;
+        cellImageCapturada.innerHTML = '<img src="' + data_uri + '" style="max-width:50px; max-height:50px;"/>';
+       // cellPerspectivaId.innerHTML = document.getElementById('ImageVM_PerspectivaId').value;
+        // document.getElementById('mydata').value = '<img src="' + data_uri + '" style="max-width:75px; max-height:75px;"/>';
+    }
+    const convertBase64 = (file) => {
+        return new Promise((resolve, reject) => {
+            const fileReader = new FileReader();
+            fileReader.readAsDataURL(file);
+
+            fileReader.onload = () => {
+                resolve(fileReader.result);
+            };
+
+            fileReader.onerror = (error) => {
+                reject(error);
+            };
+        });
+    }
+    async function createBlob(base64) {
+        let res = await fetch(base64);
+        let myBlob = await res.blob();
+
+        console.log(myBlob);
+    }
+</script>

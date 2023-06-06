@@ -1,4 +1,5 @@
 ﻿using Application.Interfaces;
+using Application.Services;
 //using AspNetCore;
 using AutoMapper;
 using Domain.Entities;
@@ -10,6 +11,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using MVC.Extensions;
 using MVC.ViewModels;
+using System;
 using System.Diagnostics;
 using System.Runtime.Intrinsics.X86;
 
@@ -288,6 +290,7 @@ namespace MVC.Controllers
                     _context.AddRange(processo);
                     economiaAppService.UpdateEconomiaTemProcessos(new Economia() { ImovelId = avm.Economia.ImovelId, EconomiaId = avm.Economia.EconomiaId });
                     _context.SaveChanges();
+
                 }
                 else
                 {
@@ -454,6 +457,106 @@ namespace MVC.Controllers
         {
             return (_context.dbSFluxosProcesso?.Any(e => e.TipoProcessoId == id)).GetValueOrDefault();
         }
+       /* public void StoreImage(IFormFileCollection files, AutuarViewModel aVM)
+        {
+            try
+            {
+                //var files = HttpContext.Request.Form.Files;
+                if (files != null)
+                {
+                    foreach (var file in files)
+                    {
+                        if (file.Length > 0)
+                        {
+                            //ImageViewModel imageVM = aVM.Image;//   new ImageViewModel();
+
+                            var fileName = file.FileName;
+                            var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+                            //imageVM.ImageId = myUniqueFileName;
+                            var fileExtension = Path.GetExtension(fileName);
+                            var newFileName = String.Concat(myUniqueFileName, fileExtension);
+                            var filePath = Path.Combine(environment.WebRootPath, "CameraPhotos") + $@"\{newFileName}";
+                            ImageViewModel imageVM = new ImageViewModel()
+                            {
+                                ImageId = myUniqueFileName,
+                                ProcessoId = aVM.Processo.ProcessoId,
+                                TipoProcessoId = aVM.TipoProcesso.TipoProcessoId,
+                                SituacaoProcessoId = aVM.SituacaoProcesso.SituacaoProcessoId,
+                                ImovelId = aVM.Imovel.ImovelId,
+                                EconomiaId = aVM.Economia.EconomiaId,
+                                SituacaoEtapaId = aVM.SituacaoEtapa.SituacaoEtapaId,
+                                TipoEtapaId = aVM.TipoEtapa.TipoEtapaId,
+                                //PerspectivaId=aVM.Image.PerspectivaId,
+                                NomeArquivo = newFileName,
+                                Caminho = filePath
+                            };
+                            //                            imageVM.NomeArquivo = newFileName;
+                            //                          imageVM.Caminho = filePath;
+
+                            if (!string.IsNullOrEmpty(filePath))
+                            {
+                                StoreInFolder(file, filePath);
+
+                            }
+                            var imageBytes = System.IO.File.ReadAllBytes(filePath);
+                            if (imageBytes != null)
+                            {
+                                StoreInDatabase(imageBytes, imageVM);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+        private void StoreInFolder(IFormFile file, string filename)
+        {
+            using (FileStream fs = System.IO.File.Create(filename))
+            {
+                file.CopyTo(fs);
+                fs.Flush();
+            }
+        }
+        private void StoreInDatabase(byte[] imageBytes, ImageViewModel? imageVM)
+        {
+            //Saving captured into database
+            try
+            {
+                if (imageBytes != null)
+                {
+                    string base64String = Convert.ToBase64String(imageBytes, 0, imageBytes.Length);
+                    string imageUrl = string.Concat("data:image/jpg;base64,", base64String);
+                    ImageViewModel NewimageVM = new ImageViewModel()
+                    {
+                        CreateDate = DateTime.Now,
+                        ImageBase64String = imageUrl,
+                        ImageId = imageVM.ImageId,
+                        ImovelId = imageVM.ImovelId,
+                        EconomiaId = imageVM.EconomiaId,
+                        ProcessoId = imageVM.ProcessoId,
+                        TipoProcessoId = imageVM.TipoProcessoId,
+                        SituacaoProcessoId = imageVM.SituacaoProcessoId,
+                        SituacaoEtapaId = imageVM.SituacaoEtapaId,
+                        TipoEtapaId = imageVM.TipoEtapaId,
+                        PerspectivaId = imageVM.PerspectivaId,
+                        NomeArquivo = imageVM.NomeArquivo,
+                        Caminho = imageVM.Caminho
+
+                    };
+                    imageAppService.Add(mapper.Map<Image>(NewimageVM));
+                    //_cameraDatabaseContext.SaveChanges();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }*/
+
 
     }
 }

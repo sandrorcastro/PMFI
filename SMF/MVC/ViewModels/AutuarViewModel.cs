@@ -27,8 +27,9 @@ namespace MVC.ViewModels
 
         public Endereco? EnderecoPessoaAutuado { get; set; }
         public Endereco? EnderecoEconomiaAutuado { get; set; }
+        public List<IFormFile>? Files { get; set; }
 
-      
+
 
 
     }
