@@ -1,0 +1,8 @@
+  //function capF() {
+    //fileInputF.addEventListener('change', function (event) {
+      //  const files = event.target.files; // Obtenha a lista de arquivos selecionados
+       // for (let i = 0; i < files.length; i++) {
+         //   dataTransfer.items.add(files[i]);
+        //};
+          //});
+    
