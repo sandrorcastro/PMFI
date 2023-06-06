@@ -9,9 +9,10 @@
   <div class="row mt-2">
         <div class="col-12">
             <label class="col-form-label">Select Multiple Files</label>
-            <input asp-for="Files" class="form-control" multiple/>
+            <input asp-for="FilesF" class="form-control" multiple/>
+            <input hidden asp-for="FilesI" class="form-control" multiple />
         @*<input type="File" name="FilesF" id="FilesF" class="form-control" multiple/>*@
-            <span asp-validation-for="Files" class="text-danger"></span>
+            <span asp-validation-for="FilesF" class="text-danger"></span>
         </div>
     </div>
 

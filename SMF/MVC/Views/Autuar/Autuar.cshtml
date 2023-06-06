@@ -145,8 +145,8 @@
     Webcam.set({ width: 320, height: 240, image_format: 'jpeg', jpeg_quality: 90 });
     Webcam.attach('#my_camera');
     /////fileInput = document.getElementById('Image_ImageBase64String');
-    fileInput = document.getElementById('Files');
-    //fileInputF = document.getElementById('FilesF');
+    fileInput = document.getElementById('FilesI');
+    fileInputF = document.getElementById('FilesF');
     let dataTransfer = new DataTransfer();
     let formData = new FormData();
     function cap() {
@@ -165,6 +165,34 @@
         fileInput.files = dataTransfer.files;
         console.log(fileInput);
     }
+    fileInputF.addEventListener('change', function (event) {
+
+          const files = event.target.files; // Obtenha a lista de arquivos selecionados
+
+        imagenscapituradas = document.getElementById("tabelaImagens");
+        var qtdLinhas = imagenscapituradas.rows.length;
+        var linha = imagenscapituradas.insertRow(qtdLinhas);
+        var linhaParam;
+        var cellImageCapturada = linha.insertCell(0);
+        var cellPerspectivaId = linha.insertCell(1);
+        var cellPerspectiva = linha.insertCell(2);
+        //var inputimg = document.getElementById('ImageVM_ImageBase64String');
+        //inputimg.appendChild(data_uri);
+        ///document.getElementById('ImageVM_ImageBase64String').append(data_uri);
+        // document.getElementById('ImageBase64String').append(data_uri);
+        //document.getElementById('ImageVM_ImageBase64String').value = data_uri;
+        //document.getElementById('ImageBase64String1').value = data_uri;
+        //cellPerspectiva.innerHTML = perspectivaId;
+        // cellPerspectivaId.innerHTML = document.getElementById('ImageVM_PerspectivaId').value;
+        // document.getElementById('mydata').value = '<img src="' + data_uri + '" style="max-width:75px; max-height:75px;"/>';
+          
+          
+          
+          for (let i = 0; i < files.length; i++) {
+                cellImageCapturada.innerHTML = '<img src="' + file[i] + '" style="max-width:50px; max-height:50px;"/>';
+           //dataTransfer.items.add(files[i]);
+        };
+        });
 
     function addImageTable(data_uri) {
         imagenscapituradas = document.getElementById("tabelaImagens");
