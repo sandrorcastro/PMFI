@@ -378,6 +378,8 @@ namespace MVC.Controllers
                                                         .ToList();
             ViewData["ImovelId"] = ImovelId.ToString();
             ViewData["EconomiaId"] = EconomiaId.ToString();
+            //ViewData["PessoaId"] = .ObjetoProcesso.PessoaId;
+           // ViewData["conId"] = processo.ObjetoProcesso.Pessoa.conId;
 
             return View(processos);
         }

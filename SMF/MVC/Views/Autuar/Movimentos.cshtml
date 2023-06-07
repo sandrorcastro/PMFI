@@ -85,19 +85,21 @@
     <div class="card-footer">
         <div class="row">
 
-        <div class="col">
-            @{
-                await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoVoltar.cshtml");
+                <div class="col">
+                    @{
+                        await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoVoltar.cshtml");
 
-            }
-        </div>
+                    }
+                </div>
         
-        <div class="col">
-            @{
-                await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoAutuar.cshtml", new { ImovelId = @ViewBag.ImovelId, EconomiaId = @ViewBag.EconomiaId, PessoaId = @ViewBag.PessoaId, conId = @ViewBag.conId });
+                <div class="col">
+                    @{
+                        await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoAutuar.cshtml", new { ImovelId = @ViewBag.ImovelId, EconomiaId = @ViewBag.EconomiaId, PessoaId = @ViewBag.PessoaId, conId = @ViewBag.conId });
 
-            }
-        </div>
+                    }
+                </div>
+               
+
         </div>
     </div>
     

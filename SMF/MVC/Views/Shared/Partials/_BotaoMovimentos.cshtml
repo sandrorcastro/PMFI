@@ -4,7 +4,7 @@
     var actionAtual = ViewContext.RouteData.Values["action"].ToString();
     long imovelId = Model.ImovelId;
     long economiaId = Model.EconomiaId;
-    bool temprocessos = Model.TemProcessos;
+   // bool temprocessos = Model.TemProcessos;
     long processoId = Model.ProcessoId;
 }
 <a class="btn btn-primary mr-1" asp-action="Movimentos" asp-controller=@controllerAtual asp-route-ProcessoId=@processoId>Movimentos</a>
