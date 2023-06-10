@@ -23,6 +23,8 @@ namespace Infra.EntityConfig
             builder.HasOne(p => p.UnidadeRemetente).WithMany().HasForeignKey(u => u.UnidadeRemetenteId).OnDelete(DeleteBehavior.NoAction);
             builder.HasOne(p => p.UnidadeDestinatario).WithMany().HasForeignKey(u=>u.UnidadeDestinatarioId).OnDelete(DeleteBehavior.NoAction);
             builder.HasOne(p => p.ObjetoProcesso).WithOne(p=>p.Processo).HasForeignKey<ObjetoProcesso>(op=>op.ProcessoId).OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(p => p.ServidorExecutor).WithMany(p => p.ExecutaProcessos).HasForeignKey(s => s.ServidorExecutorId).OnDelete(DeleteBehavior.NoAction);
+            builder.HasOne(p => p.Servidor).WithMany(p => p.Processos).HasForeignKey(s => s.ServidorId).OnDelete(DeleteBehavior.NoAction);
             builder.Property<string>("ObservacaoProcesso").HasMaxLength(1000);
 
              /*builder.Property<string>("Ano").HasMaxLength(4);

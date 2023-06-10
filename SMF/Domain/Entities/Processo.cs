@@ -44,11 +44,15 @@ namespace Domain.Entities
         // public FluxoProcesso? FluxoProcesso { get; set; }
         public long? ServidorId { get; set; }
         public Servidor? Servidor { get; set; }
+
+        public long? ServidorExecutorId { get; set; }
+        public Servidor? ServidorExecutor { get; set; }
         public string? ObservacaoProcesso { get; set; }
         public ICollection<Etapa>? Etapas { get; set; }
         public bool? ProcessoEnviado { get; set; } = false;
         public bool? ProcessoRecebido { get; set; } = false;
         public bool? ProcessoAntigo { get; set; } = false;
+        public bool? ProcessoInativo { get; set; } = false;
 
         //public NivelAcesso //Sigiloso| Restrito| Publico
     }

@@ -82,7 +82,7 @@ namespace MVC.Controllers
             //var economiaDO = queryeconomia.AsNoTracking().ToList();
             return View(evm);
         }
-         public ActionResult AutuarComProcesso(long ImovelId, long EconomiaId, long PessoaId, long conId, long? ProcessoId)
+         public ActionResult AutuarCompProcesso(long ImovelId, long EconomiaId, long PessoaId, long conId, long? ProcessoId)
         {
             var matriculaservidorId = User.Claims.FirstOrDefault().Value;
             var Servidor = _context.dbSServidores.Where(m => m.Matricula == matriculaservidorId && m.Ativo == true).Include(tp => tp.PodeExecutar).ThenInclude(tp => tp.TipoProcesso).Include(d => d.Divisao).ThenInclude(u => u.Unidade).ThenInclude(o => o.Orgao).FirstOrDefault();

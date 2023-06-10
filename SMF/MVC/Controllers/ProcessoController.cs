@@ -22,7 +22,16 @@ namespace MVC.Controllers
         // GET: Processo
         public async Task<IActionResult> Index()
         {
-            var contextoAplicacao = _context.dbSProcessos.Include(p => p.Orgao).Include(p => p.OrgaoDestinatario).Include(p => p.OrgaoRemetente).Include(p => p.Servidor).Include(p => p.SituacaoProcesso).Include(p => p.TipoProcesso).Include(p => p.UnidadeDestinatario).Include(p => p.UnidadeRemetente);
+            var contextoAplicacao = _context.dbSProcessos.Where(pi=>pi.ProcessoInativo==false)
+                                                         .Include(p => p.Orgao)
+                                                         .Include(p => p.OrgaoDestinatario)
+                                                         .Include(p => p.OrgaoRemetente)
+                                                         .Include(p => p.Servidor)
+                                                         .Include(p => p.ServidorExecutor)
+                                                         .Include(p => p.SituacaoProcesso)
+                                                         .Include(p => p.TipoProcesso)
+                                                         .Include(p => p.UnidadeDestinatario)
+                                                         .Include(p => p.UnidadeRemetente);
             return View(await contextoAplicacao.ToListAsync());
         }
 
@@ -34,11 +43,12 @@ namespace MVC.Controllers
                 return NotFound();
             }
 
-            var processo = await _context.dbSProcessos
+            var processo = await _context.dbSProcessos.Where(pi => pi.ProcessoInativo == false)
                 .Include(p => p.Orgao)
                 .Include(p => p.OrgaoDestinatario)
                 .Include(p => p.OrgaoRemetente)
                 .Include(p => p.Servidor)
+                .Include(p => p.ServidorExecutor)
                 .Include(p => p.SituacaoProcesso)
                 .Include(p => p.TipoProcesso)
                 .Include(p => p.UnidadeDestinatario)
@@ -59,6 +69,7 @@ namespace MVC.Controllers
             ViewData["OrgaoDestinatarioId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "OrgaoId");
             ViewData["OrgaoRemetenteId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "OrgaoId");
             ViewData["ServidorId"] = new SelectList(_context.dbSServidores, "ServidorId", "ServidorId");
+            ViewData["ServidorExecutorId"] = new SelectList(_context.dbSServidores, "ServidorId", "ServidorId");
             ViewData["SituacaoProcessoId"] = new SelectList(_context.dbSSituacoesProcesso, "SituacaoProcessoId", "SituacaoProcessoId");
             ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso, "TipoProcessoId", "TipoProcessoId");
             ViewData["UnidadeDestinatarioId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "UnidadeId");
@@ -71,7 +82,7 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProcessoId,OrgaoId,Ano,DataInicio,DataFim,TipoProcessoId,SituacaoProcessoId,OrgaoRemetenteId,UnidadeRemetenteId,OrgaoDestinatarioId,UnidadeDestinatarioId,ServidorId,ObservacaoProcesso,ProcessoEnviado,ProcessoRecebido,ProcessoAntigo")] Processo processo)
+        public async Task<IActionResult> Create([Bind("ProcessoId,OrgaoId,Ano,DataInicio,DataFim,TipoProcessoId,SituacaoProcessoId,OrgaoRemetenteId,UnidadeRemetenteId,OrgaoDestinatarioId,UnidadeDestinatarioId,ServidorId,ServidorExecutorId,ObservacaoProcesso,ProcessoEnviado,ProcessoRecebido,ProcessoAntigo")] Processo processo)
         {
             if (ModelState.IsValid)
             {

@@ -33,5 +33,7 @@ namespace Domain.Entities
         public bool? emailRecebido { get; set; }
         public bool? whatsEnviado { get; set; }
         public bool? whatsRecebido { get; set; }
+
+        public bool? EtapaInativa { get; set; }
     }
 }

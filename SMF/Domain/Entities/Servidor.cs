@@ -18,6 +18,8 @@ namespace Domain.Entities
         public bool? Ativo { get; set; }
 
         public ICollection<Processo> Processos { get; set; }
+        public ICollection<Processo> ExecutaProcessos { get; set; }
         public ICollection<Servidor_TipoProcesso> PodeExecutar { get; set; }
+        //public ICollection<Servidor_TipoProcesso> PodeCriar { get; set; }
     }
 }

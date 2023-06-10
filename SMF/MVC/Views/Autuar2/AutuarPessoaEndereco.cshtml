@@ -1,0 +1,92 @@
+﻿@*@model IEnumerable<Domain.Entities.Endereco_Entidade>*@
+@model MVC.ViewModels.AutuarViewModel
+@{
+    ViewData["Title"] = "Details";
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Endereco_Entidade.CEP)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Endereco_Entidade.Endereco.Logradouro.TipoLogradouro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Endereco_Entidade.Endereco.Logradouro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Endereco_Entidade.Numero)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Endereco_Entidade.Endereco.Logradouro.Bairro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Endereco_Entidade.Endereco.Logradouro.Cidade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Endereco_Entidade.Correspondencia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Endereco_Entidade.Principal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Endereco_Entidade.Ativo)
+            </th>
+            <th> 
+                Atual
+            </th>
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model.Pessoa.Enderecos)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.CEP)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Endereco.Logradouro.TipoLogradouro.Descricao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Endereco.Logradouro.Descricao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Numero)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Endereco.Logradouro.Bairro.Descricao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Endereco.Logradouro.Cidade.Descricao)
+                </td>
+               
+                <td>
+                    @Html.DisplayFor(modelItem => item.Correspondencia)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Principal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Ativo)
+                </td>
+                <td>
+                    @Html.RadioButtonFor(model => Model.EnderecoPessoaAutuado.EnderecoId,item.EnderecoId,new {@class="btn btn-success required"})
+                </td>
+                <td>
+                    <input type="hidden" asp-for="Endereco_Entidade.EntidadeId" value=@item.Pessoa.PessoaId>
+                    <input type="hidden" asp-for="Pessoa.conId" value=@item.Pessoa.conId>
+                    <input type="hidden" asp-for="Endereco_Entidade.EnderecoId" value=@item.EnderecoId>
+                    <input type="hidden" asp-for="Endereco_Entidade.TipoEntidadeId" value=@item.Pessoa.TipoPessoaId>
+                    <input type="hidden" asp-for="Endereco_Entidade.Numero" value=@item.Numero>
+
+                         
+                    @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                    @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,56 @@
+﻿@model MVC.ViewModels.AutuarViewModel
+@{
+    ViewData["Title"] = "Proprietarios";
+}
+@*<input type="file" name="imagens" multiple accept="image/*" capture="camera" />*@
+
+
+
+  <div class="row mt-2">
+        <div class="col-12">
+            <label class="col-form-label">Select Multiple Files</label>
+            <input asp-for="FilesF" class="form-control" multiple/>
+            <input hidden asp-for="FilesI" class="form-control" multiple />
+        @*<input type="File" name="FilesF" id="FilesF" class="form-control" multiple/>*@
+            <span asp-validation-for="FilesF" class="text-danger"></span>
+        </div>
+    </div>
+
+
+<div class="row">
+    <div class="col">
+        <h5>Anexar</h5>
+    </div>
+    <div class="col">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalCenter">Capturar</button>
+    </div>
+</div>
+<div class="modal fade" id="ModalCenter" tabindex="-1" role="dialog" aria-labelledby="ModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="ModalLongTitle">Capturar Imagens</h5>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="my_camera"></div>
+                <div class="input-group">
+                    @*<select class="custom-select" id="inputGroupSelect04" aria-label="Exemplo de select com botão addon">*@
+                    <div class="input-group-append">
+                        <button class="btn btn-outline-secondary" type="button" data-dismiss="modal" onclick=cap()>Capturar</button>
+                    </div>
+                    @* <select class="custom-select" asp-for="@Model.Image.PerspectivaId" asp-items="@ViewBag.Perspectivas" required>
+                    <option selected>Escolher Perfio da Foto</option>
+                    </select>*@
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+
+            </div>
+        </div>
+    </div>
+</div>

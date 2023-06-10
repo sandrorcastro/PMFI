@@ -1,0 +1,113 @@
+﻿@model IEnumerable<Domain.Entities.Etapa>
+
+@{
+    ViewData["Title"] = "Movimentos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+
+<div class="card">
+    <div class="card-header">
+        <h4>Movimentos do Processo: @ViewBag.ProcessoId</h4>
+    </div>
+    <div class="card-body">
+        <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    @Html.DisplayNameFor(model => model.Processo)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.FluxoProcesso)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.TipoProcesso)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.SituacaoEtapa)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DataInicio)
+                </th>
+                <th>
+                    @Html.DisplayNameFor(model => model.DataFim)
+                </th>
+
+                <th>
+                    @Html.DisplayNameFor(model => model.Ano)
+                </th>
+
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Processo.ProcessoId)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.FluxoProcesso.FluxoProcessoId)-
+                        @Html.DisplayFor(modelItem => item.FluxoProcesso.Descricao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.TipoProcesso.TipoProcessoId)-
+                        @Html.DisplayFor(modelItem => item.TipoProcesso.Descricao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.SituacaoEtapa.SituacaoEtapaId)-
+                        @Html.DisplayFor(modelItem => item.SituacaoEtapa.Descricao)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DataInicio)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.DataFim)
+                    </td>
+
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Ano)
+                    </td>
+
+
+                    <td>
+                        @Html.ActionLink("Edit", "Edit", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Details", "Details", new { /* id=item.PrimaryKey */ }) |
+                        @Html.ActionLink("Delete", "Delete", new { /* id=item.PrimaryKey */ })
+                    </td>
+                </tr>
+            }
+        </tbody>
+        </table>
+    </div>
+    <div class="card-footer">
+        <div class="row">
+
+                <div class="col">
+                    @{
+                        await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoVoltar.cshtml");
+
+                    }
+                </div>
+        
+                <div class="col">
+                    @{
+                        await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoAutuar.cshtml", new { ImovelId = @ViewBag.ImovelId, EconomiaId = @ViewBag.EconomiaId, PessoaId = @ViewBag.PessoaId, conId = @ViewBag.conId });
+
+                    }
+                </div>
+               
+
+        </div>
+    </div>
+    
+
+
+</div> <!--Final Card-->
+
+<script>
+    var currentUrl = window.location.href;
+    sessionStorage.setItem('previousUrl', currentUrl);
+</script>
