@@ -75,7 +75,7 @@
             <td>
                @* @Html.ActionLink("Autuar", "Autuar", new {  ImovelId=item.ImovelId,EconomiaId=item.EconomiaId,PessoaId=item.PessoaId,conId=item.Pessoa.conId}) *@
                @{
-                  await Html.RenderPartialAsync("~/Views/Shared/Partials/_AcoesEconomia_Entidade.cshtml", new { ImovelId = @item.ImovelId, EconomiaId = @item.EconomiaId,PessoaId=@item.PessoaId,conId=@item.Pessoa.conId });
+                  await Html.RenderPartialAsync("~/Views/Shared/Partials/_AcoesEconomia_EntidadeGenerico.cshtml", new { ImovelId = @item.ImovelId, EconomiaId = @item.EconomiaId,PessoaId=@item.PessoaId,conId=@item.Pessoa.conId,NomeBotao="Autuar" ,TemProcessos=false});
                 }
               
             </td>
