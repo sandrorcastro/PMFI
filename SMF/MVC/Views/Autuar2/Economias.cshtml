@@ -1,0 +1,78 @@
+﻿@*@model IEnumerable<Domain.Entities.Economia>*@
+@model IEnumerable<Domain.Entities.Economia_Entidade>
+
+@{
+    ViewData["Title"] = "Economias";
+}
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.EconomiaId)
+            </th>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.Economia.Complemento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Economia.AreaConstruida)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Economia.AnoConstrucao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Economia.Numeracao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Economia.Caracteristica)
+            </th>
+           
+          
+            <th>Ações</th>
+        </tr>
+    </thead>
+    <tbody>
+
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EconomiaId)
+            </td>
+            
+           <td>
+                @Html.DisplayFor(modelItem => item.Economia.Complemento)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Economia.AreaConstruida)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Economia.AnoConstrucao)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Economia.Numeracao)
+            </td>
+            <td>
+                    @Html.DisplayFor(modelItem => item.Economia.Caracteristica)
+            </td>
+            
+            
+            <td>
+               @* @Html.ActionLink("Proprietários", "Economia", new {  ImovelId=item.ImovelId,EconomiaId=item.EconomiaId}) |
+                @Html.ActionLink("Processos", "Processos", new {  ImovelId=item.ImovelId,EconomiaId=item.EconomiaId })*@
+                    @{
+                        //var viewDataIID = new ViewDataDictionary(,);
+                        
+                        //{ { "ImovelId", item.ImovelId } };
+                        //var viewDataEID = new ViewDataDictionary { { "EconomiaId", item.EconomiaId } };
+                    }
+                    @{
+                        //await Html.RenderPartialAsync("~/Views/Shared/Partials/_AcoesEconomias.cshtml",new { ImovelId = viewDataIID, EconomiaId = viewDataEID });
+                        await Html.RenderPartialAsync("~/Views/Shared/Partials/_AcoesEconomiasGenerico.cshtml", new { ImovelId = @item.ImovelId, EconomiaId = @item.EconomiaId,TemProcessos=@item.Economia.TemProcessos ,NomeBotao="Autuar"});
+                    }
+               
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+

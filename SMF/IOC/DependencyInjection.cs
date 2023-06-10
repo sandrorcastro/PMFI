@@ -95,7 +95,8 @@ namespace IOC
                        services.AddScoped<IEtapaAppService, EtapaAppService>();
                        services.AddScoped<ITipoEtapaAppService, TipoEtapaAppService>();
                        services.AddScoped<ISituacaoEtapaAppService, SituacaoEtapaAppService>();
-                       services.AddScoped<IProcessoAppService, ProcessoAppService>();    
+                       services.AddScoped<IProcessoAppService, ProcessoAppService>();
+                       services.AddScoped<IObjetoProcessoAppService, ObjetoProcessoAppService>();
                        services.AddScoped<IFluxoProcessoAppService, FluxoProcessoAppService>();
                        services.AddScoped<ITipoProcessoAppService, TipoProcessoAppService>();
                        services.AddScoped<ISituacaoProcessoAppService, SituacaoProcessoAppService>();
@@ -129,6 +130,7 @@ namespace IOC
                        services.AddScoped<ISituacaoEtapaService, SituacaoEtapaService>();
                        services.AddScoped<IFluxoProcessoService, FluxoProcessoService>();
                        services.AddScoped<IProcessoService, ProcessoService>();
+                       services.AddScoped<IObjetoProcessoService, ObjetoProcessoService>();
                        services.AddScoped<ITipoProcessoService, TipoProcessoService>();
                        services.AddScoped<ISituacaoProcessoService, SituacaoProcessoService>();
                        services.AddScoped<IImageService, ImageService>();
@@ -160,6 +162,7 @@ namespace IOC
                        services.AddScoped<ITipoEtapaRepository, TipoEtapaRepository>();
                        services.AddScoped<ISituacaoEtapaRepository, SituacaoEtapaRepository>();
                        services.AddScoped<IProcessoRepository, ProcessoRepository>();
+                       services.AddScoped<IObjetoProcessoRepository, ObjetoProcessoRepository>();
                        services.AddScoped<IFluxoProcessoRepository, FluxoProcessoRepository>();
                        services.AddScoped<ITipoProcessoRepository, TipoProcessoRepository>();
                        services.AddScoped<ISituacaoProcessoRepository, SituacaoProcessoRepository>();

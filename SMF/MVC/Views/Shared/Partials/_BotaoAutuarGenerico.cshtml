@@ -1,0 +1,17 @@
+﻿@model dynamic
+@{
+    var controllerAtual = ViewContext.RouteData.Values["controller"].ToString();
+    var actionAtual = ViewContext.RouteData.Values["action"].ToString();
+    long imovelId = Model.ImovelId;
+    string nomeBotao = Model.NomeBotao;
+    long economiaId = Model.EconomiaId;
+    bool temprocessos = Model.TemProcessos;
+
+}
+@if (temprocessos)
+{
+    <a class="btn btn-primary mr-1 disabled" asp-action="Economia" asp-controller=@controllerAtual asp-route-ImovelId=@imovelId asp-route-EconomiaId=@economiaId asp-route-TemProcessos=@temprocessos>@nomeBotao</a>
+}else{
+    <a class="btn btn-primary mr-1" asp-action="Economia" asp-controller=@controllerAtual asp-route-ImovelId=@imovelId asp-route-EconomiaId=@economiaId asp-route-TemProcessos=@temprocessos>@nomeBotao</a>
+}
+

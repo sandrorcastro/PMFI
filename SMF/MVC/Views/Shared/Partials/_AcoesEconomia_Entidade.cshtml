@@ -6,11 +6,12 @@
     long economiaId = Model.EconomiaId;
     long pessoaId = Model.PessoaId;
     long conId = Model.conId;
+    string NomeBotao = Model.NomeBotao;
 }
 <div class="row">
     <div class="col">
         @{
-            await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoAutuar.cshtml");
+            await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoAutuarGenerico.cshtml");
         }
     </div>
 </div>

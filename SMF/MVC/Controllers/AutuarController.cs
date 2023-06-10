@@ -333,6 +333,20 @@ namespace MVC.Controllers
                 //economiaAppService.UpdateEconomiaTemProcessos(new Economia() { ImovelId = avm.Economia.ImovelId, EconomiaId = avm.Economia.EconomiaId });
                 //_context.SaveChanges();
                 //_context.DisposeAsync();
+            }else
+            {
+                foreach (var error in ModelState)
+                {
+                    var errorMessage = error;//.e .ErrorMessage;
+                    var propertyName = error.Key;
+
+                    // Faça o que for necessário com a mensagem de erro e a chave do modelo
+                    // Exemplo: adicionar em uma lista, registrar em log, etc.
+                    Console.WriteLine($"Erro de validação: {propertyName} - {errorMessage}");
+                }
+
+                // Retorne uma resposta com os erros ou trate-os de alguma forma
+                return BadRequest(ModelState);
             }
 
 

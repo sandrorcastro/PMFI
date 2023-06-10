@@ -84,6 +84,7 @@ namespace MVC.Mappings
                   //      CreateMap<NotificacaoViewModel, EconomiaPessoa>();
             */
             CreateMap<ProcessoViewModel, Processo>();
+            CreateMap<ObjetoProcessoViewModel, ObjetoProcesso>();
             CreateMap<FluxoProcessoViewModel, FluxoProcesso>();
                  CreateMap<TipoProcessoViewModel, TipoProcesso>();
             //   CreateMap<SituacaoProcessoViewModel, SituacaoProcesso>();

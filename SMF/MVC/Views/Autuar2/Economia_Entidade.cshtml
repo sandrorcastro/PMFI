@@ -1,0 +1,85 @@
+﻿@model IEnumerable<Domain.Entities.Economia_Entidade>
+@*@model MVC.ViewModels.Economia_EntidadeViewModel*@
+
+@{
+    ViewData["Title"] = "Economia_Entidade";
+}
+<table class="table">
+    <thead>
+        <tr>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.PessoaId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pessoa.conId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pessoa.Nome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pessoa.TipoPessoa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Proprietario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Responsavel)
+            </th>
+
+            <th>
+                @Html.DisplayNameFor(model => model.CoResponsavel)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Locatario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Correspondente)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.PessoaId)
+            </td>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.Pessoa.conId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pessoa.Nome)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Pessoa.TipoPessoa.Descricao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Proprietario)
+                </td>
+                
+                
+                <td>
+                    @Html.DisplayFor(modelItem => item.Responsavel)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CoResponsavel)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Locatario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Correspondente)
+            </td>
+            <td>
+               @* @Html.ActionLink("Autuar", "Autuar", new {  ImovelId=item.ImovelId,EconomiaId=item.EconomiaId,PessoaId=item.PessoaId,conId=item.Pessoa.conId}) *@
+               @{
+                  await Html.RenderPartialAsync("~/Views/Shared/Partials/_AcoesEconomia_Entidade.cshtml", new { ImovelId = @item.ImovelId, EconomiaId = @item.EconomiaId,PessoaId=@item.PessoaId,conId=@item.Pessoa.conId });
+                }
+              
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

@@ -77,7 +77,7 @@
         
             @await Html.PartialAsync("~/Views/Shared/Partials/_BotaoVoltar.cshtml")
         @{
-            await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoProprietarios.cshtml", new { ImovelId = long.Parse(@ViewBag.ImovelId), EconomiaId = long.Parse(@ViewBag.EconomiaId), TemProcessos = false });
+            await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoAutuarGenerico.cshtml", new { ImovelId = long.Parse(@ViewBag.ImovelId), EconomiaId = long.Parse(@ViewBag.EconomiaId), TemProcessos = false, NomeBotao="Novo Processo" });
         }
         
     </div>

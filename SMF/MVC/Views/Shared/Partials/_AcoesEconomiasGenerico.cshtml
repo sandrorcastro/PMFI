@@ -1,0 +1,37 @@
+﻿@model dynamic
+@{
+    var controllerAtual = ViewContext.RouteData.Values["controller"].ToString();
+    var actionAtual = ViewContext.RouteData.Values["action"].ToString();
+    long imovelId = Model.ImovelId;
+    string NomeBotao = Model.NomeBotao; 
+    long economiaId = Model.EconomiaId;
+    bool temprocessos = Model.TemProcessos;
+}
+<div class="row">
+    @if (temprocessos)
+    {
+        <div class="col">
+            @{
+                await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoAutuarGenerico.cshtml");
+            }
+        </div>
+        <div class="col">
+            @{
+                await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoProcessos.cshtml");
+            }
+        </div>
+    }
+    else
+    {
+            <div class="col">
+                @{
+                    await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoAutuarGenerico.cshtml");
+                }
+            </div>
+            <div class="col">
+                @{
+                    await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoProcessos.cshtml");
+                }
+            </div>
+    }
+</div>
