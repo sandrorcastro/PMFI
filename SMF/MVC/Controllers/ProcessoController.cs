@@ -7,32 +7,56 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities;
 using Infra.Context;
+using Microsoft.AspNetCore.Authorization;
+using Application.Services;
+using MVC.ViewModels;
+using Application.Interfaces;
+using MVC.Models;
+using MVC.Extensions;
 
 namespace MVC.Controllers
 {
+    [Authorize]
     public class ProcessoController : Controller
     {
         private readonly ContextoAplicacao _context;
-
-        public ProcessoController(ContextoAplicacao context)
+        private readonly IProcessoAppService processoAppService;
+        public ProcessoController(ContextoAplicacao context, IProcessoAppService processoAppService)
         {
             _context = context;
+            this.processoAppService = processoAppService;
         }
 
         // GET: Processo
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string sort, string filter, int p, SortDirection direction)
         {
             var contextoAplicacao = _context.dbSProcessos.Where(pi=>pi.ProcessoInativo==false)
                                                          .Include(p => p.Orgao)
+                                                         .Include(p => p.Unidade)
+                                                         .Include(p => p.Divisao)
                                                          .Include(p => p.OrgaoDestinatario)
+                                                         .Include(p => p.UnidadeDestinatario)
+                                                         .Include(p => p.DivisaoDestinatario)
                                                          .Include(p => p.OrgaoRemetente)
+                                                         .Include(p => p.UnidadeRemetente)
+                                                         .Include(p => p.DivisaoRemetente)
                                                          .Include(p => p.Servidor)
                                                          .Include(p => p.ServidorExecutor)
                                                          .Include(p => p.SituacaoProcesso)
-                                                         .Include(p => p.TipoProcesso)
-                                                         .Include(p => p.UnidadeDestinatario)
-                                                         .Include(p => p.UnidadeRemetente);
-            return View(await contextoAplicacao.ToListAsync());
+                                                         .Include(p => p.TipoProcesso);
+           // return View(await contextoAplicacao.ToListAsync());
+
+            var query = from s in processoAppService.GetIQueryable().Filter(filter).OrderBy(sort, direction) select s;// ToPagedList(1,1,10) ;
+            ProcessoPaginatedListViewModel pPLVM = new ProcessoPaginatedListViewModel(sort, filter);
+            pPLVM.values = await ProcessoPaginatedListViewModel.CreateAsync(query, p == 0 ? 1 : p, 10);
+            pPLVM.Filter = filter;
+            pPLVM.Sort = sort;
+            return View(pPLVM);
+
+
+
+
+
         }
 
         // GET: Processo/Details/5

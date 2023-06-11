@@ -1,20 +1,28 @@
-﻿@model IEnumerable<Domain.Entities.Processo>
+﻿@*@model IEnumerable<Domain.Entities.Processo>*@
+@model MVC.ViewModels.ProcessoPaginatedListViewModel
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Index</h1>
-
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
+<div class="card">
+    <div class="card-header">
+        <h5>Processos</h5>
+    </div>
+    <div class="card-body">
+        <div class="card">
+            <div class="card-header">
+                @{
+                    await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);
+                }
+            </div>
+            <div class="card-body">
+                    <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Orgao)
+                @Html.DisplayNameFor(model => model.ProcessoId)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Ano)
@@ -31,41 +39,16 @@
             <th>
                 @Html.DisplayNameFor(model => model.SituacaoProcesso)
             </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OrgaoRemetente)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UnidadeRemetente)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.OrgaoDestinatario)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.UnidadeDestinatario)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Servidor)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ObservacaoProcesso)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProcessoEnviado)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProcessoRecebido)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.ProcessoAntigo)
-            </th>
-            <th></th>
+           
+           
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.values) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.Orgao.OrgaoId)
+                @Html.DisplayFor(modelItem => item.ProcessoId)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Ano)
@@ -77,44 +60,33 @@
                 @Html.DisplayFor(modelItem => item.DataFim)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.TipoProcesso.TipoProcessoId)
+                @Html.DisplayFor(modelItem => item.TipoProcesso.Descricao)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.SituacaoProcesso.SituacaoProcessoId)
+                @Html.DisplayFor(modelItem => item.SituacaoProcesso.Descricao)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrgaoRemetente.OrgaoId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UnidadeRemetente.UnidadeId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.OrgaoDestinatario.OrgaoId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.UnidadeDestinatario.UnidadeId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Servidor.ServidorId)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ObservacaoProcesso)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProcessoEnviado)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProcessoRecebido)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.ProcessoAntigo)
-            </td>
+           
             <td>
                 <a asp-action="Edit" asp-route-id="@item.ProcessoId">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.ProcessoId">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.ProcessoId">Delete</a>
+                                    @{
+                                        await Html.RenderPartialAsync("~/Views/Shared/Partials/_AcoesIndex.cshtml", @ViewData["Id"] = @item.ProcessoId);
+                                    }
             </td>
         </tr>
 }
     </tbody>
 </table>
+            </div>
+            <div class="card-footer">
+                @await Component.InvokeAsync("Pagination", new { values = Model.values, routeData=Model.LinkData})
+            </div>
+        </div>
+    </div>
+    <div class="card-footer">
+        @{
+            await Html.RenderPartialAsync("~/Views/Shared/Partials/_BotaoAdicionar.cshtml");
+        }
+    </div>
+</div>

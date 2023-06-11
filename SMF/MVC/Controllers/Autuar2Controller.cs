@@ -3,6 +3,7 @@ using Application.Services;
 using AutoMapper;
 using Domain.Entities;
 using Infra.Context;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -12,6 +13,7 @@ using MVC.ViewModels;
 
 namespace MVC.Controllers
 {
+    [Authorize]
     public class Autuar2Controller : Controller
     {
         private readonly ContextoAplicacao _context;
@@ -120,6 +122,7 @@ namespace MVC.Controllers
         }
         public ActionResult Autuar(long ImovelId, long EconomiaId, long PessoaId, long conId, long? ProcessoId,bool? TemProcessos)
         {
+
             var matriculaservidorId = User.Claims.FirstOrDefault().Value;
             var Servidor = _context.dbSServidores.Where(m => m.Matricula == matriculaservidorId && m.Ativo == true).Include(tp => tp.PodeExecutar).ThenInclude(tp => tp.TipoProcesso).Include(d => d.Divisao).ThenInclude(u => u.Unidade).ThenInclude(o => o.Orgao).FirstOrDefault();
             var entidadeId = long.Parse(String.Concat(ImovelId.ToString() + EconomiaId.ToString().PadLeft(3, '0')));
