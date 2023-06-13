@@ -30,7 +30,7 @@ namespace MVC.Controllers
         // GET: Processo
         public async Task<IActionResult> Index(string sort, string filter, int p, SortDirection direction)
         {
-            var contextoAplicacao = _context.dbSProcessos.Where(pi=>pi.ProcessoInativo==false)
+            /*var contextoAplicacao = _context.dbSProcessos.Where(pi=>pi.ProcessoInativo==false)
                                                          .Include(p => p.Orgao)
                                                          .Include(p => p.Unidade)
                                                          .Include(p => p.Divisao)
@@ -43,7 +43,7 @@ namespace MVC.Controllers
                                                          .Include(p => p.Servidor)
                                                          .Include(p => p.ServidorExecutor)
                                                          .Include(p => p.SituacaoProcesso)
-                                                         .Include(p => p.TipoProcesso);
+                                                         .Include(p => p.TipoProcesso);*/
            // return View(await contextoAplicacao.ToListAsync());
 
             var query = from s in processoAppService.GetIQueryable().Filter(filter).OrderBy(sort, direction) select s;// ToPagedList(1,1,10) ;

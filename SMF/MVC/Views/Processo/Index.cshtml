@@ -67,10 +67,7 @@
             </td>
            
             <td>
-                <a asp-action="Edit" asp-route-id="@item.ProcessoId">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.ProcessoId">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.ProcessoId">Delete</a>
-                                    @{
+                     @{
                                         await Html.RenderPartialAsync("~/Views/Shared/Partials/_AcoesIndex.cshtml", @ViewData["Id"] = @item.ProcessoId);
                                     }
             </td>
