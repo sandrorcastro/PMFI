@@ -1,7 +1,9 @@
 ﻿using Domain.Entities;
+using Infra.Context;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using MVC.Models;
+using System.Drawing;
 using System.Linq.Expressions;
 
 namespace MVC.Extensions
@@ -20,7 +22,10 @@ namespace MVC.Extensions
             long number1 = 0;
             if (long.TryParse(filter, out number1))
             {
-                return query.Where(s =>  s.SituacaoProcessoId == long.Parse(filter)
+                return query.Where(s =>  s.ProcessoId== long.Parse(filter) ||
+                                        EF.Property<long>(s.ObjetoProcesso, "ImovelId") == long.Parse(filter) ||
+                                        EF.Property<long>(s.ObjetoProcesso, "PessoaId") == long.Parse(filter) ||
+                                            s.SituacaoProcessoId == long.Parse(filter)
 
                                           ).Include(tp => tp.TipoProcesso).Include(se => se.SituacaoProcesso).Take(1000) ;
             }
@@ -32,6 +37,15 @@ namespace MVC.Extensions
 
             }
         }
+        public static IQueryable<Processo> FilterPoEconomia(this IQueryable<Processo> query, string filter)
+        {
+
+                
+                return query.Where(p => EF.Property<long>(p.ObjetoProcesso, "ImovelId") == long.Parse(filter));
+            
+            
+        }
+
 
         public static IQueryable<Processo> OrderBy(this IQueryable<Processo> query, string sort, SortDirection? direction = SortDirection.Asc)
         {

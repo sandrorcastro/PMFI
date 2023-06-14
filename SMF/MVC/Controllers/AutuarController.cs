@@ -388,7 +388,6 @@ namespace MVC.Controllers
                                                        .Include(e=>e.ObjetoProcesso).ThenInclude(e=>e.Economia)
                                                        .Include(e => e.ObjetoProcesso).ThenInclude(e => e.Pessoa)
                                                        .Include(e => e.ObjetoProcesso).ThenInclude(e => e.Endereco)
-
                                                         .ToList();
             ViewData["ImovelId"] = ImovelId.ToString();
             ViewData["EconomiaId"] = EconomiaId.ToString();
