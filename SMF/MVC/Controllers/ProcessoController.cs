@@ -89,16 +89,28 @@ namespace MVC.Controllers
         // GET: Processo/Create
         public IActionResult Create()
         {
+            var matriculaservidorId = User.Claims.FirstOrDefault().Value;
+            var Servidor = _context.dbSServidores.Where(m => m.Matricula == matriculaservidorId && m.Ativo == true).Include(tp => tp.PodeExecutar).ThenInclude(tp => tp.TipoProcesso).Include(d => d.Divisao).ThenInclude(u => u.Unidade).ThenInclude(o => o.Orgao).FirstOrDefault();
 
-            ViewData["OrgaoId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "OrgaoId");
-            ViewData["OrgaoDestinatarioId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "OrgaoId");
-            ViewData["OrgaoRemetenteId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "OrgaoId");
-            ViewData["ServidorId"] = new SelectList(_context.dbSServidores, "ServidorId", "ServidorId");
-            ViewData["ServidorExecutorId"] = new SelectList(_context.dbSServidores, "ServidorId", "ServidorId");
-            ViewData["SituacaoProcessoId"] = new SelectList(_context.dbSSituacoesProcesso, "SituacaoProcessoId", "SituacaoProcessoId");
-            ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso, "TipoProcessoId", "TipoProcessoId");
-            ViewData["UnidadeDestinatarioId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "UnidadeId");
-            ViewData["UnidadeRemetenteId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "UnidadeId");
+            ViewData["OrgaoId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao",Servidor.Divisao.Unidade.OrgaoId);
+            ViewData["OrgaoDestinatarioId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao", Servidor.Divisao.Unidade.OrgaoId);
+            ViewData["OrgaoRemetenteId"] = new SelectList(_context.dbSOrgaos, "OrgaoId", "Descricao", Servidor.Divisao.Unidade.OrgaoId);
+            ViewData["ServidorId"] = new SelectList(_context.dbSServidores, "ServidorId", "Nome",Servidor.ServidorId);
+            ViewData["ServidorExecutorId"] = new SelectList(_context.dbSServidores, "ServidorId", "Nome");
+            ViewData["SituacaoProcessoId"] = new SelectList(_context.dbSSituacoesProcesso, "SituacaoProcessoId", "Descricao");
+            //ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso, "TipoProcessoId", "Descricao");
+            ViewData["TipoProcessoId"] = new SelectList(_context.dbSTiposProcesso.Join(_context.dbSServidores_TiposProcessos, tipoprocesso => tipoprocesso.TipoProcessoId,
+                            servidortipoprocesso => servidortipoprocesso.TipoProcessoId, (tipoprocesso, servidortipoprocesso) => new { TipoProcesso = tipoprocesso, ServidorTipoProcesso = servidortipoprocesso })
+                .Where(resultado => resultado.ServidorTipoProcesso.ServidorId == Servidor.ServidorId)
+                .Select(resultado => new { resultado.TipoProcesso.TipoProcessoId, resultado.TipoProcesso.Descricao }).ToList(), "TipoProcessoId", "Descricao");
+
+
+            ViewData["UnidadeId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "Descricao", Servidor.Divisao.UnidadeId);
+            ViewData["UnidadeDestinatarioId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "Descricao", Servidor.Divisao.UnidadeId);
+            ViewData["UnidadeRemetenteId"] = new SelectList(_context.dbSUnidades, "UnidadeId", "Descricao", Servidor.Divisao.UnidadeId);
+            ViewData["DivisaoId"] = new SelectList(_context.dbSDivisoes, "DivisaoId", "Descricao", Servidor.DivisaoId);
+            ViewData["DivisaoDestinatarioId"] = new SelectList(_context.dbSDivisoes, "DivisaoId", "Descricao", Servidor.DivisaoId);
+            ViewData["DivisaoRemetenteId"] = new SelectList(_context.dbSDivisoes, "DivisaoId", "Descricao", Servidor.DivisaoId);
             return View();
         }
 

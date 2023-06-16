@@ -5,95 +5,166 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h1>Create</h1>
+<form asp-action="Create">
+<div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="card">
+    <div class="card-header">
+        <h5>Adiciona Novo Processo</h5>
+    </div>
+    <div class="card-body">
+        <div class="card">
+                <div class="card-header">
+                    <h6>Processo</h6>
+                </div>
+                <div class="card-body">
+                   <div class="row">
 
-<h4>Processo</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="ProcessoId" class="control-label"></label>
-                <input asp-for="ProcessoId" class="form-control" />
-                <span asp-validation-for="ProcessoId" class="text-danger"></span>
+                    <div hidden class="col form-group ">
+                        <label asp-for="ProcessoId" class="control-label"></label>
+                        <input asp-for="ProcessoId" class="form-control" />
+                        <span asp-validation-for="ProcessoId" class="text-danger"></span>
+                    </div>
+                    <div hidden class="col form-group">
+                        <label asp-for="Ano" class="control-label"></label>
+                        <input asp-for="Ano" class="form-control" />
+                        <span asp-validation-for="Ano" class="text-danger"></span>
+                    </div>
+                   
+                    <div class="col form-group">
+                        <label asp-for="TipoProcessoId" class="control-label"></label>
+                        <select asp-for="TipoProcessoId" class="form-control" asp-items="ViewBag.TipoProcessoId"></select>
+                    </div>
+                    <div hideen class="col form-group">
+                        <label asp-for="SituacaoProcessoId" class="control-label"></label>
+                        <select asp-for="SituacaoProcessoId" class="form-control" asp-items="ViewBag.SituacaoProcessoId"></select>
+                    </div>
+                    <div hideen  class="col form-group">
+                        <label asp-for="ServidorId" class="control-label"></label>
+                        <select asp-for="ServidorId" class="form-control" asp-items="ViewBag.ServidorId"></select>
+                    </div>
+                   </div>
+                   
+                    
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="OrgaoId" class="control-label"></label>
-                <select asp-for="OrgaoId" class ="form-control" asp-items="ViewBag.OrgaoId"></select>
+        <div hidden class="card">
+            <div class="card-header">
+                <h6>Orgão/Unidade/Divisão do Servidor</h6>
             </div>
-            <div class="form-group">
-                <label asp-for="Ano" class="control-label"></label>
-                <input asp-for="Ano" class="form-control" />
-                <span asp-validation-for="Ano" class="text-danger"></span>
+            <div class="card-body">
+                <div class="row">
+                    
+                    <div class="col form-group">
+                                <label asp-for="OrgaoId" class="control-label"></label>
+                                <select asp-for="OrgaoId" class ="form-control" asp-items="ViewBag.OrgaoId"></select>
+                    </div>
+                    <div class="col form-group">
+                                <label asp-for="UnidadeId" class="control-label"></label>
+                                <select asp-for="UnidadeId" class="form-control" asp-items="ViewBag.UnidadeId"></select>
+                    </div>
+                    <div class="col form-group">
+                                <label asp-for="DivisaoId" class="control-label"></label>
+                                <select asp-for="DivisaoId" class="form-control" asp-items="ViewBag.DivisaoId"></select>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="DataFim" class="control-label"></label>
-                <input asp-for="DataFim" class="form-control" />
-                <span asp-validation-for="DataFim" class="text-danger"></span>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                <h6>Remetente</h6>
             </div>
-            <div class="form-group">
-                <label asp-for="TipoProcessoId" class="control-label"></label>
-                <select asp-for="TipoProcessoId" class ="form-control" asp-items="ViewBag.TipoProcessoId"></select>
+            <div class="card-body">
+                 
+                    <div class="row">
+
+                            <div class="col form-group">
+                                <label asp-for="OrgaoRemetenteId" class="control-label"></label>
+                                <select asp-for="OrgaoRemetenteId" class="form-control" asp-items="ViewBag.OrgaoRemetenteId"></select>
+                            </div>
+                            <div class="col form-group">
+                                <label asp-for="UnidadeRemetenteId" class="control-label"></label>
+                                <select asp-for="UnidadeRemetenteId" class="form-control" asp-items="ViewBag.UnidadeRemetenteId"></select>
+                            </div>
+                            <div class="col form-group">
+                                <label asp-for="DivisaoRemetenteId" class="control-label"></label>
+                                <select asp-for="DivisaoRemetenteId" class="form-control" asp-items="ViewBag.DivisaoRemetenteId"></select>
+                            </div>
+                    </div>
             </div>
-            <div class="form-group">
-                <label asp-for="SituacaoProcessoId" class="control-label"></label>
-                <select asp-for="SituacaoProcessoId" class ="form-control" asp-items="ViewBag.SituacaoProcessoId"></select>
+        </div>
+        <div class="card">
+                <div class="card-header">
+                    <h6>Destinatário</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                            <div class="col form-group">
+                                <label asp-for="OrgaoDestinatarioId" class="control-label"></label>
+                                <select asp-for="OrgaoDestinatarioId" class="form-control" asp-items="ViewBag.OrgaoDestinatarioId"></select>
+                            </div>
+                            <div class="col form-group">
+                                <label asp-for="UnidadeDestinatarioId" class="control-label"></label>
+                                <select asp-for="UnidadeDestinatarioId" class="form-control" asp-items="ViewBag.UnidadeDestinatarioId"></select>
+                            </div>
+                            <div class="col form-group">
+                                <label asp-for="DivisaoDestinatarioId" class="control-label"></label>
+                                <select asp-for="DivisaoDestinatarioId" class="form-control" asp-items="ViewBag.DivisaoDestinatarioId"></select>
+                            </div>
+                            <div class="form-group">
+                                <label asp-for="ServidorExecutorId" class="control-label"></label>
+                                <select asp-for="ServidorExecutorId" class="form-control" asp-items="ViewBag.ServidorExecutorId"></select>
+                            </div>
+                    </div>
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="OrgaoRemetenteId" class="control-label"></label>
-                <select asp-for="OrgaoRemetenteId" class ="form-control" asp-items="ViewBag.OrgaoRemetenteId"></select>
+        <div class="card">
+                <div class="card-header">
+                    <h6>Observação</h6>
+                </div>
+                <div class="card-body">
+                    
+                    <div class="form-group">
+                        <label asp-for="ObservacaoProcesso" class="control-label"></label>
+                        <input asp-for="ObservacaoProcesso" class="form-control" />
+                        <span asp-validation-for="ObservacaoProcesso" class="text-danger"></span>
+                    </div>
+                    
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="UnidadeRemetenteId" class="control-label"></label>
-                <select asp-for="UnidadeRemetenteId" class ="form-control" asp-items="ViewBag.UnidadeRemetenteId"></select>
+            <div class="card">
+                <div class="card-header">
+                    <h6>Observação</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+
+                    <div class="col form-group">
+                        <label asp-for="ProcessoEnviado" class="control-label"></label>
+                        <input asp-for="ProcessoEnviado" class="form-control" />
+                        <span asp-validation-for="ProcessoEnviado" class="text-danger"></span>
+                    </div>
+                    <div class="col form-group">
+                        <label asp-for="ProcessoRecebido" class="control-label"></label>
+                        <input asp-for="ProcessoRecebido" class="form-control" />
+                        <span asp-validation-for="ProcessoRecebido" class="text-danger"></span>
+                    </div>
+                    </div>
+                    
+
+                </div>
             </div>
-            <div class="form-group">
-                <label asp-for="OrgaoDestinatarioId" class="control-label"></label>
-                <select asp-for="OrgaoDestinatarioId" class ="form-control" asp-items="ViewBag.OrgaoDestinatarioId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="UnidadeDestinatarioId" class="control-label"></label>
-                <select asp-for="UnidadeDestinatarioId" class ="form-control" asp-items="ViewBag.UnidadeDestinatarioId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ServidorId" class="control-label"></label>
-                <select asp-for="ServidorId" class ="form-control" asp-items="ViewBag.ServidorId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ServidorExecutorId" class="control-label"></label>
-                <select asp-for="ServidorExecutorId" class="form-control" asp-items="ViewBag.ServidorExecutorId"></select>
-            </div>
-            <div class="form-group">
-                <label asp-for="ObservacaoProcesso" class="control-label"></label>
-                <input asp-for="ObservacaoProcesso" class="form-control" />
-                <span asp-validation-for="ObservacaoProcesso" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProcessoEnviado" class="control-label"></label>
-                <input asp-for="ProcessoEnviado" class="form-control" />
-                <span asp-validation-for="ProcessoEnviado" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProcessoRecebido" class="control-label"></label>
-                <input asp-for="ProcessoRecebido" class="form-control" />
-                <span asp-validation-for="ProcessoRecebido" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="ProcessoAntigo" class="control-label"></label>
-                <input asp-for="ProcessoAntigo" class="form-control" />
-                <span asp-validation-for="ProcessoAntigo" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+    </div>
+    <div class="card-footer">
+        <div>
+            <a asp-action="Index">Back to List</a>
+                <div class="form-group">
+                    <input type="submit" value="Create" class="btn btn-primary" />
+                </div>
+
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+</form>
 
 @section Scripts {
     @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
