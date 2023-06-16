@@ -23,7 +23,7 @@ namespace MVC
             //var connectionString = builder.Configuration.GetConnectionString("ContextoAplicacaoConnection") ?? throw new InvalidOperationException("Connection string 'ContextoAplicacaoConnection' not found.");
             var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'ContextoAplicacaoConnection' not found.");
 
-            //builder.Services.AddDbContext<ContextoAplicacao>(options => options.UseSqlServer(connectionString));
+            ///builder.Services.AddDbContext<ContextoAplicacao>(options => options.UseSqlServer(connectionString));
             builder.Services.AddDbContextFactory<ContextoAplicacao>(options => options.UseSqlServer(connectionString));
             builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<ContextoAplicacao>().AddSignInManager<SignInManager<ApplicationUser>>().AddDefaultUI();
             builder.Services.AddScoped<SignInManager<ApplicationUser>>();
