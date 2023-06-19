@@ -19,7 +19,7 @@
                 <div class="card-body">
                    <div class="row">
 
-                    <div  class="col form-group ">
+                    <div class="col form-group ">
                         <label asp-for="ProcessoId" class="control-label"></label>
                         <input asp-for="ProcessoId" class="form-control" />
                         <span asp-validation-for="ProcessoId" class="text-danger"></span>
@@ -34,11 +34,11 @@
                         <label asp-for="TipoProcessoId" class="control-label"></label>
                         <select asp-for="TipoProcessoId" class="form-control" asp-items="ViewBag.TipoProcessoId"></select>
                     </div>
-                    <div hideen class="col form-group">
+                    <div hidden class="col form-group">
                         <label asp-for="SituacaoProcessoId" class="control-label"></label>
                         <select asp-for="SituacaoProcessoId" class="form-control" asp-items="ViewBag.SituacaoProcessoId"></select>
                     </div>
-                    <div hideen  class="col form-group">
+                    <div hidden  class="col form-group">
                         <label asp-for="ServidorId" class="control-label"></label>
                         <select asp-for="ServidorId" class="form-control" asp-items="ViewBag.ServidorId"></select>
                     </div>
@@ -116,7 +116,51 @@
                             </div>
                     </div>
                 </div>
+        </div>
+        @*
+        <div class="card">
+                <div class="card-header">
+                    <h6>Imovel/Economia</h6>
+                </div>
+                <div class="card-body">
+                  <div class="row">
+                        <div class="col md-4 form-group">
+                            <label asp-for="ObjetoProcesso.ImovelId" class="control-label"></label>
+                            <input asp-for="ObjetoProcesso.ImovelId" class="form-control" />
+                            <span asp-validation-for="ObjetoProcesso.ImovelId" class="text-danger"></span>
+                        </div>
+                        <div class="col md-2 form-group">
+                            <label asp-for="ObjetoProcesso.EconomiaId" class="control-label"></label>
+                            <input asp-for="ObjetoProcesso.EconomiaId" class="form-control" />
+                            <span asp-validation-for="ObjetoProcesso.EconomiaId" class="text-danger"></span>
+                        </div>
+                    </div>  
+
+                </div>
+        </div>
+            <div class="card">
+                <div class="card-header">
+                    <h6>Pessoa</h6>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col md-4 form-group">
+                            <label asp-for="ObjetoProcesso.PessoaId" class="control-label"></label>
+                            <input asp-for="ObjetoProcesso.PessoaId" class="form-control" />
+                            <span asp-validation-for="ObjetoProcesso.PessoaId" class="text-danger"></span>
+                        </div>
+
+                        <div class="col md-4 form-group">
+                            <label asp-for="ObjetoProcesso.EnderecoId" class="control-label"></label>
+                            <input asp-for="ObjetoProcesso.EnderecoId" class="form-control" />
+                            <span asp-validation-for="ObjetoProcesso.EnderecoId" class="text-danger"></span>
+                        </div>
+                        
+                    </div>
+
+                </div>
             </div>
+        *@
         <div class="card">
                 <div class="card-header">
                     <h6>Observação</h6>
@@ -130,8 +174,8 @@
                     </div>
                     
                 </div>
-            </div>
-            <div class="card">
+        </div>
+        <div class="card">
                 <div class="card-header">
                     <h6>Observação</h6>
                 </div>
@@ -152,7 +196,7 @@
                     
 
                 </div>
-            </div>
+        </div>
     </div>
     <div class="card-footer">
         <div>

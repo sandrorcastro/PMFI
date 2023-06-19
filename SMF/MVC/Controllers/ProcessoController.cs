@@ -21,10 +21,12 @@ namespace MVC.Controllers
     {
         private readonly ContextoAplicacao _context;
         private readonly IProcessoAppService processoAppService;
-        public ProcessoController(ContextoAplicacao context, IProcessoAppService processoAppService)
+        private readonly IIncrementoTabelasAppService incrementoTabelasAppService;
+        public ProcessoController(ContextoAplicacao context, IProcessoAppService processoAppService, IIncrementoTabelasAppService incrementoTabelasAppService)
         {
             _context = context;
             this.processoAppService = processoAppService;
+            this.incrementoTabelasAppService = incrementoTabelasAppService;
         }
 
         // GET: Processo
@@ -119,16 +121,20 @@ namespace MVC.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("ProcessoId,OrgaoId,Ano,DataInicio,DataFim,TipoProcessoId,SituacaoProcessoId,OrgaoRemetenteId,UnidadeRemetenteId,OrgaoDestinatarioId,UnidadeDestinatarioId,ServidorId,ServidorExecutorId,ObservacaoProcesso,ProcessoEnviado,ProcessoRecebido,ProcessoAntigo")] Processo processo)
-        {
+        //public async Task<IActionResult> Create([Bind("ProcessoId,OrgaoId,Ano,DataInicio,DataFim,TipoProcessoId,SituacaoProcessoId,OrgaoRemetenteId,UnidadeRemetenteId,OrgaoDestinatarioId,UnidadeDestinatarioId,ServidorId,ServidorExecutorId,ObservacaoProcesso,ProcessoEnviado,ProcessoRecebido,ProcessoAntigo,ObjetoProcesso")] Processo processo) //,ObjetoProcesso objetoProcesso)
+        public async Task<IActionResult> Create(Processo processo) //,ObjetoProcesso objetoProcesso)
+            {
             if (ModelState.IsValid)
             {
                 ObjetoProcesso op = new ObjetoProcesso();
-                
+
                 //op.TipoObjetoProcesso = 1;
                 //op.DescricaoObjetoProcesso = "Ainda não sei";
+                processo.ProcessoId = incrementoTabelasAppService.Incrementar("Processo", "Sistema", "2023");
                 processo.ObjetoProcesso = op;
+                
                 //_context.Add(op);
+
                 _context.AddRangeAsync(processo);
 
                 await _context.SaveChangesAsync();

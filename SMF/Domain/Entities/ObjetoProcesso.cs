@@ -11,7 +11,7 @@
         public Processo Processo { get; set; }
         //public ICollection<Processo>? Processos { get; set; }
         public int TipoObjetoProcesso { get; set; }
-        public string DescricaoObjetoProcesso { get; set; }
+        public string?  DescricaoObjetoProcesso { get; set; }
         public long? PessoaId { get; set; }
         public Pessoa? Pessoa { get; set; }
         public long? EconomiaId { get; set; }   
