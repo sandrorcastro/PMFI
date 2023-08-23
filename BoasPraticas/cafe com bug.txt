@@ -1,0 +1,22 @@
+cafe com bug
+Code first com ASP NET Core API | aula 11      
+https://www.youtube.com/watch?v=dwpIxsYWCzs
+
+
+Configurando o IOC                      Habilitando o Recebimento do Token de autenticação no Swagger | Aula 15
+https://www.youtube.com/watch?v=KFq0Bm45NYU
+
+
+
+ASP NET CORE MVC #4 | Repositórios com Interface
+https://www.youtube.com/watch?v=1eGWb_4tRU8
+
+
+
+Aprenda a Criar Serviços de uma Aplicação ASP.NET Core API com Arquitetura Limpa | Aula 16
+https://www.youtube.com/watch?v=BDIiUsBQgpE
+
+
+
+identity
+https://www.youtube.com/watch?v=81TUIwdaOuU&list=PL3thWewfjbFR8pycgQFVP68bC-Y74d9q1&index=2

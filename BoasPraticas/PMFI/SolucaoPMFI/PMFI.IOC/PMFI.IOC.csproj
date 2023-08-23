@@ -1,0 +1,22 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\PMFI.Application\PMFI.Application.csproj" />
+    <ProjectReference Include="..\PMFI.DOMAIN\PMFI.Domain.csproj" />
+    <ProjectReference Include="..\PMFI.Infra\PMFI.Infra.csproj" />
+    <ProjectReference Include="..\PMFI.Seguranca\PMFI.Seguranca.csproj" />
+  </ItemGroup>
+
+</Project>
