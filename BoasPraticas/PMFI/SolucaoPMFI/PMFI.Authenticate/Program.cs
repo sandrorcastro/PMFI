@@ -9,7 +9,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnectionSeguranca");
 
-//builder.Services.AddInfrastructureSeguranca(builder.Configuration);
+//builder.Services.AddInfrastructureAuthenticate(builder.Configuration);
 //builder.Services.AddAutoMapperConfig();
 
 

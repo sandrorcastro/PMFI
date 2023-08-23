@@ -10,7 +10,7 @@ using System.Security.Claims;
 
 namespace PMFI.Seguranca.Context
 {
-    //public class SegurancaDbContext : IdentityDbContext<ApplicationUser, ApplicationRole, long>
+    //public class SegurancaDbContext : IdentityDbContext<ApplicationUser, ApplicationRoleg>
 
     public class SegurancaDbContext
     : IdentityDbContext<
