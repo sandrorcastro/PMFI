@@ -16,7 +16,6 @@
     <ProjectReference Include="..\PMFI.Application\PMFI.Application.csproj" />
     <ProjectReference Include="..\PMFI.DOMAIN\PMFI.Domain.csproj" />
     <ProjectReference Include="..\PMFI.Infra\PMFI.Infra.csproj" />
-    <ProjectReference Include="..\PMFI.Seguranca\PMFI.Seguranca.csproj" />
   </ItemGroup>
 
 </Project>

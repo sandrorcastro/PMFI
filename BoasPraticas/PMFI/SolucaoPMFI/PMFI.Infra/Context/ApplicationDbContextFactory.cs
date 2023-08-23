@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
-using PMFI.Infra.EntityConfig;
+
 
 namespace PMFI.Infra.Context
 {

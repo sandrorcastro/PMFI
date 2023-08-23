@@ -36,6 +36,9 @@ namespace PMFI.Seguranca.Context
 
         public DbSet<Auditoria> Audits { get; set; }
         public DbSet<Company> Companies { get; set; }
+        //public DbSet<Cidade> Cidades { get; set; }
+        //public DbSet<Uf> Ufs { get; set; }
+        //public DbSet<Pais> Paises { get; set; }
 
 
 
@@ -63,8 +66,8 @@ namespace PMFI.Seguranca.Context
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(SegurancaDbContext).Assembly);
             modelBuilder.ApplyConfiguration(new AuditoriaConfigurations());
             modelBuilder.ApplyConfiguration(new CompanyConfiguration());
-            modelBuilder.ApplyConfiguration(new ApplicationRoleConfiguration());
-            modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
+           // modelBuilder.ApplyConfiguration(new ApplicationRoleConfiguration());
+           // modelBuilder.ApplyConfiguration(new ApplicationUserConfiguration());
 
 
             modelBuilder.Entity<ApplicationUser>(b =>

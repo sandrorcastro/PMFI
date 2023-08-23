@@ -11,7 +11,7 @@ using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
-using PMFI.Seguranca.Context;
+using PMFI.Infra.Context;
 
 namespace PMFI.Authenticate.Areas.Identity.Pages.Account
 {

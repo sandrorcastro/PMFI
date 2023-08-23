@@ -17,7 +17,6 @@ using PMFI.Domain.Services.Base;
 using PMFI.Infra.Context;
 using PMFI.Infra.Repositories;
 using PMFI.Infra.Repositories.Base;
-using PMFI.Seguranca.Context;
 using PMIFI.Domain.Interfaces.Base;
 using System.Data.Common;
 
@@ -40,36 +39,28 @@ namespace PMFI.IOC
                 options.UseSqlServer("Data Source=localhost;Initial Catalog=Seg;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Persist Security Info=True;User ID=sa;Password=changeme"),
                 b => b.MigrationsAssembly(typeof(SegurancaDbContext).Assembly.FullName));
             });*/
-            services.AddDbContext<Seguranca.Context.SegurancaDbContext>(options => {
-                options.UseSqlServer("Data Source=localhost;Initial Catalog=Seg;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Persist Security Info=True;User ID=sa;Password=changeme",
+       /*     services.AddDbContext<Seguranca.Context.SegurancaDbContext>(options => {
+                options.UseSqlServer("Data Source=localhost;Initial Catalog=SEG;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Persist Security Info=True;User ID=sa;Password=changeme",
                 b => b.MigrationsAssembly(typeof(Seguranca.Context.SegurancaDbContext).Assembly.FullName));
+            });*/
+            //services.AddDbContextFactory<SegurancaDbContext>(options => {
+                services.AddDbContext<SegurancaDbContext>(options => {
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                b => b.MigrationsAssembly(typeof(SegurancaDbContext).Assembly.FullName));
             });
+            //services.BuildServiceProvider().GetService<SegurancaDbContext>()?.Database.Migrate();
 
 
-            services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<SegurancaDbContext>().AddSignInManager<SignInManager<ApplicationUser>>().AddDefaultUI();
-           // services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<Seguranca.Context.SegurancaDbContext>().AddSignInManager<SignInManager<IdentityUser>>().AddDefaultUI();
-
-
-
-
+            //services.AddIdentityCore<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<SegurancaDbContext>().AddSignInManager<SignInManager<ApplicationUser>>().AddDefaultUI();
+            // services.AddIdentityCore<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = false).AddEntityFrameworkStores<Seguranca.Context.SegurancaDbContext>().AddSignInManager<SignInManager<IdentityUser>>().AddDefaultUI();
 
 
 
-            /////////////////////////////////////////////////////////////////////
-            services.AddScoped(typeof(IAppServiceBase<,>),typeof(AppServiceBase<,>));
-            services.AddScoped<IUfAppService,UfAppService>();
-            services.AddScoped<IPaisAppService, PaisAppService>();
-            services.AddScoped<ICidadeAppService, CidadeAppService>();
 
-            ////////////////////////////////////////////////////////////////////
-            services.AddScoped(typeof(IServiceBase<>),typeof(ServiceBase<>));
-           // services.AddScoped<IUfService, UfService>();
 
-            //////////////////////////////////////////////////////////////////////
-            services.AddScoped(typeof(IRepositoryBase<>),typeof(RepositoryBase<>));
-            //services.AddScoped<IUfRepository, UfRepository>();
 
-            //////////////////////////////////////////////////////////////////////
+
+
             return services;
         }
     }

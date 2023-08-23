@@ -19,7 +19,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMFI.WEBAPI", "PMFI.WEBAPI\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMFI.WebMVC", "PMFI.WebMVC\PMFI.WebMVC.csproj", "{362323A7-718A-4D08-98B8-14DEC36812C9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMFI.Authenticate", "PMFI.Authenticate\PMFI.Authenticate.csproj", "{3F7A7C15-AD44-4037-B7C0-60FE7BC12CE8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMFI.Authenticate", "PMFI.Authenticate\PMFI.Authenticate.csproj", "{3F7A7C15-AD44-4037-B7C0-60FE7BC12CE8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

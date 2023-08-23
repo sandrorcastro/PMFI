@@ -83,9 +83,6 @@ namespace PMFI.Seguranca.Migrations
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
 
-                    b.Property<Guid>("CompanyId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasMaxLength(500)
@@ -136,8 +133,6 @@ namespace PMFI.Seguranca.Migrations
                         .HasColumnType("varchar(256)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("CompanyId");
 
                     b.HasIndex("Email")
                         .IsUnique();
@@ -318,17 +313,6 @@ namespace PMFI.Seguranca.Migrations
                         .IsRequired();
 
                     b.Navigation("Role");
-                });
-
-            modelBuilder.Entity("PMFI.Seguranca.Context.ApplicationUser", b =>
-                {
-                    b.HasOne("PMFI.Seguranca.Models.Company", "Company")
-                        .WithMany()
-                        .HasForeignKey("CompanyId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Company");
                 });
 
             modelBuilder.Entity("PMFI.Seguranca.Context.ApplicationUserClaim", b =>

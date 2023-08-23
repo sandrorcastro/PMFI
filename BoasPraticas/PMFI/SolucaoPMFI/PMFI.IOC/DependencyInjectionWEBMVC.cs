@@ -17,7 +17,6 @@ using PMFI.Domain.Services.Base;
 using PMFI.Infra.Context;
 using PMFI.Infra.Repositories;
 using PMFI.Infra.Repositories.Base;
-using PMFI.Seguranca.Context;
 using PMIFI.Domain.Interfaces.Base;
 using System.Data.Common;
 

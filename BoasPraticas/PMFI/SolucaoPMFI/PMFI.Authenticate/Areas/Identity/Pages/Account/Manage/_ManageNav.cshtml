@@ -1,4 +1,5 @@
-﻿@using PMFI.Seguranca.Context;
+﻿@using PMFI.Infra.Context;
+
 @inject SignInManager<ApplicationUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();

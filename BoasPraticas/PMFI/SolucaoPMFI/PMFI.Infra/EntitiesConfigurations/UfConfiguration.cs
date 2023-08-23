@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PMFI.Domain.Entities;
 using System.Reflection.Emit;
 
-namespace PMFI.Infra.EntityConfig
+namespace PMFI.Infra.EntitiesConfigurations
 {
     public class UfConfiguration : IEntityTypeConfiguration<Uf>
     {

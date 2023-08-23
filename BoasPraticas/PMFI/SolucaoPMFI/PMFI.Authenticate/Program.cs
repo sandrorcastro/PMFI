@@ -1,8 +1,8 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.OpenApi.Models;
 using PMFI.IOC;
-using PMFI.Seguranca.Context;
+using PMFI.Infra.Context;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -21,15 +21,16 @@ builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.Requ
     .AddEntityFrameworkStores<ApplicationDbContext>();
 
 */
-builder.Services.AddDbContext<SegurancaDbContext>(options =>
-    options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<SegurancaDbContext>(options => options.UseSqlServer(connectionString));
 
 //builder.Services.AddDefaultIdentity<IdentityUser>(options => options.SignIn.RequireConfirmedAccount = true)
     //.AddEntityFrameworkStores<SegurancaDbContext>();
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services.AddIdentity<ApplicationUser,ApplicationRole>(options => options.SignIn.RequireConfirmedAccount = false)
     .AddEntityFrameworkStores<SegurancaDbContext>().AddDefaultUI()
-            .AddDefaultTokenProviders(); ;
+            .AddDefaultTokenProviders();
+builder.Services.BuildServiceProvider().GetService<SegurancaDbContext>()?.Database.Migrate();
+builder.Services.AddSwaggerGen(c => { c.SwaggerDoc("v1", new OpenApiInfo { Title = "Sample Audit", Version = "v1" }); });
 
 
 

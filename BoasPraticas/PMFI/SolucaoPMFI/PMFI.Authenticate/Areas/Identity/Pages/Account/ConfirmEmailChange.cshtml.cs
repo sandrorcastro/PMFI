@@ -10,7 +10,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using Microsoft.AspNetCore.WebUtilities;
-using PMFI.Seguranca.Context;
+using PMFI.Infra.Context;
 
 namespace PMFI.Authenticate.Areas.Identity.Pages.Account
 {
