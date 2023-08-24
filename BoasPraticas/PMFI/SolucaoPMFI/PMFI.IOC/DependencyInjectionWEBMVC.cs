@@ -28,9 +28,15 @@ namespace PMFI.IOC
         
         public static IServiceCollection AddInfrastructureWEBMVC(this IServiceCollection services, IConfiguration configuration)
         {
+/*
+            services.AddDbContextFactory<SegurancaDbContext>(options => {
+                //options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                options.UseSqlServer("Data Source=localhost;Initial Catalog=PMFI;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Persist Security Info=True;User ID=sa;Password=changeme",
+                b => b.MigrationsAssembly(typeof(SegurancaDbContext).Assembly.FullName));
+            });
+*/
             services.AddDbContextFactory<Infra.Context.ApplicationDbContext>(options => {
-            //services.AddDbContext<ApplicationDbContext>(options => {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionWEBMVC"),
                 b => b.MigrationsAssembly(typeof(Infra.Context.ApplicationDbContext).Assembly.FullName));
             });
 

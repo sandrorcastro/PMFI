@@ -17,7 +17,7 @@ namespace PMFI.Infra.Context
           .AddJsonFile("appsettings.json")
           .Build();*/ 
             var optionsBuilder = new DbContextOptionsBuilder<SegurancaDbContext>();
-            optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=SEG;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Persist Security Info=True;User ID=sa;Password=changeme");
+            optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=SEG2;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Persist Security Info=True;User ID=sa;Password=changeme");
             //optionsBuilder.UseSqlServer(configuration.GetConnectionString("Default"));
             return new SegurancaDbContext(optionsBuilder.Options,HttpContext);
         }

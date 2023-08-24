@@ -29,8 +29,7 @@ namespace PMFI.IOC
         public static IServiceCollection AddInfrastructureWEBAPI(this IServiceCollection services, IConfiguration configuration)
         {
             services.AddDbContextFactory<Infra.Context.ApplicationDbContext>(options => {
-            //services.AddDbContext<ApplicationDbContext>(options => {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionWEBAPI"),
                 b => b.MigrationsAssembly(typeof(Infra.Context.ApplicationDbContext).Assembly.FullName));
             });
 
