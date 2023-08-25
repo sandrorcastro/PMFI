@@ -1,3 +1,7 @@
 https://deviq.com/design-patterns/specification-pattern
 
 https://deviq.com/design-patterns/repository-pattern
+
+
+aplicacao mvc asp net core com specification patter
+https://macoratti.net/22/12/vda261222.htm
