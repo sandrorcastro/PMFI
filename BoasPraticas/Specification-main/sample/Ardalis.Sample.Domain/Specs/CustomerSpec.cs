@@ -11,7 +11,6 @@ public class CustomerSpec : Specification<Customer>
             .ApplyOrdering()
             .TagWith("List all customers.");
     }
-
     public CustomerSpec(CustomerFilter filter)
     {
         Query.Include(x => x.Addresses)

@@ -1,9 +1,8 @@
 ﻿
 
 using PMFI.Domain.Entities;
+using PMFI.Domain.Interfaces.Repositories;
 using PMFI.Domain.Interfaces.Services;
-using PMFI.Domain.Services.Base;
-using PMIFI.Domain.Interfaces.Base;
 
 namespace PMFI.Domain.Services
 {
