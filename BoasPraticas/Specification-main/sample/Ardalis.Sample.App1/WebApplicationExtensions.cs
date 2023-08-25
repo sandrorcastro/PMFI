@@ -17,7 +17,8 @@ public static class WebApplicationExtensions
                 Addresses = new()
                 {
                     new() { Street = "Street1_1" },
-                    new() { Street = "Street1_2" }
+                    new() { Street = "Street1_2" },
+                    new() { Street = "Street1_3" }
                 }
             },
             new()
@@ -27,7 +28,18 @@ public static class WebApplicationExtensions
                 Addresses = new()
                 {
                     new() { Street = "Street2_1" },
-                    new() { Street = "Street3_2" }
+                    new() { Street = "Street3_2" },
+                    new() { Street = "Street3_3" }
+                }
+            },
+            new()
+            {
+                Name = "Sandro Castro",
+                Age = 51,
+                Addresses = new()
+                {
+                    new() { Street = "Alameda Xique Xique, 161" }
+                 
                 }
             }
         };
