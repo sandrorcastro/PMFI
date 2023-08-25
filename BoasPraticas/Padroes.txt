@@ -1,0 +1,3 @@
+https://deviq.com/design-patterns/specification-pattern
+
+https://deviq.com/design-patterns/repository-pattern
