@@ -1,4 +1,6 @@
-﻿using Application.Interfaces.Base;
+﻿using Application.Interfaces;
+using Application.Interfaces.Base;
+using Application.Services;
 using Application.Services.Base;
 using Domain.Interfaces.Base;
 using Domain.Services.Base;
@@ -48,7 +50,7 @@ namespace IOC
 
             /////////////////////////////////////////////////////////////////////
             services.AddScoped(typeof(IAppServiceBase<>),typeof(AppServiceBase<>));
-        //    services.AddScoped<IUfAppService,UfAppService>();
+            services.AddScoped<IUfAppService,UfAppService>();
         //    services.AddScoped<IPaisAppService, PaisAppService>();
          //   services.AddScoped<ICidadeAppService, CidadeAppService>();
 
