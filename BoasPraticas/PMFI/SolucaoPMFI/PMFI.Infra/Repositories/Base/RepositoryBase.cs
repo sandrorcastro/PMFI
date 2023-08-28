@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PMFI.Domain.Interfaces.Repositories;
-using PMFI.Domain.Interfaces.Specifications;
+using PMFI.Domain.Interfaces.Base;
 using PMFI.Infra.Context;
+using PMIFI.Domain.Interfaces.Base;
 using System;
 using System.Collections.Generic;
 using System.Data.Common;

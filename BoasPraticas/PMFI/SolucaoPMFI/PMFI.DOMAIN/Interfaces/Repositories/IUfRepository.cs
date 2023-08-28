@@ -1,4 +1,5 @@
 ﻿using PMFI.Domain.Entities;
+using PMIFI.Domain.Interfaces.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;

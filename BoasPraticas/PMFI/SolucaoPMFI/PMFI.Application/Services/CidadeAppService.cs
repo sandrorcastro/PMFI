@@ -4,7 +4,7 @@ using PMFI.Application.Interfaces;
 using PMFI.Application.Services.Base;
 using PMFI.Application.ViewModels;
 using PMFI.Domain.Entities;
-using PMFI.Domain.Interfaces.Services;
+using PMFI.Domain.Interfaces.Base;
 
 namespace PMFI.Application.Services
 {

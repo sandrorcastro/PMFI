@@ -1,10 +1,10 @@
-﻿using PMFI.Domain.Interfaces.Specifications;
+﻿using PMFI.Domain.Interfaces.Base;
 using System.Linq.Expressions;
 
 namespace PMFI.Application.Interfaces.Base
 {
-
-    public interface IAppServiceBase<TEntity,TEntityViewModel> where TEntity : class where TEntityViewModel : class
+   
+        public interface IAppServiceBase<TEntity,TEntityViewModel> where TEntity : class where TEntityViewModel : class
         {
                 public Task<TEntityViewModel> GetById(int id);
                 public Task<TEntityViewModel> GetById(long id);

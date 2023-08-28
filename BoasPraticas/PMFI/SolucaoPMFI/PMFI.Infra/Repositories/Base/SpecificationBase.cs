@@ -1,4 +1,4 @@
-﻿using PMFI.Domain.Interfaces.Specifications;
+﻿using PMFI.Domain.Interfaces.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;

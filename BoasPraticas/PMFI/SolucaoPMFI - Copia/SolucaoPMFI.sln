@@ -21,8 +21,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMFI.WebMVC", "PMFI.WebMVC\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PMFI.WEB", "PMFI.WEB\PMFI.WEB.csproj", "{CA9783A6-8A03-45FC-98C9-CBD82C866314}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PMFI.Specification", "PMFI.Specification\PMFI.Specification.csproj", "{2610F85A-FBC6-45D5-9813-E6432EACE3C0}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -65,10 +63,6 @@ Global
 		{CA9783A6-8A03-45FC-98C9-CBD82C866314}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CA9783A6-8A03-45FC-98C9-CBD82C866314}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CA9783A6-8A03-45FC-98C9-CBD82C866314}.Release|Any CPU.Build.0 = Release|Any CPU
-		{2610F85A-FBC6-45D5-9813-E6432EACE3C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{2610F85A-FBC6-45D5-9813-E6432EACE3C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{2610F85A-FBC6-45D5-9813-E6432EACE3C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{2610F85A-FBC6-45D5-9813-E6432EACE3C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

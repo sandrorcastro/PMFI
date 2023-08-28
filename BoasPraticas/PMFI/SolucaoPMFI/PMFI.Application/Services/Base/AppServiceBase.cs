@@ -3,8 +3,6 @@
 using AutoMapper;
 using PMFI.Application.Interfaces.Base;
 using PMFI.Domain.Interfaces.Base;
-using PMFI.Domain.Interfaces.Services;
-using PMFI.Domain.Interfaces.Specifications;
 using System;
 using System.Linq.Expressions;
 
