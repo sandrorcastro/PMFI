@@ -8,9 +8,9 @@ using Domain.Interfaces.Base;
 
 namespace Application.Services
 {
-    public class PaisAppService : AppServiceBase<Pais,PaisViewModel>, IPaisAppService
+    public class PaisAppService : AppServiceBase<Pais>, IPaisAppService
     {
-        public PaisAppService(IServiceBase<Pais> _serviceBase,IMapper mapper) : base(_serviceBase,mapper)
+        public PaisAppService(IServiceBase<Pais> _serviceBase) : base(_serviceBase)
         {
         }
     }

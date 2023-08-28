@@ -8,9 +8,9 @@ using Domain.Interfaces.Services;
 
 namespace Application.Services
 {
-    public class UfAppService : AppServiceBase<Uf,UfViewModel>, IUfAppService
+    public class UfAppService : AppServiceBase<Uf>, IUfAppService
     {
-        public UfAppService(IServiceBase<Uf> _serviceBase,IMapper mapper) : base(_serviceBase,mapper)
+        public UfAppService(IServiceBase<Uf> _serviceBase) : base(_serviceBase)
         {
         }
     }

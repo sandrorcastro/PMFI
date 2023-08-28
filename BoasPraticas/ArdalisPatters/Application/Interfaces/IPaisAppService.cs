@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace Application.Interfaces
 {
-    public interface IPaisAppService : IAppServiceBase<Pais,PaisViewModel>
+    public interface IPaisAppService : IAppServiceBase<Pais>
     {
     }
 }

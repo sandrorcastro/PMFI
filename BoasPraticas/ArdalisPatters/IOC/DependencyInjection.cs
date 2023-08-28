@@ -26,12 +26,12 @@ namespace IOC
                  b => b.MigrationsAssembly(typeof(Infra.Context.ApplicationDbContext).Assembly.FullName));
             });
 
-             /*services.AddDbContextFactory<ApplicationDbContext>(options => {
-                 //services.AddDbContext<ApplicationDbContext>(options => {
-                  options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
-                  //options.UseSqlServer(,
-                  b => b.MigrationsAssembly(typeof(Infra.Context.ApplicationDbContext).Assembly.FullName));
-             });*/
+            /*services.AddDbContextFactory<ApplicationDbContext>(options => {
+                //services.AddDbContext<ApplicationDbContext>(options => {
+                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                 //options.UseSqlServer(,
+                 b => b.MigrationsAssembly(typeof(Infra.Context.ApplicationDbContext).Assembly.FullName));
+            });*/
 
             /*services.AddDbContextFactory<SegurancaDbContext>(options => {
                 // options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionSeguranca"),
@@ -56,10 +56,11 @@ namespace IOC
 
 
             /////////////////////////////////////////////////////////////////////
-            services.AddScoped(typeof(IAppServiceBase<,>),typeof(AppServiceBase<,>));
-          //  services.AddScoped<IUfAppService,UfAppService>();
-          //  services.AddScoped<IPaisAppService, PaisAppService>();
-          //  services.AddScoped<ICidadeAppService, CidadeAppService>();
+            //services.AddScoped(typeof(IAppServiceBase<,>),typeof(AppServiceBase<,>));
+            services.AddScoped(typeof(IAppServiceBase<>), typeof(AppServiceBase<>));
+            //  services.AddScoped<IUfAppService,UfAppService>();
+            //  services.AddScoped<IPaisAppService, PaisAppService>();
+            //  services.AddScoped<ICidadeAppService, CidadeAppService>();
 
             ////////////////////////////////////////////////////////////////////
             services.AddScoped(typeof(IServiceBase<>),typeof(ServiceBase<>));

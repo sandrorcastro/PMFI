@@ -8,9 +8,9 @@ using Domain.Interfaces.Base;
 
 namespace Application.Services
 {
-    public class CidadeAppService : AppServiceBase<Cidade,CidadeViewModel>, ICidadeAppService
+    public class CidadeAppService : AppServiceBase<Cidade>, ICidadeAppService
     {
-        public CidadeAppService(IServiceBase<Cidade> _serviceBase,IMapper mapper) : base(_serviceBase,mapper)
+        public CidadeAppService(IServiceBase<Cidade> _serviceBase) : base(_serviceBase)
         {
         }
     }

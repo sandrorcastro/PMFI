@@ -3,7 +3,7 @@ using Domain.Entities;
 
 namespace Application.Interfaces
 {
-    public interface IUfAppService : IAppServiceBase<Uf,UfViewModel>
+    public interface IUfAppService : IAppServiceBase<Uf>
     {
     }
 }

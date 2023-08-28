@@ -1,6 +1,7 @@
 ﻿
 using Domain.Filters;
-using System.Text.Json.Serialization;
+using System;
+//using System.Text.Json.Serialization;
 
 namespace Domain.Pagination;
 
@@ -17,12 +18,12 @@ public class Pagination
     public bool HasPrevious { get; }
     public bool HasNext { get; }
 
-    [JsonIgnore]
+    //[JsonIgnore]
     public int Take { get; }
-    [JsonIgnore]
+    //[JsonIgnore]
     public int Skip { get; }
 
-    [JsonConstructor]
+    //[JsonConstructor]
     public Pagination(int totalItems, int totalPages, int pageSize, int page, int startItem, int endItem, bool hasPrevious, bool hasNext)
     {
         _paginationSettings = default!;

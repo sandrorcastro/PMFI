@@ -1,4 +1,6 @@
-﻿namespace Domain.Pagination;
+﻿using System.Collections.Generic;
+
+namespace Domain.Pagination;
 
 public class PagedResponse<T>
 {
