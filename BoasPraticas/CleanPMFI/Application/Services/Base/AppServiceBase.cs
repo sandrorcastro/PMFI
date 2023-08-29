@@ -58,6 +58,11 @@ namespace Application.Services.Base
             return serviceBase.DeleteRangeAsync(entities, cancellationToken);
         }
 
+        public Task<T?> FindAsync<TId>(TId id, CancellationToken cancellationToken = default) where TId : notnull
+        {
+            return serviceBase.FindAsync<TId>(id, cancellationToken);
+        }
+
         public Task<T?> FirstOrDefaultAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
         {
             return serviceBase.FirstOrDefaultAsync(specification, cancellationToken);

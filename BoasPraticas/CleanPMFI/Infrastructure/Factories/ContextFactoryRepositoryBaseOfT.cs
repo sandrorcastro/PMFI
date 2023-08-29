@@ -229,4 +229,10 @@ public abstract class ContextFactoryRepositoryBaseOfT<TEntity, TContext> : IRepo
     {
         return _specificationEvaluator.GetQuery(dbContext.Set<TEntity>().AsQueryable(), specification);
     }
+
+    public virtual async Task<TEntity?> FindAsync<TId>(TId id, CancellationToken cancellationToken = default) where TId : notnull
+    {
+        await using var dbContext = _dbContextFactory.CreateDbContext();
+        return await dbContext.Set<TEntity>().FindAsync(new object[] { id }, cancellationToken: cancellationToken);
+    }
 }

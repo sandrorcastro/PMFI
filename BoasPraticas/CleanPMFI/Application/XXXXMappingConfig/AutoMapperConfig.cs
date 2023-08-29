@@ -1,7 +1,8 @@
-﻿using Microsoft.Extensions.DependencyInjection;
-using MVC.Mappings;
+﻿using Application.Mappings;
+using Microsoft.Extensions.DependencyInjection;
 
-namespace MVC.MappingConfig
+
+namespace Aplication.MappingConfig
 {
     public static class AutoMapperConfig
     {

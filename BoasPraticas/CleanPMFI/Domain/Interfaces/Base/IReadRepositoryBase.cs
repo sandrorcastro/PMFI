@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 namespace Domain.Interfaces.Base;
 public interface IReadRepositoryBase<T> where T : class
 {
+    Task<T?> FindAsync<TId>(TId id, CancellationToken cancellationToken = default) where TId : notnull;
     Task<T?> GetByIdAsync<TId>(TId id, CancellationToken cancellationToken = default) where TId : notnull;
     [Obsolete]
     Task<T?> GetBySpecAsync(ISpecification<T> specification, CancellationToken cancellationToken = default);

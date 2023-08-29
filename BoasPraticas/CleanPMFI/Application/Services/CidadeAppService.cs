@@ -1,12 +1,13 @@
 ﻿using Application.Interfaces;
 using Application.Services.Base;
+using Application.ViewModels;
 using Domain.Entities;
 using Domain.Interfaces.Base;
 using Domain.Interfaces.Services;
 
 namespace Application.Services
 {
-    public class CidadeAppService : AppServiceBase<CidadeViewModel>, ICidadeAppService
+    public class CidadeAppService : AppServiceBase<Cidade>, ICidadeAppService
     {
         private readonly ICidadeService cidadeService;
 

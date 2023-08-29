@@ -204,4 +204,9 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
         return _specificationEvaluator.GetQuery(_dbContext.Set<T>().AsQueryable(), specification);
     }
+
+    public virtual async Task<T?> FindAsync<TId>(TId id, CancellationToken cancellationToken = default) where TId : notnull
+    {
+        return await _dbContext.Set<T>().FindAsync(new object[] { id }, cancellationToken: cancellationToken);
+    }
 }

@@ -2,7 +2,7 @@
 using Application.ViewModels;
 using AutoMapper;
 using Domain.Entities;
-namespace MVC.Mappings
+namespace Application.Mappings
 {
     public class DomainToViewModelMappingProfile : Profile
     {

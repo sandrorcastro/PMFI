@@ -42,8 +42,8 @@ namespace WEBMVC.Controllers
 
             // var result=  await cidadeAppService.ListAsync();
             //return View(result);
-            //var applicationDbContext = _context.Cidades.Include(c => c.IdPaisNavigation).Include(c => c.IdUfNavigation);
-            //return View(await applicationDbContext.ToListAsync());
+            var applicationDbContext = _context.Cidades.Include(c => c.IdPaisNavigation).Include(c => c.IdUfNavigation);
+            return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Cidades/Details/5

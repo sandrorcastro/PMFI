@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces
 {
-    public interface ICidadeAppService : IAppServiceBase<CidadeViewModel>
+    public interface ICidadeAppService : IAppServiceBase<Cidade>
     {
     }
 }
