@@ -8,18 +8,18 @@ using Microsoft.EntityFrameworkCore;
 namespace Infrastructure.Repositories.Base;
 
 /// <inheritdoc/>
-public abstract class RepositoryBase<T> : IRepositoryBase<T> where T : class
+public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 {
-    private readonly ApplicationDbContext _dbContext;
+    private readonly DbContext _dbContext;
     private readonly ISpecificationEvaluator _specificationEvaluator;
 
-    public RepositoryBase(ApplicationDbContext dbContext)
-        : this(dbContext, SpecificationEvaluator.Default)
+  
+    public RepositoryBase(DbContext dbContext) : this(dbContext, SpecificationEvaluator.Default)
     {
     }
 
     /// <inheritdoc/>
-    public RepositoryBase(ApplicationDbContext dbContext, ISpecificationEvaluator specificationEvaluator)
+    public RepositoryBase(DbContext dbContext, ISpecificationEvaluator specificationEvaluator)
     {
         _dbContext = dbContext;
         _specificationEvaluator = specificationEvaluator;

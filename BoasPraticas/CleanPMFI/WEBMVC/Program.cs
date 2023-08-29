@@ -1,9 +1,20 @@
+using Domain.Entities;
+using Domain.Interfaces.Base;
+using Infrastructure.Context;
+using Infrastructure.Repositories.Base;
 using IOC;
+using Microsoft.EntityFrameworkCore;
+using System.Configuration;
 
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddInfrastructure(builder.Configuration);
 
+
+
+
+
+//builder.Services.AddScoped<IRepositoryBase<Uf>, RepositoryBase<Uf>>();
 
 
 

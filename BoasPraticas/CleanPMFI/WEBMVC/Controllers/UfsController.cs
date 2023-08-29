@@ -48,7 +48,7 @@ namespace WEBMVC.Controllers
         // GET: Ufs/Create
         public IActionResult Create()
         {
-            ViewData["IdPais"] = new SelectList(_context.dbPaises, "IdPais", "Nome");
+            ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "Nome");
             return View();
         }
 
@@ -65,7 +65,7 @@ namespace WEBMVC.Controllers
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdPais"] = new SelectList(_context.dbPaises, "IdPais", "Nome", uf.IdPais);
+            ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "Nome", uf.IdPais);
             return View(uf);
         }
 
@@ -82,7 +82,7 @@ namespace WEBMVC.Controllers
             {
                 return NotFound();
             }
-            ViewData["IdPais"] = new SelectList(_context.dbPaises, "IdPais", "Nome", uf.IdPais);
+            ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "Nome", uf.IdPais);
             return View(uf);
         }
 
@@ -118,7 +118,7 @@ namespace WEBMVC.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["IdPais"] = new SelectList(_context.dbPaises, "IdPais", "Nome", uf.IdPais);
+            ViewData["IdPais"] = new SelectList(_context.Paises, "IdPais", "Nome", uf.IdPais);
             return View(uf);
         }
 

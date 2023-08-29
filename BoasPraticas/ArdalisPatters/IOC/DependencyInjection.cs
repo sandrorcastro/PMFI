@@ -57,19 +57,19 @@ namespace IOC
 
             /////////////////////////////////////////////////////////////////////
             //services.AddScoped(typeof(IAppServiceBase<,>),typeof(AppServiceBase<,>));
-            services.AddScoped(typeof(IAppServiceBase<>), typeof(AppServiceBase<>));
+           // services.AddScoped(typeof(IAppServiceBase<>), typeof(AppServiceBase<>));
             //  services.AddScoped<IUfAppService,UfAppService>();
             //  services.AddScoped<IPaisAppService, PaisAppService>();
             //  services.AddScoped<ICidadeAppService, CidadeAppService>();
 
             ////////////////////////////////////////////////////////////////////
-            services.AddScoped(typeof(IServiceBase<>),typeof(ServiceBase<>));
+           // services.AddScoped(typeof(IServiceBase<>),typeof(ServiceBase<>));
            // services.AddScoped<IUfService, UfService>();
 
             //////////////////////////////////////////////////////////////////////
             //services.AddScoped(typeof(IRepositoryBase<>),typeof(RepositoryBase<>));
             //services.AddScoped(typeof(IRepositoryBase<>), typeof(RepositoryBase<>));
-            services.AddScoped<ICidadeRepository,CidadeRepository>();
+            // services.AddScoped<ICidadeRepository,CidadeRepository>();
             //services.AddScoped(typeof(IUfRepository),UfRepository);
 
             //////////////////////////////////////////////////////////////////////

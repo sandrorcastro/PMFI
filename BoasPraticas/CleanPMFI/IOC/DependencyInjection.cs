@@ -2,9 +2,14 @@
 using Application.Interfaces.Base;
 using Application.Services;
 using Application.Services.Base;
+using Domain.Entities;
 using Domain.Interfaces.Base;
+using Domain.Interfaces.Repositories;
+using Domain.Interfaces.Services;
+using Domain.Services;
 using Domain.Services.Base;
 using Infrastructure.Context;
+using Infrastructure.Repositories;
 using Infrastructure.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -50,17 +55,24 @@ namespace IOC
 
             /////////////////////////////////////////////////////////////////////
             services.AddScoped(typeof(IAppServiceBase<>),typeof(AppServiceBase<>));
-            services.AddScoped<IUfAppService,UfAppService>();
-        //    services.AddScoped<IPaisAppService, PaisAppService>();
-         //   services.AddScoped<ICidadeAppService, CidadeAppService>();
+            //         services.AddScoped<IUfAppService,UfAppService>();
+            //    services.AddScoped<IPaisAppService, PaisAppService>();
+            services.AddScoped<ICidadeAppService, CidadeAppService>();
+            
+
 
             ////////////////////////////////////////////////////////////////////
             services.AddScoped(typeof(IServiceBase<>),typeof(ServiceBase<>));
-           // services.AddScoped<IUfService, UfService>();
+            //       services.AddScoped<IUfService, UfService>();
+            services.AddScoped<ICidadeService, CidadeService>();
 
             //////////////////////////////////////////////////////////////////////
             services.AddScoped(typeof(IRepositoryBase<>),typeof(RepositoryBase<>));
+            services.AddScoped(typeof(IReadRepositoryBase<>), typeof(RepositoryBase<>));
+            //services.AddScoped(typeof(IRepositoryBase<Cidade>), typeof(RepositoryBase<Cidade>));
+            //services.AddScoped(typeof(IRepositoryBase<Uf>), typeof(RepositoryBase<Uf>));
             //services.AddScoped<IUfRepository, UfRepository>();
+            services.AddScoped<ICidadeRepository, CidadeRepository>();
 
             //////////////////////////////////////////////////////////////////////
             return services;
