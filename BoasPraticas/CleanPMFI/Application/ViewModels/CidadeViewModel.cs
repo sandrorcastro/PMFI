@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Domain.Entities;
+using System;
 using System.Collections.Generic;
 
 namespace Application.ViewModels
@@ -14,7 +15,7 @@ namespace Application.ViewModels
         public decimal? Latitude { get; set; }
         public decimal? Longitude { get; set; }
 
-        //public virtual Pais? IdPaisNavigation { get; set; }
-        //public virtual Uf? IdUfNavigation { get; set; }
+        public virtual Pais? IdPaisNavigation { get; set; }
+        public virtual Uf? IdUfNavigation { get; set; }
     }
 }

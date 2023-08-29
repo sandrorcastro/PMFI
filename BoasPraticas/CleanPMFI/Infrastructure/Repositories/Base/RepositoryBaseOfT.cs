@@ -1,9 +1,14 @@
-﻿using Domain.Interfaces.Base;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Domain.Filters;
+using Domain.Interfaces.Base;
 using Domain.Interfaces.Evaluators;
 using Domain.Interfaces.Specifications;
+using Domain.Pagination;
 using Infrastructure.Context;
 using Infrastructure.Evaluators;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace Infrastructure.Repositories.Base;
 
@@ -12,8 +17,11 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 {
     private readonly DbContext _dbContext;
     private readonly ISpecificationEvaluator _specificationEvaluator;
-
-  
+    private readonly AutoMapper.IConfigurationProvider _configurationProvider;
+    protected ISpecificationEvaluator Evaluator { get; }
+    /*protected RepositoryBase(DbContext dbContext, IMapper mapper) : this(dbContext, AppSpecificationEvaluator.Instance, mapper)
+    {
+    }*/
     public RepositoryBase(DbContext dbContext) : this(dbContext, SpecificationEvaluator.Default)
     {
     }
@@ -23,6 +31,14 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     {
         _dbContext = dbContext;
         _specificationEvaluator = specificationEvaluator;
+    }
+
+
+    protected RepositoryBase(DbContext dbContext, ISpecificationEvaluator specificationEvaluator, IMapper mapper)
+    {
+        _dbContext = dbContext;
+        Evaluator = specificationEvaluator;
+        _configurationProvider = mapper.ConfigurationProvider;
     }
 
     /// <inheritdoc/>
@@ -208,5 +224,30 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     public virtual async Task<T?> FindAsync<TId>(TId id, CancellationToken cancellationToken = default) where TId : notnull
     {
         return await _dbContext.Set<T>().FindAsync(new object[] { id }, cancellationToken: cancellationToken);
+    }
+
+    public async Task<TResult?> ProjectToFirstOrDefaultAsync<TResult>(ISpecification<T> specification, CancellationToken cancellationToken)
+    {
+        return await ApplySpecification(specification).ProjectTo<TResult>(_configurationProvider).FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<List<TResult>> ProjectToListAsync<TResult>(ISpecification<T> specification, CancellationToken cancellationToken)
+    {
+
+        return await ApplySpecification(specification).ProjectTo<TResult>(_configurationProvider).ToListAsync(cancellationToken);
+
+
+        //throw new NotImplementedException();
+    }
+
+    public async Task<PagedResponse<TResult>> ProjectToListAsync<TResult>(ISpecification<T> specification, BaseFilter filter, CancellationToken cancellationToken)
+    {
+        var count = await ApplySpecification(specification).CountAsync(cancellationToken);
+        var pagination = new Pagination(count, filter);
+        var data = await ApplySpecification(specification).Skip(pagination.Skip).Take(pagination.Take).ProjectTo<TResult>(_configurationProvider).ToListAsync(cancellationToken);
+        return new PagedResponse<TResult>(data, pagination);
+
+
+        // throw new NotImplementedException();
     }
 }

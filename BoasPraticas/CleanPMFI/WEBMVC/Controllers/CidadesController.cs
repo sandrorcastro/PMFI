@@ -13,6 +13,7 @@ using Application.Interfaces;
 using Application.Interfaces.Base;
 using Domain.Specs;
 using System.Threading;
+using Application.ViewModels;
 
 namespace WEBMVC.Controllers
 {
@@ -31,19 +32,28 @@ namespace WEBMVC.Controllers
         public async Task<IActionResult> Index(CidadeFilter filter)
         {
 
-            //Cacoal
-            filter.Nome = "Cacoal";
-            filter.IdCidade = 4;
             var spec = new CidadeSpec(filter);
+            var result = await cidadeAppService.ProjectToListAsync<CidadeViewModel>(spec, filter,new CancellationToken());
+            return View(result);
+
+
+
+
+
+
+            //Cacoal
+            //  filter.Nome = "Cacoal";
+            //  filter.IdCidade = 4;
+            //var spec = new CidadeSpec(filter);
             //var result = await cidadeAppService.FirstOrDefaultAsync<Cidade>(spec,filter); //, cancellationToken);
             //var result = await cidadeAppService.FirstOrDefaultAsync(spec);
-          //  return View(nameof(Details),result);
-            
+            //  return View(nameof(Details),result);
+
 
             // var result=  await cidadeAppService.ListAsync();
             //return View(result);
-            var applicationDbContext = _context.Cidades.Include(c => c.IdPaisNavigation).Include(c => c.IdUfNavigation);
-            return View(await applicationDbContext.ToListAsync());
+            //var applicationDbContext = _context.Cidades.Include(c => c.IdPaisNavigation).Include(c => c.IdUfNavigation);
+            //return View(await applicationDbContext.ToListAsync());
         }
 
         // GET: Cidades/Details/5

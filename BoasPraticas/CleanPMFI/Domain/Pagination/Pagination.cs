@@ -1,7 +1,7 @@
 ﻿using Domain.Filters;
 using System.Text.Json.Serialization;
 
-namespace Application.Pagination;
+namespace Domain.Pagination;
 
 public class Pagination
 {

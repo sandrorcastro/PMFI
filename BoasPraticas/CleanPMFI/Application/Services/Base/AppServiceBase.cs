@@ -1,6 +1,8 @@
 ﻿using Application.Interfaces.Base;
+using Domain.Filters;
 using Domain.Interfaces.Base;
 using Domain.Interfaces.Specifications;
+using Domain.Pagination;
 
 namespace Application.Services.Base
 {
@@ -101,6 +103,21 @@ namespace Application.Services.Base
         public Task<List<TResult>> ListAsync<TResult>(ISpecification<T, TResult> specification, CancellationToken cancellationToken = default)
         {
             return serviceBase.ListAsync<TResult>(specification, cancellationToken);
+        }
+
+        public async Task<TResult?> ProjectToFirstOrDefaultAsync<TResult>(ISpecification<T> specification, CancellationToken cancellationToken)
+        {
+            return await serviceBase.ProjectToFirstOrDefaultAsync<TResult>(specification, cancellationToken);
+        }
+
+        public async Task<List<TResult>> ProjectToListAsync<TResult>(ISpecification<T> specification, CancellationToken cancellationToken)
+        {
+            return await serviceBase.ProjectToListAsync<TResult>(specification, cancellationToken);
+        }
+
+        public async Task<PagedResponse<TResult>> ProjectToListAsync<TResult>(ISpecification<T> specification, BaseFilter filter, CancellationToken cancellationToken)
+        {
+            return await serviceBase.ProjectToListAsync<TResult>(specification,filter, cancellationToken);
         }
 
         public Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)

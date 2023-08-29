@@ -1,4 +1,4 @@
-﻿namespace Application.Pagination;
+﻿namespace Domain.Pagination;
 
 public class PagedResponse<T>
 {

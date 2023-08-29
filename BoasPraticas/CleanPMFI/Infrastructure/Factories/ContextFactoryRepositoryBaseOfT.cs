@@ -1,6 +1,10 @@
-﻿using Domain.Interfaces.Base;
+﻿using AutoMapper;
+using AutoMapper.QueryableExtensions;
+using Domain.Filters;
+using Domain.Interfaces.Base;
 using Domain.Interfaces.Evaluators;
 using Domain.Interfaces.Specifications;
+using Domain.Pagination;
 using Infrastructure.Evaluators;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +15,7 @@ public abstract class ContextFactoryRepositoryBaseOfT<TEntity, TContext> : IRepo
   where TContext : DbContext
 {
     private readonly IDbContextFactory<TContext> _dbContextFactory;
+    private readonly AutoMapper.IConfigurationProvider _configurationProvider;
     private readonly ISpecificationEvaluator _specificationEvaluator;
 
     public ContextFactoryRepositoryBaseOfT(IDbContextFactory<TContext> dbContextFactory)
@@ -24,6 +29,13 @@ public abstract class ContextFactoryRepositoryBaseOfT<TEntity, TContext> : IRepo
         _dbContextFactory = dbContextFactory;
         _specificationEvaluator = specificationEvaluator;
     }
+    protected ContextFactoryRepositoryBaseOfT(IDbContextFactory<TContext> dbContextFactory, ISpecificationEvaluator specificationEvaluator, IMapper mapper)
+    {
+        _dbContextFactory = dbContextFactory;
+        _specificationEvaluator = specificationEvaluator;
+        _configurationProvider = mapper.ConfigurationProvider;
+    }
+
 
     /// <inheritdoc/>
     public async Task<TEntity?> GetByIdAsync<TId>(TId id, CancellationToken cancellationToken = default) where TId : notnull
@@ -234,5 +246,31 @@ public abstract class ContextFactoryRepositoryBaseOfT<TEntity, TContext> : IRepo
     {
         await using var dbContext = _dbContextFactory.CreateDbContext();
         return await dbContext.Set<TEntity>().FindAsync(new object[] { id }, cancellationToken: cancellationToken);
+    }
+    public async Task<TResult?> ProjectToFirstOrDefaultAsync<TResult>(ISpecification<TEntity> specification, CancellationToken cancellationToken)
+    {
+        await using var dbContext = _dbContextFactory.CreateDbContext();
+        return await ApplySpecification(specification, dbContext).ProjectTo<TResult>(_configurationProvider).FirstOrDefaultAsync(cancellationToken);
+    }
+
+    public async Task<List<TResult>> ProjectToListAsync<TResult>(ISpecification<TEntity> specification, CancellationToken cancellationToken)
+    {
+        await using var dbContext = _dbContextFactory.CreateDbContext();
+        return await ApplySpecification(specification,dbContext).ProjectTo<TResult>(_configurationProvider).ToListAsync(cancellationToken);
+
+
+        //throw new NotImplementedException();
+    }
+
+    public async Task<PagedResponse<TResult>> ProjectToListAsync<TResult>(ISpecification<TEntity> specification, BaseFilter filter, CancellationToken cancellationToken)
+    {
+        await using var dbContext = _dbContextFactory.CreateDbContext();
+        var count = await ApplySpecification(specification, dbContext).CountAsync(cancellationToken);
+        var pagination = new Pagination(count, filter);
+        var data = await ApplySpecification(specification, dbContext).Skip(pagination.Skip).Take(pagination.Take).ProjectTo<TResult>(_configurationProvider).ToListAsync(cancellationToken);
+        return new PagedResponse<TResult>(data, pagination);
+
+
+        // throw new NotImplementedException();
     }
 }

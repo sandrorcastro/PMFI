@@ -1,4 +1,6 @@
-﻿using Domain.Interfaces.Specifications;
+﻿using Domain.Filters;
+using Domain.Interfaces.Specifications;
+using Domain.Pagination;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -23,6 +25,12 @@ public interface IReadRepositoryBase<T> where T : class
     Task<int> CountAsync(ISpecification<T> specification, CancellationToken cancellationToken = default);
     Task<int> CountAsync(CancellationToken cancellationToken = default);
     Task<bool> AnyAsync(ISpecification<T> specification, CancellationToken cancellationToken = default);
+    Task<TResult?> ProjectToFirstOrDefaultAsync<TResult>(ISpecification<T> specification, CancellationToken cancellationToken);
+    Task<List<TResult>> ProjectToListAsync<TResult>(ISpecification<T> specification, CancellationToken cancellationToken);
+    Task<PagedResponse<TResult>> ProjectToListAsync<TResult>(ISpecification<T> specification, BaseFilter filter, CancellationToken cancellationToken);
+
+
+
     Task<bool> AnyAsync(CancellationToken cancellationToken = default);
     #if NET6_0_OR_GREATER
        IAsyncEnumerable<T> AsAsyncEnumerable(ISpecification<T> specification);
