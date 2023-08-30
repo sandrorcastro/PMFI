@@ -20,7 +20,10 @@ builder.Services.AddInfrastructureAutoMapper(builder.Configuration);
 
 
 // Add services to the container.
-builder.Services.AddControllersWithViews();
+builder.Services.AddControllersWithViews().AddRazorOptions(options =>
+{
+    options.ViewLocationFormats.Add("/{0}.cshtml");
+});
 
 var app = builder.Build();
 

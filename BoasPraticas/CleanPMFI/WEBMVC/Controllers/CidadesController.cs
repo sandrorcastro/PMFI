@@ -15,6 +15,9 @@ using Domain.Specs;
 using System.Threading;
 using Application.ViewModels;
 using Domain.Pagination;
+using System.Net.Mail;
+using System.Runtime.CompilerServices;
+using WEBMVC.ViewComponents;
 
 namespace WEBMVC.Controllers
 {
@@ -36,8 +39,17 @@ namespace WEBMVC.Controllers
               //filter.Nome = "Cacoal";
               //filter.IdCidade = 4;
             var spec = new CidadeSpec(filter);
+
             var result = await cidadeAppService.ProjectToListAsync<CidadeViewModel>(spec, filter,new CancellationToken());
-            return View(result);
+            var resultPVM = new PagedResponseViewModel<CidadeViewModel>(result);
+            
+            
+            //return ViewComponent("~/Views/Shared/Partials/_Buscar.cshtmlPagedResponse", result);
+            return ViewComponent("Cidade", result);
+
+
+            //return View(result);
+            //return View(resultPVM);
 
 
 

@@ -13,9 +13,9 @@ namespace Application.Mappings
 
 
             
-            CreateMap<PagedResponse<CidadeViewModel>,Cidade>();
-            CreateMap<PagedResponse<List<CidadeViewModel>>, Cidade>();
-            CreateMap<List<CidadeViewModel>,Cidade>();
+        //    CreateMap<PagedResponse<CidadeViewModel>,Cidade>();
+        //    CreateMap<PagedResponse<List<CidadeViewModel>>, Cidade>();
+        //    CreateMap<List<CidadeViewModel>,Cidade>();
         }
 
     }
