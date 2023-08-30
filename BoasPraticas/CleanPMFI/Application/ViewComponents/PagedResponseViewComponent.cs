@@ -5,9 +5,9 @@ namespace Application.ViewComponents
     public class PagedResponseViewComponent<T> : ViewComponent
     {
         public PagedResponseViewComponent() {}
-        public async Task<IViewComponentResult> InvokeAsync(PagedResponse<T> page, Dictionary<string,string> routeData=null)
+        public async Task<IViewComponentResult> InvokeAsync(PagedResponse<T> pageResponse)
         {
-            return View("Default",new PagedesponseViewModel(){List = values, RouteData =routeData});
+            return View("Default",new PagedResponseViewModel() { PagedResponse = pageResponse });
         }
     }
 }
