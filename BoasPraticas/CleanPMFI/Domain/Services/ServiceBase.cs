@@ -120,6 +120,7 @@ namespace Domain.Services.Base
 
         public async Task<PagedResponse<TResult>> ProjectToListAsync<TResult>(ISpecification<T> specification, BaseFilter filter, CancellationToken cancellationToken)
         {
+            //return await repository.ProjectToListAsync<TResult>(specification, filter, cancellationToken);
             return await repository.ProjectToListAsync<TResult>(specification, filter, cancellationToken);
         }
 

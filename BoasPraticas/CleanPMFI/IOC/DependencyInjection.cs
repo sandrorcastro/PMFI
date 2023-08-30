@@ -4,11 +4,13 @@ using Application.Services;
 using Application.Services.Base;
 using Domain.Entities;
 using Domain.Interfaces.Base;
+using Domain.Interfaces.Evaluators;
 using Domain.Interfaces.Repositories;
 using Domain.Interfaces.Services;
 using Domain.Services;
 using Domain.Services.Base;
 using Infrastructure.Context;
+using Infrastructure.Evaluators;
 using Infrastructure.Repositories;
 using Infrastructure.Repositories.Base;
 using Microsoft.EntityFrameworkCore;
@@ -75,6 +77,7 @@ namespace IOC
             services.AddScoped<ICidadeRepository, CidadeRepository>();
 
             //////////////////////////////////////////////////////////////////////
+            //services.AddScoped<ISpecificationEvaluator, SpecificationEvaluator>();
             return services;
         }
     }

@@ -3,6 +3,7 @@ using Application.Mappings;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
+
 namespace IOC
 {
     public static class DependencyInjectionAutoMapper

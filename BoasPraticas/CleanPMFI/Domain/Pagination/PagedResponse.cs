@@ -2,6 +2,8 @@
 
 public class PagedResponse<T>
 {
+    public T ViewModel { get; set; }
+    public T model { get; set; }
     public Pagination Pagination { get; }
     public List<T> Data { get; }
 

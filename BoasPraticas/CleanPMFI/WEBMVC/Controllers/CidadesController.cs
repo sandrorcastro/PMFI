@@ -14,6 +14,7 @@ using Application.Interfaces.Base;
 using Domain.Specs;
 using System.Threading;
 using Application.ViewModels;
+using Domain.Pagination;
 
 namespace WEBMVC.Controllers
 {
@@ -32,6 +33,8 @@ namespace WEBMVC.Controllers
         public async Task<IActionResult> Index(CidadeFilter filter)
         {
 
+              //filter.Nome = "Cacoal";
+              //filter.IdCidade = 4;
             var spec = new CidadeSpec(filter);
             var result = await cidadeAppService.ProjectToListAsync<CidadeViewModel>(spec, filter,new CancellationToken());
             return View(result);

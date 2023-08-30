@@ -1,5 +1,11 @@
-﻿@model IEnumerable<Application.ViewModels.CidadeViewModel>
-
+﻿@using Application.ViewModels;
+@using Domain.Pagination;
+@*@model PagedResponse<IEnumerable<CidadeViewModel>>
+@model IEnumerable<PagedResponse<CidadeViewModel>>
+@model PagedResponse<CidadeViewModel>
+@model IEnumerable<CidadeViewModel>
+    *@
+@model PagedResponse<CidadeViewModel>
 @{
     ViewData["Title"] = "Index";
 }
@@ -13,31 +19,32 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Nome)
+
+                @Html.DisplayNameFor(model => model.ViewModel.Nome)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.CodigoIbge)
+                @Html.DisplayNameFor(model => model.ViewModel.CodigoIbge)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.SinCapital)
+                @Html.DisplayNameFor(model => model.ViewModel.SinCapital)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Latitude)
+                @Html.DisplayNameFor(model => model.ViewModel.Latitude)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Longitude)
+                @Html.DisplayNameFor(model => model.ViewModel.Longitude)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IdPaisNavigation)
+                @Html.DisplayNameFor(model => model.ViewModel.IdPaisNavigation)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.IdUfNavigation)
+                @Html.DisplayNameFor(model => model.ViewModel.IdUfNavigation)
             </th>
             <th></th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Data) {
         <tr>
             <td>
                 @Html.DisplayFor(modelItem => item.Nome)

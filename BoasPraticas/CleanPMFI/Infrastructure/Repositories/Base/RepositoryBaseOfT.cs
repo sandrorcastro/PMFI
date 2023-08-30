@@ -9,6 +9,7 @@ using Infrastructure.Context;
 using Infrastructure.Evaluators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Threading;
 
 namespace Infrastructure.Repositories.Base;
 
@@ -16,25 +17,20 @@ namespace Infrastructure.Repositories.Base;
 public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 {
     private readonly DbContext _dbContext;
-    private readonly ISpecificationEvaluator _specificationEvaluator;
+   // private readonly ISpecificationEvaluator _specificationEvaluator;
     private readonly AutoMapper.IConfigurationProvider _configurationProvider;
-    protected ISpecificationEvaluator Evaluator { get; }
-    /*protected RepositoryBase(DbContext dbContext, IMapper mapper) : this(dbContext, AppSpecificationEvaluator.Instance, mapper)
+    public  ISpecificationEvaluator Evaluator { get; }
+  /*  public RepositoryBase(DbContext dbContext) : this(dbContext, SpecificationEvaluator.Default)
     {
     }*/
-    public RepositoryBase(DbContext dbContext) : this(dbContext, SpecificationEvaluator.Default)
-    {
-    }
 
     /// <inheritdoc/>
-    public RepositoryBase(DbContext dbContext, ISpecificationEvaluator specificationEvaluator)
-    {
-        _dbContext = dbContext;
-        _specificationEvaluator = specificationEvaluator;
-    }
+  //  protected RepositoryBase(DbContext dbContext, IMapper mapper) : this(dbContext, AppSpecificationEvaluator.Instance, mapper) { }
+  
 
+    public RepositoryBase(DbContext dbContext, IMapper mapper) : this(dbContext, SpecificationEvaluator.Default, mapper) { }
 
-    protected RepositoryBase(DbContext dbContext, ISpecificationEvaluator specificationEvaluator, IMapper mapper)
+    public RepositoryBase(DbContext dbContext, ISpecificationEvaluator specificationEvaluator, IMapper mapper)
     {
         _dbContext = dbContext;
         Evaluator = specificationEvaluator;
@@ -201,9 +197,12 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     /// </summary>
     /// <param name="specification">The encapsulated query logic.</param>
     /// <returns>The filtered entities as an <see cref="IQueryable{T}"/>.</returns>
-    protected virtual IQueryable<T> ApplySpecification(ISpecification<T> specification, bool evaluateCriteriaOnly = false)
+    public virtual IQueryable<T> ApplySpecification(ISpecification<T> specification, bool evaluateCriteriaOnly = false)
     {
-        return _specificationEvaluator.GetQuery(_dbContext.Set<T>().AsQueryable(), specification, evaluateCriteriaOnly);
+
+        //return await repository.ProjectToListAsync<TResult>(specification, filter, cancellationToken);
+        return Evaluator.GetQuery(_dbContext.Set<T>().AsQueryable(), specification, evaluateCriteriaOnly);
+        //return Evaluator.GetQuery(_dbContext.Set<T>(), specification, evaluateCriteriaOnly);
     }
 
     /// <summary>
@@ -216,9 +215,11 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     /// <typeparam name="TResult">The type of the value returned by the projection.</typeparam>
     /// <param name="specification">The encapsulated query logic.</param>
     /// <returns>The filtered projected entities as an <see cref="IQueryable{T}"/>.</returns>
-    protected virtual IQueryable<TResult> ApplySpecification<TResult>(ISpecification<T, TResult> specification)
+    public virtual IQueryable<TResult> ApplySpecification<TResult>(ISpecification<T, TResult> specification)
     {
-        return _specificationEvaluator.GetQuery(_dbContext.Set<T>().AsQueryable(), specification);
+        //return _specificationEvaluator.GetQuery(_dbContext.Set<T>().AsQueryable(), specification);
+        return Evaluator.GetQuery(_dbContext.Set<T>().AsQueryable(), specification);
+        //return Evaluator.GetQuery(_dbContext.Set<T>(), specification);
     }
 
     public virtual async Task<T?> FindAsync<TId>(TId id, CancellationToken cancellationToken = default) where TId : notnull
