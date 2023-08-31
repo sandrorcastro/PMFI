@@ -11,7 +11,6 @@ namespace WEBMVC.ViewComponents
         public async Task<IViewComponentResult> InvokeAsync(PagedResponse<T> pageResponse)
         {
             return  View("Default",new PagedResponseViewModel<T>( pageResponse ));
-            //return View("Index", new PagedResponseViewModel<T>(pageResponse));
         }
     }
 }

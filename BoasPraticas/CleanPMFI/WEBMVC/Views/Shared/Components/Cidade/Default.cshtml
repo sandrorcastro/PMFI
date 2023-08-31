@@ -16,45 +16,8 @@ funciona -> @model PagedResponse<CidadeViewModel>
 <h1>Index</h1>
 
 <p>
-    <a asp-action="Create">Create New</a>
+    <a asp-action="Create">Create gggggggggggNew</a>
 </p>
-@*@{
-
-await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);
-}*@
-
-@{
-    var controllerAtual = ViewContext.RouteData.Values["controller"].ToString();
-
-}
-@*<form asp-action="Index" asp-controller="@ViewBag.FiltroPesquisa" method="get">*@
-
-<div class="col-md-5 form-group">
-    <form asp-action="Index" asp-controller=@controllerAtual method="post">
-        <div class="form-actions no-color">
-            <p>
-                Localizar: <input asp-for="@Model.ViewModel.Nome"  />
-                <input type="submit" value="Buscar" class="btn btn-success"></> |
-                <a asp-action="Index">Voltar à Lista</a>
-            </p>
-        </div>
-    </form>
-</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 <table class="table">
     <thead>
         <tr>

@@ -33,23 +33,44 @@ namespace WEBMVC.Controllers
 
         // GET: Cidades
         //public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? filter)
+        {
+
+            //filter.Nome = "Cacoal";
+            //filter.IdCidade = 4;
+            CidadeFilter cidadeFilter = new CidadeFilter() {Nome=filter };
+            var spec = new CidadeSpec(cidadeFilter);
+
+            var result = await cidadeAppService.ProjectToListAsync<CidadeViewModel>(spec, cidadeFilter, new CancellationToken());
+            var resultPVM = new PagedResponseViewModel<CidadeViewModel>(result, cidadeFilter);
+
+
+            ///return ViewComponent("~/Views/Shared/Partials/_Buscar.cshtmlPagedResponse", result);
+            //// return ViewComponent("Cidade",result);
+
+
+            //return View(result);
+            return View(resultPVM);
+        }
+        [HttpPost]
         public async Task<IActionResult> Index(CidadeFilter filter)
         {
 
               //filter.Nome = "Cacoal";
               //filter.IdCidade = 4;
+           // CidadeFilter filter = new CidadeFilter() {Nome=NomeCidadeFilter };
             var spec = new CidadeSpec(filter);
 
             var result = await cidadeAppService.ProjectToListAsync<CidadeViewModel>(spec, filter,new CancellationToken());
-            var resultPVM = new PagedResponseViewModel<CidadeViewModel>(result);
+            var resultPVM = new PagedResponseViewModel<CidadeViewModel>(result,filter);
             
             
-            //return ViewComponent("~/Views/Shared/Partials/_Buscar.cshtmlPagedResponse", result);
-            return ViewComponent("Cidade", result);
+            ///return ViewComponent("~/Views/Shared/Partials/_Buscar.cshtmlPagedResponse", result);
+           //// return ViewComponent("Cidade",result);
 
 
             //return View(result);
-            //return View(resultPVM);
+            return View(resultPVM);
 
 
 
