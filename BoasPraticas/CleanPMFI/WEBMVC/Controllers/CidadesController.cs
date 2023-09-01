@@ -42,11 +42,11 @@ namespace WEBMVC.Controllers
 
             CidadeFilter cidadeFilter = new CidadeFilter()
             {
-                Nome = null,
-                IdCidade = 123,
-                SortBy = String.IsNullOrEmpty(CidadeFilter.SortBy) ? CidadeFilter.Nome : "ggg",
-                OrderBy = "Desc"
-        };
+                Nome = String.IsNullOrEmpty(CidadeFilter.Nome) ? null : CidadeFilter.Nome,
+                IdCidade = null,
+                SortBy = String.IsNullOrEmpty(CidadeFilter.SortBy) ? "Nome" : null,
+                OrderBy = String.IsNullOrEmpty(CidadeFilter.OrderBy) ? "Desc" : null,
+            };
             ViewData["CidadeFilter"] = cidadeFilter;
                  
             
