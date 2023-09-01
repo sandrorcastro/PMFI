@@ -18,6 +18,8 @@ using Domain.Pagination;
 using System.Net.Mail;
 using System.Runtime.CompilerServices;
 using WEBMVC.ViewComponents;
+using Microsoft.Data.SqlClient;
+using System.Globalization;
 
 namespace WEBMVC.Controllers
 {
@@ -33,12 +35,27 @@ namespace WEBMVC.Controllers
 
         // GET: Cidades
         //public async Task<IActionResult> Index()
-        public async Task<IActionResult> Index(string? filter)
+        //public async Task<IActionResult> Index(string CidadeFilter_SortBy, string? filter,string sortOrder)
+        [HttpGet]
+        public async Task<IActionResult> Index(CidadeFilter CidadeFilter, string? q)
         {
 
+            CidadeFilter cidadeFilter = new CidadeFilter()
+            {
+                //Nome = "Teste333",
+                //IdCidade = cidadeFilter.IdCidade,
+                SortBy = String.IsNullOrEmpty(CidadeFilter.SortBy) ? "Asc" : "",
+                OrderBy = "IdCidade"
+        };
+            ViewData["CidadeFilter"] = cidadeFilter;
+                 
+            
+            
+         
+            
             //filter.Nome = "Cacoal";
             //filter.IdCidade = 4;
-            CidadeFilter cidadeFilter = new CidadeFilter() {Nome=filter };
+            //////CidadeFilter cidadeFilter = new CidadeFilter() {Nome=filter };
             var spec = new CidadeSpec(cidadeFilter);
 
             var result = await cidadeAppService.ProjectToListAsync<CidadeViewModel>(spec, cidadeFilter, new CancellationToken());
@@ -53,16 +70,17 @@ namespace WEBMVC.Controllers
             return View(resultPVM);
         }
         [HttpPost]
-        public async Task<IActionResult> Index(CidadeFilter filter)
+        public async Task<IActionResult> Index(CidadeFilter CidadeFilter)
+        //public async Task<IActionResult> Index(CidadeFilter filter)
         {
 
               //filter.Nome = "Cacoal";
               //filter.IdCidade = 4;
            // CidadeFilter filter = new CidadeFilter() {Nome=NomeCidadeFilter };
-            var spec = new CidadeSpec(filter);
+            var spec = new CidadeSpec(CidadeFilter);
 
-            var result = await cidadeAppService.ProjectToListAsync<CidadeViewModel>(spec, filter,new CancellationToken());
-            var resultPVM = new PagedResponseViewModel<CidadeViewModel>(result,filter);
+            var result = await cidadeAppService.ProjectToListAsync<CidadeViewModel>(spec, CidadeFilter, new CancellationToken());
+            var resultPVM = new PagedResponseViewModel<CidadeViewModel>(result, CidadeFilter);
             
             
             ///return ViewComponent("~/Views/Shared/Partials/_Buscar.cshtmlPagedResponse", result);

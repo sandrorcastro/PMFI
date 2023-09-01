@@ -1,5 +1,7 @@
 ﻿@using Application.ViewModels;
 @using Domain.Pagination;
+@using Domain.Filters;
+
 @*
 @model PagedResponse<IEnumerable<CidadeViewModel>>
 @model IEnumerable<PagedResponse<CidadeViewModel>>
@@ -11,6 +13,8 @@ funciona -> @model PagedResponse<CidadeViewModel>
 
 @{
     ViewData["Title"] = "Index";
+    //CidadeFilter CidadeFilter = new CidadeFilter() { Nome="Teste"};
+    CidadeFilter CidadeFilter = ViewData["CidadeFilter"] as CidadeFilter; 
 }
 
 <h1>Index</h1>
@@ -33,7 +37,7 @@ await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);
     <form asp-action="Index" asp-controller=@controllerAtual method="post">
         <div class="form-actions no-color">
             <p>
-                Localizar: <input asp-for="@Model.ViewModel.Nome"  />
+                Localizar: <input asp-for=@CidadeFilter.Nome />
                 <input type="submit" value="Buscar" class="btn btn-success"></> |
                 <a asp-action="Index">Voltar à Lista</a>
             </p>
@@ -59,8 +63,11 @@ await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);
     <thead>
         <tr>
             <th>
-
-                @Html.DisplayNameFor(model => model.ViewModel.Nome)
+                
+                <a asp-action="Index" asp-route-OrderBy=@CidadeFilter.OrderBy>@Html.DisplayNameFor(model => model.ViewModel.IdCidade)</a>
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-OrderBy=@CidadeFilter.OrderBy>@Html.DisplayNameFor(model => model.ViewModel.Nome)</a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ViewModel.CodigoIbge)
@@ -86,6 +93,9 @@ await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);
     <tbody>
 @foreach (var item in Model.Data) {
         <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdCidade)
+                </td>
             <td>
                 @Html.DisplayFor(modelItem => item.Nome)
             </td>

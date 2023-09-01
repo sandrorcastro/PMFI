@@ -1,4 +1,6 @@
-﻿namespace Domain.Filters;
+﻿using Domain.Entities;
+
+namespace Domain.Filters;
 
 public record CidadeFilter : BaseFilter
 {

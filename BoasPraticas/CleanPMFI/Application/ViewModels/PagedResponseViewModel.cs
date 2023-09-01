@@ -29,5 +29,11 @@ namespace Application.ViewModels
             Data = data;
             Pagination = pagination;
         }
+        public PagedResponseViewModel(List<T> data, Pagination pagination, BaseFilter filter)
+        {
+            Data = data;
+            Pagination = pagination;
+            Filter = filter;
+        }
     }
 }
