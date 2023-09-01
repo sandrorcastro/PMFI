@@ -64,10 +64,10 @@ await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);
         <tr>
             <th>
                 
-                <a asp-action="Index" asp-route-OrderBy=@CidadeFilter.OrderBy asp-route-SortBy=@Model.ViewModel.IdCidade>@Html.DisplayNameFor(model => model.ViewModel.IdCidade)</a>
+                <a asp-action="Index" asp-route-OrderBy=@CidadeFilter.OrderBy asp-route-SortBy="IdCIdade">@Html.DisplayNameFor(model => model.ViewModel.IdCidade)</a>
             </th>
             <th>
-                <a asp-action="Index" asp-route-OrderBy=@CidadeFilter.OrderBy asp-route-SortBy=@Model.ViewModel.Nome>@Html.DisplayNameFor(model => model.ViewModel.Nome)</a>
+                <a asp-action="Index" asp-route-OrderBy=@CidadeFilter.OrderBy asp-route-SortBy="Nome">@Html.DisplayNameFor(model => model.ViewModel.Nome)</a>
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ViewModel.CodigoIbge)
