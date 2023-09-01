@@ -40,6 +40,38 @@ namespace WEBMVC.Controllers
         public async Task<IActionResult> Index(CidadeFilter CidadeFilter, string? q)
         {
 
+            ViewData["NomeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "nome_desc" : "";
+            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
+            var students = from s in _context.Students
+                           select s;
+            switch (sortOrder)
+            {
+                case "nome_desc":
+                    students = students.OrderByDescending(s => s.LastName);
+                    break;
+                case "Date":
+                    students = students.OrderBy(s => s.EnrollmentDate);
+                    break;
+                case "date_desc":
+                    students = students.OrderByDescending(s => s.EnrollmentDate);
+                    break;
+                default:
+                    students = students.OrderBy(s => s.LastName);
+                    break;
+            }
+
+
+
+
+
+
+
+
+
+
+
+
+
             CidadeFilter cidadeFilter = new CidadeFilter()
             {
                 Nome = String.IsNullOrEmpty(CidadeFilter.Nome) ? null : CidadeFilter.Nome,
