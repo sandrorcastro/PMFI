@@ -20,6 +20,9 @@ using System.Runtime.CompilerServices;
 using WEBMVC.ViewComponents;
 using Microsoft.Data.SqlClient;
 using System.Globalization;
+using System.Xml.Linq;
+using Domain.Interfaces.Specifications;
+using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace WEBMVC.Controllers
 {
@@ -37,70 +40,175 @@ namespace WEBMVC.Controllers
         //public async Task<IActionResult> Index()
         //public async Task<IActionResult> Index(string CidadeFilter_SortBy, string? filter,string sortOrder)
         [HttpGet]
-        public async Task<IActionResult> Index(CidadeFilter CidadeFilter, string? q)
-        {
 
-            ViewData["NomeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "nome_desc" : "";
-            ViewData["DateSortParm"] = sortOrder == "Date" ? "date_desc" : "Date";
-            var students = from s in _context.Students
-                           select s;
-            switch (sortOrder)
+        /* public async Task<IActionResult> Index(CidadeFilter CidadeFilter, string sortOrder, string currentFilter, string searchString, int? pageNumber)
+         {
+             var spec=new CidadeSpec();
+             ViewData["CurrentSort"] = sortOrder;
+             ViewData["IdCidadeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "idcidade_desc" : "";
+             ViewData["NomeSortParm"] = sortOrder == "Nome" ? "nome_desc" : "Nome";
+             if (searchString != null)
+             {
+                 pageNumber = 1;
+             }
+             else
+             {
+                 searchString = currentFilter;
+             }
+
+             ViewData["CurrentFilter"] = searchString;
+
+             var cidades = from s in _context.Cidades
+                            select s;
+
+
+             CidadeFilter cidadeFilter = new CidadeFilter()
+             {
+                 Nome = String.IsNullOrEmpty(CidadeFilter.Nome) ? null : CidadeFilter.Nome,
+                 IdCidade = null,
+                 SortBy = String.IsNullOrEmpty(CidadeFilter.SortBy) ? "Nome" : null,
+                 OrderBy = String.IsNullOrEmpty(CidadeFilter.OrderBy) ? "Desc" : null,
+             };
+
+
+             if (!String.IsNullOrEmpty(searchString))
+             {
+                 //
+                 //
+                 //this.spec = CidadePeloNomeSpec(cidadeFilter);
+             }
+             switch (sortOrder)
+             {
+                 case "idcidade_desc":
+                     cidades = cidades.OrderByDescending(s => s.IdCidade);
+                     break;
+                 case "Nome":
+                     cidades = cidades.OrderBy(s => s.Nome);
+                     break;
+                 case "nome_desc":
+                     cidades = cidades.OrderByDescending(s => s.Nome);
+                     break;
+                 default:
+                     cidades = cidades.OrderBy(s => s.IdCidade);
+                     break;
+             }
+
+             int pageSize = 3;
+             //return View(await PaginatedList<Student>.CreateAsync(Cidades.AsNoTracking(), pageNumber ?? 1, pageSize));
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+             ViewData["CidadeFilter"] = cidadeFilter;
+
+
+
+
+
+             //filter.Nome = "Cacoal";
+             //filter.IdCidade = 4;
+             //////CidadeFilter cidadeFilter = new CidadeFilter() {Nome=filter };
+            // var spec = new CidadeSpec(cidadeFilter);
+
+             var result = await cidadeAppService.ProjectToListAsync<CidadeViewModel>(spec, cidadeFilter, new CancellationToken());
+             var resultPVM = new PagedResponseViewModel<CidadeViewModel>(result, cidadeFilter);
+
+
+             ///return ViewComponent("~/Views/Shared/Partials/_Buscar.cshtmlPagedResponse", result);
+             //// return ViewComponent("Cidade",result);
+
+
+             //return View(result);
+             return View(resultPVM);
+         }*/
+
+
+         public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
+         {
+            
+            ISpecification<Cidade> spec = null;
+            CidadeFilter cidadeFilter = new CidadeFilter();
+            
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NomeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Nome" : "";
+            ViewData["IdCidadeSortParm"] = sortOrder == "IdCidade" ? "idcidade_desc" : "IdCidade";
+            if (searchString != null)
+            {
+                pageNumber = 1;
+                cidadeFilter.Page = pageNumber;
+            }
+            else
+            {
+                searchString = currentFilter;
+                cidadeFilter.SortBy = sortOrder;
+                //cidadeFilter.OrderBy = "desc";
+                spec = new CidadeSpec(cidadeFilter);
+            }
+            
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                 long number1 = 0;
+                if (long.TryParse(searchString, out number1))
+                {
+                    cidadeFilter.IdCidade = int.Parse(searchString);
+                    spec = new CidadeByIdSpec(cidadeFilter);
+                }
+                else
+                {
+                    cidadeFilter.Nome=searchString;
+                    spec = new CidadeSpec(cidadeFilter);
+                }
+            }
+          /*  switch (sortOrder)
             {
                 case "nome_desc":
-                    students = students.OrderByDescending(s => s.LastName);
+                    Cidades = Cidades.OrderByDescending(s => s.Nome);
+                    
                     break;
-                case "Date":
-                    students = students.OrderBy(s => s.EnrollmentDate);
+                case "IdCidade":
+                    Cidades = Cidades.OrderBy(s => s.IdCidade);
                     break;
-                case "date_desc":
-                    students = students.OrderByDescending(s => s.EnrollmentDate);
+                case "idcidade_desc":
+                    Cidades = Cidades.OrderByDescending(s => s.IdCidade);
                     break;
                 default:
-                    students = students.OrderBy(s => s.LastName);
+                    //Cidades = Cidades.OrderBy(s => s.Nome);
+                    spec = new CidadeSpec();
                     break;
-            }
+            }*/
 
-
-
-
-
-
-
-
-
-
-
-
-
-            CidadeFilter cidadeFilter = new CidadeFilter()
-            {
-                Nome = String.IsNullOrEmpty(CidadeFilter.Nome) ? null : CidadeFilter.Nome,
-                IdCidade = null,
-                SortBy = String.IsNullOrEmpty(CidadeFilter.SortBy) ? "Nome" : null,
-                OrderBy = String.IsNullOrEmpty(CidadeFilter.OrderBy) ? "Desc" : null,
-            };
-            ViewData["CidadeFilter"] = cidadeFilter;
-                 
+            //int pageSize = 3;
             
-            
-         
-            
-            //filter.Nome = "Cacoal";
-            //filter.IdCidade = 4;
-            //////CidadeFilter cidadeFilter = new CidadeFilter() {Nome=filter };
-            var spec = new CidadeSpec(cidadeFilter);
-
-            var result = await cidadeAppService.ProjectToListAsync<CidadeViewModel>(spec, cidadeFilter, new CancellationToken());
-            var resultPVM = new PagedResponseViewModel<CidadeViewModel>(result, cidadeFilter);
+           // return View(await PaginatedList<Student>.CreateAsync(Cidades.AsNoTracking(), pageNumber ?? 1, pageSize));
 
 
-            ///return ViewComponent("~/Views/Shared/Partials/_Buscar.cshtmlPagedResponse", result);
-            //// return ViewComponent("Cidade",result);
+          //  cidadeFilter.Nome = searchString;
+            //spec=new CidadeSpec(cidadeFilter);
+
+            //ViewData["CidadeFilter"] = cidadeFilter;
+             var result = await cidadeAppService.ProjectToListAsync<CidadeViewModel>(spec, cidadeFilter, new CancellationToken());
+             var resultPVM = new PagedResponseViewModel<CidadeViewModel>(result, cidadeFilter);
+             //return View(result);
+             return View(resultPVM);
+         }
 
 
-            //return View(result);
-            return View(resultPVM);
-        }
+
+
+
+
+        /*
         [HttpPost]
         public async Task<IActionResult> Index(CidadeFilter CidadeFilter)
         //public async Task<IActionResult> Index(CidadeFilter filter)
@@ -140,7 +248,7 @@ namespace WEBMVC.Controllers
             //return View(result);
             //var applicationDbContext = _context.Cidades.Include(c => c.IdPaisNavigation).Include(c => c.IdUfNavigation);
             //return View(await applicationDbContext.ToListAsync());
-        }
+        }*/
 
         // GET: Cidades/Details/5
         public async Task<IActionResult> Details(int? id)

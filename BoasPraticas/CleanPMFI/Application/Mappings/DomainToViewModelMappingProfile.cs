@@ -12,7 +12,9 @@ namespace Application.Mappings
 
           //  CreateMap<TipoPessoa,TipoPessoaViewModel>();
             CreateMap<Cidade, CidadeViewModel>();
-           // CreateMap<Cidade, PagedResponse<CidadeViewModel>>();
+            CreateMap<Pais, PaisViewModel>();
+            CreateMap<Uf, UfViewModel>();
+            // CreateMap<Cidade, PagedResponse<CidadeViewModel>>();
             //CreateMap<Cidade, PagedResponse<List<CidadeViewModel>>>();
             //CreateMap<Cidade, List<CidadeViewModel>>();
 

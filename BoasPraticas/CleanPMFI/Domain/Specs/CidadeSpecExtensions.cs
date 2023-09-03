@@ -15,6 +15,7 @@ public static class CidadeSpecExtensions
     {
         // If there is no filter apply default ordering;
         if (filter is null) return builder.OrderBy(x => x.IdCidade);
+        //if (filter is null) return builder.OrderByDescending(x => x.Nome);
 
         // We want the "asc" to be the default, that's why the condition is reverted.
         var isAscending = !(filter.OrderBy?.Equals("desc", StringComparison.OrdinalIgnoreCase) ?? false);
@@ -22,7 +23,10 @@ public static class CidadeSpecExtensions
         return filter.SortBy switch
         {
             nameof(Cidade.Nome) => isAscending ? builder.OrderBy(x => x.Nome) : builder.OrderByDescending(x => x.Nome),
-            _ => builder.OrderBy(x => x.IdCidade)
+            nameof(Cidade.IdCidade) => isAscending ? builder.OrderBy(x => x.IdCidade) : builder.OrderByDescending(x => x.IdCidade),
+
+            _ => builder.OrderByDescending(x => x.IdCidade)
+          
         };
     }
 
@@ -34,4 +38,5 @@ public static class CidadeSpecExtensions
         builder.Specification.Items.TryAdd("TagWith", tag);
         return builder;
     }
+   
 }

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using PMFI.Domain.Entities;
 using System.Reflection.Emit;
 
-namespace PMFI.Infra.EntitiesConfigurations
+namespace PMFI.Infra.EntityConfig
 {
     public class CidadeConfiguration : IEntityTypeConfiguration<Cidade>
     {

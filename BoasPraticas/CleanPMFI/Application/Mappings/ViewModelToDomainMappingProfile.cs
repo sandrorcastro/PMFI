@@ -10,12 +10,14 @@ namespace Application.Mappings
         public ViewModelToDomainMappingProfile()
         {
             CreateMap<CidadeViewModel, Cidade>();
+            CreateMap<PaisViewModel, Pais>();
+            CreateMap<UfViewModel, Uf>();
 
 
-            
-        //    CreateMap<PagedResponse<CidadeViewModel>,Cidade>();
-        //    CreateMap<PagedResponse<List<CidadeViewModel>>, Cidade>();
-        //    CreateMap<List<CidadeViewModel>,Cidade>();
+
+            //    CreateMap<PagedResponse<CidadeViewModel>,Cidade>();
+            //    CreateMap<PagedResponse<List<CidadeViewModel>>, Cidade>();
+            //    CreateMap<List<CidadeViewModel>,Cidade>();
         }
 
     }

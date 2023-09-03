@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using PMFI.Domain.Entities;
-using PMFI.Infra.EntitiesConfigurations;
+using PMFI.Infra.EntityConfig;
 using System.Diagnostics;
 using System.Net.Http;
 using System.Security.Claims;

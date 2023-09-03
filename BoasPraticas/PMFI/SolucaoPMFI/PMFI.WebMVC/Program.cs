@@ -6,8 +6,19 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-builder.Services.AddInfrastructureWEBMVC(builder.Configuration);
+builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddAutoMapperConfig();
+
+
+////var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'ContextoAplicacaoConnection' not found.");
+
+///builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+///
+//builder.Services.AddDbContextFactory<ApplicationDbContext>(options => options.UseSqlServer(connectionString));
+
+
+
+
 
 builder.Services.AddControllersWithViews();
 

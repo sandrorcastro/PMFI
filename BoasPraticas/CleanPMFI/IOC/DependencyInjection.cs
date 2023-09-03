@@ -60,21 +60,26 @@ namespace IOC
             //         services.AddScoped<IUfAppService,UfAppService>();
             //    services.AddScoped<IPaisAppService, PaisAppService>();
             services.AddScoped<ICidadeAppService, CidadeAppService>();
-            
+            services.AddScoped<IPaisAppService, PaisAppService>();
+            services.AddScoped<IUfAppService, UfAppService>();
+
 
 
             ////////////////////////////////////////////////////////////////////
             services.AddScoped(typeof(IServiceBase<>),typeof(ServiceBase<>));
             //       services.AddScoped<IUfService, UfService>();
             services.AddScoped<ICidadeService, CidadeService>();
+            services.AddScoped<IPaisService, PaisService>();
+            services.AddScoped<IUfService, UfService>();
 
             //////////////////////////////////////////////////////////////////////
             services.AddScoped(typeof(IRepositoryBase<>),typeof(RepositoryBase<>));
             services.AddScoped(typeof(IReadRepositoryBase<>), typeof(RepositoryBase<>));
             //services.AddScoped(typeof(IRepositoryBase<Cidade>), typeof(RepositoryBase<Cidade>));
             //services.AddScoped(typeof(IRepositoryBase<Uf>), typeof(RepositoryBase<Uf>));
-            //services.AddScoped<IUfRepository, UfRepository>();
+            services.AddScoped<IUfRepository, UfRepository>();
             services.AddScoped<ICidadeRepository, CidadeRepository>();
+            services.AddScoped<IPaisRepository, PaisRepository>();
 
             //////////////////////////////////////////////////////////////////////
             //services.AddScoped<ISpecificationEvaluator, SpecificationEvaluator>();

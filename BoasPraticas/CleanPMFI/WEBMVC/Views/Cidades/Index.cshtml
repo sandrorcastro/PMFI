@@ -13,6 +13,7 @@ funciona -> @model PagedResponse<CidadeViewModel>
 
 @{
     ViewData["Title"] = "Index";
+    var controllerAtual = ViewContext.RouteData.Values["controller"].ToString();
     //CidadeFilter CidadeFilter = new CidadeFilter() { Nome="Teste"};
     CidadeFilter CidadeFilter = ViewData["CidadeFilter"] as CidadeFilter; 
 }
@@ -27,12 +28,10 @@ funciona -> @model PagedResponse<CidadeViewModel>
 await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);
 }*@
 
-@{
-    var controllerAtual = ViewContext.RouteData.Values["controller"].ToString();
 
-}
 @*<form asp-action="Index" asp-controller="@ViewBag.FiltroPesquisa" method="get">*@
 
+@*
 <div class="col-md-5 form-group">
     <form asp-action="Index" asp-controller=@controllerAtual method="post">
         <div class="form-actions no-color">
@@ -44,8 +43,16 @@ await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);
         </div>
     </form>
 </div>
-
-
+*@
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
 
 
 
@@ -63,11 +70,14 @@ await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);
     <thead>
         <tr>
             <th>
-                
-                <a asp-action="Index" asp-route-OrderBy=@CidadeFilter.OrderBy asp-route-SortBy="IdCIdade">@Html.DisplayNameFor(model => model.ViewModel.IdCidade)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["IdCidadeSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">IdCidade</a>
+                @*
+                    <a asp-action="Index" asp-route-OrderBy="IdCidade" asp-route-SortBy=@CidadeFilter.SortBy>@Html.DisplayNameFor(model => model.ViewModel.IdCidade)</a>
+                *@
             </th>
             <th>
-                <a asp-action="Index" asp-route-OrderBy=@CidadeFilter.OrderBy asp-route-SortBy="Nome">@Html.DisplayNameFor(model => model.ViewModel.Nome)</a>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NomeSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Nome</a>
+                @*<a asp-action="Index" asp-route-OrderBy="Nome" asp-route-SortBy=@CidadeFilter.SortBy>@Html.DisplayNameFor(model => model.ViewModel.Nome)</a>*@
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.ViewModel.CodigoIbge)
@@ -126,4 +136,22 @@ await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);
 }
     </tbody>
 </table>
+@{
+    var prevDisabled = !Model.Pagination.HasPrevious ? "disabled" : "";
+    var nextDisabled = !Model.Pagination.HasNext ? "disabled" : "";
+}
 
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.Pagination.Page - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Anterior
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.Pagination.Page + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Próximo
+</a>

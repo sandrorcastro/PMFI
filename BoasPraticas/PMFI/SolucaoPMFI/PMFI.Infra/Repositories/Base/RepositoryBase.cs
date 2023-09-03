@@ -113,7 +113,7 @@ namespace PMFI.Infra.Repositories.Base
             {
                 using (var context = contextFactory.CreateDbContext())
                 {
-                    return context.Set<TEntity>().Where(predicate).AsEnumerable(); //.ToListAsync();
+                    return await context.Set<TEntity>().Where(predicate).ToListAsync();
                 }
 
             }catch (DbException ex)
@@ -123,23 +123,7 @@ namespace PMFI.Infra.Repositories.Base
         }
         public async Task<IEnumerable<TEntity>> ListAsync(ISpecificationBase<TEntity> spec)
         {
-            try
-            {
-                using (var context = contextFactory.CreateDbContext())
-                {
-                    // fetch a Queryable that includes all expression-based includes
-                  var queryableResultWithIncludes = spec.Includes.Aggregate(context.Set<TEntity>().AsQueryable(),(current, include) => current.Include(include));
-
-                    // modify the IQueryable to include any string-based include statements
-                  var secondaryResult = spec.IncludeStrings.Aggregate(queryableResultWithIncludes,(current, include) => current.Include(include));
-
-                    // return the result of the query using the specification's criteria expression
-                    return secondaryResult.Where(spec.Criteria).AsEnumerable();
-                }
-            }catch(DbException ex)
-            {
-                throw ex;
-            }
+            throw new NotImplementedException();
         }
     }
 }
