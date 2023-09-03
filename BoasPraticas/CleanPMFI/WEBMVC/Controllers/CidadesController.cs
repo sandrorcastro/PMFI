@@ -150,7 +150,7 @@ namespace WEBMVC.Controllers
             else
             {
                 searchString = currentFilter;
-                // cidadeFilter.SortBy = sortOrder;
+                cidadeFilter.SortBy = sortOrder;
                 //cidadeFilter.OrderBy = "desc";
                 cidadeFilter.Page = pageNumber;
                 spec = new CidadeSpec(cidadeFilter);

@@ -11,7 +11,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "IOC", "IOC\IOC.csproj", "{7
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Application", "Application\Application.csproj", "{C6376BF5-C67F-4356-919C-1E7A14576382}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "WEBMVC", "WEBMVC\WEBMVC.csproj", "{BFDDB64B-FBE3-4868-826F-780EB47D3DB2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "WEBMVC", "WEBMVC\WEBMVC.csproj", "{BFDDB64B-FBE3-4868-826F-780EB47D3DB2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
