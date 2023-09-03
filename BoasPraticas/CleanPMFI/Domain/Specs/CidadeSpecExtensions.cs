@@ -21,13 +21,13 @@ public static class CidadeSpecExtensions
         var isAscending = !(filter.OrderBy?.Equals("desc", StringComparison.OrdinalIgnoreCase) ?? false);
 
         return filter.SortBy switch
-        {
-            nameof(Cidade.Nome) => isAscending ? builder.OrderBy(x => x.Nome) : builder.OrderByDescending(x => x.Nome),
+         {
+            nameof(Cidade.Nome)     => isAscending ? builder.OrderBy(x => x.Nome) : builder.OrderByDescending(x => x.Nome),
             nameof(Cidade.IdCidade) => isAscending ? builder.OrderBy(x => x.IdCidade) : builder.OrderByDescending(x => x.IdCidade),
+             _ => builder.OrderByDescending(x => x.IdCidade)
+             //_ => builder.OrderBy(x => x.IdCidade)
 
-            _ => builder.OrderByDescending(x => x.IdCidade)
-          
-        };
+         };
     }
 
     // More complex scenario would be if we want to add a new feature.
