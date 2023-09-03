@@ -23,27 +23,12 @@ funciona -> @model PagedResponse<CidadeViewModel>
 <p>
     <a asp-action="Create">Create New</a>
 </p>
-@*@{
+@{
 
-await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);
-}*@
-
-
-@*<form asp-action="Index" asp-controller="@ViewBag.FiltroPesquisa" method="get">*@
+await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml");
+}
 
 @*
-<div class="col-md-5 form-group">
-    <form asp-action="Index" asp-controller=@controllerAtual method="post">
-        <div class="form-actions no-color">
-            <p>
-                Localizar: <input asp-for=@CidadeFilter.Nome />
-                <input type="submit" value="Buscar" class="btn btn-success"></> |
-                <a asp-action="Index">Voltar à Lista</a>
-            </p>
-        </div>
-    </form>
-</div>
-*@
 <form asp-action="Index" method="get">
     <div class="form-actions no-color">
         <p>
@@ -53,7 +38,7 @@ await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);
         </p>
     </div>
 </form>
-
+*@
 
 
 
@@ -137,6 +122,15 @@ await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);
     </tbody>
 </table>
 @{
+
+    await Html.RenderPartialAsync("~/Views/Shared/Partials/_Paginacao.cshtml");
+}
+
+
+
+@*
+
+@{
     var prevDisabled = !Model.Pagination.HasPrevious ? "disabled" : "";
     var nextDisabled = !Model.Pagination.HasNext ? "disabled" : "";
 }
@@ -155,3 +149,5 @@ await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml", @Model);
    class="btn btn-default @nextDisabled">
     Próximo
 </a>
+
+*@
