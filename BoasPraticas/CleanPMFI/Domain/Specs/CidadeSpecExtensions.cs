@@ -14,7 +14,7 @@ public static class CidadeSpecExtensions
     public static ISpecificationBuilder<Cidade> ApplyOrdering(this ISpecificationBuilder<Cidade> builder, BaseFilter? filter = null)
     {
         // If there is no filter apply default ordering;
-        if (filter is null) return builder.OrderBy(x => x.IdCidade);
+        if (filter is null) return builder.OrderBy(x => x.Nome);
         //if (filter is null) return builder.OrderByDescending(x => x.Nome);
 
         // We want the "asc" to be the default, that's why the condition is reverted.
