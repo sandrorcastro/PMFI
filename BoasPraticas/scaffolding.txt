@@ -1,0 +1,27 @@
+Data Source=192.168.18.229;Initial Catalog=SEI;Persist Security Info=True;User ID=sa;Password=changeme
+
+
+dotnet ef dbcontext scaffold "" Microsoft.EntityFrameworkCore.SqlServer
+
+
+dotnet ef dbcontext scaffold "Data Source=192.168.18.229;Initial Catalog=SEI;Persist Security Info=True;TrustServerCertificate=False;User ID=sa;Password=changeme" Microsoft.EntityFrameworkCore.SqlServer -o SEI
+
+
+
+
+Integrated Security=False;Encrypt=False;TrustServerCertificate=False
+
+
+
+////SEI Funcionou
+ Scaffold-DbContext "Data Source=192.168.18.229;Initial Catalog=SEI;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=sa;Password=changeme" Microsoft.EntityFrameworkCore.SqlServer -o SEI
+ Scaffold-DbContext "Data Source=localhost;Initial Catalog=SEI;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=sa;Password=changeme" Microsoft.EntityFrameworkCore.SqlServer -o Entities -t dbo.uf -n PMFI.Domain.Entities
+
+////SIP Funcionou
+Scaffold-DbContext "Data Source=192.168.18.229;Initial Catalog=SIP;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=sa;Password=changeme" Microsoft.EntityFrameworkCore.SqlServer -o SIP
+
+
+
+DBProsiga
+Scaffold-DbContext "Data Source=172.27.84.102;Initial Catalog=DBProsiga;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=rpdesenv;Password=visual" Microsoft.EntityFrameworkCore.SqlServer -o Entities -t dbo.logradoutipo,dbo.logradouro
+ 
