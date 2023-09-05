@@ -18,12 +18,17 @@ namespace Infrastructure.Context
         public DbSet<Pais> Paises => Set<Pais>();
         //public DbSet<Cidade> Cidades { get; set; }
         public DbSet<Cidade> Cidades => Set<Cidade>();
+        public DbSet<Logradouro> Logradouros => Set<Logradouro>();
+        public DbSet<TipoLogradouro> TiposLogradouros => Set<TipoLogradouro>();
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
             builder.ApplyConfiguration(new UfConfiguration());
             builder.ApplyConfiguration(new CidadeConfiguration());
             builder.ApplyConfiguration(new PaisConfiguration());
+            builder.ApplyConfiguration(new LogradouroConfiguration());
+            builder.ApplyConfiguration(new TipoLogradouroConfiguration());
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
         }
