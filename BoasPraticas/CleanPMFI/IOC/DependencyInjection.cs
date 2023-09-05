@@ -62,6 +62,8 @@ namespace IOC
             services.AddScoped<ICidadeAppService, CidadeAppService>();
             services.AddScoped<IPaisAppService, PaisAppService>();
             services.AddScoped<IUfAppService, UfAppService>();
+            services.AddScoped<ILogradouroAppService, LogradouroAppService>();
+            services.AddScoped<ITipoLogradouroAppService, TipoLogradouroAppService>();
 
 
 
@@ -71,6 +73,8 @@ namespace IOC
             services.AddScoped<ICidadeService, CidadeService>();
             services.AddScoped<IPaisService, PaisService>();
             services.AddScoped<IUfService, UfService>();
+            services.AddScoped<ILogradouroService, LogradouroService>();
+            services.AddScoped<ITipoLogradouroService, TipoLogradouroService>();
 
             //////////////////////////////////////////////////////////////////////
             services.AddScoped(typeof(IRepositoryBase<>),typeof(RepositoryBase<>));
@@ -80,6 +84,8 @@ namespace IOC
             services.AddScoped<IUfRepository, UfRepository>();
             services.AddScoped<ICidadeRepository, CidadeRepository>();
             services.AddScoped<IPaisRepository, PaisRepository>();
+            services.AddScoped<ILogradouroRepository, LogradouroRepository>();
+            services.AddScoped<ITipoLogradouroRepository, TipoLogradouroRepository>();
 
             //////////////////////////////////////////////////////////////////////
             //services.AddScoped<ISpecificationEvaluator, SpecificationEvaluator>();

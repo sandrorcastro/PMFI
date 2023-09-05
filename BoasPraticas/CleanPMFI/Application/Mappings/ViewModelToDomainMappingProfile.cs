@@ -12,6 +12,8 @@ namespace Application.Mappings
             CreateMap<CidadeViewModel, Cidade>();
             CreateMap<PaisViewModel, Pais>();
             CreateMap<UfViewModel, Uf>();
+            CreateMap<LogradouroViewModel, LogradouroViewModel>();
+            CreateMap<TipoLogradouroViewModel, TipoLogradouroViewModel>();
 
 
 
