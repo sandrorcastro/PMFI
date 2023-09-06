@@ -1,0 +1,11 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace EngenhariaReversa.Entities.DBProsiga
+{
+    public partial class TribUvciluminacao
+    {
+        public DateTime UvciluData { get; set; }
+        public decimal? UvciluValor { get; set; }
+    }
+}

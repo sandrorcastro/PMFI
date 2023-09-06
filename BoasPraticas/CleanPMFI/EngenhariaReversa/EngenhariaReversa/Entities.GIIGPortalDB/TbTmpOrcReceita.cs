@@ -1,0 +1,30 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace EngenhariaReversa.Entities.GIIGPortalDB
+{
+    public partial class TbTmpOrcReceita
+    {
+        public TbTmpOrcReceita()
+        {
+            InverseIdReceitaNivelSuperNavigation = new HashSet<TbTmpOrcReceita>();
+        }
+
+        public int IdReceita { get; set; }
+        public short? IdEmpresa { get; set; }
+        public short NrAno { get; set; }
+        public string? CdReceita { get; set; }
+        public string? DsReceita { get; set; }
+        public string? DsEspecificacao { get; set; }
+        public string? FlReceitaPadrao { get; set; }
+        public string? DsTipoReceitaPadrao { get; set; }
+        public DateTime? DtCadastro { get; set; }
+        public DateTime? DtDesativacao { get; set; }
+        public int? IdReceitaNivelSuper { get; set; }
+        public string? FlReceitaIntraOrcamentaria { get; set; }
+        public short? IdTipoPermissaoDeducao { get; set; }
+
+        public virtual TbTmpOrcReceita? IdReceitaNivelSuperNavigation { get; set; }
+        public virtual ICollection<TbTmpOrcReceita> InverseIdReceitaNivelSuperNavigation { get; set; }
+    }
+}
