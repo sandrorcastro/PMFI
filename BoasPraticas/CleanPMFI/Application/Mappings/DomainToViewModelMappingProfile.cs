@@ -14,11 +14,10 @@ namespace Application.Mappings
             CreateMap<Cidade, CidadeViewModel>();
             CreateMap<Pais, PaisViewModel>();
             CreateMap<Uf, UfViewModel>();
-            CreateMap<LogradouroViewModel, LogradouroViewModel>();
-            CreateMap<TipoLogradouroViewModel, TipoLogradouroViewModel>();
-            // CreateMap<Cidade, PagedResponse<CidadeViewModel>>();
-            //CreateMap<Cidade, PagedResponse<List<CidadeViewModel>>>();
-            //CreateMap<Cidade, List<CidadeViewModel>>();
+            CreateMap<Logradouro, LogradouroViewModel>();
+            CreateMap<TipoLogradouro, TipoLogradouroViewModel>();
+            CreateMap<TribAlvDocumento, TribAlvDocumentoViewModel>();
+            
 
         }
     }

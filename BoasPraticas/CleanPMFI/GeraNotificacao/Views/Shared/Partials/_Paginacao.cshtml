@@ -1,0 +1,29 @@
+﻿@{
+    var controllerAtual = ViewContext.RouteData.Values["controller"].ToString();
+    var prevDisabled = !Model.Pagination.HasPrevious ? "disabled" : "";
+    var nextDisabled = !Model.Pagination.HasNext ? "disabled" : "";
+    
+}
+@*<form asp-action="Index" asp-controller="@ViewBag.FiltroPesquisa" method="get">*@
+
+ <div class="col-md-5 form-group">
+    <a asp-action="Index"
+       asp-controller=@controllerAtual
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.Pagination.Page - 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @prevDisabled">
+        Anterior
+    </a>
+    <a asp-action="Index"
+       asp-controller=@controllerAtual
+       asp-route-sortOrder="@ViewData["CurrentSort"]"
+       asp-route-pageNumber="@(Model.Pagination.Page + 1)"
+       asp-route-currentFilter="@ViewData["CurrentFilter"]"
+       class="btn btn-default @nextDisabled">
+        Próximo
+    </a>
+</div>
+
+
+

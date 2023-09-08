@@ -64,6 +64,7 @@ namespace IOC
             services.AddScoped<IUfAppService, UfAppService>();
             services.AddScoped<ILogradouroAppService, LogradouroAppService>();
             services.AddScoped<ITipoLogradouroAppService, TipoLogradouroAppService>();
+            services.AddScoped<ITribAlvDocumentoAppService, TribAlvDocumentoAppService>();
 
 
 
@@ -75,6 +76,7 @@ namespace IOC
             services.AddScoped<IUfService, UfService>();
             services.AddScoped<ILogradouroService, LogradouroService>();
             services.AddScoped<ITipoLogradouroService, TipoLogradouroService>();
+            services.AddScoped<ITribAlvDocumentoService, TribAlvDocumentoService>();
 
             //////////////////////////////////////////////////////////////////////
             services.AddScoped(typeof(IRepositoryBase<>),typeof(RepositoryBase<>));
@@ -86,7 +88,9 @@ namespace IOC
             services.AddScoped<IPaisRepository, PaisRepository>();
             services.AddScoped<ILogradouroRepository, LogradouroRepository>();
             services.AddScoped<ITipoLogradouroRepository, TipoLogradouroRepository>();
+            services.AddScoped<ITribAlvDocumentoRepository, TribAlvDocumentoRepository>();
 
+            
             //////////////////////////////////////////////////////////////////////
             //services.AddScoped<ISpecificationEvaluator, SpecificationEvaluator>();
             return services;

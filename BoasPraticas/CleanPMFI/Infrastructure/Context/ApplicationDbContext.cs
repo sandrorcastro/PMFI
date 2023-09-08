@@ -20,6 +20,7 @@ namespace Infrastructure.Context
         public DbSet<Cidade> Cidades => Set<Cidade>();
         public DbSet<Logradouro> Logradouros => Set<Logradouro>();
         public DbSet<TipoLogradouro> TiposLogradouros => Set<TipoLogradouro>();
+        public DbSet<TribAlvDocumento> TribAlvDocumentos => Set<TribAlvDocumento>();
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -29,6 +30,7 @@ namespace Infrastructure.Context
             builder.ApplyConfiguration(new PaisConfiguration());
             builder.ApplyConfiguration(new LogradouroConfiguration());
             builder.ApplyConfiguration(new TipoLogradouroConfiguration());
+            builder.ApplyConfiguration(new TribAlvDocumentoConfiguration());
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
 
         }

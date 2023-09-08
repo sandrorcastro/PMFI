@@ -17,9 +17,11 @@ namespace Infrastructure.Context
             //var configuration = new ConfigurationBuilder().SetBasePath(AppDomain.CurrentDomain.BaseDirectory).AddJsonFile("appsettings.json").Build(); 
             var optionsBuilder = new DbContextOptionsBuilder<ApplicationDbContext>();
             //optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=SEI;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Persist Security Info=True;User ID=sa;Password=changeme");
-            optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=PMFI;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Persist Security Info=True;User ID=sa;Password=changeme");
+            //---optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=PMFI;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Persist Security Info=True;User ID=sa;Password=changeme");
+            optionsBuilder.UseSqlServer("Data Source=172.27.84.102;Initial Catalog=DBProsiga;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=rpdesenv;Password=visual");
             //optionsBuilder.UseSqlServer(configuration.GetConnectionString("Default"));
             return new ApplicationDbContext(optionsBuilder.Options);
         }
     }
 }
+

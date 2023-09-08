@@ -5,9 +5,7 @@ using Infrastructure.Repositories.Base;
 using IOC;
 using Microsoft.EntityFrameworkCore;
 using System.Configuration;
-
 var builder = WebApplication.CreateBuilder(args);
-
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddInfrastructureAutoMapper(builder.Configuration);
 

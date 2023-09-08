@@ -1,4 +1,5 @@
 Scaffold-DbContext "Data Source=172.27.84.102;Initial Catalog=DBProsiga;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=rpdesenv;Password=visual" Microsoft.EntityFrameworkCore.SqlServer -o Entities 
+Scaffold-DbContext "Data Source=172.27.84.102;Initial Catalog=DBProsiga;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=rpdesenv;Password=visual" Microsoft.EntityFrameworkCore.SqlServer -o Entities.DBProsiga -t dbo.TribAlvDocumento 
 
 
 
