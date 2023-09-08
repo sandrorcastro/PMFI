@@ -14,7 +14,7 @@ public static class TribAlvDocumentoSpecExtensions
     public static ISpecificationBuilder<TribAlvDocumento> ApplyOrdering(this ISpecificationBuilder<TribAlvDocumento> builder, BaseFilter? filter = null)
     {
         // If there is no filter apply default ordering;
-        if (filter is null) return builder.OrderBy(x => x.IdDocumento);
+        if (filter is null) return builder.OrderByDescending(x => x.NrAno);
         //if (filter is null) return builder.OrderByDescending(x => x.Nome);
 
         // We want the "asc" to be the default, that's why the condition is reverted.

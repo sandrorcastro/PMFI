@@ -36,8 +36,8 @@ namespace GeraNotificacao.Controllers
             TribAlvDocumentoFilter tribAlvDocumentoFilter = new TribAlvDocumentoFilter();
 
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["NomeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Nome" : "";
-            ViewData["IdCidadeSortParm"] = sortOrder == "IdCidade" ? "idcidade_desc" : "IdCidade";
+            ViewData["NrAnoSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Ano" : "";
+            ViewData["IdDocumentoSortParm"] = sortOrder == "IdDocumento" ? "iddocumento_desc" : "IdDocumentoe";
             if (searchString != null)
             {
                 pageNumber = 1;
@@ -72,6 +72,7 @@ namespace GeraNotificacao.Controllers
             var resultPVM = new PagedResponseViewModel<TribAlvDocumentoViewModel>(result, tribAlvDocumentoFilter);
             //return View(result);
             return View(resultPVM);
+            //return new ViewAsPDF()
         }
         /*public async Task<IActionResult> Index()
         {
