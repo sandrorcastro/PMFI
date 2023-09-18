@@ -8,7 +8,7 @@ namespace Domain.Entities
         public int IdLogradouro { get; set; }
         public int? IdTipoLogradouro { get; set; }
         public virtual TipoLogradouro? TipoLogradouro { get; set; }    
-        public string? LogradTipo { get; set; }
+       // public string? LogradTipo { get; set; }
         public string? NomeLogradouro { get; set; }
         
     }
