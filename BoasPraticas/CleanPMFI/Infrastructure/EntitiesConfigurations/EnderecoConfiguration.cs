@@ -17,7 +17,7 @@ namespace Infrastructure.EntitiesConfigurations
                 builder.Property(e => e.Numero).HasMaxLength(50);//.IsRequired();
                 builder.Property(e => e.Complemento).HasMaxLength(150);//.IsRequired();
                 builder.Property(e => e.Referencia).HasMaxLength(150);//.IsRequired();
-                builder.Property(e => e.CEP).HasMaxLength(15);//.IsRequired();
+                builder.Property(e => e.CEP).HasMaxLength(10);//.IsRequired();
 
 
         }
