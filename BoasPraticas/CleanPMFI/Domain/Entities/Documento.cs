@@ -8,5 +8,7 @@ namespace Domain.Entities
         public TipoDocumento TipoDocumento { get; set; }
 
         public string Numero { get; set; }
+        public long IdPessoa { get; set; }
+        public Pessoa Pessoa { get; set;}
     }
 }
