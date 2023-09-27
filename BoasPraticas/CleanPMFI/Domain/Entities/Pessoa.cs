@@ -13,5 +13,7 @@ namespace Domain.Entities
         public string Descricao { get; set; }
         public Collection<EntidadeEndereco>? Enderecos { get; set; }
         public Collection<Documento>? Documentos { get; set; }
+
+
     }
 }
