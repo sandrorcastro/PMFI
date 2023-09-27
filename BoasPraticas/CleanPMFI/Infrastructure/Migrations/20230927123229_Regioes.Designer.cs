@@ -4,6 +4,7 @@ using Infrastructure.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,10 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20230927123229_Regioes")]
+    partial class Regioes
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -21,26 +23,6 @@ namespace Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
-
-            modelBuilder.Entity("Domain.Entities.Bairro", b =>
-                {
-                    b.Property<int>("IdBairro")
-                        .HasColumnType("int");
-
-                    b.Property<int?>("IdRegiao")
-                        .HasColumnType("int");
-
-                    b.Property<string>("Nome")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.HasKey("IdBairro");
-
-                    b.HasIndex("IdRegiao");
-
-                    b.ToTable("Bairro", (string)null);
-                });
 
             modelBuilder.Entity("Domain.Entities.Cidade", b =>
                 {
@@ -663,15 +645,6 @@ namespace Infrastructure.Migrations
                     b.HasIndex(new[] { "IdPais" }, "fk_uf_pais");
 
                     b.ToTable("uf", (string)null);
-                });
-
-            modelBuilder.Entity("Domain.Entities.Bairro", b =>
-                {
-                    b.HasOne("Domain.Entities.Regiao", "Regiao")
-                        .WithMany()
-                        .HasForeignKey("IdRegiao");
-
-                    b.Navigation("Regiao");
                 });
 
             modelBuilder.Entity("Domain.Entities.Cidade", b =>

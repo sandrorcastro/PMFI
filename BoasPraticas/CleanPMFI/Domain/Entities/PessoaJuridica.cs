@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Entities
 {
-    public class PessoaJuridica
+    public class PessoaJuridica : Pessoa
     {
         public string NomeFantazia { get; set; }
         public string RazaoSocial { get; set; }
