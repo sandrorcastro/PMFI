@@ -10,8 +10,8 @@ using Domain.Entities.NFSEDB;
 
 namespace Infrastructure.Context
 {
-    //public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
-    public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<NFSEDBContext>
+    public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<ApplicationDbContext>
+    //public class ApplicationDbContextFactory : IDesignTimeDbContextFactory<NFSEDBContext>
     {
         public ApplicationDbContext CreateDbContext(string[] args)
         {
