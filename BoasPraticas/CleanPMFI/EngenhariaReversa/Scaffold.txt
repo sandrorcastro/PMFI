@@ -10,3 +10,9 @@ Scaffold-DbContext "Data Source=172.27.1.94;Initial Catalog=GIIGReportsDB;Persis
 Scaffold-DbContext "Data Source=172.27.1.94;Initial Catalog=GIIGConsultaPreviaDB;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=Gilberto.gc;Password=Couto2408@@" Microsoft.EntityFrameworkCore.SqlServer -o Entities.GIIGConsultaPreviaDB
 Scaffold-DbContext "Data Source=172.27.1.94;Initial Catalog=GIIGPortalDBNFSE;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=Gilberto.gc;Password=Couto2408@@" Microsoft.EntityFrameworkCore.SqlServer -o Entities.GIIGPortalDBNFSE
 Scaffold-DbContext "Data Source=172.27.1.94;Initial Catalog=GIIGProjetosDB;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=Gilberto.gc;Password=Couto2408@@" Microsoft.EntityFrameworkCore.SqlServer -o Entities.GIIGProjetosDB
+
+
+
+
+
+Scaffold-DbContext "Data Source=172.27.1.94;Initial Catalog=NFSEDB;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=Gilberto.gc;Password=Couto2408@@" Microsoft.EntityFrameworkCore.SqlServer -o Entities.NFSEDB
