@@ -30,14 +30,14 @@ namespace IOC
         {
             services.AddDbContextFactory<ApplicationDbContext>(options => {
             //services.AddDbContext<ApplicationDbContext>(options => {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection-SRC-PMFI"),
                 b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
             });
 
 
             services.AddDbContextFactory<NFSEDBContext>(options => {
-                //services.AddDbContext<ApplicationDbContext>(options => {
-                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+            //    services.AddDbContext<ApplicationDbContext>(options => {
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection-NFSEDB"),
                 b => b.MigrationsAssembly(typeof(NFSEDBContext).Assembly.FullName));
             });
 

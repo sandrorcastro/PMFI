@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities.NFSEDB;
+using System.Text;
 
 namespace WEBMVC.Controllers
 {
@@ -153,7 +154,41 @@ namespace WEBMVC.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        [HttpPost]
+        public FileResult Exportar()
+        {
+            //AppDbContext db = new AppDbContext();
 
+            //obtem uma lista de objetos Employee
+            List<object> notasfiscais = (from nfsetblnfse in _context.NfseTblNfses.ToList().Take(9)
+                                      select new[] { nfsetblnfse.Idnfse.ToString()
+                                      //,
+                                        //                    employee.FirstName,
+                                          //                  employee.City,
+                                            //                employee.Country
+                                                 }).ToList<object>();
+
+            //Insere o nome das colunas
+            //notasfiscais.Insert(0, new string[4] { "ID NF", "Employee Name", "City", "Country" });
+            notasfiscais.Insert(0, new string[1] { "ID_NF"});
+
+            StringBuilder sb = new StringBuilder();
+
+            //percore os funcionarios e gera o CSV
+            for (int i = 0; i < notasfiscais.Count; i++)
+            {
+                string[] employee = (string[])notasfiscais[i];
+                for (int j = 0; j < employee.Length; j++)
+                {
+                    //anexa dados com separador
+                    sb.Append(employee[j] + ',');
+                }
+
+                //Anexa uma nova linha
+                sb.Append("\r\n");
+            }
+            return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "GridNotasFiscais.csv");
+        }
         private bool NfseTblNfseExists(long id)
         {
           return (_context.NfseTblNfses?.Any(e => e.Idnfse == id)).GetValueOrDefault();

@@ -20,8 +20,8 @@ namespace Infrastructure.Context
             //optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=SEI;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Persist Security Info=True;User ID=sa;Password=changeme");
             //---optionsBuilder.UseSqlServer("Data Source=localhost;Initial Catalog=PMFI;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Persist Security Info=True;User ID=sa;Password=changeme");
             //optionsBuilder.UseSqlServer("Data Source=172.27.84.102;Initial Catalog=DBProsiga;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=rpdesenv;Password=visual");
-            /// optionsBuilder.UseSqlServer("Data Source=172.27.84.102;Initial Catalog=SRC-PMFI;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=rpdesenv;Password=visual");
-             optionsBuilder.UseSqlServer("Data Source=172.27.1.94;Initial Catalog=NFSEDB;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=gilberto.gc;Password=Couto2408@@");
+             optionsBuilder.UseSqlServer("Data Source=172.27.84.102;Initial Catalog=SRC-PMFI;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=rpdesenv;Password=visual");
+             //optionsBuilder.UseSqlServer("Data Source=172.27.1.94;Initial Catalog=NFSEDB;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=gilberto.gc;Password=Couto2408@@");
             //optionsBuilder.UseSqlServer(configuration.GetConnectionString("Default"));
             return new ApplicationDbContext(optionsBuilder.Options);
         }

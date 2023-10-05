@@ -151,3 +151,9 @@ await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml");
 </a>
 
 *@
+
+<br />
+@using (Html.BeginForm("Exportar", "Cidades", FormMethod.Post))
+{
+    <input type="submit" id="btnSubmit" value="Exportar" />
+}

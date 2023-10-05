@@ -23,6 +23,7 @@ using System.Globalization;
 using System.Xml.Linq;
 using Domain.Interfaces.Specifications;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
+using System.Text;
 
 namespace WEBMVC.Controllers
 {
@@ -391,7 +392,37 @@ namespace WEBMVC.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
+        [HttpPost]
+        public FileResult Exportar()
+        {
+            //AppDbContext db = new AppDbContext();
 
+            //obtem uma lista de objetos Employee
+            List<object> cidades = (from Cidade in _context.Cidades.ToList().Take(9)
+                                         select new[] { Cidade.IdCidade.ToString(),
+                                                            Cidade.Nome}).ToList<object>();
+
+            //Insere o nome das colunas
+            //notasfiscais.Insert(0, new string[4] { "ID NF", "Employee Name", "City", "Country" });
+            cidades.Insert(0, new string[2] { "ID_Cidade","Nome" });
+
+            StringBuilder sb = new StringBuilder();
+
+            //percore os funcionarios e gera o CSV
+            for (int i = 0; i < cidades.Count; i++)
+            {
+                string[] cidade = (string[])cidades[i];
+                for (int j = 0; j < cidade.Length; j++)
+                {
+                    //anexa dados com separador
+                    sb.Append(cidade[j] + ',');
+                }
+
+                //Anexa uma nova linha
+                sb.Append("\r\n");
+            }
+            return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "GridCidades.csv");
+        }
         private bool CidadeExists(int id)
         {
           return (_context.Cidades?.Any(e => e.IdCidade == id)).GetValueOrDefault();
