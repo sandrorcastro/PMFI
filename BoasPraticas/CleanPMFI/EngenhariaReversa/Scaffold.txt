@@ -16,3 +16,7 @@ Scaffold-DbContext "Data Source=172.27.1.94;Initial Catalog=GIIGProjetosDB;Persi
 
 
 Scaffold-DbContext "Data Source=172.27.1.94;Initial Catalog=NFSEDB;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=Gilberto.gc;Password=Couto2408@@" Microsoft.EntityFrameworkCore.SqlServer -o Entities.NFSEDB
+
+
+
+Scaffold-DbContext "Data Source=172.27.1.94;Initial Catalog=NFSEDB;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=Gilberto.gc;Password=Couto2408@@" Microsoft.EntityFrameworkCore.SqlServer -o Entities.NFSEDB.namespaceAlterado -Namespace Domain.Entities.NFSEDB

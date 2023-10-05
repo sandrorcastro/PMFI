@@ -3,6 +3,7 @@ using Application.Interfaces.Base;
 using Application.Services;
 using Application.Services.Base;
 using Domain.Entities;
+using Domain.Entities.NFSEDB;
 using Domain.Interfaces.Base;
 using Domain.Interfaces.Evaluators;
 using Domain.Interfaces.Repositories;
@@ -32,6 +33,15 @@ namespace IOC
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
                 b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
             });
+
+
+            services.AddDbContextFactory<NFSEDBContext>(options => {
+                //services.AddDbContext<ApplicationDbContext>(options => {
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection"),
+                b => b.MigrationsAssembly(typeof(NFSEDBContext).Assembly.FullName));
+            });
+
+
 
             /*services.AddDbContextFactory<SegurancaDbContext>(options => {
                 // options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionSeguranca"),
