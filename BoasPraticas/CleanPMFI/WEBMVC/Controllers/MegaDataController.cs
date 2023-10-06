@@ -165,16 +165,14 @@ namespace WEBMVC.Controllers
 
             //obtem uma lista de objetos Employee
             List<object> notasfiscais = (from nfsetblnfse in _context.NfseTblNfses.Where(n=>n.Dtcompetencia >= DataInicio && n.Dtcompetencia<=DataFinal ).ToList().Take(1000)
-                                      select new[] { nfsetblnfse.Idnfse.ToString()
-                                      //,
-                                        //                    employee.FirstName,
+                                      select new[] { nfsetblnfse.stc .ToString(), .FirstName,
                                           //                  employee.City,
                                             //                employee.Country
                                                  }).ToList<object>();
 
             //Insere o nome das colunas
             //notasfiscais.Insert(0, new string[4] { "ID NF", "Employee Name", "City", "Country" });
-            notasfiscais.Insert(0, new string[1] { "ID_NF"});
+            notasfiscais.Insert(0, new string[1] { "STPFCNPJ"});
 
             StringBuilder sb = new StringBuilder();
 
