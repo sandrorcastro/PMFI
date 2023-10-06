@@ -1,7 +1,9 @@
 ﻿
 using Application.ViewModels;
+using Application.ViewModels.NFSEDB;
 using AutoMapper;
 using Domain.Entities;
+using Domain.Entities.NFSEDB;
 using Domain.Pagination;
 
 namespace Application.Mappings
@@ -17,7 +19,11 @@ namespace Application.Mappings
             CreateMap<Logradouro, LogradouroViewModel>();
             CreateMap<TipoLogradouro, TipoLogradouroViewModel>();
             CreateMap<TribAlvDocumento, TribAlvDocumentoViewModel>();
-            
+
+
+
+            CreateMap<NfseTblNfse, LayoutNotasFiscais_MegaData>();
+
 
         }
     }

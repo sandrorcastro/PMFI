@@ -2,6 +2,8 @@
 using Domain.Entities;
 using Application.ViewModels;
 using Domain.Pagination;
+using Application.ViewModels.NFSEDB;
+using Domain.Entities.NFSEDB;
 
 namespace Application.Mappings
 {
@@ -16,6 +18,9 @@ namespace Application.Mappings
             CreateMap<TipoLogradouroViewModel, TipoLogradouro>();
             CreateMap<TribAlvDocumentoViewModel, TribAlvDocumento>();
 
+
+
+            CreateMap<LayoutNotasFiscais_MegaData, NfseTblNfse>();
 
 
             //    CreateMap<PagedResponse<CidadeViewModel>,Cidade>();

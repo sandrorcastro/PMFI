@@ -415,7 +415,7 @@ namespace WEBMVC.Controllers
                 for (int j = 0; j < cidade.Length; j++)
                 {
                     //anexa dados com separador
-                    sb.Append(cidade[j] + ',');
+                    sb.Append(cidade[j] + ';');
                 }
 
                 //Anexa uma nova linha
@@ -423,6 +423,50 @@ namespace WEBMVC.Controllers
             }
             return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "GridCidades.csv");
         }
+        [HttpPost]
+
+        /*public ActionResult Exportar2(string returnView, ArquivoRemessaVM model)
+        {
+            if (ModelState.IsValid)
+            {
+
+                try
+                {
+                    using (var db = new Model.Context())
+                    {
+                        var bll = new BLL.ArquivoRemessaBLL(db, _idUsuario);
+
+
+                        byte[] streamByte = null;
+
+                        var texto = bll.GeraRemessaRCB800(model.nrConvenio.Value, model.nrAgencia.Value, model.cdCliente.Value, model.flTipoArquivo, model.nrSequencial.Value, model.nrAno.Value, model.cdDivida.Value);
+
+                        streamByte = Encoding.Convert(Encoding.GetEncoding("ISO-8859-1"), Encoding.GetEncoding(1252), Encoding.GetEncoding("ISO-8859-1").GetBytes(texto));
+
+                        if (Request.IsAjaxRequest())
+                        {
+                            var file64 = Convert.ToBase64String(streamByte);
+
+                            return Json(new { File = file64, MimeType = "text/plain", FileName = "ARQUIVO_REMESSA_RCB800" + "_" + model.nrAno + ".txt" });
+                        }
+                        else
+                            return File(streamByte, "text/plain", "ARQUIVO_REMESSA_RCB800" + "_" + model.nrAno + ".txt");
+                    }
+                }
+                catch (Util.Exception.RPException rpEx)
+                {
+                    this.AddFlashMessage(Util.Exception.Message.Get(rpEx), FlashMessage.ERROR);
+                    return View(model);
+                }
+                catch (Exception ex)
+                {
+                    Util.Entity.ErroLog.Add(ex, Session.SessionID, _idUsuario);
+                    return RedirectToAction("Index", "Erro", new { area = string.Empty });
+                }
+            }
+
+            return View(model);
+        }*/
         private bool CidadeExists(int id)
         {
           return (_context.Cidades?.Any(e => e.IdCidade == id)).GetValueOrDefault();
