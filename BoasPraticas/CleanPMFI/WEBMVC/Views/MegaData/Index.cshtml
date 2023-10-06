@@ -6,7 +6,12 @@
 
 
 <br />
+
 @using (Html.BeginForm("Exportar", "MegaData", FormMethod.Post))
 {
+
+    <input type="date" id="DataInicio" name="DataInicio" placeholder="Data Inicial"/>
+    <input type="date" id="DataFinal" name="DataFinal" placeholder="Data Final"/>
     <input type="submit" id="btnSubmit" value="Exportar" />
 }
+

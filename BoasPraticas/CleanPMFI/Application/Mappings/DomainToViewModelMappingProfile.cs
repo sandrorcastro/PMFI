@@ -23,6 +23,7 @@ namespace Application.Mappings
 
 
             CreateMap<NfseTblNfse, LayoutNotasFiscais_MegaData>();
+            CreateMap<NfseTblNfse, NFSEViewModel>();
 
 
         }

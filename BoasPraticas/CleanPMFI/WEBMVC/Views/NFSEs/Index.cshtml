@@ -1,0 +1,124 @@
+﻿@using Application.ViewModels;
+@using Application.ViewModels.NFSEDB;
+@using Domain.Pagination;
+@using Domain.Filters;
+@model PagedResponseViewModel<NFSEViewModel>
+@{
+    ViewData["Title"] = "Index";
+    var controllerAtual = ViewContext.RouteData.Values["controller"].ToString();
+    //CidadeFilter CidadeFilter = new CidadeFilter() { Nome="Teste"};
+    NfseTblNfseFilter NfsetblNfseFilter = ViewData["NfseTblNfseFilter"] as NfseTblNfseFilter;
+}
+
+<h1>Index</h1>
+
+@{
+
+await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml");
+}
+
+@*
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
+*@
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.Stcpfcnpj)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.Ano)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.Mes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.Situacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.Localtributacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.Servico116)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Data) {
+        <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Stcpfcnpj)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ano)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Mes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Situacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Localtributacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Servico116)
+            </td>
+            
+            
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Numero">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Numero">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Numero">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@{
+
+    await Html.RenderPartialAsync("~/Views/Shared/Partials/_Paginacao.cshtml");
+}
+
+
+
+@*
+
+@{
+    var prevDisabled = !Model.Pagination.HasPrevious ? "disabled" : "";
+    var nextDisabled = !Model.Pagination.HasNext ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.Pagination.Page - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Anterior
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.Pagination.Page + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Próximo
+</a>
+
+*@
+
+@*
+    <br />
+@using (Html.BeginForm("Exportar", "Cidades", FormMethod.Post))
+{
+    <input type="submit" id="btnSubmit" value="Exportar" />
+}
+*@

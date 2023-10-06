@@ -21,6 +21,7 @@ namespace Application.Mappings
 
 
             CreateMap<LayoutNotasFiscais_MegaData, NfseTblNfse>();
+            CreateMap<NFSEViewModel, NfseTblNfse>();
 
 
             //    CreateMap<PagedResponse<CidadeViewModel>,Cidade>();

@@ -6,32 +6,108 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities.NFSEDB;
-using System.Text;
+using Application.Services;
+using Application.ViewModels;
+using Domain.Filters;
+using Domain.Interfaces.Specifications;
+using Domain.Specs;
+using Application.Interfaces;
+using Infrastructure.Context;
+using Application.ViewModels.NFSEDB;
 
 namespace WEBMVC.Controllers
 {
-    public class MegaDataController : Controller
+    public class NFSEsController : Controller
     {
         private readonly NFSEDBContext _context;
-
-        public MegaDataController(NFSEDBContext context)
+        private readonly INFSE_To_MegaData_AppService NFSEAppService;
+        
+        public NFSEsController(NFSEDBContext context, INFSE_To_MegaData_AppService _NFSEAppService)
         {
             _context = context;
+            NFSEAppService = _NFSEAppService;
         }
 
-        // GET: MegaData
-        public async Task<IActionResult> Index()
+        // GET: NFSEs
+        /*public async Task<IActionResult> Index()
         {
-            return View();
-        }
-        public async Task<IActionResult> Index2()
+              return _context.NfseTblNfses != null ? 
+                          View(await _context.NfseTblNfses.ToListAsync()) :
+                          Problem("Entity set 'NFSEDBContext.NfseTblNfses'  is null.");
+        }*/
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
         {
-            return _context.NfseTblNfses != null ?
-                        View(await _context.NfseTblNfses.ToListAsync()) :
-                        Problem("Entity set 'NFSEDBContext.NfseTblNfses'  is null.");
+
+            ISpecification<NfseTblNfse> spec = null;
+            NfseTblNfseFilter Filter = new NfseTblNfseFilter();
+
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["NomeSortParm"] = String.IsNullOrEmpty(sortOrder) ? "Nome" : "";
+            ViewData["IdCidadeSortParm"] = sortOrder == "IdCidade" ? "idcidade_desc" : "IdCidade";
+            if (searchString != null)
+            {
+                pageNumber = 1;
+                Filter.Page = pageNumber;
+            }
+            else
+            {
+                searchString = currentFilter;
+                Filter.SortBy = sortOrder;
+                //cidadeFilter.OrderBy = "desc";
+                Filter.Page = pageNumber;
+                spec = new NfseTblNfseSpec(Filter);
+
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                long number1 = 0;
+                if (long.TryParse(searchString, out number1))
+                {
+                    //Filter. = int.Parse(searchString);
+                    spec = new NfseTblNfseSpec(Filter);
+                }
+                else
+                {
+                    //Filter.Dtcompetencia = searchString;
+                    spec = new NfseTblNfseSpec(Filter);
+                }
+            }
+            /*  switch (sortOrder)
+              {
+                  case "nome_desc":
+                      Cidades = Cidades.OrderByDescending(s => s.Nome);
+
+                      break;
+                  case "IdCidade":
+                      Cidades = Cidades.OrderBy(s => s.IdCidade);
+                      break;
+                  case "idcidade_desc":
+                      Cidades = Cidades.OrderByDescending(s => s.IdCidade);
+                      break;
+                  default:
+                      //Cidades = Cidades.OrderBy(s => s.Nome);
+                      spec = new CidadeSpec();
+                      break;
+              }*/
+
+            //int pageSize = 3;
+
+            // return View(await PaginatedList<Student>.CreateAsync(Cidades.AsNoTracking(), pageNumber ?? 1, pageSize));
+
+
+            //  cidadeFilter.Nome = searchString;
+            //spec=new CidadeSpec(cidadeFilter);
+
+            //ViewData["CidadeFilter"] = cidadeFilter;
+            var result = await NFSEAppService.ProjectToListAsync<NFSEViewModel>(spec, Filter, new CancellationToken());
+            var resultPVM = new PagedResponseViewModel<NFSEViewModel>(result, Filter);
+            //return View(result);
+            return View(resultPVM);
         }
 
-        // GET: MegaData/Details/5
+        // GET: NFSEs/Details/5
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null || _context.NfseTblNfses == null)
@@ -49,13 +125,13 @@ namespace WEBMVC.Controllers
             return View(nfseTblNfse);
         }
 
-        // GET: MegaData/Create
+        // GET: NFSEs/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: MegaData/Create
+        // POST: NFSEs/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -71,7 +147,7 @@ namespace WEBMVC.Controllers
             return View(nfseTblNfse);
         }
 
-        // GET: MegaData/Edit/5
+        // GET: NFSEs/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null || _context.NfseTblNfses == null)
@@ -87,7 +163,7 @@ namespace WEBMVC.Controllers
             return View(nfseTblNfse);
         }
 
-        // POST: MegaData/Edit/5
+        // POST: NFSEs/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
@@ -122,7 +198,7 @@ namespace WEBMVC.Controllers
             return View(nfseTblNfse);
         }
 
-        // GET: MegaData/Delete/5
+        // GET: NFSEs/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null || _context.NfseTblNfses == null)
@@ -140,7 +216,7 @@ namespace WEBMVC.Controllers
             return View(nfseTblNfse);
         }
 
-        // POST: MegaData/Delete/5
+        // POST: NFSEs/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
@@ -158,75 +234,7 @@ namespace WEBMVC.Controllers
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
-        [HttpPost]
-        public FileResult Exportar(DateTime DataInicio, DateTime DataFinal )
-        {
-            //AppDbContext db = new AppDbContext();
 
-            //obtem uma lista de objetos Employee
-            List<object> notasfiscais = (from nfsetblnfse in _context.NfseTblNfses.Where(n=>n.Dtcompetencia >= DataInicio && n.Dtcompetencia<=DataFinal ).ToList().Take(1000)
-                                      select new[] { nfsetblnfse.Idnfse.ToString()
-                                      //,
-                                        //                    employee.FirstName,
-                                          //                  employee.City,
-                                            //                employee.Country
-                                                 }).ToList<object>();
-
-            //Insere o nome das colunas
-            //notasfiscais.Insert(0, new string[4] { "ID NF", "Employee Name", "City", "Country" });
-            notasfiscais.Insert(0, new string[1] { "ID_NF"});
-
-            StringBuilder sb = new StringBuilder();
-
-            //percore os funcionarios e gera o CSV
-            for (int i = 0; i < notasfiscais.Count; i++)
-            {
-                string[] employee = (string[])notasfiscais[i];
-                for (int j = 0; j < employee.Length; j++)
-                {
-                    //anexa dados com separador
-                    sb.Append(employee[j] + ',');
-                }
-
-                //Anexa uma nova linha
-                sb.Append("\r\n");
-            }
-            return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "GridNotasFiscais.csv");
-        }
-        /*public FileResult Exportar()
-        {
-            //AppDbContext db = new AppDbContext();
-
-            //obtem uma lista de objetos Employee
-            List<object> notasfiscais = (from nfsetblnfse in _context.NfseTblNfses.ToList().Take(9)
-                                         select new[] { nfsetblnfse.Idnfse.ToString()
-                                      //,
-                                        //                    employee.FirstName,
-                                          //                  employee.City,
-                                            //                employee.Country
-                                                 }).ToList<object>();
-
-            //Insere o nome das colunas
-            //notasfiscais.Insert(0, new string[4] { "ID NF", "Employee Name", "City", "Country" });
-            notasfiscais.Insert(0, new string[1] { "ID_NF" });
-
-            StringBuilder sb = new StringBuilder();
-
-            //percore os funcionarios e gera o CSV
-            for (int i = 0; i < notasfiscais.Count; i++)
-            {
-                string[] employee = (string[])notasfiscais[i];
-                for (int j = 0; j < employee.Length; j++)
-                {
-                    //anexa dados com separador
-                    sb.Append(employee[j] + ',');
-                }
-
-                //Anexa uma nova linha
-                sb.Append("\r\n");
-            }
-            return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "GridNotasFiscais.csv");
-        }*/
         private bool NfseTblNfseExists(long id)
         {
           return (_context.NfseTblNfses?.Any(e => e.Idnfse == id)).GetValueOrDefault();
