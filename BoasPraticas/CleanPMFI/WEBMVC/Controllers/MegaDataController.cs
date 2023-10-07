@@ -165,7 +165,7 @@ namespace WEBMVC.Controllers
 
             //obtem uma lista de objetos Employee
             List<object> notasfiscais = (from nfsetblnfse in _context.NfseTblNfses.Where(n=>n.Dtcompetencia >= DataInicio && n.Dtcompetencia<=DataFinal ).ToList().Take(1000)
-                                      select new[] { nfsetblnfse.stc .ToString(), .FirstName,
+                                      select new[] { nfsetblnfse.Idnfse .ToString(), 
                                           //                  employee.City,
                                             //                employee.Country
                                                  }).ToList<object>();

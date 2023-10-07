@@ -43,6 +43,14 @@ namespace IOC
 
 
 
+            services.AddDbContextFactory<MegaDataDBContext>(options => {
+                //    services.AddDbContext<MegaDataDBContext>(options => {
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection-MegaData"),
+                b => b.MigrationsAssembly(typeof(MegaDataDBContext).Assembly.FullName));
+            });
+
+
+
             /*services.AddDbContextFactory<SegurancaDbContext>(options => {
                 // options.UseSqlServer(configuration.GetConnectionString("DefaultConnectionSeguranca"),
                 options.UseSqlServer("Data Source=localhost;Initial Catalog=Seg;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Persist Security Info=True;User ID=sa;Password=changeme"),
