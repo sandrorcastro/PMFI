@@ -4,6 +4,8 @@ using Application.ViewModels;
 using Domain.Pagination;
 using Application.ViewModels.NFSEDB;
 using Domain.Entities.NFSEDB;
+using Domain.Entities.MegaData;
+using Application.ViewModels.MegaData;
 
 namespace Application.Mappings
 {
@@ -21,7 +23,9 @@ namespace Application.Mappings
 
 
             CreateMap<LayoutNotasFiscais_MegaData, NfseTblNfse>();
+            CreateMap<LayoutNFSE_MegaData, NfseTblNfse>();
             CreateMap<NFSEViewModel, NfseTblNfse>();
+            CreateMap<MegaData_NFSE_ViewModel, MegaData_NFSE>();
 
 
             //    CreateMap<PagedResponse<CidadeViewModel>,Cidade>();

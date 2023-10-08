@@ -7,18 +7,33 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Domain.Entities.MegaData;
 using Domain.Entities.NFSEDB;
+using Application.Services;
+using Application.ViewModels;
+using Domain.Filters;
+using Domain.Interfaces.Specifications;
+using Domain.Specs;
+using Application.Interfaces;
+using Application.ViewModels.MegaData;
+using Infrastructure.Context;
+using System.Text;
 
 namespace MegaData.Controllers
 {
     public class MegaData_NFSEController : Controller
     {
         private readonly MegaDataDBContext _context;
+        private readonly IMegaData_NFSE_AppService megaData_Nfse_AppService;
+        private readonly IMegaData_Export_AppService megaData_Export_AppService;
 
-        public MegaData_NFSEController(MegaDataDBContext context)
+
+        public MegaData_NFSEController(MegaDataDBContext context, IMegaData_NFSE_AppService _nfseAppService, IMegaData_Export_AppService megaData_Export_AppService)
         {
             _context = context;
+            megaData_Nfse_AppService = _nfseAppService;
+            this.megaData_Export_AppService = megaData_Export_AppService;
         }
 
+        /*
         // GET: MegaData_NFSE
         public async Task<IActionResult> Index()
         {
@@ -26,17 +41,101 @@ namespace MegaData.Controllers
                           View(await _context.MegaData_NFSEs.ToListAsync()) :
                           Problem("Entity set 'MegaDataDBContext.MegaData_NFSEs'  is null.");
         }
+        */
+        public async Task<IActionResult> Index(string sortOrder, string currentFilter, string searchString, int? pageNumber)
+        {
+
+            ISpecification<MegaData_NFSE> spec = null;
+            MegaData_NFSEFilter Filter = new MegaData_NFSEFilter();// { DataGeracao=DateTime.Parse(searchString)};
+
+            ViewData["CurrentSort"] = sortOrder;
+            ViewData["DataGeracaoSortParm"] = String.IsNullOrEmpty(sortOrder) ? "DataGeracao" : "";
+            ViewData["DataGeracaoSortParm"] = sortOrder == "dtGeracao" ? "dtGeracao_desc" : "dtGeracao";
+            if (searchString != null)
+            {
+                pageNumber = 1;
+                Filter.Page = pageNumber;
+
+            }
+            else
+            {
+                searchString = currentFilter;
+                Filter.SortBy = sortOrder;
+                //cidadeFilter.OrderBy = "desc";
+                Filter.Page = pageNumber;
+                Filter.DataGeracao = DateTime.Now.AddMonths(-1);
+
+                //spec = new MegaData_NFSESpec(Filter);
+                spec = new MegaData_NFSESpec();
+
+            }
+
+            ViewData["CurrentFilter"] = searchString;
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                long number1 = 0;
+                if (long.TryParse(searchString, out number1))
+                {
+                    //Filter.DataGeracao = int.Parse(searchString);
+                    Filter.DataGeracao = DateTime.Parse(searchString);
+                    spec = new MegaData_NFSEByDataGeracaoSpec(Filter);
+                }
+                else
+                {
+                    Filter.DataGeracao = DateTime.Parse(searchString);
+                    spec = new MegaData_NFSESpec(Filter);
+                }
+            }
+            /*  switch (sortOrder)
+              {
+                  case "nome_desc":
+                      Cidades = Cidades.OrderByDescending(s => s.Nome);
+
+                      break;
+                  case "IdCidade":
+                      Cidades = Cidades.OrderBy(s => s.IdCidade);
+                      break;
+                  case "idcidade_desc":
+                      Cidades = Cidades.OrderByDescending(s => s.IdCidade);
+                      break;
+                  default:
+                      //Cidades = Cidades.OrderBy(s => s.Nome);
+                      spec = new CidadeSpec();
+                      break;
+              }*/
+
+            //int pageSize = 3;
+
+            // return View(await PaginatedList<Student>.CreateAsync(Cidades.AsNoTracking(), pageNumber ?? 1, pageSize));
+
+
+            //  cidadeFilter.Nome = searchString;
+            //spec=new CidadeSpec(cidadeFilter);
+
+            //ViewData["CidadeFilter"] = cidadeFilter;
+            var result = await megaData_Nfse_AppService.ProjectToListAsync<MegaData_NFSE_ViewModel>(spec, Filter, new CancellationToken());
+            var resultPVM = new PagedResponseViewModel<MegaData_NFSE_ViewModel>(result, Filter);
+            //return View(result);
+            return View(resultPVM);
+        }
+
 
         // GET: MegaData_NFSE/Details/5
         public async Task<IActionResult> Details(DateTime? id)
         {
+
+            if (id == null || megaData_Nfse_AppService == null)
+            {
+                return NotFound();
+            }
+
             if (id == null || _context.MegaData_NFSEs == null)
             {
                 return NotFound();
             }
 
-            var megaData_NFSE = await _context.MegaData_NFSEs
-                .FirstOrDefaultAsync(m => m.DataGeracao == id);
+            var megaData_NFSE = await _context.MegaData_NFSEs.FirstOrDefaultAsync(m => m.DataGeracao == id);
+            //var megaData_NFSE = await megaData_Nfse_AppService.FirstOrDefaultAsync()
             if (megaData_NFSE == null)
             {
                 return NotFound();
@@ -56,17 +155,34 @@ namespace MegaData.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("DataGeracao,DataInicioPeriodo,DataFinalPeriodo,DataEnvio")] MegaData_NFSE megaData_NFSE)
+        //public async Task<IActionResult> Create([Bind("DataGeracao,DataInicioPeriodo,DataFinalPeriodo,DataEnvio")] MegaData_NFSE megaData_NFSE)
+        public async Task<IActionResult> Create([Bind("DataInicioPeriodo,DataFinalPeriodo")] MegaData_NFSE megaData_NFSE)
         {
+            megaData_NFSE.DataGeracao=DateTime.Now;
             if (ModelState.IsValid)
             {
-                _context.Add(megaData_NFSE);
-                await _context.SaveChangesAsync();
+                //_context.Add(megaData_NFSE);
+                //megaData_Export_AppService.ProjectToListAsync()
+
+                NfseTblNfseFilter Filter = new NfseTblNfseFilter() { DataInicial=megaData_NFSE.DataInicioPeriodo,DataFinal=megaData_NFSE.DataFinalPeriodo};
+                //ISpecification<NfseTblNfse> spec = new NfseTblNfseSpec(Filter);
+                ISpecification<NfseTblNfse> spec = new NfseTblNfsePeriodoSpec(Filter);
+
+
+                //var result = await megaData_Export_AppService.ProjectToListAsync<LayoutNFSE_MegaData>(spec, Filter, new CancellationToken());
+                
+                var result = await megaData_Export_AppService.ProjectToListAsync<LayoutNFSE_MegaData>(spec, new CancellationToken());
+                // var result = await megaData_Export_AppService.ListAsync(spec);
+
+
+                megaData_Nfse_AppService.AddAsync(megaData_NFSE);
+                //await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
             return View(megaData_NFSE);
+            
         }
-
+        
         // GET: MegaData_NFSE/Edit/5
         public async Task<IActionResult> Edit(DateTime? id)
         {

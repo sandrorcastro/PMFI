@@ -4,7 +4,7 @@ using Domain.Entities.MegaData;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace Domain.Entities.NFSEDB
+namespace Infrastructure.Context //.MegaData
 {
     public partial class MegaDataDBContext : DbContext
     {
@@ -44,6 +44,8 @@ namespace Domain.Entities.NFSEDB
                 entity.Property(e => e.DataInicioPeriodo).ValueGeneratedNever();
                 entity.Property(e => e.DataFinalPeriodo).ValueGeneratedNever();
                 entity.Property(e => e.DataEnvio).ValueGeneratedNever();
+                
+
             });
 
 

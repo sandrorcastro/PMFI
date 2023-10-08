@@ -11,7 +11,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Infrastructure.Migrations
 {
-    [DbContext(typeof(ApplicationDbContext))]
+    [DbContext(typeof(MegaDataDBContext))]
     [Migration("20230905201825_AumentaNomeLogradouro")]
     partial class AumentaNomeLogradouro
     {
