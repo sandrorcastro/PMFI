@@ -22,15 +22,17 @@ namespace MegaData.Controllers
     public class MegaData_NFSEController : Controller
     {
         private readonly MegaDataDBContext _context;
+        private NFSEDBContext _NFSEDBContext;
         private readonly IMegaData_NFSE_AppService megaData_Nfse_AppService;
         private readonly IMegaData_Export_AppService megaData_Export_AppService;
 
 
-        public MegaData_NFSEController(MegaDataDBContext context, IMegaData_NFSE_AppService _nfseAppService, IMegaData_Export_AppService megaData_Export_AppService)
+        public MegaData_NFSEController(MegaDataDBContext context, IMegaData_NFSE_AppService _nfseAppService, IMegaData_Export_AppService megaData_Export_AppService, NFSEDBContext nFSEDBContext)
         {
             _context = context;
             megaData_Nfse_AppService = _nfseAppService;
             this.megaData_Export_AppService = megaData_Export_AppService;
+            _NFSEDBContext = nFSEDBContext;
         }
 
         /*
@@ -170,14 +172,28 @@ namespace MegaData.Controllers
 
 
                 //var result = await megaData_Export_AppService.ProjectToListAsync<LayoutNFSE_MegaData>(spec, Filter, new CancellationToken());
-                
-                var result = await megaData_Export_AppService.ProjectToListAsync<LayoutNFSE_MegaData>(spec, new CancellationToken());
+
+                ///
+                //var result = await megaData_Export_AppService.ProjectToListAsync<LayoutNFSE_MegaData>(spec, new CancellationToken());
+                ///
+
+                IEnumerable<NfseTblNfse> nfes = await _NFSEDBContext.NfseTblNfses.Join(_NFSEDBContext.NfseTblEmpresas, nfse => nfse.Idempresa, em => em.Idempresa, (nfse, em) => new { NfseTblNfse = nfse, NfseTblEmpresa = em })
+                                                      // .Where(resultado=> resultado.NfseTblEmpresa.Idempresa==resultado.NfseTblNfse.Idempresa && resultado.NfseTblNfse.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && resultado.NfseTblNfse.Dtcompetencia < megaData_NFSE.DataFinalPeriodo);
+                                                      .Where(resultado => resultado.NfseTblEmpresa.Idempresa == resultado.NfseTblNfse.Idempresa)
+                                                      .Select(resultado => resultado.NfseTblNfse).Where(nf=>nf.Dtcompetencia>= megaData_NFSE.DataInicioPeriodo && nf.Dtcompetencia < megaData_NFSE.DataFinalPeriodo && nf.Stsituacao != "A" )
+                                                      .Include(e=>e.Empresa)
+                                                      .ToListAsync();
+                    //&& resultado.NfseTblNfse.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && resultado.NfseTblNfse.Dtcompetencia < megaData_NFSE.DataFinalPeriodo);
+
+
+
                 // var result = await megaData_Export_AppService.ListAsync(spec);
 
 
                 megaData_Nfse_AppService.AddAsync(megaData_NFSE);
                 //await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                // return RedirectToAction(nameof(Index));
+                return View("NFs",nfes);
             }
             return View(megaData_NFSE);
             

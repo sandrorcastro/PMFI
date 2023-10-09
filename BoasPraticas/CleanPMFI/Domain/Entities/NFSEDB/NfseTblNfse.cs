@@ -98,5 +98,7 @@ namespace Domain.Entities.NFSEDB
         public virtual ICollection<NfseTblPedSubstituicao> NfseTblPedSubstituicaos { get; set; }
         public virtual ICollection<NfseTblReciboRetencao> NfseTblReciboRetencaos { get; set; }
         public virtual ICollection<NfseTblRpsImpresso> NfseTblRpsImpressos { get; set; }
+
+        public virtual NfseTblEmpresa Empresa { get; set; }
     }
 }

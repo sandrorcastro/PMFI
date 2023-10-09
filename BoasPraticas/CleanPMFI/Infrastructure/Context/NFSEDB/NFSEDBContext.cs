@@ -7479,6 +7479,14 @@ namespace Domain.Entities.NFSEDB
                 entity.Property(e => e.Vltotalliquido)
                     .HasColumnType("numeric(14, 2)")
                     .HasColumnName("VLTOTALLIQUIDO");
+
+
+                entity.HasOne(e => e.Empresa).WithMany().HasForeignKey(e => e.Idempresa);
+                    
+
+
+
+
             });
 
             modelBuilder.Entity<NfseTblNfseDesconto>(entity =>

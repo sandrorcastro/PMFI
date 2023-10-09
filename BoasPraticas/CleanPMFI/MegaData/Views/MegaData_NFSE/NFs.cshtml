@@ -1,0 +1,461 @@
+﻿@model IEnumerable<Domain.Entities.NFSEDB.NfseTblNfse>
+
+@{
+    ViewData["Title"] = "NFs";
+}
+
+<h1>NFs</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.Idempresa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Nunumero)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stcodigo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dtdata)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Idoperacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Idregime)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stoptantesimplesnacional)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StincentivadorCultural)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dtcompetencia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Idnfsesubst)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stoutrasinf)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdcnaeSubclasse)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdpreIdcidade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stcodigotributacaomunicipio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StservicoDescricao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Idservico)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Pcaliquota)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vlbasecalculo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vldesccondicionado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vldescincondicionado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stissretido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vloutrasretencoes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vlcofins)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vliof)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vlcsll)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vldeducoes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vlinss)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vlir)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vltotaliss)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vlissretido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vltotalliquido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vlpis)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vlservicos)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Vlcredito)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SttomCpfcnpj)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SttomPessoaTipo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SttomIm)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SttomNome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SttomEndLogr)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SttomEndNumero)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SttomEndComplemento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SttomEndBairro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdtomIdcidade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SttomCep)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SttomEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.SttomTelefone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StintNome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StintIm)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StintCpfcnpj)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NucodigomunicipioOrgaogerador)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stcei)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stnumeroart)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stsituacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stenviaporemail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Idusuarioinclusao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Strecolheiss)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StpreCpfcnpj)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StpreIm)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StpreRazaosocial)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StpreNomefantasia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StpreEndlogradouro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StpreEndnumero)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StpreEndcomplemento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StpreEndbairro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdpresIdcidade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StpreEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StpreCep)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.StpreTelefone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stserie)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stunideco)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Stobservacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Idempincfisc)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Idempresa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nunumero)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stcodigo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dtdata)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Idoperacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Idregime)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stoptantesimplesnacional)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StincentivadorCultural)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dtcompetencia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Idnfsesubst)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stoutrasinf)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdcnaeSubclasse)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdpreIdcidade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stcodigotributacaomunicipio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StservicoDescricao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Idservico)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Pcaliquota)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vlbasecalculo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vldesccondicionado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vldescincondicionado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stissretido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vloutrasretencoes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vlcofins)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vliof)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vlcsll)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vldeducoes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vlinss)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vlir)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vltotaliss)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vlissretido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vltotalliquido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vlpis)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vlservicos)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Vlcredito)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SttomCpfcnpj)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SttomPessoaTipo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SttomIm)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SttomNome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SttomEndLogr)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SttomEndNumero)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SttomEndComplemento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SttomEndBairro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdtomIdcidade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SttomCep)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SttomEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SttomTelefone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StintNome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StintIm)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StintCpfcnpj)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NucodigomunicipioOrgaogerador)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stcei)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stnumeroart)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stsituacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stenviaporemail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Idusuarioinclusao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Strecolheiss)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StpreCpfcnpj)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StpreIm)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StpreRazaosocial)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StpreNomefantasia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StpreEndlogradouro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StpreEndnumero)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StpreEndcomplemento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StpreEndbairro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdpresIdcidade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StpreEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StpreCep)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.StpreTelefone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stserie)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stunideco)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Stobservacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Idempincfisc)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Idnfse">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Idnfse">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Idnfse">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

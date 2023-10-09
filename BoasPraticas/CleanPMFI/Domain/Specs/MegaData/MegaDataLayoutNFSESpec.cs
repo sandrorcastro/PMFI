@@ -14,7 +14,7 @@ public class MegaDataLayoutNFSESpec : Specification<NfseTblNfse>
     }
     public MegaDataLayoutNFSESpec(NfseTblNfseFilter filter)
     {
-        Query.Where(c => c.Dtcompetencia >= filter.DataInicial && c.Dtcompetencia < filter.DataFinal,filter.Dtcompetencia is not null).ApplyOrdering(filter).TagWith("Notas Fiscais No Período desejado!");
+        Query.Where(c => c.Dtcompetencia >= filter.DataInicial && c.Dtcompetencia < filter.DataFinal); //.ApplyOrdering(filter).TagWith("Notas Fiscais No Período desejado!");
         
     }
 }
