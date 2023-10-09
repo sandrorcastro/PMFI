@@ -176,14 +176,41 @@ namespace MegaData.Controllers
                 ///
                 //var result = await megaData_Export_AppService.ProjectToListAsync<LayoutNFSE_MegaData>(spec, new CancellationToken());
                 ///
-
+                /*
                 IEnumerable<NfseTblNfse> nfes = await _NFSEDBContext.NfseTblNfses.Join(_NFSEDBContext.NfseTblEmpresas, nfse => nfse.Idempresa, em => em.Idempresa, (nfse, em) => new { NfseTblNfse = nfse, NfseTblEmpresa = em })
                                                       // .Where(resultado=> resultado.NfseTblEmpresa.Idempresa==resultado.NfseTblNfse.Idempresa && resultado.NfseTblNfse.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && resultado.NfseTblNfse.Dtcompetencia < megaData_NFSE.DataFinalPeriodo);
                                                       .Where(resultado => resultado.NfseTblEmpresa.Idempresa == resultado.NfseTblNfse.Idempresa)
-                                                      .Select(resultado => resultado.NfseTblNfse).Where(nf=>nf.Dtcompetencia>= megaData_NFSE.DataInicioPeriodo && nf.Dtcompetencia < megaData_NFSE.DataFinalPeriodo && nf.Stsituacao != "A" )
+                                                      .Select(resultado => resultado.NfseTblNfse).Where(nf=>nf.Dtcompetencia>= megaData_NFSE.DataInicioPeriodo && nf.Dtcompetencia < megaData_NFSE.DataFinalPeriodo && nf.Stsituacao != "A"  )
                                                       .Include(e=>e.Empresa)
                                                       .ToListAsync();
-                    //&& resultado.NfseTblNfse.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && resultado.NfseTblNfse.Dtcompetencia < megaData_NFSE.DataFinalPeriodo);
+                */
+
+
+                //var nfse1 = from nfse in 
+
+
+                //List<NfseTblNfse>  query = (from n in _NFSEDBContext.NfseTblNfses
+                var query = (from n in _NFSEDBContext.NfseTblNfses
+                            join empresa in _NFSEDBContext.NfseTblEmpresas on n.Idempresa equals empresa.Idempresa
+                            join contribuinte in _NFSEDBContext.NfseTblContribuintes on empresa.Idcontribuinte equals contribuinte.Idcontribuinte
+                            where n.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && n.Dtcompetencia < megaData_NFSE.DataFinalPeriodo && n.Stsituacao != "A"
+                            select n);
+                            
+
+
+                //IEnumerable<NfseTblNfse> nfes = (IEnumerable<NfseTblNfse>) query.ToListAsync();
+                IEnumerable<NfseTblNfse> nfes = query.ToList();
+
+                //var result = query.ToList()
+
+                //&& resultado.NfseTblNfse.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && resultado.NfseTblNfse.Dtcompetencia < megaData_NFSE.DataFinalPeriodo);
+
+                /*List<object> nfes = (from nfsetblnfse in _NFSEDBContext.NfseTblNfses.Where(n => n.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && n.Dtcompetencia <= megaData_NFSE.DataFinalPeriodo && n.Stsituacao != "A").Include(e=>e.Empresa).ToList()
+                                             select new[] { nfsetblnfse.Idnfse .ToString(), 
+                                          //                  employee.City,
+                                            //                employee.Country
+                                                 }).ToList<object>();*/
+
 
 
 
