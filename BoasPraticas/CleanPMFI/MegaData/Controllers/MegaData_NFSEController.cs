@@ -203,11 +203,31 @@ namespace MegaData.Controllers
                             join contribuinte in _NFSEDBContext.NfseTblContribuintes on empresa.Idcontribuinte equals contribuinte.Idcontribuinte
                             where n.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && n.Dtcompetencia < megaData_NFSE.DataFinalPeriodo && n.Stsituacao != "A"
                             select n);
-                            
+
 
 
                 //IEnumerable<NfseTblNfse> nfes = (IEnumerable<NfseTblNfse>) query.ToListAsync();
-  ///              IEnumerable<NfseTblNfse> nfes = query.ToList();
+                //IEnumerable<NfseTblNfse> nfes = query.ToList();
+                List<NfseTblNfse> nfes = query.ToList();
+
+                StringBuilder sb = new StringBuilder();
+
+                //percore os funcionarios e gera o CSV
+                for (int i = 0; i < nfes.Count(); i++)
+                {
+                    string[] nf = (string[])nfes[i];
+                    for (int j = 0; j < nf.Length; j++)
+                    {
+                        //anexa dados com separador
+                        sb.Append(nf[j] + ';');
+                    }
+
+                    //Anexa uma nova linha
+                    sb.Append("\r\n");
+                }
+                
+                return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "GridNotasFiscais.txt");
+
 
                 //var result = query.ToList()
 
