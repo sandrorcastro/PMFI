@@ -184,7 +184,7 @@ namespace MegaData.Controllers
                                                       .Include(e=>e.Empresa)
                                                       .ToListAsync();
                 */
-                /*IEnumerable<NfseTblNfse> nfes = await _NFSEDBContext.NfseTblNfses.Join(_NFSEDBContext.NfseTblEmpresas, nfse => nfse.Idempresa, em => em.Idempresa, (nfse, em) => new { NfseTblNfse = nfse, NfseTblEmpresa = em })
+/*                IEnumerable<NfseTblNfse> nfes = await _NFSEDBContext.NfseTblNfses.Join(_NFSEDBContext.NfseTblEmpresas, nfse => nfse.Idempresa, em => em.Idempresa, (nfse, em) => new { NfseTblNfse = nfse, NfseTblEmpresa = em })
                                                       // .Where(resultado=> resultado.NfseTblEmpresa.Idempresa==resultado.NfseTblNfse.Idempresa && resultado.NfseTblNfse.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && resultado.NfseTblNfse.Dtcompetencia < megaData_NFSE.DataFinalPeriodo);
                                                       .Where(resultado => resultado.NfseTblEmpresa.Idempresa == resultado.NfseTblNfse.Idempresa)
                                                       .Select(resultado => resultado.NfseTblNfse).Where(nf => nf.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && nf.Dtcompetencia < megaData_NFSE.DataFinalPeriodo && nf.Stsituacao != "A")
@@ -192,17 +192,31 @@ namespace MegaData.Controllers
                                                       .ToListAsync();*/
 
 
+                /*IEnumerable<NfseTblNfse> nfes = await _NFSEDBContext.NfseTblNfses.Join(_NFSEDBContext.NfseTblEmpresas, nfse => nfse.Idempresa, em => em.Idempresa, (nfse, em) => new { NfseTblNfse = nfse, NfseTblEmpresa = em }).Where(resultado => resultado.NfseTblEmpresa.Idempresa == resultado.NfseTblNfse.Idempresa)
+                                                      .Select(resultado => resultado.NfseTblNfse).Where(nf => nf.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && nf.Dtcompetencia < megaData_NFSE.DataFinalPeriodo && nf.Stsituacao != "A")
+                    .Join(_NFSEDBContext.NfseTblContribuintes, c =>  c.nfse c.NfseTblEmpresa.Idcontribuinte, em => em.Idcontribuinte, (c, em) => new {NfseTblContribuinte = c, NfseTblEmpresa =em}).Where(r => r.NfseTblEmpresa.Idcontribuinte==r.NfseTblContribuinte.NfseTblEmpresa.Idcontribuinte)
+                                                      .Include(e => e.Empresa)
+                                                      .ToListAsync();*/
+
+
+
+
 
                 //var nfse1 = from nfse in 
+
+                //var q = _NFSEDBContext.NfseTblNfses.Join(_NFSEDBContext.NfseTblEmpresas,nfe => nfe.Idempresa, empresa => empresa.Idempresa, (nfe, empresa) => new  {NfseTblNfse=nfe,NfseTblEmpresa=empresa }).Where(resultado => resultado.NfseTblEmpresa.Idempresa == resultado.NfseTblNfse.Idempresa)
+                //                                 .Join(_NFSEDBContext.NfseTblContribuintes, empresa=>empresa.idcontribuinte, contribuinte=>contribuinte.Idcontribuinte , (empresa,contribuinte) => new { NfseTblContribuinte = contribuinte, NfseTblEmpresa = empresa }).Where(resultado => resultado.NfseTblEmpresa.Idcontribuinte == resultado.NfseTblContribuinte.IdContribuinte)
+
+
 
 
                 //List<NfseTblNfse>  query = (from n in _NFSEDBContext.NfseTblNfses
 
                 var query = (from n in _NFSEDBContext.NfseTblNfses
                              join empresa in _NFSEDBContext.NfseTblEmpresas on n.Idempresa equals empresa.Idempresa
-                            join contribuinte in _NFSEDBContext.NfseTblContribuintes on empresa.Idcontribuinte equals contribuinte.Idcontribuinte
-                            where n.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && n.Dtcompetencia < megaData_NFSE.DataFinalPeriodo && n.Stsituacao != "A"
-                            select n);
+                             join contribuinte in _NFSEDBContext.NfseTblContribuintes on empresa.Idcontribuinte equals contribuinte.Idcontribuinte
+                             where n.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && n.Dtcompetencia < megaData_NFSE.DataFinalPeriodo && n.Stsituacao != "A"
+                             select n);
 
 
 
@@ -210,23 +224,15 @@ namespace MegaData.Controllers
                 //IEnumerable<NfseTblNfse> nfes = query.ToList();
                 List<NfseTblNfse> nfes = query.ToList();
 
-                StringBuilder sb = new StringBuilder();
+                StringBuilder builder = new StringBuilder();
 
                 //percore os funcionarios e gera o CSV
-                for (int i = 0; i < nfes.Count(); i++)
+                foreach (var n in query.ToList())
                 {
-                    string[] nf = (string[])nfes[i];
-                    for (int j = 0; j < nf.Length; j++)
-                    {
-                        //anexa dados com separador
-                        sb.Append(nf[j] + ';');
-                    }
-
-                    //Anexa uma nova linha
-                    sb.Append("\r\n");
+                    builder.AppendLine($"n.Stcpfcnpj;{n.Dtcompetencia:yyyy};{n.Dtcompetencia:MM};{n.Nunumero};{1};{n.Idoperacao};{n.Idservico};{n.Stissretido};{n.Stissretido};{n.StpreIm};{n.SttomPessoaTipo};{n.SttomNome};{7563};{n.Idoperacao};{n.Vldeducoes};{n.Vlservicos};{n.Stcodigo}");
                 }
-                
-                return File(Encoding.UTF8.GetBytes(sb.ToString()), "text/csv", "GridNotasFiscais.txt");
+
+                return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", "GridNotasFiscais.txt");
 
 
                 //var result = query.ToList()
@@ -249,7 +255,7 @@ namespace MegaData.Controllers
                 //await _context.SaveChangesAsync();
                 // return RedirectToAction(nameof(Index));
                 //return View("NFs",nfes);
-                return View("LayoutNFSE_MegaData", nfes);//LayoutNFSE_MegaData
+                //return View("LayoutNFSE_MegaData", nfes);//LayoutNFSE_MegaData
             }
             return View(megaData_NFSE);
             

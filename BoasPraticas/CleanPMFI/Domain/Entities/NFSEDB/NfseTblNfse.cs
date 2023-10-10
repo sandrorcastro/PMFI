@@ -100,5 +100,7 @@ namespace Domain.Entities.NFSEDB
         public virtual ICollection<NfseTblRpsImpresso> NfseTblRpsImpressos { get; set; }
 
         public virtual NfseTblEmpresa Empresa { get; set; }
+       // public virtual int IdContribuinte { get; set; }
+       // public virtual NfseTblContribuinte Contribuinte { get; set; }
     }
 }

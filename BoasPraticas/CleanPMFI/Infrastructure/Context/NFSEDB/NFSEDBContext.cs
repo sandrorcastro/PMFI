@@ -7482,7 +7482,8 @@ namespace Domain.Entities.NFSEDB
 
 
                 entity.HasOne(e => e.Empresa).WithMany().HasForeignKey(e => e.Idempresa);
-                    
+               // entity.HasOne(e => e.Contribuinte).WithMany().HasForeignKey(e => e.IdContribuinte);
+
 
 
 
