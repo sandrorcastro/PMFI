@@ -10,7 +10,7 @@ namespace Application.ViewModels.MegaData
     {
         //STCPFCNPJ ANO MES NUMERO  SITUACAO LOCALTRIBUTACAO SERVICO116 ISSRETIDO   BASECALCULO ALIQUOTA    VLRISS VLRISSRETIDO    CMEPRESTADOR CPFCNPJTOMADOR  NOMETOMADOR TOM EXIGIBILIDADE DEDUCOES    VLRSERVICO CDVERIFICACAO
         public string? Stcpfcnpj { get; set; }
-        public int? Ano { get; set; }
+        public string? Ano { get; set; }
         public int? Mes { get; set; }
         public int? Numero { get; set; }
         public int Situacao { get; set; }

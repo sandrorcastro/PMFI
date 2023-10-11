@@ -1,0 +1,51 @@
+﻿@model IEnumerable<Application.ViewModels.MegaData.LayoutNFSE_MegaData>
+
+@{
+    ViewData["Title"] = "Listagem de Períodos de Notas Fiscais Exportadas";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+<p>
+    <a asp-action="Create">Exportar Novo Período</a>
+</p>
+<table class="table">
+    <thead>
+        <tr
+            <th>
+                @Html.DisplayNameFor(model => model.Stcpfcnpj)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ano)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Numero)
+            </th>
+            
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+           <td>
+               @Html.DisplayFor(modelItem => item.Stcpfcnpj)
+           </td>
+           <td>
+               @Html.DisplayFor(modelItem => item.Ano)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Numero)
+            </td>
+            @*
+
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.DataGeracao">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.DataGeracao">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.DataGeracao">Delete</a>
+            </td>
+            *@
+        </tr>
+}
+    </tbody>
+</table>
