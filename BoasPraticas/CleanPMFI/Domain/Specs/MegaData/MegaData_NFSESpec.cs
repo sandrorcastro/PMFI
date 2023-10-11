@@ -16,6 +16,6 @@ public class MegaData_NFSESpec : Specification<MegaData_NFSE>
 
     {
         
-        Query.Where(c => c.DataGeracao == filter.DataGeracao).ApplyOrdering(filter).TagWith("Lista todos os Períodos");
+        Query.Where(c => c.DataGeracao >= filter.DataGeracao).ApplyOrdering(filter).TagWith("Lista todos os Períodos");
     }
 }

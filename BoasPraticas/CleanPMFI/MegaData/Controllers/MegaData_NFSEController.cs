@@ -16,6 +16,7 @@ using Application.Interfaces;
 using Application.ViewModels.MegaData;
 using Infrastructure.Context;
 using System.Text;
+using System.Globalization;
 
 namespace MegaData.Controllers
 {
@@ -67,8 +68,8 @@ namespace MegaData.Controllers
                 Filter.Page = pageNumber;
                 Filter.DataGeracao = DateTime.Now.AddMonths(-1);
 
-                //spec = new MegaData_NFSESpec(Filter);
-                spec = new MegaData_NFSESpec();
+                spec = new MegaData_NFSESpec(Filter);
+                //spec = new MegaData_NFSESpec();
 
             }
 
@@ -184,12 +185,12 @@ namespace MegaData.Controllers
                                                       .Include(e=>e.Empresa)
                                                       .ToListAsync();
                 */
-/*                IEnumerable<NfseTblNfse> nfes = await _NFSEDBContext.NfseTblNfses.Join(_NFSEDBContext.NfseTblEmpresas, nfse => nfse.Idempresa, em => em.Idempresa, (nfse, em) => new { NfseTblNfse = nfse, NfseTblEmpresa = em })
-                                                      // .Where(resultado=> resultado.NfseTblEmpresa.Idempresa==resultado.NfseTblNfse.Idempresa && resultado.NfseTblNfse.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && resultado.NfseTblNfse.Dtcompetencia < megaData_NFSE.DataFinalPeriodo);
-                                                      .Where(resultado => resultado.NfseTblEmpresa.Idempresa == resultado.NfseTblNfse.Idempresa)
-                                                      .Select(resultado => resultado.NfseTblNfse).Where(nf => nf.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && nf.Dtcompetencia < megaData_NFSE.DataFinalPeriodo && nf.Stsituacao != "A")
-                                                      .Include(e => e.Empresa)
-                                                      .ToListAsync();*/
+                /*                IEnumerable<NfseTblNfse> nfes = await _NFSEDBContext.NfseTblNfses.Join(_NFSEDBContext.NfseTblEmpresas, nfse => nfse.Idempresa, em => em.Idempresa, (nfse, em) => new { NfseTblNfse = nfse, NfseTblEmpresa = em })
+                                                                      // .Where(resultado=> resultado.NfseTblEmpresa.Idempresa==resultado.NfseTblNfse.Idempresa && resultado.NfseTblNfse.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && resultado.NfseTblNfse.Dtcompetencia < megaData_NFSE.DataFinalPeriodo);
+                                                                      .Where(resultado => resultado.NfseTblEmpresa.Idempresa == resultado.NfseTblNfse.Idempresa)
+                                                                      .Select(resultado => resultado.NfseTblNfse).Where(nf => nf.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && nf.Dtcompetencia < megaData_NFSE.DataFinalPeriodo && nf.Stsituacao != "A")
+                                                                      .Include(e => e.Empresa)
+                                                                      .ToListAsync();*/
 
 
                 /*IEnumerable<NfseTblNfse> nfes = await _NFSEDBContext.NfseTblNfses.Join(_NFSEDBContext.NfseTblEmpresas, nfse => nfse.Idempresa, em => em.Idempresa, (nfse, em) => new { NfseTblNfse = nfse, NfseTblEmpresa = em }).Where(resultado => resultado.NfseTblEmpresa.Idempresa == resultado.NfseTblNfse.Idempresa)
@@ -197,7 +198,34 @@ namespace MegaData.Controllers
                     .Join(_NFSEDBContext.NfseTblContribuintes, c =>  c.nfse c.NfseTblEmpresa.Idcontribuinte, em => em.Idcontribuinte, (c, em) => new {NfseTblContribuinte = c, NfseTblEmpresa =em}).Where(r => r.NfseTblEmpresa.Idcontribuinte==r.NfseTblContribuinte.NfseTblEmpresa.Idcontribuinte)
                                                       .Include(e => e.Empresa)
                                                       .ToListAsync();*/
-
+                var query = (from n in _NFSEDBContext.NfseTblNfses
+                             join empresa in _NFSEDBContext.NfseTblEmpresas on n.Idempresa equals empresa.Idempresa
+                             join contribuinte in _NFSEDBContext.NfseTblContribuintes on empresa.Idcontribuinte equals contribuinte.Idcontribuinte
+                             where n.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && n.Dtcompetencia < megaData_NFSE.DataFinalPeriodo && n.Stsituacao != "A"
+                             //where n.Dtcompetencia >= dti && n.Dtcompetencia < dtf && n.Stsituacao != "A"
+                             
+                             //select new LayoutNFSE_MegaData { Ano = n.Dtcompetencia.ToString(), Numero = n.Nunumero });
+                             select new LayoutNFSE_MegaData {Stcpfcnpj=contribuinte.Idcontribuinte.ToString(),
+                                                             Ano = n.Dtcompetencia.Value.Year.ToString(),
+                                                             Mes = int.Parse(n.Dtcompetencia.Value.Month.ToString()),
+                                                             Numero = n.Nunumero,
+                                                             Situacao=1,
+                                                             //Localtributacao=n.Idoperacao
+                                                             Servico116=n.Idservico,
+                                                             Issretido=n.Stissretido=="S" ? 1 : 0 ,
+                                                             Basecalculo=n.Vlbasecalculo.ToString(),
+                                                             Aliquota=n.Pcaliquota.ToString(),
+                                                             Vlriss= n.Stissretido == "N" ? n.Vltotaliss.ToString(): "0",   ///
+                                                             Vlrissretido=n.Stissretido == "S" ? n.Vlissretido.ToString(): "0",  ////
+                                                             Cmeprestador=n.StpreIm,
+                                                             Cpfcnpjtomador=n.SttomPessoaTipo,
+                                                             Nometomador=n.SttomNome,
+                                                             Tom=7563,
+                                                             //Exigibilidade=int.Parse(n.Idoperacao),
+                                                             Deducoes=n.Vldeducoes.ToString(),
+                                                             Vlrservico=n.Vlservicos.ToString(),
+                                                             Cdverificacao=n.Stcodigo
+                             });
 
 
 
@@ -212,28 +240,34 @@ namespace MegaData.Controllers
 
                 //List<NfseTblNfse>  query = (from n in _NFSEDBContext.NfseTblNfses
 
-                var query = (from n in _NFSEDBContext.NfseTblNfses
+                /*var query = (from n in _NFSEDBContext.NfseTblNfses
                              join empresa in _NFSEDBContext.NfseTblEmpresas on n.Idempresa equals empresa.Idempresa
                              join contribuinte in _NFSEDBContext.NfseTblContribuintes on empresa.Idcontribuinte equals contribuinte.Idcontribuinte
                              where n.Dtcompetencia >= megaData_NFSE.DataInicioPeriodo && n.Dtcompetencia < megaData_NFSE.DataFinalPeriodo && n.Stsituacao != "A"
-                             select n);
+                             select n);*/
 
 
 
                 //IEnumerable<NfseTblNfse> nfes = (IEnumerable<NfseTblNfse>) query.ToListAsync();
                 //IEnumerable<NfseTblNfse> nfes = query.ToList();
-                List<NfseTblNfse> nfes = query.ToList();
+                //List<NfseTblNfse> nfes = query.ToList();
 
                 StringBuilder builder = new StringBuilder();
 
                 //percore os funcionarios e gera o CSV
                 foreach (var n in query.ToList())
                 {
-                    builder.AppendLine($"n.Stcpfcnpj;{n.Dtcompetencia:yyyy};{n.Dtcompetencia:MM};{n.Nunumero};{1};{n.Idoperacao};{n.Idservico};{n.Stissretido};{n.Stissretido};{n.StpreIm};{n.SttomPessoaTipo};{n.SttomNome};{7563};{n.Idoperacao};{n.Vldeducoes};{n.Vlservicos};{n.Stcodigo}");
+                    //builder.AppendLine($"n.Stcpfcnpj;{n.Dtcompetencia:yyyy};{n.Dtcompetencia:MM};{n.Nunumero};{1};{n.Idoperacao};{n.Idservico};{n.Stissretido};{n.Stissretido};{n.StpreIm};{n.SttomPessoaTipo};{n.SttomNome};{7563};{n.Idoperacao};{n.Vldeducoes};{n.Vlservicos};{n.Stcodigo}");
+                    builder.AppendLine($"{n.Stcpfcnpj};{n.Ano};{n.Mes};{n.Numero};{1};{n.Localtributacao};{n.Servico116};{n.Issretido};{n.Basecalculo};{n.Aliquota};{n.Vlriss};{n.Vlrissretido};{n.Cmeprestador};{n.Cpfcnpjtomador};{n.Nometomador};{7563};{n.Exigibilidade};{n.Deducoes};{n.Vlrservico};{n.Cdverificacao}");
                 }
 
-                return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", "GridNotasFiscais.txt");
-
+                //return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", "GridNotasFiscais.txt");
+                //await megaData_Nfse_AppService.AddAsync(megaData_NFSE);
+                await _context.AddAsync(megaData_NFSE);
+                await _context.SaveChangesAsync();
+                //              //return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", $"NotasFiscais-{megaData_NFSE.DataInicioPeriodo}-{megaData_NFSE.DataFinalPeriodo}.txt");
+                //var file = File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", $"NotasFiscais-{megaData_NFSE.DataInicioPeriodo}-{megaData_NFSE.DataFinalPeriodo}.txt");
+                //StoreInFolder(file,"teste");
 
                 //var result = query.ToList()
 
@@ -251,24 +285,26 @@ namespace MegaData.Controllers
                 // var result = await megaData_Export_AppService.ListAsync(spec);
 
 
-                megaData_Nfse_AppService.AddAsync(megaData_NFSE);
                 //await _context.SaveChangesAsync();
-                // return RedirectToAction(nameof(Index));
+                 return RedirectToAction(nameof(Index));
                 //return View("NFs",nfes);
                 //return View("LayoutNFSE_MegaData", nfes);//LayoutNFSE_MegaData
+                //return View();
             }
             return View(megaData_NFSE);
             
         }
-        
+
         // GET: MegaData_NFSE/Edit/5
-        public async Task<IActionResult> Edit(DateTime? id)
+        //public async Task<IActionResult> Edit(DateTime? id)
+        public async Task<IActionResult> Edit(string? id)
         {
             if (id == null || _context.MegaData_NFSEs == null)
             {
                 return NotFound();
             }
-
+           // DateTime dt = DateTime.ParseExact(id,"yyyy/MM/dd HH:mm:ss",CultureInfo.InvariantCulture);
+            
             var megaData_NFSE = await _context.MegaData_NFSEs.FindAsync(id);
             if (megaData_NFSE == null)
             {
@@ -353,5 +389,105 @@ namespace MegaData.Controllers
         {
           return (_context.MegaData_NFSEs?.Any(e => e.DataGeracao == id)).GetValueOrDefault();
         }
+        /* public void StoreImage(IFormFileCollection files, AutuarViewModel aVM)
+        {
+            try
+            {
+                //var files = HttpContext.Request.Form.Files;
+                if (files != null)
+                {
+                    foreach (var file in files)
+                    {
+                        if (file.Length > 0)
+                        {
+                            //ImageViewModel imageVM = aVM.Image;//   new ImageViewModel();
+
+                            var fileName = file.FileName;
+                            var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+                            //imageVM.ImageId = myUniqueFileName;
+                            var fileExtension = Path.GetExtension(fileName);
+                            var newFileName = String.Concat(myUniqueFileName, fileExtension);
+                            var filePath = Path.Combine(environment.WebRootPath, "CameraPhotos") + $@"\{newFileName}";
+                            ImageViewModel imageVM = new ImageViewModel()
+                            {
+                                ImageId = myUniqueFileName,
+                                ProcessoId = aVM.Processo.ProcessoId,
+                                TipoProcessoId = aVM.TipoProcesso.TipoProcessoId,
+                                SituacaoProcessoId = aVM.SituacaoProcesso.SituacaoProcessoId,
+                                ImovelId = aVM.Imovel.ImovelId,
+                                EconomiaId = aVM.Economia.EconomiaId,
+                                SituacaoEtapaId = aVM.SituacaoEtapa.SituacaoEtapaId,
+                                TipoEtapaId = aVM.TipoEtapa.TipoEtapaId,
+                                //PerspectivaId=aVM.Image.PerspectivaId,
+                                NomeArquivo = newFileName,
+                                Caminho = filePath
+                            };
+                            //                            imageVM.NomeArquivo = newFileName;
+                            //                          imageVM.Caminho = filePath;
+
+                            if (!string.IsNullOrEmpty(filePath))
+                            {
+                                StoreInFolder(file, filePath);
+
+                            }
+                            var imageBytes = System.IO.File.ReadAllBytes(filePath);
+                            if (imageBytes != null)
+                            {
+                                StoreInDatabase(imageBytes, imageVM);
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }*/
+        private void StoreInFolder(IFormFile file, string filename)
+        {
+            using (FileStream fs = System.IO.File.Create(filename))
+            {
+                file.CopyTo(fs);
+                fs.Flush();
+            }
+        }
+        /*
+        private void StoreInDatabase(byte[] imageBytes, ImageViewModel? imageVM)
+        {
+            //Saving captured into database
+            try
+            {
+                if (imageBytes != null)
+                {
+                    string base64String = Convert.ToBase64String(imageBytes, 0, imageBytes.Length);
+                    string imageUrl = string.Concat("data:image/jpg;base64,", base64String);
+                    ImageViewModel NewimageVM = new ImageViewModel()
+                    {
+                        CreateDate = DateTime.Now,
+                        ImageBase64String = imageUrl,
+                        ImageId = imageVM.ImageId,
+                        ImovelId = imageVM.ImovelId,
+                        EconomiaId = imageVM.EconomiaId,
+                        ProcessoId = imageVM.ProcessoId,
+                        TipoProcessoId = imageVM.TipoProcessoId,
+                        SituacaoProcessoId = imageVM.SituacaoProcessoId,
+                        SituacaoEtapaId = imageVM.SituacaoEtapaId,
+                        TipoEtapaId = imageVM.TipoEtapaId,
+                        PerspectivaId = imageVM.PerspectivaId,
+                        NomeArquivo = imageVM.NomeArquivo,
+                        Caminho = imageVM.Caminho
+
+                    };
+                    imageAppService.Add(mapper.Map<Image>(NewimageVM));
+                    //_cameraDatabaseContext.SaveChanges();
+                }
+
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }*/
     }
 }
