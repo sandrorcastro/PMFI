@@ -36,15 +36,25 @@ namespace Infrastructure.Context //.MegaData
 
             modelBuilder.Entity<MegaData_NFSE>(entity =>
             {
+
+                entity.HasKey(e => e.IDMegaData_NFSE);
+                
+                /*                
                 entity.HasKey(e => e.DataGeracao);
+                entity.Property(e => e.DataGeracao).HasConversion(
+                                    v=>v.ToString("yyyy-MM-dd HH:mm"),
+                                    v=>DateTime.ParseExact(v, "yyyy-MM-dd HH:mm", null)
+                                );*/
 
                 entity.ToTable("MegaData_NFSE");
-               // entity.HasIndex(e => new { e.DataGeracao }, "IX_MegaData_NFSE_DataGeracao");
+                // entity.HasIndex(e => new { e.DataGeracao }, "IX_MegaData_NFSE_DataGeracao");
+                entity.Property(e => e.IDMegaData_NFSE).ValueGeneratedNever();
                 entity.Property(e => e.DataGeracao).ValueGeneratedNever();
                 entity.Property(e => e.DataInicioPeriodo).ValueGeneratedNever();
                 entity.Property(e => e.DataFinalPeriodo).ValueGeneratedNever();
                 entity.Property(e => e.DataEnvio).ValueGeneratedNever();
-                
+                entity.Property(e => e.NomeArquivo).HasMaxLength(150);//.IsRequired();
+                entity.Property(e => e.CaminhoArquivo).HasMaxLength(250);//.IsRequired();
 
             });
 

@@ -1,9 +1,12 @@
 using Infrastructure.Context;
 using IOC;
+using MegaData.Schedule;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddInfrastructureAutoMapper(builder.Configuration);
-
+MegaDataSchedule rotinaMegaData = new MegaDataSchedule();
+rotinaMegaData.Start();
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 

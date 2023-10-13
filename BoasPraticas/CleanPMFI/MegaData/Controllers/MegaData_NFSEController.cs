@@ -17,19 +17,22 @@ using Application.ViewModels.MegaData;
 using Infrastructure.Context;
 using System.Text;
 using System.Globalization;
+using Microsoft.VisualStudio.Web.CodeGenerators.Mvc.Identity;
 
 namespace MegaData.Controllers
 {
     public class MegaData_NFSEController : Controller
     {
+        private readonly IWebHostEnvironment environment;
         private readonly MegaDataDBContext _context;
         private NFSEDBContext _NFSEDBContext;
         private readonly IMegaData_NFSE_AppService megaData_Nfse_AppService;
         private readonly IMegaData_Export_AppService megaData_Export_AppService;
 
 
-        public MegaData_NFSEController(MegaDataDBContext context, IMegaData_NFSE_AppService _nfseAppService, IMegaData_Export_AppService megaData_Export_AppService, NFSEDBContext nFSEDBContext)
+        public MegaData_NFSEController(IWebHostEnvironment _environment,MegaDataDBContext context, IMegaData_NFSE_AppService _nfseAppService, IMegaData_Export_AppService megaData_Export_AppService, NFSEDBContext nFSEDBContext)
         {
+            environment = _environment;
             _context = context;
             megaData_Nfse_AppService = _nfseAppService;
             this.megaData_Export_AppService = megaData_Export_AppService;
@@ -52,7 +55,7 @@ namespace MegaData.Controllers
             MegaData_NFSEFilter Filter = new MegaData_NFSEFilter();// { DataGeracao=DateTime.Parse(searchString)};
 
             ViewData["CurrentSort"] = sortOrder;
-            ViewData["DataGeracaoSortParm"] = String.IsNullOrEmpty(sortOrder) ? "DataGeracao" : "";
+            ViewData["DataGeracaoSortParm"] = String.IsNullOrEmpty(sortOrder) ? "DaataGeracao" : "";
             ViewData["DataGeracaoSortParm"] = sortOrder == "dtGeracao" ? "dtGeracao_desc" : "dtGeracao";
             if (searchString != null)
             {
@@ -124,20 +127,20 @@ namespace MegaData.Controllers
 
 
         // GET: MegaData_NFSE/Details/5
-        public async Task<IActionResult> Details(DateTime? id)
+        public async Task<IActionResult> Details(long? id)
         {
-
+            /*
             if (id == null || megaData_Nfse_AppService == null)
             {
                 return NotFound();
-            }
+            }*/
 
             if (id == null || _context.MegaData_NFSEs == null)
             {
                 return NotFound();
             }
 
-            var megaData_NFSE = await _context.MegaData_NFSEs.FirstOrDefaultAsync(m => m.DataGeracao == id);
+            var megaData_NFSE = await _context.MegaData_NFSEs.FirstOrDefaultAsync(m => m.IDMegaData_NFSE == id);
             //var megaData_NFSE = await megaData_Nfse_AppService.FirstOrDefaultAsync()
             if (megaData_NFSE == null)
             {
@@ -146,7 +149,30 @@ namespace MegaData.Controllers
 
             return View(megaData_NFSE);
         }
+        public IActionResult Download(string arquivo)
+        {
+            //var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "MegaData", arquivo);
+            //var filePath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "MegaData", arquivo);
+            var filePath = Path.Combine(environment.WebRootPath, "MegaData",arquivo);
 
+            if (System.IO.File.Exists(filePath))
+            { 
+                var fileName = Path.GetFileName(filePath);
+                var cd = new System.Net.Mime.ContentDisposition
+                {
+                    FileName = fileName,
+                    Inline = false,
+                };
+
+                Response.Headers.Add("Content-Disposition", cd.ToString());
+
+                return File(new FileStream(filePath, FileMode.Open), "application/octet-stream");
+
+                //return File(new FileStream(filePath, FileMode.Open), "application/octet-stream", arquivo);
+            }
+
+            return NotFound();
+        }
         // GET: MegaData_NFSE/Create
         public IActionResult Create()
         {
@@ -162,6 +188,9 @@ namespace MegaData.Controllers
         public async Task<IActionResult> Create([Bind("DataInicioPeriodo,DataFinalPeriodo")] MegaData_NFSE megaData_NFSE)
         {
             megaData_NFSE.DataGeracao=DateTime.Now;
+            string dtLimpa = new string(megaData_NFSE.DataGeracao.ToString().Where(char.IsDigit).ToArray());
+
+            megaData_NFSE.IDMegaData_NFSE = long.Parse(dtLimpa);              //Guid.NewGuid();
             if (ModelState.IsValid)
             {
                 //_context.Add(megaData_NFSE);
@@ -263,10 +292,75 @@ namespace MegaData.Controllers
 
                 //return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", "GridNotasFiscais.txt");
                 //await megaData_Nfse_AppService.AddAsync(megaData_NFSE);
-                await _context.AddAsync(megaData_NFSE);
-                await _context.SaveChangesAsync();
-                //              //return File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", $"NotasFiscais-{megaData_NFSE.DataInicioPeriodo}-{megaData_NFSE.DataFinalPeriodo}.txt");
+                //var arqnfs =  File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", $"NotasFiscais-{megaData_NFSE.DataInicioPeriodo}-{megaData_NFSE.DataFinalPeriodo}.txt");
+                //var arqnfs = File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", $"{megaData_NFSE.IDMegaData_NFSE}.txt");
+                
+
+                //var fileName = arqnfs.FileDownloadName;
+
+
+
+
+                // Simulando a criação de um FileContentResult (substitua isso pelo seu próprio FileContentResult)
+                byte[] fileBytes = System.Text.Encoding.UTF8.GetBytes(builder.ToString());
+                var fileResult = new FileContentResult(fileBytes, "text/csv")
+                {
+                    FileDownloadName = $"{megaData_NFSE.IDMegaData_NFSE}.txt"
+                };
+
+                // Caminho para a pasta onde você deseja salvar o arquivo
+                //string pastaDestino = Path.Combine(Directory.GetCurrentDirectory(), "MegaData");
+                string pastaDestino = Path.Combine(environment.WebRootPath, "MegaData");
+
+                // Garanta que a pasta de destino exista, crie-a se necessário
+                if (!Directory.Exists(pastaDestino))
+                {
+                    Directory.CreateDirectory(pastaDestino);
+                }
+
+                // Caminho completo do arquivo de destino
+                string caminhoCompleto = Path.Combine(pastaDestino, fileResult.FileDownloadName);
+
+                // Salve os bytes do arquivo no arquivo de destino
+                System.IO.File.WriteAllBytes(caminhoCompleto, fileResult.FileContents);
+                megaData_NFSE.NomeArquivo=fileResult.FileDownloadName;
+                megaData_NFSE.CaminhoArquivo=caminhoCompleto;
+                //return View();
+
+                //var myUniqueFileName = Convert.ToString(Guid.NewGuid());
+                ////imageVM.ImageId = myUniqueFileName;
+                //var fileExtension = Path.GetExtension(fileName);
+                //var newFileName = String.Concat(myUniqueFileName, fileExtension);
+    
+                // var filePath = Path.Combine(environment.WebRootPath, "MegaData") + $@"\{fileName}";
+    //            using (FileStream fs = System.IO.File.Create(filePath))
+    //            {
+    //                //arqnfs.CopyTo(fs);
+    //                fs.Flush();
+    //            }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 //var file = File(Encoding.UTF8.GetBytes(builder.ToString()), "text/csv", $"NotasFiscais-{megaData_NFSE.DataInicioPeriodo}-{megaData_NFSE.DataFinalPeriodo}.txt");
+
+
                 //StoreInFolder(file,"teste");
 
                 //var result = query.ToList()
@@ -286,7 +380,9 @@ namespace MegaData.Controllers
 
 
                 //await _context.SaveChangesAsync();
-                 return RedirectToAction(nameof(Index));
+                await _context.AddAsync(megaData_NFSE);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
                 //return View("NFs",nfes);
                 //return View("LayoutNFSE_MegaData", nfes);//LayoutNFSE_MegaData
                 //return View();
@@ -296,15 +392,17 @@ namespace MegaData.Controllers
         }
 
         // GET: MegaData_NFSE/Edit/5
-        //public async Task<IActionResult> Edit(DateTime? id)
-        public async Task<IActionResult> Edit(string? id)
+     //   public async Task<IActionResult> Edit(DateTime? id)
+        public async Task<IActionResult> Edit(long  id)
         {
+            
             if (id == null || _context.MegaData_NFSEs == null)
             {
                 return NotFound();
             }
-           // DateTime dt = DateTime.ParseExact(id,"yyyy/MM/dd HH:mm:ss",CultureInfo.InvariantCulture);
-            
+          //  DateTime dt = DateTime.ParseExact(id.ToString(), "yyyy-MM-dd HH:mm:ss", null); // CultureInfo.InvariantCulture, DateTimeStyles.None, out var dataGeracao);
+            //DateTime dt = DateTime.TryParseExact(id, "yyyy-MM-dd HH:mm:ss.fff",null);
+
             var megaData_NFSE = await _context.MegaData_NFSEs.FindAsync(id);
             if (megaData_NFSE == null)
             {
@@ -318,12 +416,12 @@ namespace MegaData.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(DateTime id, [Bind("DataGeracao,DataInicioPeriodo,DataFinalPeriodo,DataEnvio")] MegaData_NFSE megaData_NFSE)
+        public async Task<IActionResult> Edit(long id, [Bind("DataGeracao,DataInicioPeriodo,DataFinalPeriodo,DataEnvio")] MegaData_NFSE megaData_NFSE)
         {
-            if (id != megaData_NFSE.DataGeracao)
+           /* if (id != megaData_NFSE.IDMegaData_NFSE)
             {
                 return NotFound();
-            }
+            }*/
 
             if (ModelState.IsValid)
             {
@@ -334,7 +432,7 @@ namespace MegaData.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!MegaData_NFSEExists(megaData_NFSE.DataGeracao))
+                    if (!MegaData_NFSEExists(megaData_NFSE.IDMegaData_NFSE))
                     {
                         return NotFound();
                     }
@@ -349,7 +447,7 @@ namespace MegaData.Controllers
         }
 
         // GET: MegaData_NFSE/Delete/5
-        public async Task<IActionResult> Delete(DateTime? id)
+        public async Task<IActionResult> Delete(long? id)
         {
             if (id == null || _context.MegaData_NFSEs == null)
             {
@@ -357,7 +455,7 @@ namespace MegaData.Controllers
             }
 
             var megaData_NFSE = await _context.MegaData_NFSEs
-                .FirstOrDefaultAsync(m => m.DataGeracao == id);
+                .FirstOrDefaultAsync(m => m.IDMegaData_NFSE == id);
             if (megaData_NFSE == null)
             {
                 return NotFound();
@@ -369,7 +467,7 @@ namespace MegaData.Controllers
         // POST: MegaData_NFSE/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(DateTime id)
+        public async Task<IActionResult> DeleteConfirmed(long id)
         {
             if (_context.MegaData_NFSEs == null)
             {
@@ -385,9 +483,9 @@ namespace MegaData.Controllers
             return RedirectToAction(nameof(Index));
         }
 
-        private bool MegaData_NFSEExists(DateTime id)
+        private bool MegaData_NFSEExists(long id)
         {
-          return (_context.MegaData_NFSEs?.Any(e => e.DataGeracao == id)).GetValueOrDefault();
+          return (_context.MegaData_NFSEs?.Any(e => e.IDMegaData_NFSE == id)).GetValueOrDefault();
         }
         /* public void StoreImage(IFormFileCollection files, AutuarViewModel aVM)
         {
