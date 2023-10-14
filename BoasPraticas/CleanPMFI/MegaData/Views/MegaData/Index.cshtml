@@ -1,51 +1,83 @@
-﻿@model IEnumerable<Application.ViewModels.MegaData.LayoutNFSE_MegaData>
-
+﻿@using Application.ViewModels;
+@using Application.ViewModels.MegaData;
+@using Domain.Pagination;
+@using Domain.Filters;
+@model PagedResponseViewModel<MegaData_NFSE_ViewModel>
 @{
-    ViewData["Title"] = "Listagem de Períodos de Notas Fiscais Exportadas";
+    ViewData["Title"] = "Listagem de Arquivos Gerados para Exportação";
+    var controllerAtual = ViewContext.RouteData.Values["controller"].ToString();
+    //CidadeFilter CidadeFilter = new CidadeFilter() { Nome="Teste"};
+    CidadeFilter CidadeFilter = ViewData["CidadeFilter"] as CidadeFilter;
 }
-
 <h1>@ViewData["Title"]</h1>
-
 <p>
     <a asp-action="Create">Exportar Novo Período</a>
 </p>
+
+
+@{
+
+    await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml");
+}
+
 <table class="table">
     <thead>
-        <tr
+        <tr>
             <th>
-                @Html.DisplayNameFor(model => model.Stcpfcnpj)
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["DataGeracaoSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Data_Geração</a>
+                @* @Html.DisplayNameFor(model => model.ViewModel.DataGeracao)*@
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Ano)
+                @Html.DisplayNameFor(model => model.ViewModel.DataInicioPeriodo)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.Numero)
+                @Html.DisplayNameFor(model => model.ViewModel.DataFinalPeriodo)
             </th>
-            
-            <th></th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.TipoArquivo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.DataEnvio)
+            </th>
+            <th>Ações</th>
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model) {
+@foreach (var item in Model.Data) {
         <tr>
-           <td>
-               @Html.DisplayFor(modelItem => item.Stcpfcnpj)
-           </td>
-           <td>
-               @Html.DisplayFor(modelItem => item.Ano)
+            <td>
+                @Html.DisplayFor(modelItem => item.DataGeracao)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Numero)
+                @Html.DisplayFor(modelItem => item.DataInicioPeriodo)
             </td>
-            @*
+            <td>
+                @Html.DisplayFor(modelItem => item.DataFinalPeriodo)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TipoArquivo)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataEnvio)
+            </td>
+            <td>
 
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.DataGeracao">Edit</a> |
+                    <a asp-action="Edit" asp-route-id="@item.IDMegaData_NFSE">Editar</a> |
+                    <a asp-action="Details" asp-route-id="@item.IDMegaData_NFSE">Detalhes</a> |
+                    <a asp-action="Enviar" asp-route-id="@item.IDMegaData_NFSE">Enviar</a> |
+                    <a asp-action="Delete" asp-route-id="@item.IDMegaData_NFSE">Excluir</a>
+                @*
+
+                    <a asp-action="Edit" asp-route-id="@item.DataGeracao.ToString("dd-MM-yyyy HH:mm")">Edit</a> |
                 <a asp-action="Details" asp-route-id="@item.DataGeracao">Details</a> |
                 <a asp-action="Delete" asp-route-id="@item.DataGeracao">Delete</a>
+                *@
             </td>
-            *@
         </tr>
 }
     </tbody>
 </table>
+@{
+
+    await Html.RenderPartialAsync("~/Views/Shared/Partials/_Paginacao.cshtml");
+}

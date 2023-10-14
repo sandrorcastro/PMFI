@@ -55,6 +55,7 @@ namespace Infrastructure.Context //.MegaData
                 entity.Property(e => e.DataEnvio).ValueGeneratedNever();
                 entity.Property(e => e.NomeArquivo).HasMaxLength(150);//.IsRequired();
                 entity.Property(e => e.CaminhoArquivo).HasMaxLength(250);//.IsRequired();
+                entity.Property(e => e.TipoArquivo).HasMaxLength(25);//.IsRequired();
 
             });
 

@@ -11,11 +11,13 @@ public class MegaData_NFSESpec : Specification<MegaData_NFSE>
     public MegaData_NFSESpec()
     {
         Query.ApplyOrdering().TagWith("Lista todos os Períodos");
+        
     }
     public MegaData_NFSESpec(MegaData_NFSEFilter filter)
 
     {
         
         Query.Where(c => c.DataGeracao >= filter.DataGeracao).ApplyOrdering(filter).TagWith("Lista todos os Períodos");
+        //Query
     }
 }

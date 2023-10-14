@@ -1,22 +1,18 @@
 ﻿@model Domain.Entities.MegaData.MegaData_NFSE
 
 @{
-    ViewData["Title"] = "Create";
+    ViewData["Title"] = "Edit";
 }
 
-<h1>Create</h1>
+<h1>Edit</h1>
 
 <h4>MegaData_NFSE</h4>
 <hr />
 <div class="row">
     <div class="col-md-4">
-        <form asp-action="Create">
+        <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-         @*   <div class="form-group">
-                <label asp-for="DataGeracao" class="control-label"></label>
-                <input asp-for="DataGeracao" class="form-control" />
-                <span asp-validation-for="DataGeracao" class="text-danger"></span>
-            </div>*@
+            <input type="hidden" asp-for="DataGeracao" />
             <div class="form-group">
                 <label asp-for="DataInicioPeriodo" class="control-label"></label>
                 <input asp-for="DataInicioPeriodo" class="form-control" />
@@ -27,14 +23,13 @@
                 <input asp-for="DataFinalPeriodo" class="form-control" />
                 <span asp-validation-for="DataFinalPeriodo" class="text-danger"></span>
             </div>
-          
-            @*<div class="form-group">
+            <div class="form-group">
                 <label asp-for="DataEnvio" class="control-label"></label>
                 <input asp-for="DataEnvio" class="form-control" />
                 <span asp-validation-for="DataEnvio" class="text-danger"></span>
-            </div>*@
+            </div>
             <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
+                <input type="submit" value="Save" class="btn btn-primary" />
             </div>
         </form>
     </div>

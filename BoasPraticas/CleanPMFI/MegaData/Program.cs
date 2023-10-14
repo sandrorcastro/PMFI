@@ -5,8 +5,32 @@ using MegaData.Schedule;
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddInfrastructureAutoMapper(builder.Configuration);
-MegaDataSchedule rotinaMegaData = new MegaDataSchedule();
-rotinaMegaData.Start();
+
+
+
+
+//builder.Services.AddSingleton<MegaDataSchedule>().Configure(builder,builder.Environment, MegaDataSchedule m){ m.Start() } ;
+
+
+/*
+Configure(IApplicationBuilder app, IWebHostEnvironment env, MegaDataSchedule myScheduledTask)
+{
+    // Configure o pipeline de solicitação aqui
+
+    // Inicie o MyScheduledTask no início do aplicativo.
+}
+//builder.Services.AddSingleton<MegaDataSchedule>(MegaDataSchedule m){ };
+*/
+
+
+
+
+//MegaDataSchedule rotinaMegaData = new MegaDataSchedule();
+//rotinaMegaData.Start();
+
+
+
+
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 
@@ -30,6 +54,6 @@ app.UseAuthorization();
 app.MapControllerRoute(
     name: "default",
     //pattern: "{controller=Home}/{action=Index}/{id?}");
-    pattern: "{controller=MegaData_NFSE}/{action=Index}/{id?}");
+    pattern: "{controller=MegaData}/{action=Index}/{id?}");
 
 app.Run();

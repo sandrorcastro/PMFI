@@ -18,6 +18,8 @@ namespace Domain.Entities.MegaData
         public DateTime? DataEnvio { get; set; }
         public string? NomeArquivo { get; set; }
         public string? CaminhoArquivo { get; set; }
+        public string? TipoArquivo { get; set; }
+
 
     }
 }
