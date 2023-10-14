@@ -9,15 +9,18 @@ namespace MegaData.Schedule
 {
     public class MegaDataSchedule
     {
-        private readonly MegaData_NFSEController _controller;
+        private readonly IMegaDataAppService megaDataAppService;
 
-        public MegaDataSchedule(MegaData_NFSEController controller)
+
+        public MegaDataSchedule(IMegaDataAppService megaDataAppService)
         {
-            _controller = controller;
+            this.megaDataAppService=megaDataAppService;
+            //this.Start();
         }
 
         private Timer _timer;
-        private readonly string cronExpression = "0 12 * * *"; // Expressão cron para 12:00 (horário de 24 horas)
+        //private readonly string cronExpression = "0 12 * * *"; // Expressão cron para 12:00 (horário de 24 horas)
+        private readonly string cronExpression = "* * * * *"; // Expressão cron para 12:00 (horário de 24 horas)
         public void Start()
         {
 
@@ -38,11 +41,22 @@ namespace MegaData.Schedule
         private void DoWork(object state)
         {
             // Coloque sua lógica de tarefa aqui
-           // MegaData_NFSEController megaData_NFSEController = (MegaData_NFSEController)state;
-            MegaData_NFSE megaData_NFSE = new MegaData_NFSE() { 
-                DataInicioPeriodo = DateTime.Now.AddMonths(-2),
-                DataFinalPeriodo = DateTime.Now.AddMonths(-1)
+            // MegaData_NFSEController megaData_NFSEController = (MegaData_NFSEController)state;
+
+
+            var dtnow = DateTime.Now;
+            string dtLimpa = new string(dtnow.ToString().Where(char.IsDigit).ToArray());
+            long ID = long.Parse(dtLimpa);
+
+            MegaData_NFSE megaData_NFSE = new MegaData_NFSE() {
+                    DataGeracao = DateTime.Now,
+                    DataInicioPeriodo = DateTime.Now.AddMonths(-2),
+                    DataFinalPeriodo = DateTime.Now.AddMonths(-1),
+                    IDMegaData_NFSE = ID,
+                    TipoArquivo="NFSE"
+
             };
+            megaDataAppService.AddAsync(megaData_NFSE);
             //megaData_NFSEController.Create(megaData_NFSE);
 
             // Agende a próxima execução
@@ -53,7 +67,7 @@ namespace MegaData.Schedule
            // _timer.Change(1,  TimeSpan.FromMinutes(1));
 
 
-            Console.WriteLine("dddddddddddddddd");         // Coloque sua lógica de tarefa aqui;
+            //Console.WriteLine("dddddddddddddddd");         // Coloque sua lógica de tarefa aqui;
 
 
         }

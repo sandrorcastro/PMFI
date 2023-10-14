@@ -9,7 +9,7 @@ builder.Services.AddInfrastructureAutoMapper(builder.Configuration);
 
 
 
-//builder.Services.AddSingleton<MegaDataSchedule>().Configure(builder,builder.Environment, MegaDataSchedule m){ m.Start() } ;
+builder.Services.AddScoped<MegaDataSchedule>();
 
 
 /*

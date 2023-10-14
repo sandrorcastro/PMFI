@@ -9,6 +9,7 @@ using Domain.Interfaces.Entities;
 using Domain.Interfaces.Specifications;
 using Domain.Specs;
 using MegaData.Extensions;
+using MegaData.Schedule;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -24,12 +25,15 @@ namespace MegaData.Controllers
         private NFSEDBContext _NFSEDBContext;
         private readonly IMegaDataAppService megaDataAppService;
         private readonly IWebHostEnvironment environment;
+        private readonly MegaDataSchedule megaDataSchedule;
 
-        public MegaDataController(IMegaDataAppService megaDataAppService, NFSEDBContext nFSEDBContext, IWebHostEnvironment environment)
+        public MegaDataController(IMegaDataAppService megaDataAppService, NFSEDBContext nFSEDBContext, IWebHostEnvironment environment, MegaDataSchedule megaDataSchedule)
         {
             this.megaDataAppService = megaDataAppService;
             _NFSEDBContext = nFSEDBContext;
             this.environment = environment;
+            this.megaDataSchedule = new MegaDataSchedule(this.megaDataAppService);
+           // this.megaDataSchedule.Start();
         }
 
         // GET: MegaDataController
