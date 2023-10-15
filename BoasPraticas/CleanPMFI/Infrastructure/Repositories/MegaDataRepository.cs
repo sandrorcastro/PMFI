@@ -16,7 +16,8 @@ namespace Infrastructure.Repositories
 {
     public class MegaDataRepository : RepositoryBase<MegaData_NFSE>, IMegaDataRepository
     {
-         public MegaDataRepository(MegaDataDBContext _contextFactory,IMapper mapper) : base(_contextFactory,mapper) { }
+        public MegaDataRepository(MegaDataDBContext _contextFactory) : base(_contextFactory) { }
+        public MegaDataRepository(MegaDataDBContext _contextFactory,IMapper mapper) : base(_contextFactory,mapper) { }
         public MegaDataRepository(MegaDataDBContext dbContext, ISpecificationEvaluator specificationEvaluator, IMapper mapper) : base(dbContext, specificationEvaluator, mapper) { }
     }
 }

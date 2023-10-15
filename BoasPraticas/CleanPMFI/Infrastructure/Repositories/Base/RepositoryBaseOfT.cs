@@ -20,14 +20,14 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
    // private readonly ISpecificationEvaluator _specificationEvaluator;
     private readonly AutoMapper.IConfigurationProvider _configurationProvider;
     public  ISpecificationEvaluator Evaluator { get; }
-  /*  public RepositoryBase(DbContext dbContext) : this(dbContext, SpecificationEvaluator.Default)
-    {
-    }*/
+    /*  public RepositoryBase(DbContext dbContext) : this(dbContext, SpecificationEvaluator.Default)
+      {
+      }*/
 
     /// <inheritdoc/>
-  //  protected RepositoryBase(DbContext dbContext, IMapper mapper) : this(dbContext, AppSpecificationEvaluator.Instance, mapper) { }
-  
+    //  protected RepositoryBase(DbContext dbContext, IMapper mapper) : this(dbContext, AppSpecificationEvaluator.Instance, mapper) { }
 
+    public RepositoryBase(DbContext dbContext)  { }
     public RepositoryBase(DbContext dbContext, IMapper mapper) : this(dbContext, SpecificationEvaluator.Default, mapper) { }
 
     public RepositoryBase(DbContext dbContext, ISpecificationEvaluator specificationEvaluator, IMapper mapper)

@@ -10,6 +10,7 @@ using Domain.Interfaces.Specifications;
 using Domain.Specs;
 using MegaData.Extensions;
 using MegaData.Schedule;
+using MegaData.Service;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -22,18 +23,25 @@ namespace MegaData.Controllers
 {
     public class MegaDataController : Controller
     {
+        private IHostedService hostedService;
+        private IWebHostBuilder webHostBuilder;
         private NFSEDBContext _NFSEDBContext;
         private readonly IMegaDataAppService megaDataAppService;
         private readonly IWebHostEnvironment environment;
-        private readonly MegaDataSchedule megaDataSchedule;
+       // private readonly MegaDataSchedule megaDataSchedule;
 
-        public MegaDataController(IMegaDataAppService megaDataAppService, NFSEDBContext nFSEDBContext, IWebHostEnvironment environment, MegaDataSchedule megaDataSchedule)
+        //public MegaDataController(IMegaDataAppService megaDataAppService, NFSEDBContext nFSEDBContext, IWebHostEnvironment environment, MegaDataSchedule megaDataSchedule)
+        public MegaDataController(IMegaDataAppService megaDataAppService, NFSEDBContext nFSEDBContext, IWebHostEnvironment environment)
         {
             this.megaDataAppService = megaDataAppService;
             _NFSEDBContext = nFSEDBContext;
             this.environment = environment;
-            this.megaDataSchedule = new MegaDataSchedule(this.megaDataAppService);
+            //this.megaDataSchedule = new MegaDataSchedule(this.megaDataAppService);
            // this.megaDataSchedule.Start();
+           //
+          // hostedService = new DataRefreshService(megaDataAppService,nFSEDBContext,environment);
+            //hostedService.StartAsync();
+            //
         }
 
         // GET: MegaDataController
@@ -106,7 +114,7 @@ namespace MegaData.Controllers
             {
                 return NotFound();
             }
-
+            
             var megaData_NFSE = await megaDataAppService.FindAsync(id);
             //var megaData_NFSE = await megaData_Nfse_AppService.FirstOrDefaultAsync()
             if (megaData_NFSE == null)

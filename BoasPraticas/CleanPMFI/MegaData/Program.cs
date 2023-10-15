@@ -1,15 +1,23 @@
 using Infrastructure.Context;
 using IOC;
+using MegaData.Controllers;
 using MegaData.Schedule;
+using MegaData.Service;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddInfrastructureAutoMapper(builder.Configuration);
 
+//builder.Services.AddSingleton<MegaDataController>();
+builder.Services.AddSingleton<IHostedService,DataRefreshService>();
+//builder.Services.AddScoped<IHostedService, DataRefreshService>();
+//builder.Services.AddScoped<DataRefreshService>();
+
+
+//builder.Services.AddScoped<MegaDataSchedule>();
 
 
 
-builder.Services.AddScoped<MegaDataSchedule>();
 
 
 /*
