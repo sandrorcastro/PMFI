@@ -47,36 +47,37 @@ namespace Application.Services
         }
         public bool ExportarPeriodoNFSE(IWebHostEnvironment environment, NFSEDBContext _NFSEDBContext, MegaData_NFSE entity)
         {
-                var query = (from n in _NFSEDBContext.NfseTblNfses
-                             join empresa in _NFSEDBContext.NfseTblEmpresas on n.Idempresa equals empresa.Idempresa
-                             join contribuinte in _NFSEDBContext.NfseTblContribuintes on empresa.Idcontribuinte equals contribuinte.Idcontribuinte
-                             where n.Dtcompetencia >= entity.DataInicioPeriodo && n.Dtcompetencia < entity.DataFinalPeriodo && n.Stsituacao != "A"
-                             //where n.Dtcompetencia >= dti && n.Dtcompetencia < dtf && n.Stsituacao != "A"
+            var query = (from n in _NFSEDBContext.NfseTblNfses
+                         join empresa in _NFSEDBContext.NfseTblEmpresas on n.Idempresa equals empresa.Idempresa
+                         join contribuinte in _NFSEDBContext.NfseTblContribuintes on empresa.Idcontribuinte equals contribuinte.Idcontribuinte
+                         where n.Dtcompetencia >= entity.DataInicioPeriodo && n.Dtcompetencia < entity.DataFinalPeriodo && n.Stsituacao != "A"
+                         //where n.Dtcompetencia >= dti && n.Dtcompetencia < dtf && n.Stsituacao != "A"
 
-                             //select new LayoutNFSE_MegaData { Ano = n.Dtcompetencia.ToString(), Numero = n.Nunumero });
-                             select new LayoutNFSE_MegaData
-                             {
-                                 Stcpfcnpj = contribuinte.Idcontribuinte.ToString(),
-                                 Ano = n.Dtcompetencia.Value.Year.ToString(),
-                                 Mes = int.Parse(n.Dtcompetencia.Value.Month.ToString()),
-                                 Numero = n.Nunumero,
-                                 Situacao = 1,
-                                 //Localtributacao=n.Idoperacao
-                                 Servico116 = n.Idservico,
-                                 Issretido = n.Stissretido == "S" ? 1 : 0,
-                                 Basecalculo = n.Vlbasecalculo.ToString(),
-                                 Aliquota = n.Pcaliquota.ToString(),
-                                 Vlriss = n.Stissretido == "N" ? n.Vltotaliss.ToString() : "0",   ///
-                                 Vlrissretido = n.Stissretido == "S" ? n.Vlissretido.ToString() : "0",  ////
-                                 Cmeprestador = n.StpreIm,
-                                 Cpfcnpjtomador = n.SttomPessoaTipo,
-                                 Nometomador = n.SttomNome,
-                                 Tom = 7563,
-                                 //Exigibilidade=int.Parse(n.Idoperacao),
-                                 Deducoes = n.Vldeducoes.ToString(),
-                                 Vlrservico = n.Vlservicos.ToString(),
-                                 Cdverificacao = n.Stcodigo
-                             });
+                         //select new LayoutNFSE_MegaData { Ano = n.Dtcompetencia.ToString(), Numero = n.Nunumero });
+                         select new LayoutNFSE_MegaData
+                         {
+                             //Stcpfcnpj = contribuinte.Idcontribuinte.ToString(),
+                             Stcpfcnpj = contribuinte.Stcpfcnpj,
+                             Ano = n.Dtcompetencia.Value.Year.ToString(),
+                             Mes = int.Parse(n.Dtcompetencia.Value.Month.ToString()),
+                             Numero = n.Nunumero,
+                             Situacao = 1,
+                             Localtributacao =n.Idoperacao == 1 ? 1:2,
+                             Servico116 = n.Idservico.Replace(".","").PadLeft(4,'0').TrimEnd(),
+                             Issretido = n.Stissretido == "S" ? 1 : 0,
+                             Basecalculo = n.Vlbasecalculo.ToString().Replace(".",","),
+                             Aliquota = n.Pcaliquota.ToString().Replace(".", ","),
+                             Vlriss = n.Stissretido == "N" ? n.Vltotaliss.ToString().Replace(".", ",") : "0",   ///
+                             Vlrissretido = n.Stissretido == "S" ? n.Vlissretido.ToString().Replace(".", ",") : "0",  ////
+                             Cmeprestador = n.StpreIm,
+                             Cpfcnpjtomador = n.SttomPessoaTipo=="J" ? n.SttomCpfcnpj.PadLeft(14,'0') : n.SttomCpfcnpj.PadLeft(11,'0'),
+                             Nometomador = n.SttomNome.Replace(";"," ").Replace("-"," "),
+                             Tom = 7563,
+                             Exigibilidade=n.Idoperacao==1 ?1:(n.Idoperacao == 2 ? 1:(n.Idoperacao == 3 ? 3:(n.Idoperacao == 4 ? 5:(n.Idoperacao == 5 ? 2:(n.Idoperacao == 6 ? 6:7))))),
+                             Deducoes = n.Vldeducoes.ToString().Replace(".",","),
+                             Vlrservico = n.Vlservicos.ToString().Replace(".", ","),
+                             Cdverificacao = n.Stcodigo
+                         });
                 StringBuilder builder = new StringBuilder();
                 //percore os funcionarios e gera o CSV
                 foreach (var n in query.ToList())
