@@ -9,7 +9,7 @@ builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddInfrastructureAutoMapper(builder.Configuration);
 
 //builder.Services.AddSingleton<MegaDataController>();
-//builder.Services.AddSingleton<IHostedService,DataRefreshService>();
+///////////////builder.Services.AddSingleton<IHostedService,DataRefreshService>();
 //builder.Services.AddScoped<IHostedService, DataRefreshService>();
 //builder.Services.AddScoped<DataRefreshService>();
 
