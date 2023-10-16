@@ -51,7 +51,8 @@ namespace MegaData.Service
                    //  this.MostrarMensagem("Período Do Tipo: " + megaData_NFSE.TipoArquivo.ToString() + " Entre: " + megaData_NFSE.DataInicioPeriodo + " a " + megaData_NFSE.DataFinalPeriodo + " Adicionado!");
                  };*/
                 addMegaData_NFSE();
-                    await Task.Delay(TimeSpan.FromSeconds(15), cancellationToken);
+                //await Task.Delay(TimeSpan.FromSeconds(15), cancellationToken);
+                await Task.Delay(TimeSpan.FromMinutes(2), cancellationToken);
             }
         }
         public async void addMegaData_NFSE()

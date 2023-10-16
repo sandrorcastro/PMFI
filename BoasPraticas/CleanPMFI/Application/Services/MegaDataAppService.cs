@@ -111,7 +111,65 @@ namespace Application.Services
                 entity.CaminhoArquivo = caminhoCompleto;
                return true;
         }
+        public bool ExportarPeriodoContribuinte(IWebHostEnvironment environment, NFSEDBContext _NFSEDBContext, MegaData_NFSE entity)
+        {
+            var query = (from empresa in _NFSEDBContext.NfseTblEmpresas
+                         join contribuinte in _NFSEDBContext.NfseTblContribuintes on empresa.Idcontribuinte equals contribuinte.Idcontribuinte
+                         join cidade in _NFSEDBContext.NfseTblCidades on contribuinte.Idcidade equals cidade.Idcidade
+                         where contribuinte.Sttipo == "J"
+                         select new LayoutContribuinte_MegaData
+                         {   
+                             AnoAberturaEmpresa = int.Parse(empresa.Dtabertura.Value.Year.ToString()),
+                             MesAberturaEmpresa = int.Parse(empresa.Dtabertura.Value.Month.ToString()),
+                             CodigoTom = "7563",
+                             CNPJ_Contribuinte = contribuinte.Stcpfcnpj,
+                             Situacao = empresa.Stsituacao=="A" ? 3 : 2,
+                             RazaoSocial = contribuinte.Stnome,
+                             Inicio= "1900/01/01",
+                             Fim = "",
+                             ContribuinteEstimado = empresa.Idregime==5 ? 1: 0,
+                             CNAES = "cnae empresa",
+                             VLRESTIMADO= 0,
+                             DTEXPORTACAO = "",
+                             ENDERECO = string.Concat(contribuinte.StenderecoLogr +", "+ contribuinte.StenderecoNumero +", "+"Bairro: "+contribuinte.StenderecoBairro+" "+cidade.Stnome+" -CEP: "+ contribuinte.Stcep),
+                             EmailContribuinte = "Válido",
+                             
+                         });
+            StringBuilder builder = new StringBuilder();
+            //percore os funcionarios e gera o CSV
+            foreach (var e in query.ToList())
+            {
+                //builder.AppendLine($"n.Stcpfcnpj;{n.Dtcompetencia:yyyy};{n.Dtcompetencia:MM};{n.Nunumero};{1};{n.Idoperacao};{n.Idservico};{n.Stissretido};{n.Stissretido};{n.StpreIm};{n.SttomPessoaTipo};{n.SttomNome};{7563};{n.Idoperacao};{n.Vldeducoes};{n.Vlservicos};{n.Stcodigo}");
+                builder.AppendLine($"{e.AnoAberturaEmpresa};{e.MesAberturaEmpresa};{e.CodigoTom};{e.CNPJ_Contribuinte};{e.Situacao};{e.RazaoSocial};{e.Inicio};{e.Fim};{e.ContribuinteEstimado};{e.CNAES};{e.VLRESTIMADO};{e.DTEXPORTACAO};{e.ENDERECO};{e.EmailContribuinte}");
+            }
+            // Simulando a criação de um FileContentResult (substitua isso pelo seu próprio FileContentResult)
+            byte[] fileBytes = System.Text.Encoding.UTF8.GetBytes(builder.ToString());
+            var fileResult = new FileContentResult(fileBytes, "text/csv")
+            {
+                FileDownloadName = $"{entity.IDMegaData_NFSE}-Contribuinte.txt"
+            };
+
+            // Caminho para a pasta onde você deseja salvar o arquivo
+            //string pastaDestino = Path.Combine(Directory.GetCurrentDirectory(), "MegaData");
+            string pastaDestino = Path.Combine(environment.WebRootPath, "MegaData");
+
+            // Garanta que a pasta de destino exista, crie-a se necessário
+            if (!Directory.Exists(pastaDestino))
+            {
+                Directory.CreateDirectory(pastaDestino);
+            }
+
+            // Caminho completo do arquivo de destino
+            string caminhoCompleto = Path.Combine(pastaDestino, fileResult.FileDownloadName);
+
+            // Salve os bytes do arquivo no arquivo de destino
+            System.IO.File.WriteAllBytes(caminhoCompleto, fileResult.FileContents);
+            entity.NomeArquivo = fileResult.FileDownloadName;
+            entity.CaminhoArquivo = caminhoCompleto;
+            return true;
+        }
         public bool ExportarPeriodo(IWebHostEnvironment environment, NFSEDBContext _NFSEDBContext, MegaData_NFSE entity)
+        //public bool ExportarPeriodo(IWebHostEnvironment environment, NFSEDBContext _NFSEDBContext, ViewModel entity)
         {
             if (entity.TipoArquivo == "NFSE")
             {
@@ -120,7 +178,7 @@ namespace Application.Services
             }
             if (entity.TipoArquivo == "Contribuinte")
             {
-                ExportarPeriodoNFSE(environment, _NFSEDBContext, entity);
+                ExportarPeriodoContribuinte(environment, _NFSEDBContext, entity);
                 return true;
             }
             if (entity.TipoArquivo == "CartaoCredito")

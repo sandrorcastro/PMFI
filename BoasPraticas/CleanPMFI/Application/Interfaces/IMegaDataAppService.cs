@@ -18,6 +18,7 @@ namespace Application.Interfaces
     {
         public string ValidarPeriodo(MegaData_NFSE entity);
         public bool ExportarPeriodo(IWebHostEnvironment environment ,NFSEDBContext _NFSEDBContext, MegaData_NFSE entity);
+        //public bool ExportarPeriodo(IWebHostEnvironment environment, NFSEDBContext _NFSEDBContext, MegaData_Contribuinte entity);
         public bool EnviarPeriodo(MegaData_NFSE entity);
 
     }
