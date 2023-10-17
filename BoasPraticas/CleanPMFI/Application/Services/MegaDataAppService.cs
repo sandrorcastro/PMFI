@@ -113,27 +113,28 @@ namespace Application.Services
         }
         public bool ExportarPeriodoContribuinte(IWebHostEnvironment environment, NFSEDBContext _NFSEDBContext, MegaData_NFSE entity)
         {
+            //var CNAEquery = (from cnae in _NFSEDBContext.NfseTblEmpresaCnaes where cnae.Idempresa== );
             var query = (from empresa in _NFSEDBContext.NfseTblEmpresas
                          join contribuinte in _NFSEDBContext.NfseTblContribuintes on empresa.Idcontribuinte equals contribuinte.Idcontribuinte
-                         join cidade in _NFSEDBContext.NfseTblCidades on contribuinte.Idcidade equals cidade.Idcidade
+                         join  cidade in _NFSEDBContext.NfseTblCidades on contribuinte.Idcidade equals cidade.Idcidade
                          where contribuinte.Sttipo == "J"
                          select new LayoutContribuinte_MegaData
-                         {   
+                         {
                              AnoAberturaEmpresa = int.Parse(empresa.Dtabertura.Value.Year.ToString()),
                              MesAberturaEmpresa = int.Parse(empresa.Dtabertura.Value.Month.ToString()),
                              CodigoTom = "7563",
-                             CNPJ_Contribuinte = contribuinte.Stcpfcnpj,
-                             Situacao = empresa.Stsituacao=="A" ? 3 : 2,
+                             CNPJ_Contribuinte = contribuinte.Stcpfcnpj.PadLeft(14, '0'),
+                             Situacao = empresa.Stsituacao == "A" ? 3 : 2,
                              RazaoSocial = contribuinte.Stnome,
-                             Inicio= "1900/01/01",
+                             Inicio = "1900/01/01",
                              Fim = "",
-                             ContribuinteEstimado = empresa.Idregime==5 ? 1: 0,
-                             CNAES = "cnae empresa",
-                             VLRESTIMADO= 0,
-                             DTEXPORTACAO = "",
-                             ENDERECO = string.Concat(contribuinte.StenderecoLogr +", "+ contribuinte.StenderecoNumero +", "+"Bairro: "+contribuinte.StenderecoBairro+" "+cidade.Stnome+" -CEP: "+ contribuinte.Stcep),
+                             ContribuinteEstimado = empresa.Idregime == 5 ? 1 : 0,
+                             CNAES ="ggggg",
+                             VLRESTIMADO = 0,
+                             DTEXPORTACAO = DateTime.Now.ToString(),
+                             ENDERECO = "ddddddddddddddddddddd", 
                              EmailContribuinte = "Válido",
-                             
+
                          });
             StringBuilder builder = new StringBuilder();
             //percore os funcionarios e gera o CSV
@@ -141,6 +142,8 @@ namespace Application.Services
             {
                 //builder.AppendLine($"n.Stcpfcnpj;{n.Dtcompetencia:yyyy};{n.Dtcompetencia:MM};{n.Nunumero};{1};{n.Idoperacao};{n.Idservico};{n.Stissretido};{n.Stissretido};{n.StpreIm};{n.SttomPessoaTipo};{n.SttomNome};{7563};{n.Idoperacao};{n.Vldeducoes};{n.Vlservicos};{n.Stcodigo}");
                 builder.AppendLine($"{e.AnoAberturaEmpresa};{e.MesAberturaEmpresa};{e.CodigoTom};{e.CNPJ_Contribuinte};{e.Situacao};{e.RazaoSocial};{e.Inicio};{e.Fim};{e.ContribuinteEstimado};{e.CNAES};{e.VLRESTIMADO};{e.DTEXPORTACAO};{e.ENDERECO};{e.EmailContribuinte}");
+                //builder.AppendLine($"{e.CodigoTom};{e.Situacao};{e.Inicio};{e.Fim};{e.ContribuinteEstimado};{e.CNAES};{e.VLRESTIMADO}");
+
             }
             // Simulando a criação de um FileContentResult (substitua isso pelo seu próprio FileContentResult)
             byte[] fileBytes = System.Text.Encoding.UTF8.GetBytes(builder.ToString());
