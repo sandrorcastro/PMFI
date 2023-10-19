@@ -70,7 +70,7 @@ namespace Application.Services
                              Aliquota = n.Pcaliquota.ToString().Replace(".", ","),
                              Vlriss = n.Stissretido == "N" ? n.Vltotaliss.ToString().Replace(".", ",") : "0",   ///
                              Vlrissretido = n.Stissretido == "S" ? n.Vlissretido.ToString().Replace(".", ",") : "0",  ////
-                             Cmeprestador = n.StpreIm,
+                             Cmeprestador = n.SttomPessoaTipo=="J" ? n.StpreIm.PadLeft(14,'0'): n.StpreIm.PadLeft(11, '0'),
                              Cpfcnpjtomador = n.SttomPessoaTipo=="J" ? n.SttomCpfcnpj.PadLeft(14,'0') : n.SttomCpfcnpj.PadLeft(11,'0'),
                              Nometomador = n.SttomNome.Replace(";"," ").Replace("-"," "),
                              Tom = 7563,
