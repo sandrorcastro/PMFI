@@ -134,8 +134,11 @@ namespace Application.Services
                              CNAES ="ggggg",
                              VLRESTIMADO = 0, //
                              DTEXPORTACAO = DateTime.Now.ToString(),
-                             ENDERECO = "ddddddddddddddddddddd", 
-                             EmailContribuinte = "Válido",
+                             ENDERECO = contribuinte.StenderecoLogr.ToString().Replace(";"," ")+"," +
+                                        contribuinte.StenderecoNumero +","+
+                                        "Bairro: " + contribuinte.StenderecoBairro.ToString().Replace(";", " ") +
+                                        cidade.Stnome??" -Foz do IGUAÇU/PR",
+                             EmailContribuinte = contribuinte.Stemail
 
                          });
             StringBuilder builder = new StringBuilder();
@@ -143,7 +146,7 @@ namespace Application.Services
             foreach (var e in query.ToList()) //AsEnumerable())
             {
                 //builder.AppendLine($"n.Stcpfcnpj;{n.Dtcompetencia:yyyy};{n.Dtcompetencia:MM};{n.Nunumero};{1};{n.Idoperacao};{n.Idservico};{n.Stissretido};{n.Stissretido};{n.StpreIm};{n.SttomPessoaTipo};{n.SttomNome};{7563};{n.Idoperacao};{n.Vldeducoes};{n.Vlservicos};{n.Stcodigo}");
-               ///// builder.AppendLine($"{e.AnoAberturaEmpresa};{e.MesAberturaEmpresa};{e.CodigoTom};{e.CNPJ_Contribuinte};{e.Situacao};{e.RazaoSocial};{e.Inicio};{e.Fim};{e.ContribuinteEstimado};{e.CNAES};{e.VLRESTIMADO};{e.DTEXPORTACAO};{e.ENDERECO};{e.EmailContribuinte}");
+                builder.AppendLine($"{e.AnoAberturaEmpresa};{e.MesAberturaEmpresa};{e.CodigoTom};{e.CNPJ_Contribuinte};{e.Situacao};{e.RazaoSocial};{e.Inicio};{e.Fim};{e.ContribuinteEstimado};{e.CNAES};{e.VLRESTIMADO};{e.DTEXPORTACAO};{e.ENDERECO};{e.EmailContribuinte}");
                 //builder.AppendLine($"{e.CodigoTom};{e.Situacao};{e.Inicio};{e.Fim};{e.ContribuinteEstimado};{e.CNAES};{e.VLRESTIMADO}");
 
             }
