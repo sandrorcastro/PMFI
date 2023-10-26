@@ -1,0 +1,49 @@
+﻿@page "/imovel"
+
+
+@using Vistoria.Data
+@inject ImovelService ImovelService
+
+<h3>Buscar Imóvel </h3>
+
+
+
+
+
+<EditForm Model="@Model" OnSubmit="@Submit">
+    @*<InputText @bind-Value="Model!.Id" />*@
+
+    <button type="submit">Buscar</button>
+</EditForm>
+
+
+
+@code {
+    //protected override void OnInitialized() => Model ??= new();
+    private Imovel imovel;
+    private Imovel Model;
+
+    protected override async Task OnInitializedAsync()
+    {
+      //  imovel = await ImovelService.GetImovelAsync("06323020235001");
+    }
+    private async void Submit()
+    {
+        // ImovelService.GetImovelAsync()
+        //Logger.LogInformation("Model.Id = {Id}", Model?.Id);
+     //   imovel = (Imovel) await ImovelService.GetImovelAsync("06323020235001");
+        //iimovel = await ImovelService.GetImovelAsync(Model?);
+    }
+    class ImovelP
+    {
+        //[Name("InscricaoImobiliaria")]
+        public string inscricao { get; set; }
+        //[Name("conNome")]
+        public string proprietario { get; set; }
+    }
+}
+
+
+
+
+
