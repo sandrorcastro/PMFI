@@ -19,9 +19,21 @@ namespace Fiscalizacao
                 });
             
 
+
+            builder.Services.AddSingleton<ImovelService>();
+
+            //builder.Services.AddTransient<Imo>();
+            builder.Services.AddSingleton<ImovelDatabase>();
+
             builder.Services.AddDbContext<ImoveisDBContext>(options => {
                 //options.UseSqlServer(configuration.GetConnectionString("DefaultConnection-SRC-PMFI"),
-                options.UseSqlite("Data Source = NaRua.db3");
+                // options.UseSqlite("Data Source = NaRua.db3");
+                options.UseSqlite("Data Source = C:\\GIT\\PMFI\\BoasPraticas\\Fiscalizacao\\Fiscalizacao\\NaRua.db3");
+
+
+
+
+            //C:\GIT\PMFI\BoasPraticas\Fiscalizacao\Fiscalizacao
 
                 //Data Source = LocalDatabase.db
                 //b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
@@ -34,7 +46,6 @@ namespace Fiscalizacao
 		builder.Logging.AddDebug();
 #endif
 
-            builder.Services.AddSingleton<ImovelService>();
 
             return builder.Build();
         }
