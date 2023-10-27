@@ -1,0 +1,41 @@
+﻿@page "/imoveis"
+
+
+@using Fiscalizacao.Model
+@inject ImovelService ImovelService
+
+<h1>Imoveis</h1>
+
+<p>This component demonstrates fetching data from a service.</p>
+
+@if (imoveis == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Inscrição</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var imovel in imoveis)
+            {
+                <tr>
+                    <td>@imovel.InscricaoImobiliaria</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+
+@code {
+    private List<Imovel> imoveis;
+
+    protected override async Task OnInitializedAsync()
+    {
+        imoveis = await ImovelService.GetImovelAsync();
+    }
+}
