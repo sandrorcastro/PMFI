@@ -12,6 +12,7 @@ namespace VistoriaInLoco.Models
 
         public string InscricaoImobiliaria { get; set; }
 
+        public string? ResponsávelBCI { get; set; }
         public string ResponsávelMatricula { get; set; }
         public string email { get; set; }
         public string whatsapp { get; set; }

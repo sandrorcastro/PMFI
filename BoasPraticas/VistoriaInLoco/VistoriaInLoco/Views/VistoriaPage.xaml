@@ -13,9 +13,11 @@
             
             <Label Text="Inscrição" />
             <Entry Text="{Binding InscricaoImobiliaria}" />
-            
-            <Label  Text="Data Vistoria" />
-            <Entry Text="{Binding DataVistoria}" />
+
+            <DatePicker Format="dd/MM/yyyy">
+                
+            </DatePicker>
+           
 
             <Label  Text="Responsável Matrícula" />
             <Entry Text="{Binding ResponsávelMatricula}" />

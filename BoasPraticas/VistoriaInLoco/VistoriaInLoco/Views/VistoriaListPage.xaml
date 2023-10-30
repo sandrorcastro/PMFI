@@ -14,14 +14,17 @@
                   SelectionChanged="CollectionView_SelectionChanged">
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:Vistoria">
-                        <Grid ColumnDefinitions="*, Auto" Padding="20">
-                            <Label Text="{Binding IdVistoria}"
-                                   VerticalTextAlignment="Center"/>
-                            <Label Text="✔️"
-                                   Grid.Column="1"
+                    <Grid  RowDefinitions="Auto" ColumnDefinitions="*,Auto" Padding="5">
+                            <Label Text="{Binding DataVistoria}"
+                                   
+                                   VerticalTextAlignment="Center"
+                                   IsVisible="{Binding DataVistoria}"/>
+                            <Label Text="{Binding InscricaoImobiliaria}"
+                                   Grid.Column="3"
                                    VerticalTextAlignment="Center"
                                    IsVisible="{Binding InscricaoImobiliaria}"/>
-                        </Grid>
+                    </Grid>
+                    
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
