@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="VistoriaInLoco.Views.VistoriaPage"
+             Title="{Binding IdVistoria}"
+             xmlns:models="clr-namespace:VistoriaInLoco.Models"
+             x:DataType="models:Vistoria">
+    <ScrollView>
+        <VerticalStackLayout Padding="20"
+                             Spacing="10"
+                             VerticalOptions="StartAndExpand">
+           
+            
+            <Label Text="Inscrição" />
+            <Entry Text="{Binding InscricaoImobiliaria}" />
+            
+            <Label  Text="Data Vistoria" />
+            <Entry Text="{Binding DataVistoria}" />
+
+            <Label  Text="Responsável Matrícula" />
+            <Entry Text="{Binding ResponsávelMatricula}" />
+
+
+            <Label  Text="Email" />
+            <Entry Text="{Binding email}" />
+
+            <Label  Text="Wahtsapp" />
+            <Entry Text="{Binding whatsapp}" />
+
+            <Label  Text="Caracteristica" />
+            <Entry Text="{Binding Caracteristica}" />
+
+
+            <Label  Text="Area Total BCI" />
+            <Entry Text="{Binding AreaTotalBCI}" />
+
+            <Label  Text="Alvará" />
+            <Entry Text="{Binding Alvara}" />
+
+            
+
+            <Button Text="Salvar"
+                    Clicked="OnSaveClicked" />
+            <Button Text="Excluir"
+                    Clicked="OnDeleteClicked" />
+            <Button Text="Cancelar"
+                    Clicked="OnCancelClicked" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>

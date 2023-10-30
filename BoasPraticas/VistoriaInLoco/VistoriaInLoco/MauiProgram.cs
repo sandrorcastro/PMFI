@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging;
 using VistoriaInLoco.Context;
-
+using VistoriaInLoco.Views;
 namespace VistoriaInLoco
 {
     public static class MauiProgram
@@ -16,7 +16,10 @@ namespace VistoriaInLoco
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 });
             builder.Services.AddDbContext<VistoriaDBContext>();
+            builder.Services.AddSingleton<VistoriaListPage>();
+            builder.Services.AddTransient<VistoriaPage>();
             builder.Services.AddTransient<MainPage>();
+            //builder.Services.AddTransient<VistoriaListPage>();
 
             var dbContext = new VistoriaDBContext();
             dbContext.Database.EnsureCreated();

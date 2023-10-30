@@ -53,4 +53,22 @@
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="7.0.0" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Compile Update="Views\VistoriaPage.xaml.cs">
+	    <DependentUpon>VistoriaPage.xaml</DependentUpon>
+	  </Compile>
+	  <Compile Update="Views\VistoriaListPage.xaml.cs">
+	    <DependentUpon>VistoriaListPage.xaml</DependentUpon>
+	  </Compile>
+	</ItemGroup>
+
+	<ItemGroup>
+	  <MauiXaml Update="Views\VistoriaPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Views\VistoriaListPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	</ItemGroup>
+
 </Project>
