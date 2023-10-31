@@ -7,7 +7,7 @@ namespace VistoriaInLoco.Context
     public class ImovelCheckDBContext :DbContext
     {
         
-        public DbSet<ImovelCheck> ImoveisCheck { get; set; }
+        public DbSet<ImovelCheck> ImovelCheck { get; set; }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             // base.OnConfiguring(optionsBuilder);

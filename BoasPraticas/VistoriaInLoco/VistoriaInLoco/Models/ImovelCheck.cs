@@ -1,6 +1,7 @@
-﻿using Org.W3c.Dom;
+﻿//using Org.W3c.Dom;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,6 +10,7 @@ namespace VistoriaInLoco.Models
 {
     public class ImovelCheck
     {
+        [Key]
         public string InscricaoImobiliaria { get; set; }
         public string conNome { get; set; }
         public string ConEMail { get; set; }

@@ -12,7 +12,13 @@
            
             
             <Label Text="Inscrição" />
-            <Entry Text="{Binding InscricaoImobiliaria}" />
+            <Entry x:Name="entry"
+                   MaxLength="14"
+                   Keyboard="Numeric"
+                   Placeholder="Inscrição Imobiliária"
+                   TextChanged="OnEntryTextChanged"
+                   Completed="OnEntryCompleted"
+                   Text="{Binding InscricaoImobiliaria}" />
 
             <DatePicker Format="dd/MM/yyyy">
                 
