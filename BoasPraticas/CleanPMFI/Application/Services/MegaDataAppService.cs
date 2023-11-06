@@ -112,6 +112,7 @@ namespace Application.Services
                 entity.CaminhoArquivo = caminhoCompleto;
                return true;
         }
+
         public bool ExportarPeriodoNFSECancelada(IWebHostEnvironment environment, NFSEDBContext _NFSEDBContext, MegaData_NFSE entity)
         {
             var query = (from n in _NFSEDBContext.NfseTblNfses
