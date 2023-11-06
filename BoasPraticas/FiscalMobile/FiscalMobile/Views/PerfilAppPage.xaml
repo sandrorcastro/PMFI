@@ -1,0 +1,42 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FiscalMobile.Views.PerfilAppPage"
+             xmlns:models="clr-namespace:FiscalMobile.Models"
+             x:DataType="models:PerfilApp"
+             Title="Perfil Usuário"
+             BindingContext="{x:Reference PerfilApp}"
+           
+             >
+
+    <ScrollView>
+        <VerticalStackLayout Padding="20"
+                         Spacing="10"
+                         VerticalOptions="StartAndExpand">
+
+
+            <Label  Text="Matricula" />
+            <Entry Text="{Binding Matricula}" />
+
+
+            <Label  Text="Nome" />
+            <Entry Text="{Binding Nome}" />
+
+            <Label  Text="Email" />
+            <Entry Text="{Binding Email}" />
+
+            <Label  Text="Telefone" />
+            <Entry Text="{Binding Telefone}" />
+
+
+
+            <Button Text="Salvar"
+                Clicked="OnSaveClicked" />
+            <Button Text="Excluir"
+                Clicked="OnDeleteClicked" />
+            <Button Text="Cancelar"
+                Clicked="OnCancelClicked" />
+        </VerticalStackLayout>
+    </ScrollView>
+</ContentPage>
+    
