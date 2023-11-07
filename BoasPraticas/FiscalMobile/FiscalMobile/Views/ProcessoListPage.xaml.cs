@@ -4,7 +4,7 @@ using FiscalMobile.Context;
 using FiscalMobile.Models;
 
 namespace FiscalMobile.Views;
-
+[QueryProperty("Items", "Items")]
 public partial class ProcessoListPage : ContentPage
 {
     FiscalMobileDBContext database;
@@ -15,6 +15,12 @@ public partial class ProcessoListPage : ContentPage
        InitializeComponent();
        database = fiscalMobileDBContext;
        BindingContext = this;
+    }
+    public ProcessoListPage(List<ImovelCheck> docencontrado)
+    {
+        InitializeComponent();
+        //this.Items = docencontrado.ToList();
+        BindingContext = this;
     }
 
 

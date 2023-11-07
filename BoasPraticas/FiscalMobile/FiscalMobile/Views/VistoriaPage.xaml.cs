@@ -31,7 +31,32 @@ public partial class VistoriaPage : ContentPage
         }
         BindingContext = new Vistoria {IdVistoria=int.Parse(perfil.Matricula), MatriculaFiscal=perfil.Matricula, DataVistoria=DateTime.Now.ToString()};
     }
-    
+    public async void TakePhoto(object sender, EventArgs e)
+    {
+        if (entry.Text == null)
+        {
+            await DisplayAlert("Inscrição Imobiliária requerida", "Entre com a Inscrição", "OK");
+
+        }else {    if (MediaPicker.Default.IsCaptureSupported)
+                    {
+                        FileResult photo = await MediaPicker.Default.CapturePhotoAsync();
+                        //photo.FileName = $"{entry.Text}.jpg";
+                        
+                        if (photo != null)
+                        {
+                            // save the file into local storage
+                            string localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
+
+                            using Stream sourceStream = await photo.OpenReadAsync();
+                            using FileStream localFileStream = File.OpenWrite(localFilePath);
+
+
+                            await sourceStream.CopyToAsync(localFileStream);
+                        }
+                    }
+        }
+
+    }
     async void OnSaveClicked(object sender, EventArgs e)
     {
        
@@ -100,10 +125,10 @@ public partial class VistoriaPage : ContentPage
         if (docencontrado.Count > 0)
         {
 
-            await Shell.Current.GoToAsync(nameof(VistoriaPage), true, new Dictionary<string, object>
+            await Shell.Current.GoToAsync(nameof(ProcessoListPage), true, new Dictionary<string, object>
             {
-                ["Item"] = Item
-            }); ;
+                ["Items"] = new ProcessoListPage(docencontrado)
+            }); 
         } else
         {
             await DisplayAlert(entry.Text, "Não foi encontrado Nenhum Processo!", "OK");

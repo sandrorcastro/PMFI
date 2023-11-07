@@ -50,7 +50,8 @@
             <Entry Text="{Binding Alvara}" />
 
 
-
+            <Button Text="Foto"
+                     Clicked="TakePhoto" />
             <Button Text="Salvar"
                 Clicked="OnSaveClicked" />
             <Button Text="Excluir"
