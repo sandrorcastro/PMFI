@@ -53,7 +53,7 @@ public partial class ProcessoListPage : ContentPage
     {
         base.OnNavigatedTo(args);
 
-        if (args.Source == ShellNavigationSource.Push)
+     /*   if (args.Source == ShellNavigationSource.Push)
         {
             if (args.Parameter is Dictionary<string, object> parameters)
             {
@@ -64,8 +64,8 @@ public partial class ProcessoListPage : ContentPage
                     var items = await database.ImovelCheck.Where(i=>i.InscricaoImobiliaria==(string)inscricao).Take(10).OrderBy(i=>i.idDocumento).ToListAsync(); // .GetItemsAsync();
                 }
             }
-        }
-        //var items = await database.ImovelCheck.Where(i => i.InscricaoImobiliaria == args.insc).Take(10).OrderBy(i => i.idDocumento).ToListAsync(); // .GetItemsAsync();
+        }*/
+       var items = await database.ImovelCheck.Where(i => i.InscricaoImobiliaria == this.insc).Take(10).OrderBy(i => i.idDocumento).ToListAsync(); // .GetItemsAsync();
         
         
         
