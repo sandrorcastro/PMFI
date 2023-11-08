@@ -125,9 +125,13 @@ public partial class VistoriaPage : ContentPage
         if (docencontrado.Count > 0)
         {
 
+            //await Navigation.PushAsync(new ProcessoListPage(database,entry.Text));
             await Shell.Current.GoToAsync(nameof(ProcessoListPage), true, new Dictionary<string, object>
             {
-                ["Items"] = new ProcessoListPage(docencontrado)
+                //["Items"] = new ProcessoListPage(docencontrado)
+                //["Items"] = new ProcessoListPage(database,entry.Text)
+                // ["InscricaoImobiliaria"] = entry.Text
+                ["insc"] = entry.Text
             }); 
         } else
         {

@@ -4,17 +4,42 @@ using FiscalMobile.Context;
 using FiscalMobile.Models;
 
 namespace FiscalMobile.Views;
-[QueryProperty("Items", "Items")]
+//[QueryProperty("Items", "Items")]
+[QueryProperty("insc", "insc")]
 public partial class ProcessoListPage : ContentPage
 {
     FiscalMobileDBContext database;
+    public string insc 
+    {
+        get =>  BindingContext as string ;
+        set =>  BindingContext =value ;
+    }
     public ObservableCollection<ImovelCheck> Items { get; set; } = new();
-   
+    /*public ObservableCollection<ImovelCheck> Items 
+    { 
+        get=> BindingContext as ObservableCollection<ImovelCheck>; 
+        set=> BindingContext = value; 
+    } */// = new();
+    public ProcessoListPage()
+    {
+        InitializeComponent();
+        BindingContext = this;
+    }
     public ProcessoListPage(FiscalMobileDBContext fiscalMobileDBContext)
     {
        InitializeComponent();
        database = fiscalMobileDBContext;
        BindingContext = this;
+       
+    }
+    public ProcessoListPage(FiscalMobileDBContext fiscalMobileDBContext,string inscricao)
+    {
+        InitializeComponent();
+        this.insc = inscricao;
+        database = fiscalMobileDBContext;
+        BindingContext = this;
+        //BindingContext = new ProcessoListPage(fiscalMobileDBContext, this.insc);
+        
     }
     public ProcessoListPage(List<ImovelCheck> docencontrado)
     {
@@ -27,7 +52,7 @@ public partial class ProcessoListPage : ContentPage
     protected override async void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
-        var items = await database.ImovelCheck.Take(100).OrderBy(i=>i.InscricaoImobiliaria).ToListAsync(); // .GetItemsAsync();
+        var items = await database.ImovelCheck.Where(i=>i.InscricaoImobiliaria==this.insc).Take(10).OrderBy(i=>i.idDocumento).ToListAsync(); // .GetItemsAsync();
         MainThread.BeginInvokeOnMainThread(() =>
         {
             Items.Clear();
@@ -46,7 +71,7 @@ public partial class ProcessoListPage : ContentPage
 
     private async void  CollectionView_SelectionChanged(object sender, SelectionChangedEventArgs e)
     {
-        if (e.CurrentSelection.FirstOrDefault() is not Vistoria item)
+        if (e.CurrentSelection.FirstOrDefault() is not ImovelCheck item)
             return;
 
         await Shell.Current.GoToAsync(nameof(VistoriaPage), true, new Dictionary<string, object>

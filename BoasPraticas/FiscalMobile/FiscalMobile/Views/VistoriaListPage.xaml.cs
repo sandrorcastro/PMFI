@@ -15,7 +15,12 @@ public partial class VistoriaListPage : ContentPage
        InitializeComponent();
        database = fiscalMobileDBContext;
        BindingContext = this;
+        
     }
+   /* public VistoriaListPage()
+    {
+     
+    }*/
 
 
     protected override async void OnNavigatedTo(NavigatedToEventArgs args)

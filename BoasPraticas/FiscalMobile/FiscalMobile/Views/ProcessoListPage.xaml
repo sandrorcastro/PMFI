@@ -13,7 +13,7 @@
                   SelectionMode="Single"
                   SelectionChanged="CollectionView_SelectionChanged">
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:Processo">
+                <DataTemplate x:DataType="models:ImovelCheck">
                     <Grid  RowDefinitions="Auto" ColumnDefinitions="*,Auto" Padding="5">
                             <Label Text="{Binding InscricaoImobiliaria}"
                                    
