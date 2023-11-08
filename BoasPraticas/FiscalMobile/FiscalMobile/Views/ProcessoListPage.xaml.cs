@@ -52,7 +52,29 @@ public partial class ProcessoListPage : ContentPage
     protected override async void OnNavigatedTo(NavigatedToEventArgs args)
     {
         base.OnNavigatedTo(args);
-        var items = await database.ImovelCheck.Where(i=>i.InscricaoImobiliaria==this.insc).Take(10).OrderBy(i=>i.idDocumento).ToListAsync(); // .GetItemsAsync();
+
+        if (e.Source == ShellNavigationSource.Push)
+        {
+            if (e.Parameter is Dictionary<string, object> parameters)
+            {
+                if (parameters.TryGetValue("insc", out object inscricao))
+                {
+                    // Agora você pode usar a inscrição (inscricao) na página de destino
+                    // Certifique-se de fazer a conversão de tipo apropriada, se necessário
+                    var items = await database.ImovelCheck.Where(i=>i.InscricaoImobiliaria==(string)inscricao).Take(10).OrderBy(i=>i.idDocumento).ToListAsync(); // .GetItemsAsync();
+                }
+            }
+        }
+        //var items = await database.ImovelCheck.Where(i => i.InscricaoImobiliaria == args.insc).Take(10).OrderBy(i => i.idDocumento).ToListAsync(); // .GetItemsAsync();
+        
+        
+        
+        
+        
+        
+        
+        
+        
         MainThread.BeginInvokeOnMainThread(() =>
         {
             Items.Clear();
