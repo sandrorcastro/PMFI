@@ -53,9 +53,9 @@ public partial class ProcessoListPage : ContentPage
     {
         base.OnNavigatedTo(args);
 
-        if (e.Source == ShellNavigationSource.Push)
+        if (args.Source == ShellNavigationSource.Push)
         {
-            if (e.Parameter is Dictionary<string, object> parameters)
+            if (args.Parameter is Dictionary<string, object> parameters)
             {
                 if (parameters.TryGetValue("insc", out object inscricao))
                 {
