@@ -1,0 +1,455 @@
+﻿@model IEnumerable<Fazenda.Entities.DBProsiga.TribEdificaco>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifMatricula)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifNumOficio)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifAlvara)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifCaracteristica)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifNumeracao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifEdificacaoEnglobamento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifDtUltTransfPropriedade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifDtInicioConstrucao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifDtParalizacaoConstrucao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CategId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifNumElevadores)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifAnoConstrucao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifNumPavimento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifAndarConstrucao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifAreaConstruida)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifAreaCoberta)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifContinuacaoTerreno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifEconomia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InscricaoImobiliaria)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InscricaoImobiliariaGeo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifFracaoIdealEdificacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifPontosEdificacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifComplemento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifNumAptoSalaLoja)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifBloco)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorVenalCalculo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NumeroCadastroCanadas)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UnidadeLote)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifJuntarAoCarne)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorVenalEdificacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifSituacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UsuarioInclusao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataInclusao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifCep)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProcId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifMotivoAlteracao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifDtMatricula)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifCentroGrauLon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifCentroGrauLat)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorVenalTerrenoParaEdificacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifObs)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifDataAtualizacaoEndereco)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifUsuarioAtualizacaoEndereco)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Flconferido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dsobservacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TmpIdlogradouro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TmpIdzoneamento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Idusuariorevisao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AcabExt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AcabInt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Agrupa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Cobert)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Deno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Eletrica)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Esquadrias)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EstConserv)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Estrut)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Forro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdloteamentoNavigation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdplantaNavigation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Inci)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Lograd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Ocupa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Parede)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Piso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Posicao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Situacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Terreno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoCon)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Uso)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Utiliz)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifMatricula)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifNumOficio)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifAlvara)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifCaracteristica)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifNumeracao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifEdificacaoEnglobamento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifDtUltTransfPropriedade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifDtInicioConstrucao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifDtParalizacaoConstrucao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CategId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifNumElevadores)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifAnoConstrucao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifNumPavimento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifAndarConstrucao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifAreaConstruida)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifAreaCoberta)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifContinuacaoTerreno)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifEconomia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InscricaoImobiliaria)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InscricaoImobiliariaGeo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifFracaoIdealEdificacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifPontosEdificacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifComplemento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifNumAptoSalaLoja)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifBloco)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ValorVenalCalculo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NumeroCadastroCanadas)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UnidadeLote)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifJuntarAoCarne)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ValorVenalEdificacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifSituacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UsuarioInclusao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataInclusao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifCep)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProcId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifMotivoAlteracao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifDtMatricula)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifCentroGrauLon)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifCentroGrauLat)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ValorVenalTerrenoParaEdificacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifObs)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifDataAtualizacaoEndereco)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdifUsuarioAtualizacaoEndereco)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Flconferido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dsobservacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TmpIdlogradouro)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TmpIdzoneamento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Idusuariorevisao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AcabExt.AcabExtId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AcabInt.AcabIntId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Agrupa.AgrupaId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Cobert.CobertId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Deno.DenoId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Eletrica.EletricaId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Esquadrias.EsquadriasId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EstConserv.EstConservId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Estrut.EstrutId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Forro.ForroId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdloteamentoNavigation.Idloteamento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdplantaNavigation.Idplanta)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Inci.InciId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Lograd.LogradId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Ocupa.OcupaId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Parede.ParedeId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Piso.PisoId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Posicao.PosicaoId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Situacao.SituacaoId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Terreno.TerrenoId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoCon.TipoConId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Uso.UsoId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Utiliz.UtilizId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.EdificacaoId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.EdificacaoId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.EdificacaoId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
