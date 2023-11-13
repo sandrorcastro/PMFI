@@ -47,14 +47,14 @@ namespace Fazenda.Models
             //this.InscricoesImobiliariaPorQuadra = await _context.TribEdificacoes.Where(insc => insc.InscricaoImobiliaria.Substring(0, 6) == Imovel.InscricaoImobiliaria.Substring(0, 6)).AsNoTracking().ToListAsync(); //.Select(i=>i.EdificacaoId).ToList();
             var imoveis = from Imoveis in _context.TribEdificacoes.Where(insc => insc.EdifSituacao=="Normal" && insc.InscricaoImobiliaria.Substring(0, 6) == Imovel.InscricaoImobiliaria.Substring(0, 6)) select Imoveis; //.Select(i=>i.EdificacaoId).ToList();
                                                                    
-            InscricoesImobiliariaPorQuadra = new List<Type>();
+            /*InscricoesImobiliariaPorQuadra = new List<Type>();
             foreach (TribEdificaco imovel in imoveis.AsNoTracking().ToList())
             {
                 //Console.WriteLine($"Id: {imovel.Id}, Nome: {imovel.Nome}");
                 //  TribFatorCorArea  fatorA = imovel.Terreno.TerrAreaTerreno < 10000 ? new TribFatorCorArea() { FatCorAreaAte=1}  :  _context.TribFatorCorAreas.Where(fa => fa.FatCorAreaDe < imovel.Terreno.TerrAreaTerreno && fa.FatCorAreaAte >= imovel.Terreno.TerrAreaTerreno).FirstOrDefault();
                 //iPTUs.Add(new IPTU(imovel) { FatorA= (decimal) fatorA.FatCorAreaFator.GetValueOrDefault()});
-                InscricoesImobiliariaPorQuadra.Add(imovel);
-            }
+               // InscricoesImobiliariaPorQuadra.Add(imovel);
+            }*/
         }
 
         private decimal getValorVenalCalculo()
@@ -185,7 +185,7 @@ namespace Fazenda.Models
         public string EdifCaracteristica { get; set; }
 
         //public virtual List<IPTU> InscricoesImobiliariaPorQuadra { get; set; }
-        public virtual List<Type> InscricoesImobiliariaPorQuadra { get; set; }
+       // public virtual List<Type> InscricoesImobiliariaPorQuadra { get; set; }
 
 
 

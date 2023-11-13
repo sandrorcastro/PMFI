@@ -9,11 +9,11 @@ using Fazenda.Entities.DBProsiga;
 
 namespace Fazenda.Controllers
 {
-    public class Imoveis : Controller
+    public class ImoveisController : Controller
     {
         private readonly DbprosigaContext _context;
 
-        public Imoveis(DbprosigaContext context)
+        public ImoveisController(DbprosigaContext context)
         {
             _context = context;
         }
@@ -21,8 +21,8 @@ namespace Fazenda.Controllers
         // GET: Imoveis
         public async Task<IActionResult> Index()
         {
-            var dbprosigaContext = _context.TribEdificacoes.Include(t => t.AcabExt).Include(t => t.AcabInt).Include(t => t.Agrupa).Include(t => t.Cobert).Include(t => t.Deno).Include(t => t.Eletrica).Include(t => t.Esquadrias).Include(t => t.EstConserv).Include(t => t.Estrut).Include(t => t.Forro).Include(t => t.IdloteamentoNavigation).Include(t => t.IdplantaNavigation).Include(t => t.Inci).Include(t => t.Lograd).Include(t => t.Ocupa).Include(t => t.Parede).Include(t => t.Piso).Include(t => t.Posicao).Include(t => t.Situacao).Include(t => t.Terreno).Include(t => t.TipoCon).Include(t => t.Uso).Include(t => t.Utiliz);
-            return View(await dbprosigaContext.Where(s=>s.EdifSituacao=="Normal").Take(10).ToListAsync());
+            var dbprosigaContext = _context.TribEdificacoes.Where(s=>s.EdifSituacao=="Normal" && ((s.EdifCaracteristica=="Predial" && s.EdifAreaConstruida>0) || (s.EdifCaracteristica=="Territorial" && s.EdifAreaConstruida==0 ))).Include(t => t.AcabExt).Include(t => t.AcabInt).Include(t => t.Agrupa).Include(t => t.Cobert).Include(t => t.Deno).Include(t => t.Eletrica).Include(t => t.Esquadrias).Include(t => t.EstConserv).Include(t => t.Estrut).Include(t => t.Forro).Include(t => t.IdloteamentoNavigation).Include(t => t.IdplantaNavigation).Include(t => t.Inci).Include(t => t.Lograd).Include(t => t.Ocupa).Include(t => t.Parede).Include(t => t.Piso).Include(t => t.Posicao).Include(t => t.Situacao).Include(t => t.Terreno).Include(t => t.TipoCon).Include(t => t.Uso).Include(t => t.Utiliz).Take(100);
+            return View(await dbprosigaContext.ToListAsync());
         }
 
         // GET: Imoveis/Details/5

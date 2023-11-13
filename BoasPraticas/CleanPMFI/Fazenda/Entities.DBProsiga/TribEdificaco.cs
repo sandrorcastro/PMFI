@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Fazenda.Entities.DBProsiga;
 
 public partial class TribEdificaco
 {
     public long EdificacaoId { get; set; }
+
 
     public long? TerrenoId { get; set; }
 
@@ -18,6 +20,8 @@ public partial class TribEdificaco
     /// <summary>
     /// domínio: Predial / Territorial
     /// </summary>
+     
+    [Display(Name = "Caracteristica")]
     public string? EdifCaracteristica { get; set; }
 
     public string? EdifNumeracao { get; set; }
@@ -35,11 +39,11 @@ public partial class TribEdificaco
     public int? AgrupaId { get; set; }
 
     public int? AcabIntId { get; set; }
-
+    [Display(Name = "Situação")]
     public int? SituacaoId { get; set; }
-
+    
     public int? PosicaoId { get; set; }
-
+    
     public int? UsoId { get; set; }
 
     public int? UtilizId { get; set; }
@@ -70,8 +74,10 @@ public partial class TribEdificaco
 
     public int? EdifAndarConstrucao { get; set; }
 
-    public decimal? EdifAreaConstruida { get; set; }
 
+    [Display(Name = "AreaConstruída")]
+    public decimal? EdifAreaConstruida { get; set; }
+    [Display(Name = "AreaCoberta")]
     public decimal? EdifAreaCoberta { get; set; }
 
     /// <summary>
@@ -80,13 +86,14 @@ public partial class TribEdificaco
     public string EdifContinuacaoTerreno { get; set; } = null!;
 
     public string? EdifEconomia { get; set; }
-
+    [Display(Name = "Insc.Imob.")]
     public string InscricaoImobiliaria { get; set; } = null!;
 
     public string InscricaoImobiliariaGeo { get; set; } = null!;
 
+    [Display(Name = "FraçãoIdeal")]
     public decimal EdifFracaoIdealEdificacao { get; set; }
-
+    [Display(Name = "PontosEdf.")]
     public int? EdifPontosEdificacao { get; set; }
 
     public string? EdifComplemento { get; set; }
@@ -104,6 +111,7 @@ public partial class TribEdificaco
     /// <summary>
     /// Valor Venal para o Calculo do IPTU (ja considerado a fração do Terreno)
     /// </summary>
+    [Display(Name = "VVCalculo")]
     public decimal? ValorVenalCalculo { get; set; }
 
     public long? NumeroCadastroCanadas { get; set; }
@@ -118,16 +126,19 @@ public partial class TribEdificaco
     /// <summary>
     /// Valor Venal da Edificação (trigger)
     /// </summary>
+    [Display(Name = "VVEdificação")]
     public decimal? ValorVenalEdificacao { get; set; }
 
     /// <summary>
     /// Informa se o Imovel esta Normal ou Removido
     /// </summary>
+    [Display(Name = "Situação")]
     public string? EdifSituacao { get; set; }
 
     /// <summary>
     /// Incidencia de Tributos para a Edificacao
     /// </summary>
+    [Display(Name = "Incidência")]
     public int? InciId { get; set; }
 
     public string? UsuarioInclusao { get; set; }
@@ -170,6 +181,7 @@ public partial class TribEdificaco
     /// <summary>
     /// Valor venal do terreno da edificação utilizado para calcular o IPTU, devido a alteração do FATOR K na lei do iptu de 2006.
     /// </summary>
+    [Display(Name = "VVTerreno")]
     public decimal? ValorVenalTerrenoParaEdificacao { get; set; }
 
     /// <summary>
@@ -248,6 +260,7 @@ public partial class TribEdificaco
 
     public virtual TribTerreno? Terreno { get; set; }
 
+    [Display(Name = "TipoConstrução")]
     public virtual TribTiposConstrucao? TipoCon { get; set; }
 
     public virtual ICollection<TribAcompAnterior> TribAcompAnteriors { get; set; } = new List<TribAcompAnterior>();
@@ -322,6 +335,7 @@ public partial class TribEdificaco
 
     public virtual TribUso? Uso { get; set; }
 
+    [Display(Name = "Utilização")]
     public virtual TribUtilizacao? Utiliz { get; set; }
 
     public virtual ICollection<TribEquipamento> Equips { get; set; } = new List<TribEquipamento>();
