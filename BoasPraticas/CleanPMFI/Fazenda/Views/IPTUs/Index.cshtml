@@ -32,6 +32,9 @@
             <th>
                 @Html.DisplayNameFor(model => model.ValorVenalCalculoGIIG)
             </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorVenalCalculo)
+            </th>
             <th></th>
         </tr>
     </thead>
@@ -56,9 +59,12 @@
                 <td>
                     @Html.DisplayFor(modelItem => item.ValorVenalCalculoGIIG)
                 </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorVenalCalculo)
+                </td>
             <td>
                 @*<a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |*@
-                <a asp-action="Details" asp-route-id="@item.ID">Details</a> 
+                <a asp-action="Details" asp-route-id="@item.ID">Detalhes</a> 
                 @*<a asp-action="Delete" asp-route-id="@item.ID">Delete</a>*@
             </td>
         </tr>

@@ -23,16 +23,30 @@ namespace Fazenda.Controllers
         public async Task<IActionResult> Index()
         {
             //return _context.TribEdificacoes  != null ? View(await _context.IPTU.ToListAsync()) : Problem("Entity set 'DbprosigaContext.IPTU'  is null.");
-            IEnumerable<TribEdificaco> imoveis = await _context.TribEdificacoes.Where(es=>es.EdifSituacao=="Normal")
-                                                                               .Include(te=>te.Terreno).ThenInclude(p=>p.Pedo)
-                                                                               .Include(to=>to.Terreno).ThenInclude(to=>to.Topo)
-                                                                               .Include(to => to.Terreno).ThenInclude(lq => lq.LocQ)
-                                                                               .Take(10).ToListAsync();
-            List<IPTU> iPTUs = new List<IPTU>();
-            foreach (TribEdificaco imovel in imoveis)
+
+            var imoveis = from Imoveis in _context.TribEdificacoes.Where(es => es.EdifSituacao == "Normal" && es.InscricaoImobiliaria.Length==14 && es.Terreno.TerrAreaTerreno > 10000)
+                                                                              .Include(te => te.Terreno).ThenInclude(p => p.Pedo)
+                                                                              .Include(to => to.Terreno).ThenInclude(to => to.Topo)
+                                                                              .Include(to => to.Terreno).ThenInclude(lq => lq.LocQ)
+                                                                              .Take(10)
+                          select Imoveis;
+
+            /*            IEnumerable<TribEdificaco> imoveis = await _context.TribEdificacoes.Where(es=>es.EdifSituacao=="Normal")
+                                                                                           .Include(te=>te.Terreno).ThenInclude(p=>p.Pedo)
+                                                                                           .Include(to=>to.Terreno).ThenInclude(to=>to.Topo)
+                                                                                           .Include(to => to.Terreno).ThenInclude(lq => lq.LocQ)
+                                                                                           .Take(10).ToListAsync();*/
+            List < IPTU > iPTUs = new List<IPTU>();
+            foreach (TribEdificaco imovel in imoveis.AsNoTracking())
             {
                 //Console.WriteLine($"Id: {imovel.Id}, Nome: {imovel.Nome}");
+                //  TribFatorCorArea  fatorA = imovel.Terreno.TerrAreaTerreno < 10000 ? new TribFatorCorArea() { FatCorAreaAte=1}  :  _context.TribFatorCorAreas.Where(fa => fa.FatCorAreaDe < imovel.Terreno.TerrAreaTerreno && fa.FatCorAreaAte >= imovel.Terreno.TerrAreaTerreno).FirstOrDefault();
+                //iPTUs.Add(new IPTU(imovel) { FatorA= (decimal) fatorA.FatCorAreaFator.GetValueOrDefault()});
+                //IPTU iptu = new IPTU(imovel);
+                //iptu.obterInscricoesImobiliariaPorQuadra();
                 iPTUs.Add(new IPTU(imovel));
+                //iPTUs.Add(iptu);
+
             }
 
             //var  imovel = await _context.TribEdificacoes.FindAsync((long) 78);
@@ -49,8 +63,12 @@ namespace Fazenda.Controllers
             {
                 return NotFound();
             }
-
-            var imovel = await _context.TribEdificacoes.FirstOrDefaultAsync(m => m.EdificacaoId == id);
+            
+            var imovel = await _context.TribEdificacoes
+                                        .Include(te => te.Terreno).ThenInclude(p => p.Pedo)
+                                        .Include(to => to.Terreno).ThenInclude(to => to.Topo)
+                                        .Include(to => to.Terreno).ThenInclude(lq => lq.LocQ).FirstOrDefaultAsync(m => m.EdificacaoId == id);
+            
             IPTU iPTU = new IPTU(imovel);
             if (iPTU == null)
             {
