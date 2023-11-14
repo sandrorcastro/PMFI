@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Fazenda.Models.IPTU01>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Simulação de IPTU Com Comparação GIIG</h1>
+@*
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+*@
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.EdificacaoID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InscricaoImobiliaria)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdifCaracteristica)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorVenalEdificacaoGIIG)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorVenalTerrenoParaEdificacaoGIIG)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorVenalCalculoGIIG)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorVenalCalculo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EdificacaoID)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.InscricaoImobiliaria)
+            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EdifCaracteristica)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorVenalEdificacaoGIIG)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorVenalTerrenoParaEdificacaoGIIG)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorVenalCalculoGIIG)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorVenalCalculo)
+                </td>
+            <td>
+                @*<a asp-action="Edit" asp-route-id="@item.ID">Edit</a> |*@
+                <a asp-action="Details" asp-route-id="@item.ID">Detalhes</a> 
+                @*<a asp-action="Delete" asp-route-id="@item.ID">Delete</a>*@
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

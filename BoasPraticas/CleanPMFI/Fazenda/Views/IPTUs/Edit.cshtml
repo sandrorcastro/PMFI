@@ -12,11 +12,76 @@
     <div class="col-md-4">
         <form asp-action="Edit">
             <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="ID" />
+            <input type="hidden" asp-for="IPTUID" />
+            <div class="form-group">
+                <label asp-for="ID" class="control-label"></label>
+                <input asp-for="ID" class="form-control" />
+                <span asp-validation-for="ID" class="text-danger"></span>
+            </div>
             <div class="form-group">
                 <label asp-for="InscricaoImobiliaria" class="control-label"></label>
                 <input asp-for="InscricaoImobiliaria" class="form-control" />
                 <span asp-validation-for="InscricaoImobiliaria" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AreaTerreno" class="control-label"></label>
+                <input asp-for="AreaTerreno" class="form-control" />
+                <span asp-validation-for="AreaTerreno" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FatorCorrecaoArea" class="control-label"></label>
+                <input asp-for="FatorCorrecaoArea" class="form-control" />
+                <span asp-validation-for="FatorCorrecaoArea" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TestadaTerreno" class="control-label"></label>
+                <input asp-for="TestadaTerreno" class="form-control" />
+                <span asp-validation-for="TestadaTerreno" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ProfundidadePadrao" class="control-label"></label>
+                <input asp-for="ProfundidadePadrao" class="form-control" />
+                <span asp-validation-for="ProfundidadePadrao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LogradTestadaPrincipal" class="control-label"></label>
+                <input asp-for="LogradTestadaPrincipal" class="form-control" />
+                <span asp-validation-for="LogradTestadaPrincipal" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="QuadraId" class="control-label"></label>
+                <input asp-for="QuadraId" class="form-control" />
+                <span asp-validation-for="QuadraId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FatorKID" class="control-label"></label>
+                <input asp-for="FatorKID" class="form-control" />
+                <span asp-validation-for="FatorKID" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FatorKValor" class="control-label"></label>
+                <input asp-for="FatorKValor" class="form-control" />
+                <span asp-validation-for="FatorKValor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FatorLocQuadra" class="control-label"></label>
+                <input asp-for="FatorLocQuadra" class="form-control" />
+                <span asp-validation-for="FatorLocQuadra" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FatorPedologia" class="control-label"></label>
+                <input asp-for="FatorPedologia" class="form-control" />
+                <span asp-validation-for="FatorPedologia" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="FatorTopografia" class="control-label"></label>
+                <input asp-for="FatorTopografia" class="form-control" />
+                <span asp-validation-for="FatorTopografia" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EdificacaoID" class="control-label"></label>
+                <input asp-for="EdificacaoID" class="form-control" />
+                <span asp-validation-for="EdificacaoID" class="text-danger"></span>
             </div>
             <div class="form-group">
                 <input type="submit" value="Save" class="btn btn-primary" />

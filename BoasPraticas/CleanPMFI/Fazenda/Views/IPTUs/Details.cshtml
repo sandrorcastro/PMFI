@@ -1,24 +1,102 @@
 ﻿@model Fazenda.Models.IPTU
 
 @{
-    ViewData["Title"] = "Detalhes";
+    ViewData["Title"] = "Details";
 }
 
-<h1>Detalhes</h1>
+<h1>Details</h1>
 
 <div>
     <h4>IPTU</h4>
     <hr />
     <dl class="row">
         <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ID)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ID)
+        </dd>
+        <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.InscricaoImobiliaria)
         </dt>
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.InscricaoImobiliaria)
         </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.AreaTerreno)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.AreaTerreno)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FatorCorrecaoArea)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FatorCorrecaoArea)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.TestadaTerreno)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.TestadaTerreno)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.ProfundidadePadrao)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.ProfundidadePadrao)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.LogradTestadaPrincipal)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.LogradTestadaPrincipal)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.QuadraId)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.QuadraId)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FatorKID)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FatorKID)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FatorKValor)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FatorKValor)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FatorLocQuadra)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FatorLocQuadra)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FatorPedologia)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FatorPedologia)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.FatorTopografia)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.FatorTopografia)
+        </dd>
+        <dt class = "col-sm-2">
+            @Html.DisplayNameFor(model => model.EdificacaoID)
+        </dt>
+        <dd class = "col-sm-10">
+            @Html.DisplayFor(model => model.EdificacaoID)
+        </dd>
     </dl>
 </div>
 <div>
-    <a asp-action="Edit" asp-route-id="@Model?.ID">Edit</a> |
+    <a asp-action="Edit" asp-route-id="@Model?.IPTUID">Edit</a> |
     <a asp-action="Index">Back to List</a>
 </div>
