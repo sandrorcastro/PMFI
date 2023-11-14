@@ -16,6 +16,7 @@ namespace Fazenda.Models
         private TribEdificaco? imovel;
         private string inscricaoImobiliaria;
         private decimal areaTerreno;
+        private decimal fatorCorrecaoArea;
 
         public IPTU()
         {
@@ -28,7 +29,7 @@ namespace Fazenda.Models
             EdificacaoID = this.imovel.EdificacaoId;
             InscricaoImobiliaria = this.imovel.InscricaoImobiliaria.ToString();
             AreaTerreno = (decimal) _context.TribTerrenos.Find(this.imovel.TerrenoId).TerrAreaTerreno;
-            
+            FatorCorrecaoArea = (decimal)_context.TribFatorCorAreas.Find(this.imovel.TerrenoId).FatCorAreaFator;
         }
         [Key]
         public long IPTUID { get; set; }
@@ -39,7 +40,7 @@ namespace Fazenda.Models
         public TribEdificaco? Imovel { get => imovel; set => imovel = value; }
         public string InscricaoImobiliaria { get => inscricaoImobiliaria; set => inscricaoImobiliaria = value; }
         public decimal AreaTerreno { get => areaTerreno; set => areaTerreno = value; }
-        public decimal FatorCorrecaoArea { get; set; }
+        public decimal FatorCorrecaoArea { get => fatorCorrecaoArea; set => fatorCorrecaoArea = value; }
         public decimal TestadaTerreno { get; set; }
         public decimal ProfundidadePadrao { get; set; }
         public int LogradTestadaPrincipal { get; set; }
