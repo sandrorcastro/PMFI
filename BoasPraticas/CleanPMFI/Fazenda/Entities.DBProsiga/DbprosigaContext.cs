@@ -55329,5 +55329,5 @@ public partial class DbprosigaContext : DbContext
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
     public DbSet<Fazenda.Models.IPTU> IPTU { get; set; } = default!;
-    public DbSet<TribParamPlantaValore> TribParamPlantaValores { get; set; }
+    public DbSet<TribParamPlantaValore> TribParamPlantaValore { get; set; }
 }

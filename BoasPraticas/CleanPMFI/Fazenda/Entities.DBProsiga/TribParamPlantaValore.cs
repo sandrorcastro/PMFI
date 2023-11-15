@@ -12,4 +12,5 @@ public partial class TribParamPlantaValore
     public int TparamId { get; set; }
     [Key]
     public int ParamId { get; set; }
+
 }
