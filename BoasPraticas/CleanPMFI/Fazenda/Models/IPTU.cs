@@ -4,6 +4,7 @@ using Humanizer;
 using Microsoft.CodeAnalysis.Elfie.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
@@ -158,16 +159,50 @@ namespace Fazenda.Models
                     ParamIDEstruturaAreaCoberta = int.Parse(_context.SisParametros.Where(sp => sp.SiPaIdSistema == "Tribuno" && sp.SiPaIdParametro == "IDParamAreaCobertaEconomia").FirstOrDefault().SiPaValorParametro);
                     ParamIDTipoConstrucao = _context.TribEdifParamCalculos.Where(epc => epc.EdificacaoId == imovel.EdificacaoId && epc.TparamId == this.tParamIDTipoConstrucao).FirstOrDefault().ParamId;
 
-                   // var ValorM2AreaCobertaquery = from ppv in _context.TribParamPl
+                    /*var ValorM2AreaCobertaquery = from ppv in _context.TribParamPlantaValore
+                                                  join tpc in _context.TribTipoParamCalculos on ppv.TparamId equals tpc.TparamId
+                                                  join pc in _context.TribParamCalculos on ppv.ParamId equals pc.ParamId 
+                                                  join tpv in _context.TribTipoPlantasValores on ppv.Idplanta equals tpv.Idplanta
+                                                  join ce in _context.TribCategoriaEdificacaos on tpv.CategId equals ce.CategId
+                                                  where ppv.TparamId == this.tParamIDTipoConstrucao 
+                                                        &&
+                                                        ppv.ParamId == this.paramIDTipoConstrucao
+                                                        &&
+                                                        _context.TribParamPlantaValore */
 
 
-                        /*
-                         var FatorLocQuadraquery = from epc in _context.TribEdifParamCalculos
-                                                   join pc in _context.TribParamCalculos on epc.TparamId equals pc.TparamId
-                                                   where (epc.EdificacaoId == this.imovel.EdificacaoId && epc.TparamId == int.Parse(sFatorLocQuadra))
-                                                   select new { epc, pc };
-                    FatorLocQuadra = FatorLocQuadraquery.FirstOrDefault().pc.Fator != null ? (decimal)FatorLocQuadraquery.FirstOrDefault().pc.Fator : 1;
-                        */
+                    var ValorM2AreaCobertaquery = from tpv in _context.TribParamPlantaValore
+                                 join ttpc in _context.TribTipoParamCalculos on tpv.TparamId equals ttpc.TparamId
+                                 join tpc in _context.TribParamCalculos on new { tpv.TparamId, tpv.ParamId } equals new { tpc.TparamId, tpc.ParamId }
+                                 join ttpv in _context.TribTipoPlantasValores on tpv.Idplanta equals ttpv.Idplanta
+                                 join tce in _context.TribCategoriaEdificacaos on ttpv.CategId equals tce.CategId
+                                 where tpv.TparamId == TParamIDTipoConstrucao &&
+                                       tpv.ParamId == ParamIDTipoConstrucao &&
+                                       ttpv.AnoPlanta == AnoIPTU &&
+                                       ttpv.CategId == CategID &&
+                                       _context.TribParamPlantaValore.Any(
+                                           tppv => tppv.TparamId == TParamIDEstrutura &&
+                                                   tppv.ParamId == ParamIDEstruturaAreaCoberta &&
+                                                   ttpv.AnoPlanta == AnoIPTU &&
+                                                   tppv.Idplanta == tpv.Idplanta)
+                                 select ttpv.ValorM2;
+
+                    ValorVenalEdificacao = 0;
+                    ValorM2AreaCoberta = (decimal)ValorM2AreaCobertaquery.FirstOrDefault();
+                    if(ValorM2AreaCoberta > 0){
+                        ValorVenalEdificacao = ValorVenalEdificacao * ((double)(this.valorM2AreaCoberta - this.areaConstruida));
+                    }
+                    ValorVenalEdificacao = ValorVenalEdificacao + ((double)(this.areaConstruida * this.valorM2));
+                    ValorVenalEdificacao = ValorVenalEdificacao * (double)this.aliquotaDepreciacao;
+
+
+                    /*
+                     var FatorLocQuadraquery = from epc in _context.TribEdifParamCalculos
+                                               join pc in _context.TribParamCalculos on epc.TparamId equals pc.TparamId
+                                               where (epc.EdificacaoId == this.imovel.EdificacaoId && epc.TparamId == int.Parse(sFatorLocQuadra))
+                                               select new { epc, pc };
+                FatorLocQuadra = FatorLocQuadraquery.FirstOrDefault().pc.Fator != null ? (decimal)FatorLocQuadraquery.FirstOrDefault().pc.Fator : 1;
+                    */
                     //ParamIDEstruturaAreaCoberta = 
 
 
