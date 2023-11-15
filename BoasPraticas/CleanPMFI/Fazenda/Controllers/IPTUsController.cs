@@ -23,7 +23,13 @@ namespace Fazenda.Controllers
         public async Task<IActionResult> Index()
         {
             //return _context.IPTU != null ? View(await _context.IPTU.ToListAsync()) : Problem("Entity set 'DbprosigaContext.IPTU'  is null.");
-            var imoveis = await _context.TribEdificacoes.Take(100).ToListAsync();
+            var imoveis = await _context.TribEdificacoes.Where(e=>((e.EdifCaracteristica=="Predial" && e.EdifContinuacaoTerreno=="Não") 
+                                                                    ||
+                                                                  (e.EdifCaracteristica == "Territorial" && e.EdifContinuacaoTerreno == "Sim"))
+                                                                    &&
+                                                                   (e.EdifSituacao=="Normal") 
+                                                                                
+                                                                  ).Take(10).ToListAsync();
             List<IPTU> iPTUs = new List<IPTU>();
             foreach (TribEdificaco imovel in imoveis)
             {

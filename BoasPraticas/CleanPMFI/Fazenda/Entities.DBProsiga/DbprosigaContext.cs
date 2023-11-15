@@ -55275,6 +55275,16 @@ public partial class DbprosigaContext : DbContext
                 .IsUnicode(false)
                 .HasColumnName("inscricaoimobiliaria");
         });
+        modelBuilder.Entity<TribParamPlantaValore>(entity =>
+        {
+            entity.HasKey(e => new { e.Idplanta, e.TparamId, e.ParamId });
+
+            entity.HasIndex(e => new { e.TparamId, e.ParamId }, "IX_TParamID_ParamID").HasFillFactor(90);
+
+            entity.Property(e => e.Idplanta).HasColumnName("IDPlanta");
+            entity.Property(e => e.TparamId).HasColumnName("TParamID");
+            entity.Property(e => e.ParamId).HasColumnName("ParamID");
+        });
 
         modelBuilder.Entity<_24hrsMenu>(entity =>
         {
@@ -55319,4 +55329,5 @@ public partial class DbprosigaContext : DbContext
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 
     public DbSet<Fazenda.Models.IPTU> IPTU { get; set; } = default!;
+    public DbSet<TribParamPlantaValore> TribParamPlantaValores { get; set; }
 }

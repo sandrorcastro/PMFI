@@ -4,14 +4,14 @@
     ViewData["Title"] = "Index";
 }
 
-<h1>Index</h1>
+<h1>Simulado IPTU 2024</h1>
 
 
 <table class="table">
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.ID)
+                @Html.DisplayNameFor(model => model.EdificacaoID)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.InscricaoImobiliaria)
@@ -50,7 +50,15 @@
                 @Html.DisplayNameFor(model => model.FatorTopografia)
             </th>
             <th>
-                @Html.DisplayNameFor(model => model.EdificacaoID)
+                @Html.DisplayNameFor(model => model.ValorVenalTerreno)
+            </th>
+
+
+            <th>
+                @Html.DisplayNameFor(model => model.ValorVenalEdificacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorVenalCalculo)
             </th>
             <th></th>
         </tr>
@@ -59,7 +67,7 @@
 @foreach (var item in Model) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => item.ID)
+                @Html.DisplayFor(modelItem => item.EdificacaoID)
             </td>
             <td>
                 @Html.DisplayFor(modelItem => item.InscricaoImobiliaria)
@@ -97,9 +105,15 @@
             <td>
                 @Html.DisplayFor(modelItem => item.FatorTopografia)
             </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.EdificacaoID)
-            </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorVenalTerreno)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorVenalEdificacao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorVenalCalculo)
+                </td>
             <td>
                
                 <a asp-action="Detalhes" asp-route-id="@item.IPTUID">Details</a> 
