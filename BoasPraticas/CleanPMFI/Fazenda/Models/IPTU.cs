@@ -62,8 +62,8 @@ namespace Fazenda.Models
             this.imovel = imovel;
             EdificacaoID = this.imovel.EdificacaoId;
             InscricaoImobiliaria = this.imovel.InscricaoImobiliaria.ToString();
-            if (imovel.EdifCaracteristica == "Territorial")
-            {
+            //if (imovel.EdifCaracteristica == "Territorial")
+           // {
 
                     AreaTerreno = (decimal) _context.TribTerrenos.Find(this.imovel.TerrenoId).TerrAreaTerreno;
                     FatorCorrecaoArea = (decimal)_context.TribFatorCorAreas.Where(f=> f.FatCorAreaDe <=  this.areaTerreno && f.FatCorAreaAte  >= this.areaTerreno).FirstOrDefault().FatCorAreaFator;
@@ -130,7 +130,8 @@ namespace Fazenda.Models
                     ////////////////////////////////////////////////////////////////////////////////////////
                     ///Incia Calculo Valor Venal Edificação
                     ///
-            }else if (imovel.EdifCaracteristica=="Predial")
+            //}else
+            if (imovel.EdifCaracteristica=="Predial")
             {
 
                 AreaConstruida = (decimal)_context.TribEdificacoes.Find(imovel.EdificacaoId).EdifAreaConstruida;
@@ -194,7 +195,6 @@ namespace Fazenda.Models
                     }
                     ValorVenalEdificacao = ValorVenalEdificacao + ((double)(this.areaConstruida * this.valorM2));
                     ValorVenalEdificacao = ValorVenalEdificacao * (double)this.aliquotaDepreciacao;
-
 
                     /*
                      var FatorLocQuadraquery = from epc in _context.TribEdifParamCalculos
