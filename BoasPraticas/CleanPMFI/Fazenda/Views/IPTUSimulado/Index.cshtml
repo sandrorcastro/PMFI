@@ -1,0 +1,125 @@
+﻿@model IEnumerable<Fazenda.Models.IPTU>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Simulado 2023</h1>
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.EdificacaoID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.InscricaoImobiliaria)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AreaTerreno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FatorCorrecaoArea)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TestadaTerreno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ProfundidadePadrao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.LogradTestadaPrincipal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.QuadraId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FatorKID)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FatorKValor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FatorLocQuadra)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FatorPedologia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FatorTopografia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorVenalTerreno)
+            </th>
+
+
+            <th>
+                @Html.DisplayNameFor(model => model.ValorVenalEdificacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ValorVenalCalculo)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.EdificacaoID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.InscricaoImobiliaria)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.AreaTerreno)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FatorCorrecaoArea)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.TestadaTerreno)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ProfundidadePadrao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.LogradTestadaPrincipal)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.QuadraId)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FatorKID)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FatorKValor)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FatorLocQuadra)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FatorPedologia)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.FatorTopografia)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorVenalTerreno)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorVenalEdificacao)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.ValorVenalCalculo)
+                </td>
+                <td>
+
+                    <a asp-action="Detalhes" asp-route-id="@item.IPTUID">Details</a>
+
+                </td>
+        </tr>
+}
+    </tbody>
+</table>

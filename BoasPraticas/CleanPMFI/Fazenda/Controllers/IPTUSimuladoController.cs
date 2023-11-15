@@ -10,29 +10,29 @@ using Fazenda.Models;
 
 namespace Fazenda.Controllers
 {
-    public class IPTUsController : Controller
+    public class IPTUSimuladoController : Controller
     {
         private readonly DbprosigaContext _context;
 
-        public IPTUsController(DbprosigaContext context)
+        public IPTUSimuladoController(DbprosigaContext context)
         {
             _context = context;
         }
 
-        // GET: IPTUs
+        // GET: IPTUSimulado
         public async Task<IActionResult> Index()
         {
-            //return _context.IPTU != null ? View(await _context.IPTU.ToListAsync()) : Problem("Entity set 'DbprosigaContext.IPTU'  is null.");
             var imoveis = await _context.TribEdificacoes.Where(e => ((e.EdifCaracteristica == "Predial" && e.EdifContinuacaoTerreno == "Não")
-                                                                    ||
-                                                                  (e.EdifCaracteristica == "Territorial" && e.EdifContinuacaoTerreno == "Sim"))
-                                                                    &&
-                                                                   (e.EdifSituacao == "Normal")
-                                                                  // &&
-                                                                  // e.InscricaoImobiliaria == "06206021738001"
+                                                                  ||
+                                                                (e.EdifCaracteristica == "Territorial" && e.EdifContinuacaoTerreno == "Sim"))
+                                                                  &&
+                                                                 (e.EdifSituacao == "Normal")
+                                                                   &&
+                                                                   //  e.InscricaoImobiliaria == "06206021738001"
+                                                                   e.Terreno.TerrAreaTerreno < 10000
 
-                                                                  //).ToListAsync(); //  .Take(10).ToListAsync();
-                                                                  ).Take(10).OrderBy(i=>i.InscricaoImobiliaria).ToListAsync();
+
+                                                                ).Take(10).Include(t=>t.Terreno).ToListAsync(); //  .Take(10).ToListAsync();
             List<IPTU> iPTUs = new List<IPTU>();
             foreach (TribEdificaco imovel in imoveis)
             {
@@ -41,7 +41,7 @@ namespace Fazenda.Controllers
             return View(iPTUs);
         }
 
-        // GET: IPTUs/Details/5
+        // GET: IPTUSimulado/Details/5
         public async Task<IActionResult> Details(long? id)
         {
             if (id == null || _context.IPTU == null)
@@ -59,18 +59,18 @@ namespace Fazenda.Controllers
             return View(iPTU);
         }
 
-        // GET: IPTUs/Create
+        // GET: IPTUSimulado/Create
         public IActionResult Create()
         {
             return View();
         }
 
-        // POST: IPTUs/Create
+        // POST: IPTUSimulado/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("IPTUID")] IPTU iPTU)
+        public async Task<IActionResult> Create([Bind("IPTUID,ID")] IPTU iPTU)
         {
             if (ModelState.IsValid)
             {
@@ -81,7 +81,7 @@ namespace Fazenda.Controllers
             return View(iPTU);
         }
 
-        // GET: IPTUs/Edit/5
+        // GET: IPTUSimulado/Edit/5
         public async Task<IActionResult> Edit(long? id)
         {
             if (id == null || _context.IPTU == null)
@@ -97,12 +97,12 @@ namespace Fazenda.Controllers
             return View(iPTU);
         }
 
-        // POST: IPTUs/Edit/5
+        // POST: IPTUSimulado/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(long id, [Bind("IPTUID")] IPTU iPTU)
+        public async Task<IActionResult> Edit(long id, [Bind("IPTUID,ID")] IPTU iPTU)
         {
             if (id != iPTU.IPTUID)
             {
@@ -132,7 +132,7 @@ namespace Fazenda.Controllers
             return View(iPTU);
         }
 
-        // GET: IPTUs/Delete/5
+        // GET: IPTUSimulado/Delete/5
         public async Task<IActionResult> Delete(long? id)
         {
             if (id == null || _context.IPTU == null)
@@ -150,7 +150,7 @@ namespace Fazenda.Controllers
             return View(iPTU);
         }
 
-        // POST: IPTUs/Delete/5
+        // POST: IPTUSimulado/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(long id)
