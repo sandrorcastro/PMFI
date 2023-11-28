@@ -126,6 +126,7 @@ public partial class VistoriaPage : ContentPage
         {
 
             //await Navigation.PushAsync(new ProcessoListPage(database,entry.Text));
+            
             await Shell.Current.GoToAsync(nameof(ProcessoListPage), true, new Dictionary<string, object>
             {
                 //["Items"] = new ProcessoListPage(docencontrado)
@@ -136,6 +137,7 @@ public partial class VistoriaPage : ContentPage
         } else
         {
             await DisplayAlert(entry.Text, "Não foi encontrado Nenhum Processo!", "OK");
+            var result = await DisplayAlert("Situação Atual: ", "Obram em Andamento ou Finalizada", "Andamento", "Finalizada");
         }
         string text = ((Entry)sender).Text;
     }
