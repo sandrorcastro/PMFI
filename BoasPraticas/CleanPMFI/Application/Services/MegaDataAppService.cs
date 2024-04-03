@@ -51,7 +51,8 @@ namespace Application.Services
             var query = (from n in _NFSEDBContext.NfseTblNfses
                          join empresa in _NFSEDBContext.NfseTblEmpresas on n.Idempresa equals empresa.Idempresa
                          join contribuinte in _NFSEDBContext.NfseTblContribuintes on empresa.Idcontribuinte equals contribuinte.Idcontribuinte
-                         where n.Dtcompetencia >= entity.DataInicioPeriodo && n.Dtcompetencia < entity.DataFinalPeriodo && n.Stsituacao == "A"
+                         //where n.Dtcompetencia >= entity.DataInicioPeriodo && n.Dtcompetencia < entity.DataFinalPeriodo && n.Stsituacao == "A"
+                         where n.Dtdata >= entity.DataInicioPeriodo && n.Dtdata < entity.DataFinalPeriodo && n.Stsituacao == "A"
                          //where n.Dtcompetencia >= dti && n.Dtcompetencia < dtf && n.Stsituacao != "A"
 
                          //select new LayoutNFSE_MegaData { Ano = n.Dtcompetencia.ToString(), Numero = n.Nunumero });
