@@ -1,0 +1,281 @@
+﻿@model IEnumerable<DBProsiga.Entities.TribDividasContribuinte>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivAno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoTribId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivSubDivida)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivParcela)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivVencimento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivDataGeracao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivTipoDivida)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivDataBloqCorrecao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivDataBloqJuros)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivDataBloqMulta)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivVlrUltimaCorrecao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivDataUltimaCorrecao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivOrigemLancamento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivParcelaUnica)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TipoBxId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivMes)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivDataBaixa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivValorHistorico)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivValorBaixa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivMotivoBaixa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivQtdeBaixas)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.AutoInfrId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.UsuarioInclusao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivBxVlrJuros)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivBxVlrMulta)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivBxVlrCorrecao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivBxVlrDesconto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivBxVlrMultaDa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivObs)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivDescDivida)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivSaiBoleto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Idmoeda)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.EdiId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivValor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Multa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Juros)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Correcao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.MultaDividaAtiva)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DataCalculo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivValorBkp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDivExcluido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Con)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivAno)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoTribId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivSubDivida)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivParcela)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivVencimento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivDataGeracao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivTipoDivida)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivDataBloqCorrecao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivDataBloqJuros)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivDataBloqMulta)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivVlrUltimaCorrecao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivDataUltimaCorrecao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivOrigemLancamento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivParcelaUnica)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TipoBxId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivMes)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivDataBaixa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivValorHistorico)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivValorBaixa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivMotivoBaixa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivQtdeBaixas)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AutoInfrId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.UsuarioInclusao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivBxVlrJuros)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivBxVlrMulta)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivBxVlrCorrecao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivBxVlrDesconto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivBxVlrMultaDa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivObs)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivDescDivida)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivSaiBoleto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Idmoeda)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.EdiId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivValor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Multa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Juros)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Correcao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.MultaDividaAtiva)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DataCalculo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivValorBkp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDivExcluido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Con.ConTipoPessoa)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ConIddivida">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ConIddivida">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ConIddivida">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

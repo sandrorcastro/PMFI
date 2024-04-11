@@ -1,0 +1,377 @@
+﻿@model IEnumerable<DBProsiga.Entities.Contribuinte>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ConTipoPessoa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConNome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConCnpjcpf)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConNomeFantasia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConInscrEstadual)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConCargo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConFuncao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConCmc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDtNasc)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConSexo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConRg)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConRgdtEmissao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConRgorgaoExp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConRgufexp)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConNumTitulo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConNumHabilitacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConCatHabilitacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConIdtipoDocumento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConNrDocumento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConUfdocumento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConNacionalidade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConNacCorrigida)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConEstadoCivil)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConProfissao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConTelefones)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConTelefoneResidencial)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConTelefoneComercial)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConTelefoneCelular)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConEmail)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConCep)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConTipoLograd)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConEndereco)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConNumero)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConComplemento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConCidNascId)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConRespRg)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConRespNome)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConFoto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConIdconjuge)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConSite)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConIdanterior)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConRendaMensal)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConFalecido)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConGrafica)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDtBaseTce)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConIdcbo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConNomeMae)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConTecUltAlt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDtUltAlt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConSenha)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDtValidadeSenha)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConDtCriaSenha)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConFonetizado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConIdnacionalidade)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TmpConFoneAuxiliar)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TmpTipoPessoa)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConBairro)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ConCidade)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConTipoPessoa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConNome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConCnpjcpf)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConNomeFantasia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConInscrEstadual)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConCargo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConFuncao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConCmc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDtNasc)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConSexo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConRg)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConRgdtEmissao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConRgorgaoExp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConRgufexp)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConNumTitulo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConNumHabilitacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConCatHabilitacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConIdtipoDocumento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConNrDocumento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConUfdocumento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConNacionalidade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConNacCorrigida)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConEstadoCivil)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConProfissao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConTelefones)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConTelefoneResidencial)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConTelefoneComercial)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConTelefoneCelular)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConEmail)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConCep)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConTipoLograd)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConEndereco)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConNumero)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConComplemento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConCidNascId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConRespRg)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConRespNome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConFoto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConIdconjuge)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConSite)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConIdanterior)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConRendaMensal)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConFalecido)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConGrafica)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDtBaseTce)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConIdcbo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConNomeMae)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConTecUltAlt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDtUltAlt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConSenha)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDtValidadeSenha)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConDtCriaSenha)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConFonetizado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConIdnacionalidade)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TmpConFoneAuxiliar)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TmpTipoPessoa)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConBairro.BairroId)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ConCidade.CidadeId)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.ConId">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.ConId">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.ConId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
