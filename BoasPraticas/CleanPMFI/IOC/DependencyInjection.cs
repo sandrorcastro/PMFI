@@ -11,6 +11,7 @@ using Domain.Interfaces.Services;
 using Domain.Services;
 using Domain.Services.Base;
 using Infrastructure.Context;
+using Infrastructure.Context.DBProsiga;
 using Infrastructure.Evaluators;
 using Infrastructure.Repositories;
 using Infrastructure.Repositories.Base;
@@ -28,7 +29,12 @@ namespace IOC
         
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-            
+
+            services.AddDbContextFactory<DBProsigaContext>(options => {
+                //services.AddDbContext<DBProsigaContext>(options => {
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection-DBProsigaDev"),
+                b => b.MigrationsAssembly(typeof(DBProsigaContext).Assembly.FullName));
+            });
 
             services.AddDbContextFactory<ApplicationDbContext>(options => {
             //services.AddDbContext<ApplicationDbContext>(options => {
