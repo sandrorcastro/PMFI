@@ -1,6 +1,7 @@
-using ITBI.Client.Pages;
+//using ITBI.Client.Pages;
 using ITBI.Components;
 using ITBI.Context;
+using ITBI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.FluentUI.AspNetCore.Components;
@@ -20,7 +21,8 @@ builder.Services.AddDbContextFactory<DbprosigaContext>(options => {
 });
 
 builder.Services.AddDataGridEntityFrameworkAdapter();
-
+builder.Services.AddScoped<IContribuinteService, ContribuinteService>();
+builder.Services.AddScoped<IImovelService, ImovelService>();
 
 var app = builder.Build();
 
@@ -43,7 +45,7 @@ app.UseAntiforgery();
 
 app.MapRazorComponents<App>()
     .AddInteractiveServerRenderMode()
-    .AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(Counter).Assembly);
+    .AddInteractiveWebAssemblyRenderMode();
+  //  .AddAdditionalAssemblies(typeof(Counter).Assembly);
 
 app.Run();

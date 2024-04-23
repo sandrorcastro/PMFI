@@ -4,10 +4,14 @@
 @using ITBI.Context
 @using ITBI.Entities.DBProsiga
 @using Microsoft.EntityFrameworkCore
+@using ITBI.Services
 @rendermode InteractiveServer
 @inject IDialogService _dialogService
 @inject IDialogService DialogService
 @inject IDbContextFactory<DbprosigaContext> DbFactory
+@inject IImovelService imovelService
+@inject IContribuinteService contribuinteService
+
 
 <FluentWizard StepperPosition="StepperPosition.Left"
               DisplayStepNumber="@(WizardStepStatus.Current | WizardStepStatus.Next)"
@@ -19,30 +23,30 @@
     <Steps>
         <FluentWizardStep Label="Inscrição Imobiliária"
                           OnChange="@OnStepChange">
-            <FluentEditForm Model="tribedificacao" FormName="inscricaoInfo" OnValidSubmit="@OnValidSubmitBuscaInscricao" OnInvalidSubmit="OnInvalidSubmit">
+            <FluentEditForm Model="imovel" FormName="inscricaoInfo" OnValidSubmit="@OnValidSubmitBuscaInscricao" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <FluentTextField Placeholder="Inscricção Imobiliária" @bind-Value="tribedificacao.InscricaoImobiliaria" />
+                    <FluentTextField Placeholder="Inscricção Imobiliária" @bind-Value="imovel.InscricaoImobiliaria" />
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
         </FluentWizardStep>
         <FluentWizardStep Label="Informações do Imóvel"
                           OnChange="@OnStepChange">
-            <FluentEditForm Model="tribedificacao" FormName="imovelInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+            <FluentEditForm Model="imovel" FormName="imovelInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <FluentTextField Placeholder="Inscrição Imobiliária" @bind-Value="tribedificacao.InscricaoImobiliaria"> Inscrição Imobiliária</FluentTextField> 
-                    <FluentTextField Placeholder="Matrícula" @bind-Value="tribedificacao.EdifMatricula">Matrícula</FluentTextField> 
+                    <FluentTextField Placeholder="Inscrição Imobiliária" @bind-Value="imovel.InscricaoImobiliaria"> Inscrição Imobiliária</FluentTextField> 
+                    <FluentTextField Placeholder="Matrícula" @bind-Value="imovel.EdifMatricula">Matrícula</FluentTextField> 
                     <FluentTextField Placeholder="Número do Cartório de Ofício" @bind-Value="oficio">Número do Cartório de Ofício</FluentTextField> 
-                    <FluentTextField Placeholder="Caracteristica" @bind-Value="tribedificacao.EdifCaracteristica">Caracteristica</FluentTextField> 
+                    <FluentTextField Placeholder="Caracteristica" @bind-Value="imovel.EdifCaracteristica">Caracteristica</FluentTextField> 
                     <FluentTextField Placeholder="Área Terreno" @bind-Value="areaterreno">Área do Terreno</FluentTextField> 
                     <FluentTextField Placeholder="Área Construída" @bind-Value="areaconstruida">Área do Construída</FluentTextField> 
                     <FluentTextField Placeholder="Fração" @bind-Value="fracao">Fração</FluentTextField> 
-                    <FluentTextField Placeholder="TipoLogradouro" @bind-Value="logradouroimovel.LogradTipo">TipoLogradouro</FluentTextField> 
-                    <FluentTextField Placeholder="Logradouro" @bind-Value="logradouroimovel.LogradNome">Logradouro</FluentTextField> 
-                    <FluentTextField Placeholder="Número" @bind-Value="tribedificacao.EdifNumeracao">Numero</FluentTextField> 
-                    <FluentTextField Placeholder="Bairro" @bind-Value="loteamentoimovel.Descricao">Bairro</FluentTextField> 
+                    <FluentTextField Placeholder="TipoLogradouro" @bind-Value="imovel.Lograd.LogradTipo">TipoLogradouro</FluentTextField> 
+                    <FluentTextField Placeholder="Logradouro" @bind-Value="imovel.Lograd.LogradNome">Logradouro</FluentTextField> 
+                    <FluentTextField Placeholder="Número" @bind-Value="imovel.EdifNumeracao">Numero</FluentTextField> 
+                    <FluentTextField Placeholder="Bairro" @bind-Value="imovel.IdloteamentoNavigation.Descricao">Bairro</FluentTextField> 
                   <!-- 
                     <FluentTextField Placeholder="Logradouro" @bind-Value="@logradouroimovelConcat">Logradouro</FluentTextField> 
 
@@ -50,11 +54,12 @@
                     <Endereco></Endereco>
 
                   --> 
-                    
+
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
         </FluentWizardStep>
+           <!-- 
         <FluentWizardStep Label="Transmitentes"  OnChange="@OnStepChange">
                 <FluentDataGrid Items="@transmitentes">
                     <PropertyColumn Property="@(t => t.Con.ConCnpjcpf)" Sortable="true"/>
@@ -67,17 +72,18 @@
                     <PropertyColumn Property="@(t => t.Percentual)" Sortable="true" />
                 </FluentDataGrid>
         </FluentWizardStep>
+        -->
+        <!-- 
+
         <FluentWizardStep Label="Adquirentes"  OnChange="@OnStepChange">
                 <FluentButton OnClick="OpenDialog" Appearance="Appearance.Accent">Adicionar Adquirente</FluentButton>
                 <FluentDataGrid Items="@adquirentes">
                     <PropertyColumn Property="@(a => a.ConCnpjcpf)" Sortable="true"/>
                     <PropertyColumn Property="@(a => a.ConNome)" Sortable="true" />
-                    <!-- 
-                                            <PropertyColumn Property="@(a => a.Percentual)" Sortable="true" />
-                    -->
                 </FluentDataGrid>
         </FluentWizardStep>
 
+        -->
         
         <FluentWizardStep Label="Set budget"
                           Summary="Identify the best price"
@@ -102,6 +108,7 @@
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
         </FluentWizardStep>
+              
     </Steps>
 </FluentWizard>
 
@@ -115,22 +122,25 @@
 @code
 {
 
-    private IQueryable<TribEdificaco> tribEdificacoQueryable;
-    private IQueryable<TribEdificacoesContrib> tribEdificacoesContribQueryable;
-    private TribEdificaco? tribedificacao = new TribEdificaco();
-    private IQueryable<TribEdificacoesContrib>? transmitentes;
-    private IQueryable<Contribuinte>? adquirentes;
-    private long? edificacaoid = null;
+    //  private IQueryable<TribEdificaco> tribEdificacoQueryable;
+    //  private IQueryable<TribEdificaco> imovelQ;
+    private TribEdificaco? imovel { get; set; } = new TribEdificaco() { InscricaoImobiliaria=string.Empty, Lograd = new Logradouro(),Terreno= new TribTerreno(),IdloteamentoNavigation=new Loteamento()};
+    //   private IQueryable<TribEdificacoesContrib> tribEdificacoesContribQueryable;
+    //   private TribEdificaco? tribedificacao = new TribEdificaco() ;//{ InscricaoImobiliaria=null};
+    //   private IQueryable<TribEdificacoesContrib>? transmitentes;
+    //   private IQueryable<Contribuinte>? adquirentes;
+    //   private long? edificacaoid = null;
+
     private string? oficio = null;
     public string? adquirentecpfcnpj = null;
     private string? areaterreno = null;
     private string? areaconstruida = null;
     private string? fracao = null;
     //private DbprosigaContext contexto = DbFactory.CreateDbContext();
-
-    public Logradouro? logradouroimovel = new Logradouro();
-    public Loteamento? loteamentoimovel = new Loteamento();
-    public string? logradouroimovelConcat = null;
+    //  public Contribuinte? novoContribuinte = null;
+    //  public Logradouro? logradouroimovel = new Logradouro();
+    //  public Loteamento? loteamentoimovel = new Loteamento();
+    //  public string? logradouroimovelConcat = null;
     private FormData1 _formData1 = new FormData1();
     private FormData2 _formData2 = new FormData2();
     private FinishFormData _finishFormData = new FinishFormData();
@@ -155,70 +165,89 @@
     }
     async Task OnValidSubmitBuscaInscricao()
     {
-
-
         _overlayIsVisible = true;
-        try
-        {
-            var contexto = DbFactory.CreateDbContext();
-            //tribEdificacoQueryable = contexto.TribEdificacoes.AsQueryable().SingleOrDefaultAsync(i => i.InscricaoImobiliaria == tribedificacao.InscricaoImobiliaria);
-            /*       tribEdificacoQueryable =  contexto.TribEdificacoes.Where(i => i.InscricaoImobiliaria == tribedificacao.InscricaoImobiliaria.PadLeft(14,'0'))
-                                                                   .Include(t=> t.Terreno)
-                                                                   .Include(l=> l.Lograd)
-                                                                   .Include(l => l.IdloteamentoNavigation)
-                                                                   .AsQueryable<TribEdificaco>();*/
-
-
-            if (contexto is not null && contexto.TribEdificacoes is not null)
-            {
-                //   tribedificacao = await contexto.TribEdificacoes.SingleOrDefaultAsync(i => i.InscricaoImobiliaria == tribedificacao.InscricaoImobiliaria);
-                //tribedificacao.IdloteamentoNavigation = new Loteamento();
-                tribedificacao = tribEdificacoQueryable.FirstOrDefault();
-                oficio = tribedificacao.EdifNumOficio.ToString();
-                areaconstruida = tribedificacao.EdifAreaConstruida.ToString();
-                areaterreno = tribedificacao.Terreno.TerrAreaTerreno.ToString();
-                fracao = tribedificacao.EdifFracaoIdealEdificacao.ToString();
-                logradouroimovel =  tribedificacao.Lograd;
-                loteamentoimovel = tribedificacao.IdloteamentoNavigation;
-                edificacaoid = tribedificacao.EdificacaoId;
-                transmitentes = tribEdificacoesContribQueryable.AsQueryable();
-            //    transmitentes = tribEdificacoQueryable.AsQueryable<TribEdificacoesContrib>().TribEdificacoesContribs; // .AsQueryable<TribEdificacoesContrib>();
-                // logradouroimovelConcat = String.Concat(tribedificacao.Lograd.LogradTipo, ' ', tribedificacao.Lograd.LogradNome, ',', tribedificacao.EdifNumeracao); //, ',', tribedificacao.IdloteamentoNavigation.Descricao);
-                if (tribedificacao is null)
-                {
-                    await DialogService.ShowInfoAsync("Inscrição Inexistente!");
-                }
-            }
-        }
-        finally
-        {
-            _overlayIsVisible = false;
-        }
-        _overlayIsVisible = false;
-
-
-
-        //_overlayIsVisible = false;
-    }
-
-    protected override async Task OnInitializedAsync()
-    {
-        _overlayIsVisible = true;
-        var contexto = DbFactory.CreateDbContext();
-        tribEdificacoQueryable = contexto.TribEdificacoes.Where(i => i.InscricaoImobiliaria == tribedificacao.InscricaoImobiliaria.PadLeft(14, '0'))
-                                                           .Include(t => t.Terreno)
-                                                           .Include(l => l.Lograd)
-                                                           .Include(l => l.IdloteamentoNavigation)
-                                                           .Include(c=>c.TribEdificacoesContribs).ThenInclude(x => x.Con)
-                                                           .AsQueryable<TribEdificaco>();
-
-        tribEdificacoesContribQueryable = contexto.TribEdificacoesContribs.Where(e => e.EdificacaoId == edificacaoid).AsQueryable<TribEdificacoesContrib>();
-     //   transmitentes = tribEdificacoesContribQueryable;
-
-        adquirentes = contexto.Contribuintes.Where(c => c.ConCnpjcpf == adquirentecpfcnpj).AsQueryable<Contribuinte>();
-        await base.OnInitializedAsync();
+        imovel = await imovelService.GetImovel(imovel.InscricaoImobiliaria);
+        oficio = imovel.EdifNumOficio.ToString();
+        areaconstruida = imovel.EdifAreaConstruida.ToString();
+        areaterreno = imovel.Terreno.TerrAreaTerreno.ToString();
+        fracao = imovel.EdifFracaoIdealEdificacao.ToString();
+    //    logradouroimovel = tribedificacao.Lograd;
+     //   loteamentoimovel = tribedificacao.IdloteamentoNavigation;
+     //   edificacaoid = tribedificacao.EdificacaoId;
+     //   transmitentes = tribEdificacoesContribQueryable.AsQueryable();
+     //   //tribedificacao = tribEdificacoQueryable.FirstOrDefault();*/
         _overlayIsVisible = false;
     }
+   // async Task OnValidSubmitBuscaInscricao2()
+    //{
+
+
+ //       _overlayIsVisible = true;
+   //     try
+     //   {
+    //    //    var contexto = DbFactory.CreateDbContext();
+      //      //tribEdificacoQueryable = contexto.TribEdificacoes.AsQueryable().SingleOrDefaultAsync(i => i.InscricaoImobiliaria == tribedificacao.InscricaoImobiliaria);
+      //      /*       tribEdificacoQueryable =  contexto.TribEdificacoes.Where(i => i.InscricaoImobiliaria == tribedificacao.InscricaoImobiliaria.PadLeft(14,'0'))
+       //                                                            .Include(t=> t.Terreno)
+       //                                                            .Include(l=> l.Lograd)
+       //                                                            .Include(l => l.IdloteamentoNavigation)
+       //                                                            .AsQueryable<TribEdificaco>();*/
+
+
+        //    if (contexto is not null && contexto.TribEdificacoes is not null)
+          //  {
+            //    //   tribedificacao = await contexto.TribEdificacoes.SingleOrDefaultAsync(i => i.InscricaoImobiliaria == tribedificacao.InscricaoImobiliaria);
+           //     //tribedificacao.IdloteamentoNavigation = new Loteamento();
+           //     tribedificacao = tribEdificacoQueryable.FirstOrDefault();
+           //     oficio = tribedificacao.EdifNumOficio.ToString();
+           //     areaconstruida = tribedificacao.EdifAreaConstruida.ToString();
+           //     areaterreno = tribedificacao.Terreno.TerrAreaTerreno.ToString();
+           //     fracao = tribedificacao.EdifFracaoIdealEdificacao.ToString();
+           //     logradouroimovel =  tribedificacao.Lograd;
+           //     loteamentoimovel = tribedificacao.IdloteamentoNavigation;
+           //     edificacaoid = tribedificacao.EdificacaoId;
+           //     transmitentes = tribEdificacoesContribQueryable.AsQueryable();
+           //     //    transmitentes = tribEdificacoQueryable.AsQueryable<TribEdificacoesContrib>().TribEdificacoesContribs; // .AsQueryable<TribEdificacoesContrib>();
+           //     // logradouroimovelConcat = String.Concat(tribedificacao.Lograd.LogradTipo, ' ', tribedificacao.Lograd.LogradNome, ',', tribedificacao.EdifNumeracao); //, ',', tribedificacao.IdloteamentoNavigation.Descricao);
+           //     if (tribedificacao is null)
+          //      {
+          //          await DialogService.ShowInfoAsync("Inscrição Inexistente!");
+          //      }
+          //  }
+       // }
+       // finally
+       // {
+       //     _overlayIsVisible = false;
+       // }
+       // _overlayIsVisible = false;
+
+
+
+       // //_overlayIsVisible = false;
+    //}
+    
+    //protected override async Task OnInitializedAsync()
+    //{
+      //  _overlayIsVisible = true;
+      //  var contexto = DbFactory.CreateDbContext();
+     //   /* tribEdificacoQueryable = contexto.TribEdificacoes.Where(i => i.InscricaoImobiliaria == tribedificacao.InscricaoImobiliaria.PadLeft(14, '0'))
+     //                                                       .Include(t => t.Terreno)
+     //                                                       .Include(l => l.Lograd)
+     //                                                       .Include(l => l.IdloteamentoNavigation)
+     //                                                       .Include(c=>c.TribEdificacoesContribs).ThenInclude(x => x.Con)
+     //                                                       .AsQueryable<TribEdificaco>();*/
+     //   //tribEdificacoQueryable = await imovelService.GetImovelQueryable(tribedificacao.InscricaoImobiliaria);
+     //   //tribEdificacao = await imovelService.GetImovel(tribedificacao.InscricaoImobiliaria);
+
+     //   //tribEdificacoesContribQueryable = contexto.TribEdificacoesContribs.Where(e => e.EdificacaoId == edificacaoid).AsQueryable<TribEdificacoesContrib>();
+     //  //  tribEdificacoesContribQueryable = contexto.TribEdificacoesContribs.Where(e => e.EdificacaoId == edificacaoid).AsQueryable<TribEdificacoesContrib>();
+    //  //   transmitentes = tribEdificacoesContribQueryable;
+
+     //   adquirentes = contexto.Contribuintes.Where(c => c.ConCnpjcpf == adquirentecpfcnpj).AsQueryable<Contribuinte>();
+     //   await base.OnInitializedAsync();
+      //  _overlayIsVisible = false;
+    //}
+    //
     void OnInvalidSubmit()
     {
         //DemoLogger.WriteLine($"OnInvalidSubmit called");
@@ -261,21 +290,45 @@
         [MinLength(5)]
         public string? Signature { get; set; }
     }
-    private async Task OpenDialog()
-    {
-        var text = string.Empty;
-        var dialogInstance = await _dialogService.ShowDialogAsync(@<div>
-        <FluentTextField @bind-Value=text Label="CPF/CNPJ:" />
-    </div>
-    , new DialogParameters
-    {
-        Title = "Adiciona Adquirentes",
-    });
+    //private async Task OpenDialog()
+    //{
+    //    var text = string.Empty;
+    //    //<FluentTextField @bind-Value=text Label="CPF/CNPJ:" />
+    //    var dialogInstance = await _dialogService.ShowDialogAsync(@<div>
+    //            <FluentTextField @bind-Value=adquirentecpfcnpj Label="CPF/CNPJ:" />
+    //                                                             </div>
+    //, new DialogParameters
+    //                                        {Title = "Digite o CPF/CNPJ do Adquirente", });
+    //
+     //   var result = await dialogInstance.Result;
+     //   if (!result.Cancelled)
+     //   {
+     //       var adqui = await adquirentes.FirstOrDefaultAsync();
+     //       await AdicionaAdiquirenteDialog(adqui);
+     //       //await _dialogService.ShowSuccessAsync($"You entered: {text}", "Success");
+     //       //if(adqui) //.ConCnpjcpf !null){
+     //       //    await _dialogService.ShowSuccessAsync($"Você adicionou: {adqui.ConNome}", "Successo");
+     //       //}else
+     //       // {
+     //       //   await _dialogService.ShowInfoAsync($"Contribuinte não encontrado: {adqui.ConNome}", "Success");
+     //       //}
 
-        var result = await dialogInstance.Result;
-        if (!result.Cancelled)
-        {
-            await _dialogService.ShowSuccessAsync($"You entered: {text}", "Success");
-        }
-    }
+     //   }
+    //}
+   // private async Task AdicionaAdiquirenteDialog(Contribuinte contribuinte)
+   // {
+      //  novoContribuinte = contribuinte;
+      //  //Contribuinte con = new Contribuinte() { ConCnpjcpf=adquirentecpfcnpj};
+      //  //<FluentTextField @bind-Value=text Label="CPF/CNPJ:" />
+      //  var dialogInstance = await _dialogService.ShowDialogAsync(
+        //    @<div>
+       //             <FluentTextField @bind-Value=novoContribuinte.ConNome Label="Nome/Razão:" />
+      //              <FluentTextField @bind-Value=novoContribuinte.ConCnpjcpf Label="CPF/CNPJ:" />
+    //        </div>
+  //  , new DialogParameters
+  //  { Title = "Adicionar Contribuinte", });
+
+
+    //    //    await _dialogService.ShowSuccessAsync($"Você adicionou: {adqui.ConNome}", "Successo");
+    //}
 }
