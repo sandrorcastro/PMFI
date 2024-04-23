@@ -75,7 +75,7 @@
         </FluentWizardStep>
                 
         <FluentWizardStep Label="Adquirentes"  OnChange="@OnStepChange">
-                <FluentButton OnClick=@OpenContribuinteDialog Appearance="Appearance.Accent">Adicionar Adquirente</FluentButton>
+                <FluentButton OnClick="@BuscarContribuinteDialog" Appearance="Appearance.Accent">Adicionar Adquirente</FluentButton>
                 <FluentDataGrid Items="@adquirentes">
                     <PropertyColumn Property="@(a => a.ConCnpjcpf)" Sortable="true"/>
                     <PropertyColumn Property="@(a => a.ConNome)" Sortable="true" />
@@ -120,7 +120,6 @@
 
 @code
 {
-    ContribuinteDialog.RegisterContent DialogData { get; set; } = new() { Id = 1, Name = "Denis", Age = 24 };
     //  private IQueryable<TribEdificaco> tribEdificacoQueryable;
     //  private IQueryable<TribEdificaco> imovelQ;
     private TribEdificaco? imovel { get; set; } = new TribEdificaco() { 
@@ -296,16 +295,17 @@
         [MinLength(5)]
         public string? Signature { get; set; }
     }
+    ContribuinteEditDialog.RegisterContent DialogData { get; set; } = new() { cpfcnpj = "76247813953", Nome = "Sandro",NomeMeio="Ronaldo de", SobreNome="Castro" };
     private async Task OpenContribuinteDialog()
     {
         // Create a new instance of DialogData
         // to allow the user to cancel the update
-        var data = DialogData with { Id = 0 } ?? new();
+        var data = DialogData with { cpfcnpj = string.Empty } ?? new();
 
-        var dialog = await DialogService.ShowDialogAsync<ContribuinteDialog>(data, new DialogParameters()
+        var dialog = await DialogService.ShowDialogAsync<ContribuinteEditDialog>(data, new DialogParameters()
             {
                 Height = "400px",
-                Title = $"Updating the {DialogData.Name} sheet",
+                Title = $"Atualizando {DialogData.Nome} sheet",
                 PreventDismissOnOverlayClick = true,
                 PreventScroll = true,
             });
@@ -313,7 +313,29 @@
         var result = await dialog.Result;
         if (!result.Cancelled && result.Data != null)
         {
-            DialogData = (ContribuinteDialog.RegisterContent)result.Data;
+            DialogData = (ContribuinteEditDialog.RegisterContent)result.Data;
+        }
+    }
+    BuscarContribuinteDialog.RegisterContent BuscarContribuinteDialogData { get; set; } = new() { cpfcnpj = "" };
+    private async Task BuscarContribuinteDialog()
+    {
+        // Create a new instance of DialogData
+        // to allow the user to cancel the update
+        var data = BuscarContribuinteDialogData with { cpfcnpj = string.Empty }; // ?? new();
+
+        var dialog = await DialogService.ShowDialogAsync<BuscarContribuinteDialog>(data, new DialogParameters()
+            {
+                Height = "400px",
+                Title = $"Buscar Adquirente",
+                PreventDismissOnOverlayClick = true,
+                PreventScroll = true,
+            });
+
+        var result = await dialog.Result;
+        if (!result.Cancelled && result.Data != null)
+        {
+            BuscarContribuinteDialogData = (BuscarContribuinteDialog.RegisterContent)result.Data;
+            //var contribuinte = contribuinteService.GetContribuinte(BuscarContribuinteDialogData.cpfcnpj);
         }
     }
     private async Task OpenDialog()

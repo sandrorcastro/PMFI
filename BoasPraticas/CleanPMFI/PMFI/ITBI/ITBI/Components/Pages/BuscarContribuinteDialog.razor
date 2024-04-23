@@ -1,5 +1,7 @@
 ﻿@using System.ComponentModel.DataAnnotations
-@implements IDialogContentComponent<ContribuinteDialog.RegisterContent>
+@using ITBI.Services
+@inject IContribuinteService contribuinteService
+@implements IDialogContentComponent<BuscarContribuinteDialog.RegisterContent>
 
 <!-- Header -->
 <FluentDialogHeader ShowDismiss="true">
@@ -13,22 +15,17 @@
 
 <!-- Body -->
 <FluentDialogBody>
-    <EditForm EditContext="@_editContext" FormName="simple_register">
+    <EditForm EditContext="@_editContext" FormName="buscarcontribuinte_register">
         <DataAnnotationsValidator />
 
         <FluentLabel Style="margin-bottom: 16px;">
             Digite o CPF/CNPJ desejado.
         </FluentLabel>
 
-        <FluentTextField Name="register_name"
-                         @bind-Value="@Content.Name"
-                         Label="Name"
+        <FluentTextField Name="register_cpfcnpj"
+                         @bind-Value="@Content.cpfcnpj"
+                         Label="CPF/CNPJ"
                          Required />
-        <FluentNumberField Name="register_age"
-                           @bind-Value="@Content.Age"
-                           Label="Age"
-                           Required />
-
         <div style="color: var(--error);">
             <FluentValidationSummary />
         </div>
@@ -39,8 +36,9 @@
 <FluentDialogFooter>
     <FluentButton Appearance="Appearance.Accent"
                   Disabled="@(!_editContext.Validate())"
-                  OnClick="@SaveAsync">
-        Save
+                  
+                  OnClick="@BuscarAsync">
+        Buscar
     </FluentButton>
     <FluentButton Appearance="Appearance.Neutral"
                   OnClick="@CancelAsync">
@@ -56,17 +54,19 @@
     public FluentDialog Dialog { get; set; } = default!;
 
     [Parameter]
-    public ContribuinteDialog.RegisterContent Content { get; set; } = default!;
+    public BuscarContribuinteDialog.RegisterContent Content { get; set; } = default!;
 
     protected override void OnInitialized()
     {
         _editContext = new EditContext(Content);
     }
 
-    private async Task SaveAsync()
+    private async Task BuscarAsync()
     {
         if (_editContext.Validate())
         {
+            var contribuinte = contribuinteService.GetContribuinte(Content.cpfcnpj);
+           
             await Dialog.CloseAsync(Content);
         }
     }
@@ -78,15 +78,12 @@
 
     public record RegisterContent
     {
-        public int Id { get; set; } = 0;
+        //   public int Id = 0;
+       // [MinLength(14)]
+       // [MaxLength(14)]
+        public string cpfcnpj { get; set; } =  string.Empty;
 
-        [MinLength(3)]
-        [MaxLength(20)]
-        public string Name { get; set; } = string.Empty;
 
-        [Range(1, 99)]
-        public int Age { get; set; }
-        [Range(1, 99)]
-        public int Age2 { get; set; }
+        
     }
 }
