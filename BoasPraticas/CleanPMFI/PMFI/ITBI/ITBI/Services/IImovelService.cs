@@ -7,7 +7,7 @@ namespace ITBI.Services
         Task<List<TribEdificaco>> GetImoveis();
         Task<IQueryable<TribEdificaco>> GetImoveisQueryable();
 
-        Task<TribEdificaco> GetImovel(string? cpfcnpj);
+        Task<TribEdificaco> GetImovel(string? inscricaoimobiliaria);
         Task<IQueryable<TribEdificaco>> GetImovelQueryable(string? inscricaoimobiliaria);
         //Task<IQueryable<TribEdificaco>> GetImovelQueryable();
 

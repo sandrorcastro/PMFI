@@ -31,12 +31,12 @@ namespace ITBI.Services
             var contexto = dbContextFactory.CreateDbContext();
 
             var contribuinte = await contexto.Contribuintes.FirstOrDefaultAsync(c => c.ConCnpjcpf == cpfcnpj);
-            if (contribuinte == null)
+         /*   if (contribuinte == null)
             {
                 throw new EntityNotFoundException($"Contribuinte com CPF/CNPJ {cpfcnpj} não encontrado.");
-            }
+            }*/
 
-            return contribuinte ?? new Contribuinte();
+            return contribuinte ?? null; // new Contribuinte();
 
            // throw new NotImplementedException();
         }

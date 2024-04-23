@@ -20,7 +20,7 @@ namespace ITBI.Services
             var imovel = await contexto.TribEdificacoes.Include(t => t.Terreno)
                                                            .Include(l => l.Lograd)
                                                            .Include(l => l.IdloteamentoNavigation)
-                                                           .Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con)
+                                                           .Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con).AsQueryable()
                                                            .FirstOrDefaultAsync(c => c.InscricaoImobiliaria == inscricaoimobiliaria.PadLeft(14,'0'));
             if (imovel == null)
             {
