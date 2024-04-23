@@ -5,6 +5,7 @@
 @using ITBI.Entities.DBProsiga
 @using Microsoft.EntityFrameworkCore
 @using ITBI.Services
+@using ITBI.Components.Pages
 @rendermode InteractiveServer
 @inject IDialogService _dialogService
 @inject IDialogService DialogService
@@ -74,7 +75,7 @@
         </FluentWizardStep>
                 
         <FluentWizardStep Label="Adquirentes"  OnChange="@OnStepChange">
-                <FluentButton OnClick="OpenDialog" Appearance="Appearance.Accent">Adicionar Adquirente</FluentButton>
+                <FluentButton OnClick=@OpenContribuinteDialog Appearance="Appearance.Accent">Adicionar Adquirente</FluentButton>
                 <FluentDataGrid Items="@adquirentes">
                     <PropertyColumn Property="@(a => a.ConCnpjcpf)" Sortable="true"/>
                     <PropertyColumn Property="@(a => a.ConNome)" Sortable="true" />
@@ -119,7 +120,7 @@
 
 @code
 {
-
+    ContribuinteDialog.RegisterContent DialogData { get; set; } = new() { Id = 1, Name = "Denis", Age = 24 };
     //  private IQueryable<TribEdificaco> tribEdificacoQueryable;
     //  private IQueryable<TribEdificaco> imovelQ;
     private TribEdificaco? imovel { get; set; } = new TribEdificaco() { 
@@ -177,80 +178,80 @@
         areaterreno = imovel.Terreno.TerrAreaTerreno.ToString();
         fracao = imovel.EdifFracaoIdealEdificacao.ToString();
         transmitentes = imovel.TribEdificacoesContribs.AsQueryable();
-    //    logradouroimovel = tribedificacao.Lograd;
-     //   loteamentoimovel = tribedificacao.IdloteamentoNavigation;
-     //   edificacaoid = tribedificacao.EdificacaoId;
-     //   //tribedificacao = tribEdificacoQueryable.FirstOrDefault();*/
+        //    logradouroimovel = tribedificacao.Lograd;
+        //   loteamentoimovel = tribedificacao.IdloteamentoNavigation;
+        //   edificacaoid = tribedificacao.EdificacaoId;
+        //   //tribedificacao = tribEdificacoQueryable.FirstOrDefault();*/
         _overlayIsVisible = false;
     }
-   // async Task OnValidSubmitBuscaInscricao2()
+    // async Task OnValidSubmitBuscaInscricao2()
     //{
 
 
- //       _overlayIsVisible = true;
-   //     try
-     //   {
+    //       _overlayIsVisible = true;
+    //     try
+    //   {
     //    //    var contexto = DbFactory.CreateDbContext();
-      //      //tribEdificacoQueryable = contexto.TribEdificacoes.AsQueryable().SingleOrDefaultAsync(i => i.InscricaoImobiliaria == tribedificacao.InscricaoImobiliaria);
-      //      /*       tribEdificacoQueryable =  contexto.TribEdificacoes.Where(i => i.InscricaoImobiliaria == tribedificacao.InscricaoImobiliaria.PadLeft(14,'0'))
-       //                                                            .Include(t=> t.Terreno)
-       //                                                            .Include(l=> l.Lograd)
-       //                                                            .Include(l => l.IdloteamentoNavigation)
-       //                                                            .AsQueryable<TribEdificaco>();*/
+    //      //tribEdificacoQueryable = contexto.TribEdificacoes.AsQueryable().SingleOrDefaultAsync(i => i.InscricaoImobiliaria == tribedificacao.InscricaoImobiliaria);
+    //      /*       tribEdificacoQueryable =  contexto.TribEdificacoes.Where(i => i.InscricaoImobiliaria == tribedificacao.InscricaoImobiliaria.PadLeft(14,'0'))
+    //                                                            .Include(t=> t.Terreno)
+    //                                                            .Include(l=> l.Lograd)
+    //                                                            .Include(l => l.IdloteamentoNavigation)
+    //                                                            .AsQueryable<TribEdificaco>();*/
 
 
-        //    if (contexto is not null && contexto.TribEdificacoes is not null)
-          //  {
-            //    //   tribedificacao = await contexto.TribEdificacoes.SingleOrDefaultAsync(i => i.InscricaoImobiliaria == tribedificacao.InscricaoImobiliaria);
-           //     //tribedificacao.IdloteamentoNavigation = new Loteamento();
-           //     tribedificacao = tribEdificacoQueryable.FirstOrDefault();
-           //     oficio = tribedificacao.EdifNumOficio.ToString();
-           //     areaconstruida = tribedificacao.EdifAreaConstruida.ToString();
-           //     areaterreno = tribedificacao.Terreno.TerrAreaTerreno.ToString();
-           //     fracao = tribedificacao.EdifFracaoIdealEdificacao.ToString();
-           //     logradouroimovel =  tribedificacao.Lograd;
-           //     loteamentoimovel = tribedificacao.IdloteamentoNavigation;
-           //     edificacaoid = tribedificacao.EdificacaoId;
-           //     transmitentes = tribEdificacoesContribQueryable.AsQueryable();
-           //     //    transmitentes = tribEdificacoQueryable.AsQueryable<TribEdificacoesContrib>().TribEdificacoesContribs; // .AsQueryable<TribEdificacoesContrib>();
-           //     // logradouroimovelConcat = String.Concat(tribedificacao.Lograd.LogradTipo, ' ', tribedificacao.Lograd.LogradNome, ',', tribedificacao.EdifNumeracao); //, ',', tribedificacao.IdloteamentoNavigation.Descricao);
-           //     if (tribedificacao is null)
-          //      {
-          //          await DialogService.ShowInfoAsync("Inscrição Inexistente!");
-          //      }
-          //  }
-       // }
-       // finally
-       // {
-       //     _overlayIsVisible = false;
-       // }
-       // _overlayIsVisible = false;
+    //    if (contexto is not null && contexto.TribEdificacoes is not null)
+    //  {
+    //    //   tribedificacao = await contexto.TribEdificacoes.SingleOrDefaultAsync(i => i.InscricaoImobiliaria == tribedificacao.InscricaoImobiliaria);
+    //     //tribedificacao.IdloteamentoNavigation = new Loteamento();
+    //     tribedificacao = tribEdificacoQueryable.FirstOrDefault();
+    //     oficio = tribedificacao.EdifNumOficio.ToString();
+    //     areaconstruida = tribedificacao.EdifAreaConstruida.ToString();
+    //     areaterreno = tribedificacao.Terreno.TerrAreaTerreno.ToString();
+    //     fracao = tribedificacao.EdifFracaoIdealEdificacao.ToString();
+    //     logradouroimovel =  tribedificacao.Lograd;
+    //     loteamentoimovel = tribedificacao.IdloteamentoNavigation;
+    //     edificacaoid = tribedificacao.EdificacaoId;
+    //     transmitentes = tribEdificacoesContribQueryable.AsQueryable();
+    //     //    transmitentes = tribEdificacoQueryable.AsQueryable<TribEdificacoesContrib>().TribEdificacoesContribs; // .AsQueryable<TribEdificacoesContrib>();
+    //     // logradouroimovelConcat = String.Concat(tribedificacao.Lograd.LogradTipo, ' ', tribedificacao.Lograd.LogradNome, ',', tribedificacao.EdifNumeracao); //, ',', tribedificacao.IdloteamentoNavigation.Descricao);
+    //     if (tribedificacao is null)
+    //      {
+    //          await DialogService.ShowInfoAsync("Inscrição Inexistente!");
+    //      }
+    //  }
+    // }
+    // finally
+    // {
+    //     _overlayIsVisible = false;
+    // }
+    // _overlayIsVisible = false;
 
 
 
-       // //_overlayIsVisible = false;
+    // //_overlayIsVisible = false;
     //}
-    
+
     //protected override async Task OnInitializedAsync()
     //{
-      //  _overlayIsVisible = true;
-      //  var contexto = DbFactory.CreateDbContext();
-     //   /* tribEdificacoQueryable = contexto.TribEdificacoes.Where(i => i.InscricaoImobiliaria == tribedificacao.InscricaoImobiliaria.PadLeft(14, '0'))
-     //                                                       .Include(t => t.Terreno)
-     //                                                       .Include(l => l.Lograd)
-     //                                                       .Include(l => l.IdloteamentoNavigation)
-     //                                                       .Include(c=>c.TribEdificacoesContribs).ThenInclude(x => x.Con)
-     //                                                       .AsQueryable<TribEdificaco>();*/
-     //   //tribEdificacoQueryable = await imovelService.GetImovelQueryable(tribedificacao.InscricaoImobiliaria);
-     //   //tribEdificacao = await imovelService.GetImovel(tribedificacao.InscricaoImobiliaria);
+    //  _overlayIsVisible = true;
+    //  var contexto = DbFactory.CreateDbContext();
+    //   /* tribEdificacoQueryable = contexto.TribEdificacoes.Where(i => i.InscricaoImobiliaria == tribedificacao.InscricaoImobiliaria.PadLeft(14, '0'))
+    //                                                       .Include(t => t.Terreno)
+    //                                                       .Include(l => l.Lograd)
+    //                                                       .Include(l => l.IdloteamentoNavigation)
+    //                                                       .Include(c=>c.TribEdificacoesContribs).ThenInclude(x => x.Con)
+    //                                                       .AsQueryable<TribEdificaco>();*/
+    //   //tribEdificacoQueryable = await imovelService.GetImovelQueryable(tribedificacao.InscricaoImobiliaria);
+    //   //tribEdificacao = await imovelService.GetImovel(tribedificacao.InscricaoImobiliaria);
 
-     //   //tribEdificacoesContribQueryable = contexto.TribEdificacoesContribs.Where(e => e.EdificacaoId == edificacaoid).AsQueryable<TribEdificacoesContrib>();
-     //  //  tribEdificacoesContribQueryable = contexto.TribEdificacoesContribs.Where(e => e.EdificacaoId == edificacaoid).AsQueryable<TribEdificacoesContrib>();
+    //   //tribEdificacoesContribQueryable = contexto.TribEdificacoesContribs.Where(e => e.EdificacaoId == edificacaoid).AsQueryable<TribEdificacoesContrib>();
+    //  //  tribEdificacoesContribQueryable = contexto.TribEdificacoesContribs.Where(e => e.EdificacaoId == edificacaoid).AsQueryable<TribEdificacoesContrib>();
     //  //   transmitentes = tribEdificacoesContribQueryable;
 
-     //   adquirentes = contexto.Contribuintes.Where(c => c.ConCnpjcpf == adquirentecpfcnpj).AsQueryable<Contribuinte>();
-     //   await base.OnInitializedAsync();
-      //  _overlayIsVisible = false;
+    //   adquirentes = contexto.Contribuintes.Where(c => c.ConCnpjcpf == adquirentecpfcnpj).AsQueryable<Contribuinte>();
+    //   await base.OnInitializedAsync();
+    //  _overlayIsVisible = false;
     //}
     //
     void OnInvalidSubmit()
@@ -294,6 +295,26 @@
         [Required]
         [MinLength(5)]
         public string? Signature { get; set; }
+    }
+    private async Task OpenContribuinteDialog()
+    {
+        // Create a new instance of DialogData
+        // to allow the user to cancel the update
+        var data = DialogData with { Id = 0 } ?? new();
+
+        var dialog = await DialogService.ShowDialogAsync<ContribuinteDialog>(data, new DialogParameters()
+            {
+                Height = "400px",
+                Title = $"Updating the {DialogData.Name} sheet",
+                PreventDismissOnOverlayClick = true,
+                PreventScroll = true,
+            });
+
+        var result = await dialog.Result;
+        if (!result.Cancelled && result.Data != null)
+        {
+            DialogData = (ContribuinteDialog.RegisterContent)result.Data;
+        }
     }
     private async Task OpenDialog()
     {
