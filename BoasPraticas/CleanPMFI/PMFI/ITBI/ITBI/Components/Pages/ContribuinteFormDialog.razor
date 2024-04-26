@@ -1,0 +1,69 @@
+﻿@using System.ComponentModel.DataAnnotations
+@using ITBI.Entities.DBProsiga
+@implements IDialogContentComponent<Contribuinte>
+
+<!-- Header -->
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            @Dialog.Instance.Parameters.Title
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+<!-- Body -->
+<FluentDialogBody>
+    <FluentEditForm Model="Content" FormName="inscricaoInfo" >
+        <DataAnnotationsValidator />
+        <FluentStack Orientation="Orientation.Vertical">
+            <FluentTextField Placeholder="CPF/CNPJ" @bind-Value="Content.ConCnpjcpf" />
+        </FluentStack>
+        <FluentValidationSummary style="color:darkred" />
+    </FluentEditForm>
+</FluentDialogBody>
+
+<!-- Footer -->
+<FluentDialogFooter>
+    <FluentButton Appearance="Appearance.Accent"
+                  
+                  OnClick="@SaveAsync">
+        Salvar
+    </FluentButton>
+    <FluentButton Appearance="Appearance.Neutral"
+                  OnClick="@CancelAsync">
+        Cancelar
+    </FluentButton>
+</FluentDialogFooter>
+
+@code
+{
+    
+    [Parameter]
+    public Contribuinte Content { get; set; } = default!;
+
+    [CascadingParameter]
+    public FluentDialog Dialog { get; set; } = default!;
+
+
+    protected override void OnInitialized()
+    {
+        Content = new Contribuinte();
+    }
+
+    private async Task SaveAsync()
+    {
+       // if (Content.Validate())
+        //{
+            //await Dialog.CloseAsync(Content);
+        await Dialog.CancelAsync();
+        //}
+    }
+
+    private async Task CancelAsync()
+    {
+        await Dialog.CancelAsync();
+    }
+
+   
+}

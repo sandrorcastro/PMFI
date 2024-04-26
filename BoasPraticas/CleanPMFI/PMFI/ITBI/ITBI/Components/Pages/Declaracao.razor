@@ -39,11 +39,11 @@
                 <FluentStack Orientation="Orientation.Vertical">
                     <FluentTextField Placeholder="Inscrição Imobiliária" @bind-Value="imovel.InscricaoImobiliaria"> Inscrição Imobiliária</FluentTextField> 
                     <FluentTextField Placeholder="Matrícula" @bind-Value="imovel.EdifMatricula">Matrícula</FluentTextField> 
-                    <FluentTextField Placeholder="Número do Cartório de Ofício" @bind-Value="oficio">Número do Cartório de Ofício</FluentTextField> 
+                    <FluentNumberField Placeholder="Número do Cartório de Ofício" @bind-Value="imovel.EdifNumOficio">Número do Cartório de Ofício</FluentNumberField> 
                     <FluentTextField Placeholder="Caracteristica" @bind-Value="imovel.EdifCaracteristica">Caracteristica</FluentTextField> 
-                    <FluentTextField Placeholder="Área Terreno" @bind-Value="areaterreno">Área do Terreno</FluentTextField> 
-                    <FluentTextField Placeholder="Área Construída" @bind-Value="areaconstruida">Área do Construída</FluentTextField> 
-                    <FluentTextField Placeholder="Fração" @bind-Value="fracao">Fração</FluentTextField> 
+                    <FluentNumberField Placeholder="Área Terreno" @bind-Value="imovel.Terreno.TerrAreaTerreno">Área do Terreno</FluentNumberField> 
+                    <FluentNumberField Placeholder="Área Construída" @bind-Value="imovel.EdifAreaConstruida">Área do Construída</FluentNumberField> 
+                    <FluentNumberField Placeholder="Fração" @bind-Value="imovel.EdifFracaoIdealEdificacao">Fração</FluentNumberField> 
                     <FluentTextField Placeholder="TipoLogradouro" @bind-Value="imovel.Lograd.LogradTipo">TipoLogradouro</FluentTextField> 
                     <FluentTextField Placeholder="Logradouro" @bind-Value="imovel.Lograd.LogradNome">Logradouro</FluentTextField> 
                     <FluentTextField Placeholder="Número" @bind-Value="imovel.EdifNumeracao">Numero</FluentTextField> 
@@ -80,6 +80,7 @@
                     <PropertyColumn Property="@(a => a.ConCnpjcpf)" Sortable="true"/>
                     <PropertyColumn Property="@(a => a.ConNome)" Sortable="true" />
                     <PropertyColumn Property="@(a => a.ConEmail)" Sortable="true" />
+                    <PropertyColumn Property="@(a => a.ConTelefoneCelular)" Sortable="true" />
                 </FluentDataGrid>
         </FluentWizardStep>
 
@@ -133,14 +134,10 @@
     //   private TribEdificaco? tribedificacao = new TribEdificaco() ;//{ InscricaoImobiliaria=null};
     private IQueryable<TribEdificacoesContrib>? transmitentes;
     private IQueryable<Contribuinte>? adquirentes;
-    private Contribuinte? adquirente;
+    private List<Contribuinte>? adquirentesList;
+    private Contribuinte? adquirente = new Contribuinte() { ConCnpjcpf=string.Empty};
     //   private long? edificacaoid = null;
-
-    private string? oficio = null;
     public string? adquirentecpfcnpj = null;
-    private string? areaterreno = null;
-    private string? areaconstruida = null;
-    private string? fracao = null;
     //private DbprosigaContext contexto = DbFactory.CreateDbContext();
     //  public Contribuinte? novoContribuinte = null;
     //  public Logradouro? logradouroimovel = new Logradouro();
@@ -172,10 +169,6 @@
     {
         _overlayIsVisible = true;
         imovel = await imovelService.GetImovel(imovel.InscricaoImobiliaria);
-        oficio = imovel.EdifNumOficio.ToString();
-        areaconstruida = imovel.EdifAreaConstruida.ToString();
-        areaterreno = imovel.Terreno.TerrAreaTerreno.ToString();
-        fracao = imovel.EdifFracaoIdealEdificacao.ToString();
         transmitentes = imovel.TribEdificacoesContribs.AsQueryable();
         //    logradouroimovel = tribedificacao.Lograd;
         //   loteamentoimovel = tribedificacao.IdloteamentoNavigation;
@@ -316,27 +309,84 @@
             DialogData = (ContribuinteEditDialog.RegisterContent)result.Data;
         }
     }
-    BuscarContribuinteDialog.RegisterContent BuscarContribuinteDialogData { get; set; } = new() { cpfcnpj = "" };
+    //BuscarContribuinteDialog.RegisterContent BuscarContribuinteDialogData { get; set; } = new() { cpfcnpj = "" };
     private async Task BuscarContribuinteDialog()
     {
-        // Create a new instance of DialogData
-        // to allow the user to cancel the update
-        var data = BuscarContribuinteDialogData with { cpfcnpj = string.Empty }; // ?? new();
-
-        var dialog = await DialogService.ShowDialogAsync<BuscarContribuinteDialog>(data, new DialogParameters()
+        await DialogService.ShowDialogAsync<BuscarContribuinteDialog>(adquirente, new DialogParameters()
             {
-                Height = "400px",
                 Title = $"Buscar Adquirente",
-                PreventDismissOnOverlayClick = true,
-                PreventScroll = true,
+                OnDialogResult = DialogService.CreateDialogCallback(this, HandleBuscarContribuinteDialog),
+                Width = "500px",
+                Height = "500px",
             });
-
-        var result = await dialog.Result;
-        if (!result.Cancelled && result.Data != null)
+    }
+    private async Task ContribuinteFormDialog()
+    {
+        await DialogService.ShowDialogAsync<ContribuinteFormDialog>(adquirente, new DialogParameters()
+            {
+                Title = $"Cadastro de Adquirente",
+                OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
+                Width = "500px",
+                Height = "500px",
+            });
+    }
+    private async Task HandleBuscarContribuinteDialog(DialogResult result)
+    {
+        if (result.Cancelled)
         {
-            BuscarContribuinteDialogData = (BuscarContribuinteDialog.RegisterContent)result.Data;
-            //var contribuinte = contribuinteService.GetContribuinte(BuscarContribuinteDialogData.cpfcnpj);
+            //   await Task.Run(() => DemoLogger.WriteLine($"Dialog cancelled"));
+            return;
         }
+        if (result.Data is not null)
+        {
+            adquirente  = result.Data as Contribuinte;
+            // await Task.Run(() => DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age})"));
+            adquirente = await contribuinteService.GetContribuinte(adquirente.ConCnpjcpf);
+            if(adquirente == null)
+            {
+                //await DialogService.ShowInfoAsync("Adquirente Não Encontrado, Adicione-o!");
+                await ContribuinteFormDialog();
+
+
+            }
+            else
+            {
+                await DialogService.ShowInfoAsync("Dilog com informações do Contribuinte");
+            }
+            return;
+        }
+
+        //await Task.Run(() => DemoLogger.WriteLine($"Dialog closed"));
+
+    }
+    private async Task HandleContribuinteFormDialog(DialogResult result)
+    {
+        if (result.Cancelled)
+        {
+            //   await Task.Run(() => DemoLogger.WriteLine($"Dialog cancelled"));
+            return;
+        }
+
+        if (result.Data is not null)
+        {
+            adquirente = result.Data as Contribuinte;
+            // await Task.Run(() => DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age})"));
+            adquirente = await contribuinteService.GetContribuinte(adquirente.ConCnpjcpf);
+            if (adquirente == null)
+            {
+                await DialogService.ShowInfoAsync("Adquirente Não Encontrado, Adicione-o!");
+
+
+            }
+            else
+            {
+                await DialogService.ShowInfoAsync("Dilog com informações do Contribuinte");
+            }
+            return;
+        }
+
+        //await Task.Run(() => DemoLogger.WriteLine($"Dialog closed"));
+
     }
     private async Task OpenDialog()
     {
