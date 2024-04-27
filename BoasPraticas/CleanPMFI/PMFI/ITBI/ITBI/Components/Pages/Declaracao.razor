@@ -339,19 +339,21 @@
         }
         if (result.Data is not null)
         {
+
             adquirente  = result.Data as Contribuinte;
             // await Task.Run(() => DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age})"));
             adquirente = await contribuinteService.GetContribuinte(adquirente.ConCnpjcpf);
             if(adquirente == null)
             {
-                //await DialogService.ShowInfoAsync("Adquirente Não Encontrado, Adicione-o!");
-                await ContribuinteFormDialog();
+              //await DialogService.ShowInfoAsync("Adquirente Não Encontrado, Adicione-o!");
+              await ContribuinteFormDialog();
 
 
             }
             else
             {
-                await DialogService.ShowInfoAsync("Dilog com informações do Contribuinte");
+                //ait DialogService.ShowInfoAsync("Dilog com informações do Contribuinte");
+                await ContribuinteFormDialog();
             }
             return;
         }
@@ -380,7 +382,8 @@
             }
             else
             {
-                await DialogService.ShowInfoAsync("Dilog com informações do Contribuinte");
+                //await DialogService.ShowInfoAsync("Dilog com informações do Contribuinte");
+                await ContribuinteFormDialog();
             }
             return;
         }

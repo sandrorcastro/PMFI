@@ -30,11 +30,12 @@ namespace ITBI.Services
         {
             var contexto = dbContextFactory.CreateDbContext();
 
-            var contribuinte = await contexto.Contribuintes.FirstOrDefaultAsync(c => c.ConCnpjcpf == cpfcnpj);
-         /*   if (contribuinte == null)
-            {
-                throw new EntityNotFoundException($"Contribuinte com CPF/CNPJ {cpfcnpj} não encontrado.");
-            }*/
+            //var contribuinte = await contexto.Contribuintes.FirstOrDefaultAsync(c => c.ConCnpjcpf == cpfcnpj);
+            var contribuinte = await contexto.Contribuintes.Where(c => c.ConCnpjcpf == cpfcnpj).Include(i=>i.ConBairro).Include(i=>i.ConCidade).ThenInclude(i=>i.Pais).FirstOrDefaultAsync();
+            /*   if (contribuinte == null)
+               {
+                   throw new EntityNotFoundException($"Contribuinte com CPF/CNPJ {cpfcnpj} não encontrado.");
+               }*/
 
             return contribuinte ?? null; // new Contribuinte();
 
