@@ -22,9 +22,7 @@
               Style="min-height: 300px;"
               OnFinish="@OnFinishedAsync">
     <Steps>
-         <FluentWizardStep Label="Teste Logradouro"  OnChange="@OnStepChange">
-            <LogradouroFormDialog></LogradouroFormDialog>
-        </FluentWizardStep>
+        
         <FluentWizardStep Label="Inscrição Imobiliária"
                           OnChange="@OnStepChange">
             <FluentEditForm Model="imovel" FormName="inscricaoInfo" OnValidSubmit="@OnValidSubmitBuscaInscricao" OnInvalidSubmit="OnInvalidSubmit">

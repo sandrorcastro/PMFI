@@ -6,7 +6,7 @@
     <FluentStack VerticalAlignment="VerticalAlignment.Center">
         <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
         <FluentLabel Typo="Typography.PaneHeader">
-            @Dialog.Instance.Parameters.Title
+           
         </FluentLabel>
     </FluentStack>
 </FluentDialogHeader>
@@ -16,14 +16,13 @@
     <EditForm EditContext="@_editContext" FormName="simple_register">
         <DataAnnotationsValidator />
 
-             <FluentTextField Placeholder="CEP" @bind-Value="Content.ConCep">CEP</FluentTextField> 
-            <FluentTextField Placeholder="Tipo Logradouro" @bind-Value="Content.ConTipoLograd">Tipo Logradouro</FluentTextField> 
-            <FluentTextField Placeholder="Logradouro" @bind-Value="Content.ConEndereco">Logradouro</FluentTextField> 
-            <FluentTextField Placeholder="Número" @bind-Value="Content.ConNumero">Número</FluentTextField> 
-            <FluentTextField Placeholder="Bairro" @bind-Value="Content.ConBairro.BaiNome">Bairro</FluentTextField> 
-            <FluentTextField Placeholder="Cidade" @bind-Value="Content.ConCidade.CidNome">Cidade</FluentTextField> 
-            <FluentTextField Placeholder="Estado" @bind-Value="Content.ConCidade.CidUf">Estado</FluentTextField> 
-            <FluentTextField Placeholder="Pais" @bind-Value="Content.ConCidade.Pais.PaisNome">País</FluentTextField> 
+            <!-- 
+
+            <FluentTextField Placeholder="CEP" @bind-Value="Content.CEP">CEP</FluentTextField> 
+            --> 
+            <FluentTextField Placeholder="Tipo Logradouro" @bind-Value="Content.LogradTipo">Tipo Logradouro</FluentTextField> 
+            <FluentTextField Placeholder="Logradouro" @bind-Value="Content.LogradNome">Logradouro</FluentTextField> 
+            
 
         <div style="color: var(--error);">
             <FluentValidationSummary />
@@ -53,9 +52,11 @@
 
     [Parameter]
     public Logradouro Content { get; set; } = default!;
+  //  public LogradouroFormDialog.LogradouroExt Content { get; set; } = default!;
 
     protected override void OnInitialized()
     {
+       // ContentExt = Content;
         _editContext = new EditContext(Content);
     }
 
@@ -71,6 +72,8 @@
     {
         await Dialog.CancelAsync();
     }
-
+    public class LogradouroExt : Logradouro{
+        public string CEP { get; set; }
+    }
     
 }
