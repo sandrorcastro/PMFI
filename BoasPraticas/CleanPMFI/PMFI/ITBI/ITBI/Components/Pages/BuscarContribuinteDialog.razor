@@ -1,18 +1,9 @@
 ﻿@using ITBI.Entities.DBProsiga
 @implements IDialogContentComponent<Contribuinte>
-
-
-
 <FluentTextField @bind-Value="@Content.ConCnpjcpf">CPF/CNPJ:</FluentTextField>
-
-
-
 @code {
     [Parameter]
     public Contribuinte Content { get; set; } = default!;
-
     [CascadingParameter]
     public FluentDialog? Dialog { get; set; }
-
-    
 }

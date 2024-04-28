@@ -22,6 +22,9 @@
               Style="min-height: 300px;"
               OnFinish="@OnFinishedAsync">
     <Steps>
+         <FluentWizardStep Label="Teste Logradouro"  OnChange="@OnStepChange">
+            <LogradouroFormDialog></LogradouroFormDialog>
+        </FluentWizardStep>
         <FluentWizardStep Label="Inscrição Imobiliária"
                           OnChange="@OnStepChange">
             <FluentEditForm Model="imovel" FormName="inscricaoInfo" OnValidSubmit="@OnValidSubmitBuscaInscricao" OnInvalidSubmit="OnInvalidSubmit">
@@ -63,6 +66,7 @@
             
         <FluentWizardStep Label="Transmitentes"  OnChange="@OnStepChange">
                 <FluentDataGrid Items="transmitentes">
+                    <FluentButton OnClick="@BuscarContribuinteDialog" Appearance="Appearance.Accent">Adicionar Transmitente</FluentButton>
                     <PropertyColumn Property="@(t => t.Con.ConCnpjcpf)" Sortable="true"/>
                     <PropertyColumn Property="@(t => t.Con.ConNome)" Sortable="true" />
                     <PropertyColumn Property="@(t => t.Proprietario)" Sortable="true" />
@@ -322,6 +326,7 @@
     }
     private async Task ContribuinteFormDialog()
     {
+
         await DialogService.ShowDialogAsync<ContribuinteFormDialog>(adquirente, new DialogParameters()
             {
                 Title = $"Cadastro de Adquirente",
@@ -343,17 +348,17 @@
             adquirente  = result.Data as Contribuinte;
             // await Task.Run(() => DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age})"));
             adquirente = await contribuinteService.GetContribuinte(adquirente.ConCnpjcpf);
-            if(adquirente == null)
+            if(adquirente != null)
             {
-              //await DialogService.ShowInfoAsync("Adquirente Não Encontrado, Adicione-o!");
               await ContribuinteFormDialog();
-
+                //await ContribuinteFormDialog();
+                  //await DialogService.ShowInfoAsync("Chama Função para adicionar!");
 
             }
             else
             {
                 //ait DialogService.ShowInfoAsync("Dilog com informações do Contribuinte");
-                await ContribuinteFormDialog();
+              await DialogService.ShowInfoAsync("Adquirente Não Encontrado, Adicione-o!");
             }
             return;
         }
@@ -364,6 +369,7 @@
     private async Task HandleContribuinteFormDialog(DialogResult result)
     {
         if (result.Cancelled)
+        
         {
             //   await Task.Run(() => DemoLogger.WriteLine($"Dialog cancelled"));
             return;

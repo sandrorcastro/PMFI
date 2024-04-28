@@ -1,7 +1,6 @@
 ﻿@using System.ComponentModel.DataAnnotations
 @using ITBI.Entities.DBProsiga
-@implements IDialogContentComponent<Contribuinte>
-
+@implements IDialogContentComponent<Logradouro>
 <!-- Header -->
 <FluentDialogHeader ShowDismiss="true">
     <FluentStack VerticalAlignment="VerticalAlignment.Center">
@@ -14,25 +13,10 @@
 
 <!-- Body -->
 <FluentDialogBody>
-    <FluentEditForm Model="Content" FormName="inscricaoInfo" >
+    <EditForm EditContext="@_editContext" FormName="simple_register">
         <DataAnnotationsValidator />
-        <FluentStack Orientation="Orientation.Vertical">
-            <FluentTextField Placeholder="Nome" @bind-Value="Content.ConNome">Nome</FluentTextField> 
-        </FluentStack>
-        <FluentStack Orientation="Orientation.Vertical">
-            <FluentTextField Placeholder="CPF/CNPJ" @bind-Value="Content.ConCnpjcpf">CPF/CNPJ</FluentTextField> 
-        </FluentStack>
-        <FluentStack Orientation="Orientation.Vertical">
-            <FluentTextField Placeholder="RG" @bind-Value="Content.ConRg">RG</FluentTextField> 
-        </FluentStack>
-        <FluentStack Orientation="Orientation.Vertical">
-            <FluentTextField Placeholder="Email" @bind-Value="Content.ConEmail">Email</FluentTextField> 
-        </FluentStack>
-        <FluentStack Orientation="Orientation.Vertical">
-            <FluentTextField Placeholder="Celular" @bind-Value="Content.ConTelefoneCelular">Celular</FluentTextField> 
-        </FluentStack>
-        <FluentStack Orientation="Orientation.Vertical">
-            <FluentTextField Placeholder="CEP" @bind-Value="Content.ConCep">CEP</FluentTextField> 
+
+             <FluentTextField Placeholder="CEP" @bind-Value="Content.ConCep">CEP</FluentTextField> 
             <FluentTextField Placeholder="Tipo Logradouro" @bind-Value="Content.ConTipoLograd">Tipo Logradouro</FluentTextField> 
             <FluentTextField Placeholder="Logradouro" @bind-Value="Content.ConEndereco">Logradouro</FluentTextField> 
             <FluentTextField Placeholder="Número" @bind-Value="Content.ConNumero">Número</FluentTextField> 
@@ -40,47 +24,47 @@
             <FluentTextField Placeholder="Cidade" @bind-Value="Content.ConCidade.CidNome">Cidade</FluentTextField> 
             <FluentTextField Placeholder="Estado" @bind-Value="Content.ConCidade.CidUf">Estado</FluentTextField> 
             <FluentTextField Placeholder="Pais" @bind-Value="Content.ConCidade.Pais.PaisNome">País</FluentTextField> 
-        </FluentStack>
-        <FluentValidationSummary style="color:darkred" />
-    </FluentEditForm>
+
+        <div style="color: var(--error);">
+            <FluentValidationSummary />
+        </div>
+    </EditForm>
 </FluentDialogBody>
 
 <!-- Footer -->
 <FluentDialogFooter>
     <FluentButton Appearance="Appearance.Accent"
-                  
+                  Disabled="@(!_editContext.Validate())"
                   OnClick="@SaveAsync">
-        Salvar
+        Save
     </FluentButton>
     <FluentButton Appearance="Appearance.Neutral"
                   OnClick="@CancelAsync">
-        Cancelar
+        Cancel
     </FluentButton>
 </FluentDialogFooter>
 
 @code
 {
-    
-    [Parameter]
-    public Contribuinte Content { get; set; } = default!;
-    
+    private EditContext _editContext = default!;
+
     [CascadingParameter]
     public FluentDialog Dialog { get; set; } = default!;
 
+    [Parameter]
+    public Logradouro Content { get; set; } = default!;
 
     protected override void OnInitialized()
     {
-        Content = new Contribuinte();
+        _editContext = new EditContext(Content);
     }
 
     private async Task SaveAsync()
     {
-       // if (Content.Validate())
-        //{
+        if (_editContext.Validate())
+        {
             await Dialog.CloseAsync(Content);
-            //await Dialog.CancelAsync();
-            //await Dialog.
-        //}
+        }
     }
 
     private async Task CancelAsync()
@@ -88,5 +72,5 @@
         await Dialog.CancelAsync();
     }
 
-   
+    
 }
