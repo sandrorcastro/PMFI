@@ -136,8 +136,10 @@
     //   private TribEdificaco? tribedificacao = new TribEdificaco() ;//{ InscricaoImobiliaria=null};
     private IQueryable<TribEdificacoesContrib>? transmitentes;
     private IQueryable<Contribuinte>? adquirentes;
+    private List<Contribuinte>? transmitentesList;
     private List<Contribuinte>? adquirentesList;
     private Contribuinte? adquirente = new Contribuinte() { ConCnpjcpf=string.Empty};
+    private Contribuinte? transmitente = new Contribuinte() { ConCnpjcpf = string.Empty };
     //   private long? edificacaoid = null;
     public string? adquirentecpfcnpj = null;
     //private DbprosigaContext contexto = DbFactory.CreateDbContext();
@@ -170,6 +172,7 @@
     async Task OnValidSubmitBuscaInscricao()
     {
         _overlayIsVisible = true;
+        await Task.Delay(1000);
         imovel = await imovelService.GetImovel(imovel.InscricaoImobiliaria);
         transmitentes = imovel.TribEdificacoesContribs.AsQueryable();
         //    logradouroimovel = tribedificacao.Lograd;
@@ -314,37 +317,27 @@
     //BuscarContribuinteDialog.RegisterContent BuscarContribuinteDialogData { get; set; } = new() { cpfcnpj = "" };
     private async Task BuscarContribuinteDialog()
     {
-        await DialogService.ShowDialogAsync<BuscarContribuinteDialog>(adquirente, new DialogParameters()
+            
+            await DialogService.ShowDialogAsync<BuscarContribuinteDialog>(transmitente, new DialogParameters()
             {
-                Title = $"Buscar Adquirente",
+                Title = $"Buscar Trasmitente",
                 OnDialogResult = DialogService.CreateDialogCallback(this, HandleBuscarContribuinteDialog),
-                Width = "500px",
-                Height = "500px",
+             //   Width = "500px",
+             //   Height = "500px",
             });
-    }
-    private async Task ContribuinteFormDialog()
-    {
+        
 
-        await DialogService.ShowDialogAsync<ContribuinteFormDialog>(adquirente, new DialogParameters()
-            {
-                Title = $"Cadastro de Adquirente",
-                OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
-                Width = "500px",
-                Height = "500px",
-            });
     }
     private async Task HandleBuscarContribuinteDialog(DialogResult result)
     {
         if (result.Cancelled)
         {
-            //   await Task.Run(() => DemoLogger.WriteLine($"Dialog cancelled"));
-            return;
+             return;
         }
         if (result.Data is not null)
         {
-
+            
             adquirente  = result.Data as Contribuinte;
-            // await Task.Run(() => DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age})"));
             adquirente = await contribuinteService.GetContribuinte(adquirente.ConCnpjcpf);
             if(adquirente != null)
             {
@@ -363,6 +356,17 @@
 
         //await Task.Run(() => DemoLogger.WriteLine($"Dialog closed"));
 
+    }
+    private async Task ContribuinteFormDialog()
+    {
+
+        await DialogService.ShowDialogAsync<ContribuinteFormDialog>(adquirente, new DialogParameters()
+            {
+                Title = $"Cadastro de Adquirente",
+                OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
+                Width = "500px",
+                Height = "500px",
+            });
     }
     private async Task HandleContribuinteFormDialog(DialogResult result)
     {
