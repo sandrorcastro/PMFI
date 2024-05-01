@@ -67,12 +67,12 @@
                     <FluentButton OnClick="@( ()=> BuscarContribuinteDialog("Transmitente"))" Appearance="Appearance.Accent">Adicionar Transmitente</FluentButton>
                     <PropertyColumn Property="@(t => t.Con.ConCnpjcpf)" Sortable="true"/>
                     <PropertyColumn Property="@(t => t.Con.ConNome)" Sortable="true" />
-                    <PropertyColumn Property="@(t => t.Proprietario)" Sortable="true" />
-                    <PropertyColumn Property="@(t => t.Responsavel)" Sortable="true" />
+                  @*  <PropertyColumn Property="@(t => t.TribEdificacoesContribs)" Sortable="true" />
+                     <PropertyColumn Property="@(t => t.Responsavel)" Sortable="true" />
                     <PropertyColumn Property="@(t => t.Locatario)" Sortable="true" />
                     <PropertyColumn Property="@(t => t.CoResponsavel)" Sortable="true" />
                     <PropertyColumn Property="@(t => t.Correspondencia)" Sortable="true" />
-                    <PropertyColumn Property="@(t => t.Percentual)" Sortable="true" />
+                    <PropertyColumn Property="@(t => t.Percentual)" Sortable="true" /> *@
                 </FluentDataGrid>
         </FluentWizardStep>
                 
@@ -135,6 +135,7 @@
     //   private IQueryable<TribEdificacoesContrib> tribEdificacoesContribQueryable;
     //   private TribEdificaco? tribedificacao = new TribEdificaco() ;//{ InscricaoImobiliaria=null};
     private IQueryable<TribEdificacoesContrib>? transmitentes;
+    //private IQueryable<Contribuinte>? transmitentes;
     private IQueryable<Contribuinte>? adquirentes;
     private List<Contribuinte>? transmitentesList;
     private List<Contribuinte>? adquirentesList;
@@ -176,6 +177,7 @@
         await Task.Delay(1000);
         imovel = await imovelService.GetImovel(imovel.InscricaoImobiliaria);
         transmitentes = imovel.TribEdificacoesContribs.AsQueryable();
+       //transmitentes = contribuinteService.GetContribuintes().
         //    logradouroimovel = tribedificacao.Lograd;
         //   loteamentoimovel = tribedificacao.IdloteamentoNavigation;
         //   edificacaoid = tribedificacao.EdificacaoId;
@@ -420,7 +422,7 @@
 
                 adquirente = result.Data as Contribuinte;
                 adquirentesList = new List<Contribuinte>();
-                adquirentesList = adquirentes.ToList();
+              //  adquirentesList = adquirentes.ToList();
                 // await Task.Run(() => DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age})"));
                 adquirente = await contribuinteService.GetContribuinte(adquirente.ConCnpjcpf);
                 if (adquirente != null)
@@ -441,13 +443,13 @@
 
                 transmitente = result.Data as Contribuinte;
                 transmitentesList = new List<Contribuinte>();
-                transmitentesList = adquirentes.ToList();
+             //   transmitentesList = adquirentes.ToList();
                 // await Task.Run(() => DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age})"));
                 transmitente = await contribuinteService.GetContribuinte(transmitente.ConCnpjcpf);
                 if (transmitente != null)
                 {
                     transmitentesList.Add(transmitente);
-                //    transmitentes = transmitentesList.AsQueryable();
+                   // transmitentes = transmitentesList.AsQueryable();
                     //await ContribuinteFormDialog();
                 }
                 else
