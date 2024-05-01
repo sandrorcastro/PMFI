@@ -1,5 +1,4 @@
 ﻿@*
-
 @using ITBI.Entities.DBProsiga
 @implements IDialogContentComponent<Contribuinte>
 <FluentTextField @bind-Value="@Content.ConCnpjcpf">CPF/CNPJ:</FluentTextField>
@@ -8,16 +7,11 @@
     public Contribuinte Content { get; set; } = default!;
     [CascadingParameter]
     public FluentDialog? Dialog { get; set; }
-
-
 }
 *@
-
-
 @using System.ComponentModel.DataAnnotations
 @using ITBI.Entities.DBProsiga
 @implements IDialogContentComponent<Contribuinte>
-
 <!-- Header -->
 <FluentDialogHeader ShowDismiss="true">
     <FluentStack VerticalAlignment="VerticalAlignment.Center">
@@ -27,7 +21,6 @@
         </FluentLabel>
     </FluentStack>
 </FluentDialogHeader>
-
 <!-- Body -->
 <FluentDialogBody>
     <FluentEditForm Model="Content" FormName="buscarContribuinteInfo">
@@ -39,7 +32,6 @@
         <FluentValidationSummary style="color:darkred" />
     </FluentEditForm>
 </FluentDialogBody>
-
 <!-- Footer -->
 <FluentDialogFooter>
     <FluentButton Appearance="Appearance.Accent"
@@ -51,31 +43,22 @@
         Cancelar
     </FluentButton>
 </FluentDialogFooter>
-
 @code
 {
-
     [Parameter]
     public Contribuinte Content { get; set; } = default!;
-
     [CascadingParameter]
     public FluentDialog Dialog { get; set; } = default!;
     protected override void OnInitialized()
     {
-        
         Content = new Contribuinte();
     }
-
     private async Task BuscarContribuinteAsync()
     {
-        
         await Dialog.CloseAsync(Content);
      }
-
     private async Task CancelAsync()
     {
         await Dialog.CancelAsync();
     }
-
-
 }

@@ -64,7 +64,7 @@
             
         <FluentWizardStep Label="Transmitentes"  OnChange="@OnStepChange">
                 <FluentDataGrid Items="transmitentes">
-                    <FluentButton OnClick="@BuscarContribuinteDialog" Appearance="Appearance.Accent">Adicionar Transmitente</FluentButton>
+                    <FluentButton OnClick="@( ()=> BuscarContribuinteDialog("Transmitente"))" Appearance="Appearance.Accent">Adicionar Transmitente</FluentButton>
                     <PropertyColumn Property="@(t => t.Con.ConCnpjcpf)" Sortable="true"/>
                     <PropertyColumn Property="@(t => t.Con.ConNome)" Sortable="true" />
                     <PropertyColumn Property="@(t => t.Proprietario)" Sortable="true" />
@@ -77,7 +77,7 @@
         </FluentWizardStep>
                 
         <FluentWizardStep Label="Adquirentes"  OnChange="@OnStepChange">
-                <FluentButton OnClick="@BuscarContribuinteDialog" Appearance="Appearance.Accent">Adicionar Adquirente</FluentButton>
+                <FluentButton OnClick="@( ()=> BuscarContribuinteDialog("Adquirente"))" Appearance="Appearance.Accent">Adicionar Adquirente</FluentButton>
                 <FluentDataGrid Items="@adquirentes">
                     <PropertyColumn Property="@(a => a.ConCnpjcpf)" Sortable="true"/>
                     <PropertyColumn Property="@(a => a.ConNome)" Sortable="true" />
@@ -142,6 +142,7 @@
     private Contribuinte? transmitente = new Contribuinte() { ConCnpjcpf = string.Empty };
     //   private long? edificacaoid = null;
     public string? adquirentecpfcnpj = null;
+    public string? tipoContribuinte = null;
     //private DbprosigaContext contexto = DbFactory.CreateDbContext();
     //  public Contribuinte? novoContribuinte = null;
     //  public Logradouro? logradouroimovel = new Logradouro();
@@ -315,43 +316,66 @@
         }
     }
     //BuscarContribuinteDialog.RegisterContent BuscarContribuinteDialogData { get; set; } = new() { cpfcnpj = "" };
-    private async Task BuscarContribuinteDialog()
+    private async Task BuscarContribuinteDialog(string _tipoContribuinte)
     {
-            
+        tipoContribuinte=_tipoContribuinte;
+        //Contribuinte contribuinte = new Contribuinte();
+        if(tipoContribuinte == "Transmitente"){
+
             await DialogService.ShowDialogAsync<BuscarContribuinteDialog>(transmitente, new DialogParameters()
-            {
-                Title = $"Buscar Trasmitente",
-                OnDialogResult = DialogService.CreateDialogCallback(this, HandleBuscarContribuinteDialog),
-             //   Width = "500px",
-             //   Height = "500px",
-            });
-        
+                    {
+                        Title = $"Buscar {tipoContribuinte}",
+                        OnDialogResult = DialogService.CreateDialogCallback(this, HandleBuscarContribuinteDialog),
+                     //   Width = "500px",
+                     //   Height = "500px",
+                    });
+        }
+        if(tipoContribuinte == "Adquirente"){
+
+            await DialogService.ShowDialogAsync<BuscarContribuinteDialog>(adquirente, new DialogParameters()
+                    {
+                        Title = $"Buscar {tipoContribuinte}",
+                        OnDialogResult = DialogService.CreateDialogCallback(this, HandleBuscarContribuinteDialog),
+                     //   Width = "500px",
+                     //   Height = "500px",
+                    });
+        }
+
 
     }
     private async Task HandleBuscarContribuinteDialog(DialogResult result)
     {
         if (result.Cancelled)
         {
-             return;
+            return;
         }
         if (result.Data is not null)
         {
-            
-            adquirente  = result.Data as Contribuinte;
-            adquirente = await contribuinteService.GetContribuinte(adquirente.ConCnpjcpf);
-            if(adquirente != null)
+
+            if (tipoContribuinte=="Transmitente")
             {
-              await ContribuinteFormDialog();
-                //await ContribuinteFormDialog();
-                  //await DialogService.ShowInfoAsync("Chama Função para adicionar!");
+                transmitente = result.Data as Contribuinte;
+                transmitente = await contribuinteService.GetContribuinte(transmitente.ConCnpjcpf);
+                if(transmitente != null)  {
+                    await ContribuinteFormDialog();
+                } else{
+                    await DialogService.ShowInfoAsync("Transmitente Não Encontrado, Adicione-o!");
+
+                }
 
             }
-            else
+            if (tipoContribuinte=="Adquirente")
             {
-                //ait DialogService.ShowInfoAsync("Dilog com informações do Contribuinte");
-              await DialogService.ShowInfoAsync("Adquirente Não Encontrado, Adicione-o!");
+                adquirente = result.Data as Contribuinte;
+                adquirente = await contribuinteService.GetContribuinte(adquirente.ConCnpjcpf);
+                if(adquirente != null)  {
+                    await ContribuinteFormDialog();
+                } else{
+                    await DialogService.ShowInfoAsync("Adquirente Não Encontrado, Adicione-o!");
+
+                }
+
             }
-            return;
         }
 
         //await Task.Run(() => DemoLogger.WriteLine($"Dialog closed"));
@@ -359,41 +383,80 @@
     }
     private async Task ContribuinteFormDialog()
     {
+        if(tipoContribuinte=="Transmitenre"){
 
-        await DialogService.ShowDialogAsync<ContribuinteFormDialog>(adquirente, new DialogParameters()
-            {
-                Title = $"Cadastro de Adquirente",
-                OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
-                Width = "500px",
-                Height = "500px",
-            });
+
+            await DialogService.ShowDialogAsync<ContribuinteFormDialog>(transmitente, new DialogParameters()
+                    {
+                        Title = $"Cadastro de {tipoContribuinte}",
+                        OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
+                      //  Width = "500px",
+                      //  Height = "500px",
+                    });
+        }
+        if(tipoContribuinte=="Adquirente"){
+
+
+            await DialogService.ShowDialogAsync<ContribuinteFormDialog>(adquirente, new DialogParameters()
+                    {
+                        Title = $"Cadastro de {tipoContribuinte}",
+                        OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
+                      //  Width = "500px",
+                      //  Height = "500px",
+                    });
+        }
     }
     private async Task HandleContribuinteFormDialog(DialogResult result)
     {
         if (result.Cancelled)
-        
         {
-            //   await Task.Run(() => DemoLogger.WriteLine($"Dialog cancelled"));
             return;
         }
-
         if (result.Data is not null)
         {
-            adquirente = result.Data as Contribuinte;
-            // await Task.Run(() => DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age})"));
-            adquirente = await contribuinteService.GetContribuinte(adquirente.ConCnpjcpf);
-            if (adquirente == null)
-            {
-                await DialogService.ShowInfoAsync("Adquirente Não Encontrado, Adicione-o!");
 
-
-            }
-            else
+            if(tipoContribuinte == "Adquirente")
             {
-                //await DialogService.ShowInfoAsync("Dilog com informações do Contribuinte");
-                await ContribuinteFormDialog();
+
+                adquirente = result.Data as Contribuinte;
+                adquirentesList = new List<Contribuinte>();
+                adquirentesList = adquirentes.ToList();
+                // await Task.Run(() => DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age})"));
+                adquirente = await contribuinteService.GetContribuinte(adquirente.ConCnpjcpf);
+                if (adquirente != null)
+                {
+                    adquirentesList.Add(adquirente);
+                    adquirentes = adquirentesList.AsQueryable();
+                    //await ContribuinteFormDialog();
+                }
+                else
+                {
+                        //await DialogService.ShowInfoAsync("Dilog com informações do Contribuinte");
+                       await DialogService.ShowInfoAsync("Adquirente Não Encontrado, Adicione-o!");
+                }
+                return;
             }
-            return;
+            if (tipoContribuinte == "Transmitente")
+            {
+
+                transmitente = result.Data as Contribuinte;
+                transmitentesList = new List<Contribuinte>();
+                transmitentesList = adquirentes.ToList();
+                // await Task.Run(() => DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age})"));
+                transmitente = await contribuinteService.GetContribuinte(transmitente.ConCnpjcpf);
+                if (transmitente != null)
+                {
+                    transmitentesList.Add(transmitente);
+                //    transmitentes = transmitentesList.AsQueryable();
+                    //await ContribuinteFormDialog();
+                }
+                else
+                {
+                    //await DialogService.ShowInfoAsync("Dilog com informações do Contribuinte");
+                    await DialogService.ShowInfoAsync("Transmitente Não Encontrado, Adicione-o!");
+                }
+                return;
+            }
         }
 
         //await Task.Run(() => DemoLogger.WriteLine($"Dialog closed"));
