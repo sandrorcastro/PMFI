@@ -22,12 +22,13 @@ namespace ITBI.Services
                                                            .Include(l => l.IdloteamentoNavigation)
                                                            .Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con).AsQueryable()
                                                            .FirstOrDefaultAsync(c => c.InscricaoImobiliaria == inscricaoimobiliaria.PadLeft(14,'0'));
-            if (imovel == null)
-            {
-                throw new EntityNotFoundException($"Imovel com inscrição {inscricaoimobiliaria} não encontrado.");
-            }
+            /*  if (imovel == null)
+              {
+                  throw new EntityNotFoundException($"Imovel com inscrição {inscricaoimobiliaria} não encontrado.");
+              }*/
 
-            return imovel; // ?? new TribEdificaco();
+            //return imovel; // ?? new TribEdificaco();
+            return imovel ?? null;
 
             // throw new NotImplementedException();
         }
@@ -41,7 +42,7 @@ namespace ITBI.Services
                                                            .Include(t => t.Terreno)
                                                            .Include(l => l.Lograd)
                                                            .Include(l => l.IdloteamentoNavigation)
-                                                           .Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con)
+                                                           .Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con).AsQueryable()
                                                            .AsQueryable<TribEdificaco>();
                                         //                  .AsQueryable(); // wFirstOrDefaultAsync(c => c.ConCnpjcpf == cpfcnpj) ;
             //if (imovel == null)

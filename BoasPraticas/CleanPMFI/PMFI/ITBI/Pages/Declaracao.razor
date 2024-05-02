@@ -1,0 +1,445 @@
+﻿@page "/declaracao"
+<h3>Declaração ITBI</h3>
+@using System.ComponentModel.DataAnnotations
+@using ITBI.Context
+@using ITBI.Entities.DBProsiga
+@using Microsoft.EntityFrameworkCore
+@using ITBI.Services
+@using ITBI.Components.Pages
+@rendermode InteractiveServer
+@inject IDialogService _dialogService
+@inject IDialogService DialogService
+@inject IDbContextFactory<DbprosigaContext> DbFactory
+@inject IImovelService imovelService
+@inject IContribuinteService contribuinteService
+
+
+<FluentWizard StepperPosition="StepperPosition.Left"
+              DisplayStepNumber="@(WizardStepStatus.Current | WizardStepStatus.Next)"
+              Border="WizardBorder.Outside"
+              StepTitleHiddenWhen="@GridItemHidden.XsAndDown"
+              Height="auto"
+              Style="min-height: 300px;"
+              OnFinish="@OnFinishedAsync">
+    <Steps>
+        
+        <FluentWizardStep Label="Inscrição Imobiliária"
+                          OnChange="@OnStepChange">
+            <FluentEditForm Model="imovel" FormName="inscricaoInfo" OnValidSubmit="@OnValidSubmitBuscaInscricao" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <FluentTextField Placeholder="Inscrição Imobiliária" @bind-Value="imovel.InscricaoImobiliaria" />
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+        </FluentWizardStep>
+        <FluentWizardStep Label="Informações do Imóvel"
+                          OnChange="@OnStepChange">
+            <FluentEditForm Model="imovel" FormName="imovelInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <FluentTextField Placeholder="Inscrição Imobiliária" @bind-Value="imovel.InscricaoImobiliaria"> Inscrição Imobiliária</FluentTextField> 
+                    <FluentTextField Placeholder="Matrícula" @bind-Value="imovel.EdifMatricula">Matrícula</FluentTextField> 
+                    <FluentNumberField Placeholder="Número do Cartório de Ofício" @bind-Value="imovel.EdifNumOficio">Número do Cartório de Ofício</FluentNumberField> 
+                    <FluentTextField Placeholder="Caracteristica" @bind-Value="imovel.EdifCaracteristica">Caracteristica</FluentTextField> 
+                    <FluentNumberField Placeholder="Área Terreno" @bind-Value="imovel.Terreno.TerrAreaTerreno">Área do Terreno</FluentNumberField> 
+                    <FluentNumberField Placeholder="Área Construída" @bind-Value="imovel.EdifAreaConstruida">Área do Construída</FluentNumberField> 
+                    <FluentNumberField Placeholder="Fração" @bind-Value="imovel.EdifFracaoIdealEdificacao">Fração</FluentNumberField> 
+                    <FluentTextField Placeholder="TipoLogradouro" @bind-Value="imovel.Lograd.LogradTipo">TipoLogradouro</FluentTextField> 
+                    <FluentTextField Placeholder="Logradouro" @bind-Value="imovel.Lograd.LogradNome">Logradouro</FluentTextField> 
+                    <FluentTextField Placeholder="Número" @bind-Value="imovel.EdifNumeracao">Numero</FluentTextField> 
+                    <FluentTextField Placeholder="Bairro" @bind-Value="imovel.IdloteamentoNavigation.Descricao">Bairro</FluentTextField> 
+                  <!-- 
+                    <FluentTextField Placeholder="Logradouro" @bind-Value="@logradouroimovelConcat">Logradouro</FluentTextField> 
+
+                    <Endereco logradouro="@logradouroimovel" ></Endereco>
+                    <Endereco></Endereco>
+
+                  --> 
+
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+        </FluentWizardStep>
+            
+        <FluentWizardStep Label="Transmitentes"  OnChange="@OnStepChange">
+                <FluentDataGrid Items="transmitentes">
+                    <FluentButton OnClick="@( ()=> BuscarContribuinteDialog("Transmitente"))" Appearance="Appearance.Accent">Adicionar Transmitente</FluentButton>
+                    <PropertyColumn Property="@(t => t.Con.ConCnpjcpf)" Sortable="true"/>
+                    <PropertyColumn Property="@(t => t.Con.ConNome)" Sortable="true" />
+                  @*  <PropertyColumn Property="@(t => t.TribEdificacoesContribs)" Sortable="true" />
+                     <PropertyColumn Property="@(t => t.Responsavel)" Sortable="true" />
+                    <PropertyColumn Property="@(t => t.Locatario)" Sortable="true" />
+                    <PropertyColumn Property="@(t => t.CoResponsavel)" Sortable="true" />
+                    <PropertyColumn Property="@(t => t.Correspondencia)" Sortable="true" />
+                    <PropertyColumn Property="@(t => t.Percentual)" Sortable="true" /> *@
+                </FluentDataGrid>
+        </FluentWizardStep>
+                
+        <FluentWizardStep Label="Adquirentes"  OnChange="@OnStepChange">
+                <FluentButton OnClick="@( ()=> BuscarContribuinteDialog("Adquirente"))" Appearance="Appearance.Accent">Adicionar Adquirente</FluentButton>
+                <FluentDataGrid Items="@adquirentes">
+                    <PropertyColumn Property="@(a => a.ConCnpjcpf)" Sortable="true"/>
+                    <PropertyColumn Property="@(a => a.ConNome)" Sortable="true" />
+                    <PropertyColumn Property="@(a => a.ConEmail)" Sortable="true" />
+                    <PropertyColumn Property="@(a => a.ConTelefoneCelular)" Sortable="true" />
+                </FluentDataGrid>
+        </FluentWizardStep>
+
+         <!--
+
+        <FluentWizardStep Label="Set budget"
+                          Summary="Identify the best price"
+                          IconPrevious="@(new Icons.Filled.Size24.Star())"
+                          IconCurrent="@(new Icons.Filled.Size24.StarEmphasis())"
+                          IconNext="@(new Icons.Regular.Size24.Star())"
+                          DisplayStepNumber="false"
+                          OnChange="@OnStepChange">
+            Phasellus quis augue convallis, congue velit ac, aliquam ex. In egestas porttitor massa
+            aliquet porttitor. Donec bibendum faucibus urna vitae elementum. Phasellus vitae efficitur
+            turpis, eget molestie ipsum.
+            <FluentSelect Items="@(Enumerable.Range(10, 80).Select(i => i.ToString()))"
+                          Style="min-width: 70px;"
+                          Height="300px" />
+        </FluentWizardStep>
+        <FluentWizardStep Label="Finish">
+            <FluentEditForm Model="_finishFormData" FormName="finishForm" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <FluentTextField Label="Signature" Placeholder="Type your signature" @bind-Value="_finishFormData.Signature" />
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+        </FluentWizardStep>
+         -->       
+              
+    </Steps>
+</FluentWizard>
+
+<FluentOverlay @bind-Visible=@_overlayIsVisible
+               Opacity="0.4"
+               Alignment="Align.Center"
+               Justification="@JustifyContent.Center">
+    <FluentProgressRing />
+</FluentOverlay>
+
+@code
+{
+    private TribEdificaco? imovel { get; set; } = new TribEdificaco() { 
+                                                                        InscricaoImobiliaria=string.Empty, 
+                                                                        Lograd = new Logradouro(),
+                                                                        Terreno= new TribTerreno(),
+                                                                        IdloteamentoNavigation=new Loteamento(),
+                                                                        TribEdificacoesContribs = new List<TribEdificacoesContrib>()
+                                                                       };
+
+    private IQueryable<TribEdificacoesContrib>? transmitentes;
+    private IQueryable<Contribuinte>? adquirentes;
+    private List<Contribuinte>? transmitentesList;
+    private List<Contribuinte>? adquirentesList;
+    private Contribuinte? adquirente = new Contribuinte() { ConCnpjcpf=string.Empty};
+    private Contribuinte? transmitente = new Contribuinte() { ConCnpjcpf = string.Empty };
+   
+    public string? adquirentecpfcnpj = null;
+    public string? tipoContribuinte = null;
+ 
+    private FormData1 _formData1 = new FormData1();
+    private FormData2 _formData2 = new FormData2();
+    private FinishFormData _finishFormData = new FinishFormData();
+    private bool _overlayIsVisible = false;
+
+    void OnStepChange(FluentWizardStepChangeEventArgs e)
+    {
+        //DemoLogger.WriteLine($"Go to step {e.TargetLabel} (#{e.TargetIndex})");
+    }
+
+    async Task OnFinishedAsync()
+    {
+        await DialogService.ShowInfoAsync("Wizard completed");
+    }
+
+    async Task OnValidSubmit()
+    {
+        //DemoLogger.WriteLine($"OnValidSubmit called");
+        _overlayIsVisible = true;
+        await Task.Delay(2000);
+        _overlayIsVisible = false;
+    }
+    async Task OnValidSubmitBuscaInscricao()
+    {
+        _overlayIsVisible = true;
+        await Task.Delay(1000);
+        imovel = await imovelService.GetImovel(imovel.InscricaoImobiliaria);
+        transmitentes = imovel.TribEdificacoesContribs.AsQueryable();
+       _overlayIsVisible = false;
+    }
+    
+    void OnInvalidSubmit()
+    {
+        //DemoLogger.WriteLine($"OnInvalidSubmit called");
+    }
+
+    private class FormData1
+    {
+        [Required]
+        [MaxLength(3)]
+        public string? FirstName { get; set; }
+
+        [Required]
+        [MinLength(10)]
+        public string? LastName { get; set; }
+    }
+
+    private class FormData2
+    {
+        [Required]
+        public string? AddressLine1 { get; set; }
+
+        public string? AddressLine2 { get; set; }
+
+        [Required]
+        public string? City { get; set; }
+
+        [Required]
+        public string? StateOrProvince { get; set; }
+
+        [Required]
+        public string? Country { get; set; }
+
+        [Required]
+        public string? PostalCode { get; set; }
+    }
+
+    private class FinishFormData
+    {
+        [Required]
+        [MinLength(5)]
+        public string? Signature { get; set; }
+    }
+    ContribuinteEditDialog.RegisterContent DialogData { get; set; } = new() { cpfcnpj = "76247813953", Nome = "Sandro",NomeMeio="Ronaldo de", SobreNome="Castro" };
+    private async Task OpenContribuinteDialog()
+    {
+        // Create a new instance of DialogData
+        // to allow the user to cancel the update
+        var data = DialogData with { cpfcnpj = string.Empty } ?? new();
+
+        var dialog = await DialogService.ShowDialogAsync<ContribuinteEditDialog>(data, new DialogParameters()
+            {
+                Height = "400px",
+                Title = $"Atualizando {DialogData.Nome} sheet",
+                PreventDismissOnOverlayClick = true,
+                PreventScroll = true,
+            });
+
+        var result = await dialog.Result;
+        if (!result.Cancelled && result.Data != null)
+        {
+            DialogData = (ContribuinteEditDialog.RegisterContent)result.Data;
+        }
+    }
+    //BuscarContribuinteDialog.RegisterContent BuscarContribuinteDialogData { get; set; } = new() { cpfcnpj = "" };
+    private async Task BuscarContribuinteDialog(string _tipoContribuinte)
+    {
+        tipoContribuinte=_tipoContribuinte;
+        //Contribuinte contribuinte = new Contribuinte();
+        if(tipoContribuinte == "Transmitente"){
+
+            await DialogService.ShowDialogAsync<BuscarContribuinteDialog>(transmitente, new DialogParameters()
+                    {
+                        Title = $"Buscar {tipoContribuinte}",
+                        OnDialogResult = DialogService.CreateDialogCallback(this, HandleBuscarContribuinteDialog),
+                     //   Width = "500px",
+                     //   Height = "500px",
+                    });
+        }
+        if(tipoContribuinte == "Adquirente"){
+
+            await DialogService.ShowDialogAsync<BuscarContribuinteDialog>(adquirente, new DialogParameters()
+                    {
+                        Title = $"Buscar {tipoContribuinte}",
+                        OnDialogResult = DialogService.CreateDialogCallback(this, HandleBuscarContribuinteDialog),
+                     //   Width = "500px",
+                     //   Height = "500px",
+                    });
+        }
+
+
+    }
+    private async Task HandleBuscarContribuinteDialog(DialogResult result)
+    {
+        if (result.Cancelled)
+        {
+            return;
+        }
+        if (result.Data is not null)
+        {
+
+            if (tipoContribuinte=="Transmitente")
+            {
+                transmitente = result.Data as Contribuinte;
+                transmitente = await contribuinteService.GetContribuinte(transmitente.ConCnpjcpf);
+                if(transmitente != null)  {
+                    await ContribuinteFormDialog();
+                } else{
+                    await DialogService.ShowInfoAsync("Transmitente Não Encontrado, Adicione-o!");
+
+                }
+
+            }
+            if (tipoContribuinte=="Adquirente")
+            {
+                adquirente = result.Data as Contribuinte;
+                adquirente = await contribuinteService.GetContribuinte(adquirente.ConCnpjcpf);
+                if(adquirente != null)  {
+                    await ContribuinteFormDialog();
+                } else{
+                    await DialogService.ShowInfoAsync("Adquirente Não Encontrado, Adicione-o!");
+
+                }
+
+            }
+        }
+
+        //await Task.Run(() => DemoLogger.WriteLine($"Dialog closed"));
+
+    }
+    private async Task ContribuinteFormDialog()
+    {
+        if(tipoContribuinte=="Transmitente"){
+
+
+            await DialogService.ShowDialogAsync<ContribuinteFormDialog>(transmitente, new DialogParameters()
+                    {
+                        Title = $"Cadastro de {tipoContribuinte}",
+                        OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
+                      //  Width = "500px",
+                      //  Height = "500px",
+                    });
+        }
+        if(tipoContribuinte=="Adquirente"){
+
+
+            await DialogService.ShowDialogAsync<ContribuinteFormDialog>(adquirente, new DialogParameters()
+                    {
+                        Title = $"Cadastro de {tipoContribuinte}",
+                        OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
+                      //  Width = "500px",
+                      //  Height = "500px",
+                    });
+        }
+    }
+    private async Task HandleContribuinteFormDialog(DialogResult result)
+    {
+        if (result.Cancelled)
+        {
+            return;
+        }
+        if (result.Data is not null)
+        {
+
+            if(tipoContribuinte == "Adquirente")
+            {
+
+                adquirente = result.Data as Contribuinte;
+                adquirentesList = new List<Contribuinte>();
+              //  adquirentesList = adquirentes.ToList();
+                // await Task.Run(() => DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age})"));
+                adquirente = await contribuinteService.GetContribuinte(adquirente.ConCnpjcpf);
+                if (adquirente != null)
+                {
+                    adquirentesList.Add(adquirente);
+                    adquirentes = adquirentesList.AsQueryable();
+                    //await ContribuinteFormDialog();
+                }
+                else
+                {
+                        //await DialogService.ShowInfoAsync("Dilog com informações do Contribuinte");
+                       await DialogService.ShowInfoAsync("Adquirente Não Encontrado, Adicione-o!");
+                }
+                return;
+            }
+            if (tipoContribuinte == "Transmitente")
+            {
+
+                transmitente = result.Data as Contribuinte;
+                transmitentesList = new List<Contribuinte>();
+             //   transmitentesList = adquirentes.ToList();
+                // await Task.Run(() => DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age})"));
+                transmitente = await contribuinteService.GetContribuinte(transmitente.ConCnpjcpf);
+                if (transmitente != null)
+                {
+                    transmitentesList.Add(transmitente);
+                   // transmitentes = transmitentesList.AsQueryable();
+                    //await ContribuinteFormDialog();
+                }
+                else
+                {
+                    //await DialogService.ShowInfoAsync("Dilog com informações do Contribuinte");
+                    await DialogService.ShowInfoAsync("Transmitente Não Encontrado, Adicione-o!");
+                }
+                return;
+            }
+        }
+
+        //await Task.Run(() => DemoLogger.WriteLine($"Dialog closed"));
+
+    }
+    private async Task OpenDialog()
+    {
+        var text = string.Empty;
+        //<FluentTextField @bind-Value=text Label="CPF/CNPJ:" />
+        var dialogInstance = await _dialogService.ShowDialogAsync(@<div>
+                <FluentTextField @bind-Value=adquirentecpfcnpj Label="CPF/CNPJ:" />
+                                                                 </div>
+    , new DialogParameters
+                                            {Title = "Digite o CPF/CNPJ do Adquirente", });
+
+        var result = await dialogInstance.Result;
+        if (!result.Cancelled)
+        {
+            //var adqui = await adquirentes.FirstOrDefaultAsync();
+            adquirente = await contribuinteService.GetContribuinte(adquirentecpfcnpj);
+            if (adquirente == null)
+            {
+                await AdicionaAdiquirenteDialog(new Contribuinte() { ConCnpjcpf = adquirentecpfcnpj });
+
+            }
+            else
+            {
+                await AdicionaAdiquirenteDialog(adquirente);
+            }
+
+           
+
+            //await _dialogService.ShowSuccessAsync($"You entered: {adquirente.ConNome}", "Success");
+            //if(adqui) //.ConCnpjcpf !null){
+            //    await _dialogService.ShowSuccessAsync($"Você adicionou: {adqui.ConNome}", "Successo");
+            //}else
+            // {
+            //   await _dialogService.ShowInfoAsync($"Contribuinte não encontrado: {adqui.ConNome}", "Success");
+          //}
+
+        }
+    }
+    private async Task AdicionaAdiquirenteDialog(Contribuinte adquirente)
+    {
+        //adquirente = _adquirente;
+        //novoContribuinte = contribuinte;
+        //Contribuinte con = new Contribuinte() { ConCnpjcpf=adquirentecpfcnpj};
+        //<FluentTextField @bind-Value=text Label="CPF/CNPJ:" />
+        var dialogInstance = await _dialogService.ShowDialogAsync(
+            @<div>
+                    <FluentTextField @bind-Value=adquirente.ConNome Label="Nome/Razão:" />
+                    <FluentTextField @bind-Value=adquirente.ConCnpjcpf Label="CPF/CNPJ:" />
+                    <FluentTextField @bind-Value=adquirente.ConEmail Label="Email:" />
+            </div>
+    , new DialogParameters
+    { Title = "Adicionar Adquirente", });
+         //   adquirentes.Append(adquirente);
+            
+
+        //    await _dialogService.ShowSuccessAsync($"Você adicionou: {adqui.ConNome}", "Successo");
+    }
+
+
+}
