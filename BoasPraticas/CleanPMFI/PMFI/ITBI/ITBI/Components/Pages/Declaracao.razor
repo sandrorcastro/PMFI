@@ -69,7 +69,11 @@
                     <PropertyColumn Property="@(t => t.Locatario)" Sortable="true" />
                     <PropertyColumn Property="@(t => t.CoResponsavel)" Sortable="true" />
                     <PropertyColumn Property="@(t => t.Correspondencia)" Sortable="true" />
-                    <PropertyColumn Property="@(t => t.Percentual)" Sortable="true" /> 
+                    <PropertyColumn Property="@(t => t.Percentual)" Sortable="true" />
+                <TemplateColumn Align="@Align.End">
+                    
+                    <FluentCheckbox @bind-Value="@value2" Disabled="false" Label="Bananas (disabled)" />
+                    </TemplateColumn>
 
                 </FluentDataGrid>
         </FluentWizardStep>
@@ -86,6 +90,7 @@
     <FluentProgressRing />
 </FluentOverlay>
 @code {
+    bool value2 = true;
     private bool _overlayIsVisible = false;
     //public string InscricaoImobiliaria { get; set; } = string.Empty;
     private IQueryable<Contribuinte>? adquirentes;
@@ -126,7 +131,9 @@
         if(step.TargetIndex==1){
 
             imovel = await imovelService.GetImovel(imovel.InscricaoImobiliaria);
-            transmitentes = imovel.TribEdificacoesContribs.AsQueryable();
+            //transmitentes = imovel.TribEdificacoesContribs.AsQueryable() ?? null;
+            
+            transmitentes = imovel.TribEdificacoesContribs.AsQueryable() ?? null;
             if(imovel ==null)
             {
                 await DialogService.ShowInfoAsync("Inscrição não Encontrada!");
