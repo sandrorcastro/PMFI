@@ -1,0 +1,19 @@
+﻿@using ITBI.Entities.DBProsiga;
+@implements IDialogContentComponent<TribEdificaco>
+<FluentCard Justify="@JustifyContent.Center" >
+    <FluentTextField @bind-Value="@Content.Lograd.LogradTipo">Tipo de Logradouro:</FluentTextField>
+    <FluentTextField @bind-Value="@Content.Lograd.LogradNome">Logradouro:</FluentTextField>
+    <FluentTextField @bind-Value="@Content.EdifNumeracao">Número:</FluentTextField>
+    <FluentTextField @bind-Value="@Content.IdloteamentoNavigation.Descricao">Bairro:</FluentTextField>
+
+
+</FluentCard>
+@code {
+    [Parameter]
+    public TribEdificaco Content { get; set; } = default!;
+
+    [CascadingParameter]
+    public FluentDialog? Dialog { get; set; }
+
+ 
+}
