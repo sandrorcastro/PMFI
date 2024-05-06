@@ -33,7 +33,17 @@
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
                     <ImovelForm Content="Imovel" />
-                    <EnderecoForm Content="Imovel" />
+                    <EnderecoForm Content="Imovel.Lograd" Bairro="@(Imovel.IdloteamentoNavigation.Descricao ?? " ")" Numero="@(Imovel.EdifNumeracao ?? " ")" />
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+        </FluentWizardStep>
+        <FluentWizardStep Label="Transmitentes"
+                          OnChange="@OnStepChange">
+            <FluentEditForm Model="Imovel" FormName="transmitenteInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <TransmitentesForm Content="Transmitentes" />
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
@@ -73,7 +83,13 @@
 
 @code
 {
-    private TribEdificaco? Imovel = new TribEdificaco() { Lograd = new Logradouro(), Terreno = new TribTerreno(), IdloteamentoNavigation = new Loteamento() };
+
+    private TribEdificaco? Imovel = new TribEdificaco() { Lograd = new Logradouro(), 
+                                                            Terreno = new TribTerreno(), 
+                                                            IdloteamentoNavigation = new Loteamento(),
+                                                            TribEdificacoesContribs = new List<TribEdificacoesContrib>()
+        };
+    private IQueryable<TribEdificacoesContrib>? Transmitentes;
     private FormData1 _formData1 = new FormData1();
     private FormData2 _formData2 = new FormData2();
     private FinishFormData _finishFormData = new FinishFormData();
@@ -91,6 +107,7 @@
         // await DialogService.ShowInfoAsync($"Go to step {e.TargetLabel} (#{e.TargetIndex})");
         if (e.TargetIndex == 1){
             Imovel = await BuscaImovel(Imovel.InscricaoImobiliaria.ToString().PadLeft(14,'0'));
+            Transmitentes = Imovel.TribEdificacoesContribs.AsQueryable();
          /*   if(Imovel != null)
             {
                 await DialogService.ShowInfoAsync("imovel Encontrado");
@@ -152,17 +169,22 @@
     }
     private async Task<TribEdificaco> BuscaImovel(string? inscricaoimobiliaria){
         // var resultado=null;
+        _overlayIsVisible = true;
+        await Task.Delay(2000);
         if (inscricaoimobiliaria != null){
             using (var contexto = DbFactory.CreateDbContext()){
                 var resultado = await contexto.TribEdificacoes.Where(i => i.InscricaoImobiliaria == inscricaoimobiliaria)
                  .Include(t => t.Terreno)
                 .Include(i=>i.Lograd)
                 .Include(l => l.IdloteamentoNavigation)
+                .Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con).AsQueryable()
                 .FirstOrDefaultAsync();
+                _overlayIsVisible = false;
                 return resultado;
             }
 
         }
+        _overlayIsVisible = false;
         return null;
     }
     private class FinishFormData

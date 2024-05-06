@@ -1,0 +1,64 @@
+﻿@using ITBI.Entities.DBProsiga;
+@implements IDialogContentComponent<IQueryable<TribEdificacoesContrib>>
+<FluentCard Justify="@JustifyContent.Center" >
+    <p>Proprietários/Responsáveis</p>
+    <FluentDataGrid Items=@Content TGridItem=TribEdificacoesContrib>
+        <PropertyColumn Title="CPF/CNPJ" Property="@(c => c!.Con.ConCnpjcpf)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="RG" Property="@(c => c!.Con.ConRg)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Nome/Razão" Property="@(c => c!.Con.ConNome)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Email" Property="@(c => c!.Con.ConEmail)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Celular" Property="@(c => c!.Con.ConTelefoneCelular)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Proprietário" Property="@(c => c!.Proprietario)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Responsável" Property="@(c => c!.Responsavel)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Percentual" Property="@(c => c!.Percentual)" Sortable="true" Align=Align.Start />
+        <TemplateColumn Align="@Align.End">
+                    <FluentCheckbox />
+        </TemplateColumn>
+        <!-- 
+        <FluentTextField @bind-Value="@Content">:</FluentTextField>
+            <EnderecoForm Content="Imovel.Lograd" Bairro="@(Imovel.IdloteamentoNavigation.Descricao ?? " ")" Numero="@(Imovel.EdifNumeracao ?? " ")" />
+
+    <FluentTextField @bind-Value="@Content.Lograd.LogradNome">Logradouro:</FluentTextField>
+    <FluentTextField @bind-Value="@Content.EdifNumeracao">Número:</FluentTextField>
+    <FluentTextField @bind-Value="@Content.IdloteamentoNavigation.Descricao">Bairro:</FluentTextField>
+        -->
+    </FluentDataGrid>
+
+
+</FluentCard>
+<FluentCard Justify="@JustifyContent.Center" >
+    <!-- 
+        <FluentButton OnClick="@( ()=> BuscarContribuinteDialog("Transmitente"))" Appearance="Appearance.Accent">Adicionar Novo Transmitente</FluentButton>
+    -->
+    <FluentButton Appearance="Appearance.Accent">Adicionar Novo Transmitente</FluentButton>
+    <FluentDataGrid Items=@Content TGridItem=TribEdificacoesContrib>
+        <PropertyColumn Title="CPF/CNPJ" Property="@(c => c!.Con.ConCnpjcpf)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="RG" Property="@(c => c!.Con.ConRg)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Nome/Razão" Property="@(c => c!.Con.ConNome)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Email" Property="@(c => c!.Con.ConEmail)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Celular" Property="@(c => c!.Con.ConTelefoneCelular)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Proprietário" Property="@(c => c!.Proprietario)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Responsável" Property="@(c => c!.Responsavel)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Percentual" Property="@(c => c!.Percentual)" Sortable="true" Align=Align.Start />
+        <!-- 
+                    <FluentCheckbox @bind-Value="@(() => c!.Responsavel == "Sim" ? true : False )" />
+        <FluentTextField @bind-Value="@Content">:</FluentTextField>
+            <EnderecoForm Content="Imovel.Lograd" Bairro="@(Imovel.IdloteamentoNavigation.Descricao ?? " ")" Numero="@(Imovel.EdifNumeracao ?? " ")" />
+
+    <FluentTextField @bind-Value="@Content.Lograd.LogradNome">Logradouro:</FluentTextField>
+    <FluentTextField @bind-Value="@Content.EdifNumeracao">Número:</FluentTextField>
+    <FluentTextField @bind-Value="@Content.IdloteamentoNavigation.Descricao">Bairro:</FluentTextField>
+        -->
+    </FluentDataGrid>
+
+
+</FluentCard>
+@code {
+    [Parameter]
+    public IQueryable<TribEdificacoesContrib> Content { get; set; } = default!;
+   
+    [CascadingParameter]
+    public FluentDialog? Dialog { get; set; }
+
+ 
+}
