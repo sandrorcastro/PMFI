@@ -1,0 +1,7 @@
+            <!-- 
+               @{
+                var item = context as TribEdificacoesContrib;
+                bool isChecked = item.Responsavel == "Sim";
+                <fluent-checkbox checked="@isChecked"></fluent-checkbox>
+            }
+            -->
