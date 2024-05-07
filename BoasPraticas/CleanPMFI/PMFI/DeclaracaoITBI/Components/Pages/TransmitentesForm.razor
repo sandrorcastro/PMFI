@@ -1,5 +1,7 @@
 ﻿@using ITBI.Entities.DBProsiga;
+@inherits Microsoft.AspNetCore.Components.ComponentBase
 @implements IDialogContentComponent<IQueryable<TribEdificacoesContrib>>
+@rendermode InteractiveServer
 <FluentCard Justify="@JustifyContent.Center" >
     <p>Proprietários/Responsáveis</p>
     <FluentDataGrid Items=@Content TGridItem=TribEdificacoesContrib>
@@ -12,9 +14,15 @@
         <PropertyColumn Title="Responsável" Property="@(c => c!.Responsavel)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="Percentual" Property="@(c => c!.Percentual)" Sortable="true" Align=Align.Start />
         <TemplateColumn Align="@Align.End">
-                    <FluentCheckbox />
+            @{
+                var item = context as TribEdificacoesContrib;
+                //bool isChecked = item.Responsavel == "Sim";
+                <FluentCheckbox onchange="@((ChangeEventArgs e)=>@AddRemove(e,item.Con))"> </FluentCheckbox>
+            }
+          
         </TemplateColumn>
         <!-- 
+                <FluentCheckbox onchange="@AddRemove(item)"> </FluentCheckbox>
         <FluentTextField @bind-Value="@Content">:</FluentTextField>
             <EnderecoForm Content="Imovel.Lograd" Bairro="@(Imovel.IdloteamentoNavigation.Descricao ?? " ")" Numero="@(Imovel.EdifNumeracao ?? " ")" />
 
@@ -31,15 +39,19 @@
         <FluentButton OnClick="@( ()=> BuscarContribuinteDialog("Transmitente"))" Appearance="Appearance.Accent">Adicionar Novo Transmitente</FluentButton>
     -->
     <FluentButton Appearance="Appearance.Accent">Adicionar Novo Transmitente</FluentButton>
-    <FluentDataGrid Items=@Content TGridItem=TribEdificacoesContrib>
-        <PropertyColumn Title="CPF/CNPJ" Property="@(c => c!.Con.ConCnpjcpf)" Sortable="true" Align=Align.Start />
-        <PropertyColumn Title="RG" Property="@(c => c!.Con.ConRg)" Sortable="true" Align=Align.Start />
-        <PropertyColumn Title="Nome/Razão" Property="@(c => c!.Con.ConNome)" Sortable="true" Align=Align.Start />
-        <PropertyColumn Title="Email" Property="@(c => c!.Con.ConEmail)" Sortable="true" Align=Align.Start />
-        <PropertyColumn Title="Celular" Property="@(c => c!.Con.ConTelefoneCelular)" Sortable="true" Align=Align.Start />
+    <FluentDataGrid Items=@ContribuintesQ TGridItem=Contribuinte>
+        <PropertyColumn Title="ID" Property="@(c => c!.ConId)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="RG" Property="@(c => c!.ConCnpjcpf)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="RG" Property="@(c => c!.ConRg)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Nome/Razão" Property="@(c => c!.ConNome)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Email" Property="@(c => c!.ConEmail)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Celular" Property="@(c => c!.ConTelefoneCelular)" Sortable="true" Align=Align.Start />
+            <!-- 
+
         <PropertyColumn Title="Proprietário" Property="@(c => c!.Proprietario)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="Responsável" Property="@(c => c!.Responsavel)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="Percentual" Property="@(c => c!.Percentual)" Sortable="true" Align=Align.Start />
+        -->
         <!-- 
                     <FluentCheckbox @bind-Value="@(() => c!.Responsavel == "Sim" ? true : False )" />
         <FluentTextField @bind-Value="@Content">:</FluentTextField>
@@ -56,9 +68,56 @@
 @code {
     [Parameter]
     public IQueryable<TribEdificacoesContrib> Content { get; set; } = default!;
-   
+    public IQueryable<Contribuinte>? ContribuintesQ { get; set; } 
+    [Parameter]
+    public List<Contribuinte>? ListaDeTransmitentes { get; set; } 
+
     [CascadingParameter]
     public FluentDialog? Dialog { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        //    await Task.Delay(1000);
+        //  await CarregaAlunos();
+        //pagination.TotalItemCountChanged += (sender, eventArgs) => StateHasChanged();
+        //ContribuintesQ = Content;
+        await base.OnInitializedAsync();
+    }
+    [Parameter]
+    public EventCallback<List<Contribuinte>> ListaDeTransmitentesChanged { get; set; }
 
- 
+    public void AtualizarTransmitente(Contribuinte contribuinte, int operacao)
+    {
+        if (operacao == 1)
+        {
+
+            //ListaDeTransmitentes[index] = contribuinte;
+            ListaDeTransmitentes.Add(contribuinte);
+            ContribuintesQ = ListaDeTransmitentes.AsQueryable();
+            ListaDeTransmitentesChanged.InvokeAsync(ListaDeTransmitentes);
+        } else if (operacao == 2)
+        {
+            ListaDeTransmitentes.Remove(contribuinte);
+            ContribuintesQ = ListaDeTransmitentes.AsQueryable();
+            ListaDeTransmitentesChanged.InvokeAsync(ListaDeTransmitentes);
+        }
+    }
+    private void AddRemove(ChangeEventArgs e,Contribuinte contribuinte)
+    {
+        //  bool isChecked = (bool) e.Value;
+        // Lógica a ser executada quando o checkbox é marcado
+        //await DialogService.ShowInfoAsync("Wizard completed");
+        //if(isChecked){
+        if (e.Value.ToString() == "True")
+        {
+
+            AtualizarTransmitente(contribuinte,1);
+            //ContribuintesQ = this.ListaDeTrasmitentes.AsQueryable();
+        } else
+        {
+            AtualizarTransmitente(contribuinte, 2);
+        }
+    }
+         
+         
 }
+ 

@@ -43,7 +43,7 @@
             <FluentEditForm Model="Imovel" FormName="transmitenteInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <TransmitentesForm Content="Transmitentes" />
+                    <TransmitentesForm Content="Transmitentes" ListaDeTransmitentes=@ListaDeTransmitentes ListaDeTransmitentesChanged="HandleListaDeTransmitentesChanged"/>
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
@@ -89,6 +89,8 @@
                                                             IdloteamentoNavigation = new Loteamento(),
                                                             TribEdificacoesContribs = new List<TribEdificacoesContrib>()
         };
+    public List<Contribuinte>? ListaDeTransmitentes = new List<Contribuinte>();
+
     private IQueryable<TribEdificacoesContrib>? Transmitentes;
     private FormData1 _formData1 = new FormData1();
     private FormData2 _formData2 = new FormData2();
@@ -122,7 +124,7 @@
 
     async Task OnFinishedAsync()
     {
-        //   await DialogService.ShowInfoAsync("Wizard completed");
+          await DialogService.ShowInfoAsync("Wizard completed");
     }
 
     async Task OnValidSubmit()
@@ -193,4 +195,9 @@
         [MinLength(5)]
         public string? Signature { get; set; }
     }
+    private void HandleListaDeTransmitentesChanged(List<Contribuinte> listaAtualizada)
+    {
+        ListaDeTransmitentes = listaAtualizada;
+    }
+
 }
