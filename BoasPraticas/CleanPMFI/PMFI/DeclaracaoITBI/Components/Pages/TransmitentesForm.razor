@@ -195,7 +195,7 @@
 
         //await Task.Run(() => DemoLogger.WriteLine($"Dialog closed"));
 
-        }
+    }
     private async Task ContribuinteFormDialog()
     {
         if (tipoContribuinte == "Transmitente")
@@ -236,14 +236,14 @@
             {
 
                 adquirente = result.Data as Contribuinte;
-            //    adquirentesList = new List<Contribuinte>();
+                //    adquirentesList = new List<Contribuinte>();
                 //  adquirentesList = adquirentes.ToList();
                 // await Task.Run(() => DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age})"));
                 adquirente = await contribuinteService.GetContribuinte(adquirente.ConCnpjcpf);
                 if (adquirente != null)
                 {
-         //           adquirentesList.Add(adquirente);
-          //          adquirentes = adquirentesList.AsQueryable();
+                    //           adquirentesList.Add(adquirente);
+                    //          adquirentes = adquirentesList.AsQueryable();
                     //await ContribuinteFormDialog();
                 }
                 else
@@ -257,11 +257,14 @@
             {
 
                 transmitente = result.Data as Contribuinte;
-     //           transmitentesList = new List<Contribuinte>();
+                AtualizarTransmitente(transmitente, 1);
+                //           transmitentesList = new List<Contribuinte>();
                 //   transmitentesList = adquirentes.ToList();
                 // await Task.Run(() => DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age})"));
-                transmitente = await contribuinteService.GetContribuinte(transmitente.ConCnpjcpf);
-                if (transmitente != null)
+                // transmitente = await contribuinteService.GetContribuinte(transmitente.ConCnpjcpf);
+              /*
+               * 
+               *   if (transmitente != null)
                 {
        //             transmitentesList.Add(transmitente);
                     // transmitentes = transmitentesList.AsQueryable();
@@ -271,7 +274,8 @@
                 {
                     //await DialogService.ShowInfoAsync("Dilog com informações do Contribuinte");
                     await DialogService.ShowInfoAsync("Transmitente Não Encontrado, Adicione-o!");
-                }
+                }*/
+
                 return;
             }
         }
