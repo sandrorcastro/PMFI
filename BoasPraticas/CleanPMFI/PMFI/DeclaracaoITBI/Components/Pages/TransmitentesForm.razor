@@ -1,6 +1,7 @@
 ﻿@using ITBI.Entities.DBProsiga;
-@inherits Microsoft.AspNetCore.Components.ComponentBase
+@* @inherits Microsoft.AspNetCore.Components.ComponentBase *@
 @using System.ComponentModel.DataAnnotations
+@using Microsoft.FluentUI.AspNetCore.Components
 @using ITBI.Services
 @implements IDialogContentComponent<IQueryable<TribEdificacoesContrib>>
 @rendermode InteractiveServer
@@ -19,12 +20,24 @@
         <PropertyColumn Title="Percentual" Property="@(c => c!.Percentual)" Sortable="true" Align=Align.Start />
         <TemplateColumn Align="@Align.End">
             @{
+
+                var item = context as TribEdificacoesContrib;
+                <FluentButton Appearance="Appearance.Outline" OnClick="()=>AddRemovePlus(item.Con)"  IconStart="GetIcon(item.Con)">
+            
+                </FluentButton>
+            }
+        </TemplateColumn>
+     <!-- 
+
+            <TemplateColumn Align="@Align.End">
+            @{
                 var item = context as TribEdificacoesContrib;
                 //bool isChecked = item.Responsavel == "Sim";
                 <FluentCheckbox onchange="@((ChangeEventArgs e)=>@AddRemove(e,item.Con))"> </FluentCheckbox>
             }
           
         </TemplateColumn>
+     -->
         <!-- 
                 <FluentCheckbox onchange="@AddRemove(item)"> </FluentCheckbox>
         <FluentTextField @bind-Value="@Content">:</FluentTextField>
@@ -39,10 +52,7 @@
 
 </FluentCard>
 <FluentCard Justify="@JustifyContent.Center" >
-    <!-- 
-    <FluentButton Appearance="Appearance.Accent">Adicionar Novo Transmitente</FluentButton>
-    -->
-        <FluentButton OnClick="@( ()=> BuscarContribuinteDialog("Transmitente"))" Appearance="Appearance.Accent">Adicionar Novo Transmitente</FluentButton>
+    <FluentButton OnClick="@( ()=> BuscarContribuinteDialog("Transmitente"))" Appearance="Appearance.Accent">Adicionar Novo Transmitente</FluentButton>
     <FluentDataGrid Items=@ContribuintesQ TGridItem=Contribuinte>
         <PropertyColumn Title="ID" Property="@(c => c!.ConId)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="RG" Property="@(c => c!.ConCnpjcpf)" Sortable="true" Align=Align.Start />
@@ -50,29 +60,31 @@
         <PropertyColumn Title="Nome/Razão" Property="@(c => c!.ConNome)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="Email" Property="@(c => c!.ConEmail)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="Celular" Property="@(c => c!.ConTelefoneCelular)" Sortable="true" Align=Align.Start />
-            <!-- 
+        <TemplateColumn Align="@Align.End">
+            @{
 
-        <PropertyColumn Title="Proprietário" Property="@(c => c!.Proprietario)" Sortable="true" Align=Align.Start />
-        <PropertyColumn Title="Responsável" Property="@(c => c!.Responsavel)" Sortable="true" Align=Align.Start />
-        <PropertyColumn Title="Percentual" Property="@(c => c!.Percentual)" Sortable="true" Align=Align.Start />
-        -->
-        <!-- 
-                    <FluentCheckbox @bind-Value="@(() => c!.Responsavel == "Sim" ? true : False )" />
-        <FluentTextField @bind-Value="@Content">:</FluentTextField>
-            <EnderecoForm Content="Imovel.Lograd" Bairro="@(Imovel.IdloteamentoNavigation.Descricao ?? " ")" Numero="@(Imovel.EdifNumeracao ?? " ")" />
-
-    <FluentTextField @bind-Value="@Content.Lograd.LogradNome">Logradouro:</FluentTextField>
-    <FluentTextField @bind-Value="@Content.EdifNumeracao">Número:</FluentTextField>
-    <FluentTextField @bind-Value="@Content.IdloteamentoNavigation.Descricao">Bairro:</FluentTextField>
-        -->
+            var item = context as Contribuinte;
+            <FluentButton Appearance="Appearance.Outline" OnClick="()=>AddRemovePlus(item)"
+                      IconStart="@(new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent))">
+                      </FluentButton>
+            }
+        </TemplateColumn>
+<!--
+        <TemplateColumn Align="@Align.End">
+            @{
+                var item = context as Contribuinte;
+                //bool isChecked = item.Responsavel == "Sim";
+                <FluentCheckbox onchange="@((ChangeEventArgs e)=>@AddRemove(e,item))"> </FluentCheckbox>
+            }
+        </TemplateColumn>
+-->
     </FluentDataGrid>
-
-
 </FluentCard>
 @code {
     [Parameter]
     public IQueryable<TribEdificacoesContrib> Content { get; set; } = default!;
-    public IQueryable<Contribuinte>? ContribuintesQ { get; set; } 
+    public IQueryable<Contribuinte>? ContribuintesQ { get; set; }
+    private Dictionary<Contribuinte, bool> itemStates = new Dictionary<Contribuinte, bool>();
     [Parameter]
     public List<Contribuinte>? ListaDeTransmitentes { get; set; } 
     public string? tipoContribuinte = null;
@@ -123,6 +135,42 @@
             AtualizarTransmitente(contribuinte, 2);
         }
     }
+    private void AddRemovePlus(Contribuinte contribuinte)
+    {
+
+        //  AtualizarTransmitente(contribuinte, 1);
+        //ContribuintesQ = this.ListaDeTrasmitentes.AsQueryable();
+        if(itemStates.ContainsKey(contribuinte))
+        {
+            itemStates[contribuinte] = !itemStates[contribuinte];
+            AtualizarTransmitente(contribuinte, 2);
+          //  itemStates.Add(contribuinte, false);
+        }
+        else
+        {
+            itemStates.Add(contribuinte,true);
+            AtualizarTransmitente(contribuinte, 1);
+        }
+        StateHasChanged();
+
+    }
+    //private MarkupString GetIcon(Contribuinte item)
+    private Icon GetIcon(Contribuinte item)
+    {
+        // Retorna o ícone de exclusão se o item foi adicionado, caso contrário, retorna o ícone de adição
+        return itemStates.TryGetValue(item, out bool isAdded) && isAdded
+         //? (MarkupString)@"<Icons.Regular.Size24.AddSquare().WithColor(Color.Accent)>"
+         //: (MarkupString)@"<Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)>";
+         // ? "icon-remover" // Nome do ícone de remoção
+         // : "icon-adicionar"; // Nome do ícone de adição
+         // ? (Icon)@"<Icons.Regular.Size24.AddSquare().WithColor(Color.Accent)>"
+         // : (Icon)@"<Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)>";
+         //? new Icon() { Name = "Icons.Regular.Size24.AddSquare().WithColor(Color.Accent)" }
+         //   : new Icon() { Name="Icons.Regular.size24.SubtractSquare().WithColor(Color.Accent)"} ;
+         ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
+         : new Icons.Regular.Size24.AddSquare().WithColor(Color.Accent);
+    }
+    
     private async Task BuscarContribuinteDialog(string _tipoContribuinte)
     {
         tipoContribuinte = _tipoContribuinte;
