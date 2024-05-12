@@ -142,7 +142,8 @@
         //ContribuintesQ = this.ListaDeTrasmitentes.AsQueryable();
         if(itemStates.ContainsKey(contribuinte))
         {
-            itemStates[contribuinte] = !itemStates[contribuinte];
+            //itemStates[contribuinte] = !itemStates[contribuinte];
+            itemStates.Remove(contribuinte);
             AtualizarTransmitente(contribuinte, 2);
           //  itemStates.Add(contribuinte, false);
         }

@@ -22,7 +22,7 @@
             <FluentEditForm Model="Imovel" FormName="personalInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <FluentTextField Placeholder="First Name" @bind-Value="Imovel.InscricaoImobiliaria" />
+                    <FluentTextField Placeholder="Inscrição Imobiliária" @bind-Value="Imovel!.InscricaoImobiliaria" />
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
