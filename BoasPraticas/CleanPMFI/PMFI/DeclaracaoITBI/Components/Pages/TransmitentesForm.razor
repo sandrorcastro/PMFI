@@ -54,8 +54,10 @@
 <FluentCard Justify="@JustifyContent.Center" >
     <FluentButton OnClick="@( ()=> BuscarContribuinteDialog("Transmitente"))" Appearance="Appearance.Accent">Adicionar Novo Transmitente</FluentButton>
     <FluentDataGrid Items=@ContribuintesQ TGridItem=Contribuinte>
-        <PropertyColumn Title="ID" Property="@(c => c!.ConId)" Sortable="true" Align=Align.Start />
-        <PropertyColumn Title="RG" Property="@(c => c!.ConCnpjcpf)" Sortable="true" Align=Align.Start />
+        <!--  
+            <PropertyColumn Title="ID" Property="@(c => c!.ConId)" Sortable="true" Align=Align.Start />
+        --> 
+        <PropertyColumn Title="CPF/CNPJ" Property="@(c => c!.ConCnpjcpf)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="RG" Property="@(c => c!.ConRg)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="Nome/Razão" Property="@(c => c!.ConNome)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="Email" Property="@(c => c!.ConEmail)" Sortable="true" Align=Align.Start />
@@ -160,14 +162,6 @@
     {
         // Retorna o ícone de exclusão se o item foi adicionado, caso contrário, retorna o ícone de adição
         return itemStates.TryGetValue(item, out bool isAdded) && isAdded
-         //? (MarkupString)@"<Icons.Regular.Size24.AddSquare().WithColor(Color.Accent)>"
-         //: (MarkupString)@"<Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)>";
-         // ? "icon-remover" // Nome do ícone de remoção
-         // : "icon-adicionar"; // Nome do ícone de adição
-         // ? (Icon)@"<Icons.Regular.Size24.AddSquare().WithColor(Color.Accent)>"
-         // : (Icon)@"<Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)>";
-         //? new Icon() { Name = "Icons.Regular.Size24.AddSquare().WithColor(Color.Accent)" }
-         //   : new Icon() { Name="Icons.Regular.size24.SubtractSquare().WithColor(Color.Accent)"} ;
          ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
          : new Icons.Regular.Size24.AddSquare().WithColor(Color.Accent);
     }
@@ -187,17 +181,7 @@
                     //   Height = "500px",
                 });
         }
-        if (tipoContribuinte == "Adquirente")
-        {
-
-            await DialogService.ShowDialogAsync<BuscarContribuinteDialog>(adquirente, new DialogParameters()
-                {
-                    Title = $"Buscar {tipoContribuinte}",
-                    OnDialogResult = DialogService.CreateDialogCallback(this, HandleBuscarContribuinteDialog),
-                    //   Width = "500px",
-                    //   Height = "500px",
-                });
-        }
+       
 
 
     }
@@ -228,21 +212,7 @@
                 }
 
             }
-            if (tipoContribuinte == "Adquirente")
-            {
-                adquirente = result.Data as Contribuinte;
-                adquirente = await contribuinteService.GetContribuinte(adquirente.ConCnpjcpf);
-                if (adquirente != null)
-                {
-                    await ContribuinteFormDialog();
-                }
-                else
-                {
-                    await DialogService.ShowInfoAsync("Adquirente Não Encontrado, Adicione-o!");
-
-                }
-
-            }
+           
         }
 
         //await Task.Run(() => DemoLogger.WriteLine($"Dialog closed"));
@@ -250,19 +220,7 @@
     }
     private async Task ContribuinteFormDialog()
     {
-        if (tipoContribuinte == "NovoTransmitente")
-        {
-
-
-            await DialogService.ShowDialogAsync<ContribuinteFormDialog>(transmitente = new Contribuinte(), new DialogParameters()
-                {
-                    Title = $"Cadastro de {tipoContribuinte}",
-                    OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
-                    //  Width = "500px",
-                    //  Height = "500px",
-                });
-        }
-        if (tipoContribuinte == "Transmitente")
+       if (tipoContribuinte == "Transmitente")
         {
             if(transmitente!= null)
             {
@@ -287,18 +245,6 @@
                     });
             }
         }
-        if (tipoContribuinte == "Adquirente")
-        {
-
-
-            await DialogService.ShowDialogAsync<ContribuinteFormDialog>(adquirente, new DialogParameters()
-                {
-                    Title = $"Cadastro de {tipoContribuinte}",
-                    OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
-                    //  Width = "500px",
-                    //  Height = "500px",
-                });
-        }
     }
     private async Task HandleContribuinteFormDialog(DialogResult result)
     {
@@ -309,28 +255,7 @@
         if (result.Data is not null)
         {
 
-            if (tipoContribuinte == "Adquirente")
-            {
-
-                adquirente = result.Data as Contribuinte;
-                //    adquirentesList = new List<Contribuinte>();
-                //  adquirentesList = adquirentes.ToList();
-                // await Task.Run(() => DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age})"));
-                adquirente = await contribuinteService.GetContribuinte(adquirente.ConCnpjcpf);
-                if (adquirente != null)
-                {
-                    //           adquirentesList.Add(adquirente);
-                    //          adquirentes = adquirentesList.AsQueryable();
-                    //await ContribuinteFormDialog();
-                }
-                else
-                {
-                    //await DialogService.ShowInfoAsync("Dilog com informações do Contribuinte");
-                    await DialogService.ShowInfoAsync("Adquirente Não Encontrado, Adicione-o!");
-                }
-                return;
-            }
-            if (tipoContribuinte == "Transmitente")
+           if (tipoContribuinte == "Transmitente")
             {
 
                 transmitente = result.Data as Contribuinte;
