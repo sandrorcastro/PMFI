@@ -145,7 +145,7 @@
             //itemStates[contribuinte] = !itemStates[contribuinte];
             itemStates.Remove(contribuinte);
             AtualizarTransmitente(contribuinte, 2);
-          //  itemStates.Add(contribuinte, false);
+            //  itemStates.Add(contribuinte, false);
         }
         else
         {
@@ -171,7 +171,7 @@
          ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
          : new Icons.Regular.Size24.AddSquare().WithColor(Color.Accent);
     }
-    
+
     private async Task BuscarContribuinteDialog(string _tipoContribuinte)
     {
         tipoContribuinte = _tipoContribuinte;
@@ -220,7 +220,10 @@
                 }
                 else
                 {
-                    await DialogService.ShowInfoAsync("Transmitente Não Encontrado, Adicione-o!");
+                    //await DialogService.ShowInfoAsync("Transmitente Não Encontrado!");
+                    //  tipoContribuinte = "NovoTransmitente";
+                    transmitente = new Contribuinte() { ConBairro = new Bairro(), ConCidade = new Cidade() { Pais=new Paise()}  };
+                    await ContribuinteFormDialog();
 
                 }
 
@@ -247,17 +250,42 @@
     }
     private async Task ContribuinteFormDialog()
     {
-        if (tipoContribuinte == "Transmitente")
+        if (tipoContribuinte == "NovoTransmitente")
         {
 
 
-            await DialogService.ShowDialogAsync<ContribuinteFormDialog>(transmitente, new DialogParameters()
+            await DialogService.ShowDialogAsync<ContribuinteFormDialog>(transmitente = new Contribuinte(), new DialogParameters()
                 {
                     Title = $"Cadastro de {tipoContribuinte}",
                     OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
                     //  Width = "500px",
                     //  Height = "500px",
                 });
+        }
+        if (tipoContribuinte == "Transmitente")
+        {
+            if(transmitente!= null)
+            {
+
+
+                await DialogService.ShowDialogAsync<ContribuinteFormDialog>(transmitente, new DialogParameters()
+                {
+                    Title = $"Cadastro de {tipoContribuinte}",
+                    OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
+                    //  Width = "500px",
+                    //  Height = "500px",
+                });
+            } else
+            {
+               //transmitente = new Contribuinte();
+                await DialogService.ShowDialogAsync<ContribuinteFormDialog>(transmitente, new DialogParameters()
+                    {
+                        Title = $"Cadastro de {tipoContribuinte}",
+                        OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
+                        //  Width = "500px",
+                        //  Height = "500px",
+                    });
+            }
         }
         if (tipoContribuinte == "Adquirente")
         {
@@ -306,7 +334,8 @@
             {
 
                 transmitente = result.Data as Contribuinte;
-                AtualizarTransmitente(transmitente, 1);
+                //AtualizarTransmitente(transmitente, 1);
+                AddRemovePlus(transmitente);
                 //           transmitentesList = new List<Contribuinte>();
                 //   transmitentesList = adquirentes.ToList();
                 // await Task.Run(() => DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age})"));
