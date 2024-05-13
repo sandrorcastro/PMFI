@@ -113,7 +113,7 @@
         };
     public List<Contribuinte>? ListaDeTransmitentes = new List<Contribuinte>();
     public List<Contribuinte>? ListaDeAdquirentes = new List<Contribuinte>();
-    public string? TipoTransferencia = string.Empty;
+    public string? TipoDeTransferencia = string.Empty;
 
     private IQueryable<TribEdificacoesContrib>? Transmitentes;
     private IQueryable<Contribuinte>? Adquirentes;
@@ -135,21 +135,21 @@
         if (e.TargetIndex == 1){
             Imovel = await BuscaImovel(Imovel.InscricaoImobiliaria.ToString().PadLeft(14,'0'));
             Transmitentes = Imovel.TribEdificacoesContribs.AsQueryable();
-         /*   if(Imovel != null)
-            {
-                await DialogService.ShowInfoAsync("imovel Encontrado");
-            } else
-            {
-                await DialogService.ShowInfoAsync("Imóvel Não Encontrado");
-                
-            }*/
+               /*   if(Imovel != null)
+                   {
+                   await DialogService.ShowInfoAsync("imovel Encontrado");
+               } else
+               {
+                   await DialogService.ShowInfoAsync("Imóvel Não Encontrado");
+
+               }*/
         }
 
     }
 
     async Task OnFinishedAsync()
     {
-          await DialogService.ShowInfoAsync("Wizard completed");
+        await DialogService.ShowInfoAsync("Wizard completed");
     }
 
     async Task OnValidSubmit()
@@ -227,6 +227,10 @@
     private void HandleListaDeAdquirentesChanged(List<Contribuinte> listaAtualizada)
     {
         ListaDeAdquirentes = listaAtualizada;
+    }
+    private void HandleTipoDeTransferenciaChanged(string tipodetransferencia)
+    {
+        TipoDeTransferencia = tipodetransferencia;
     }
     
 
