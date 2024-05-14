@@ -2,12 +2,54 @@
 @* @inherits Microsoft.AspNetCore.Components.ComponentBase *@
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.FluentUI.AspNetCore.Components
-@using ITBI.Services
-@implements IDialogContentComponent<IQueryable<Contribuinte>>
-@rendermode InteractiveServer
+<!--
+    @using ITBI.Services
+    @implements IDialogContentComponent<IQueryable<Contribuinte>>
+    @inject IContribuinteService contribuinteService
+--> 
 @inject IDialogService DialogService
-@inject IContribuinteService contribuinteService
+@rendermode InteractiveServer
 
+<FluentCard Justify="@JustifyContent.Center" >
+    <p>Tipo de Transferência:</p>
+<FluentRadioGroup Required="true" aria-labelledby="label1" @bind-Value=@tipotransferencia Name="tipo" Orientation="Orientation.Vertical"> <!--  ValueChanged="@((ChangeEventArgs e)=> e)"> -->
+   
+        <FluentRadio Value="@("CompraeVenda")" >Compra</FluentRadio>
+        <FluentRadio Value="@("Arrematação")" >Arrematação</FluentRadio>
+        <FluentRadio Value="@("Adjudicacao")" >Adjudicação</FluentRadio>
+        <FluentRadio Value="@("Permuta")" >Permuta</FluentRadio>
+        <FluentRadio Value="@("DivisaoAmigavel")" >Divisão Amigável</FluentRadio>
+        <FluentRadio Value="@("CessaoDeDireitos")" >Cessão De Direitos</FluentRadio>
+        <FluentRadio Value="@("Integralizacao Guia")" >Integralização de Capital/Incorporação, Fusão, Cisão ou Extinção de Pessoa Jurídica- Emissão de Guia </FluentRadio>
+        <FluentRadio Value="@("Integralizacao Certidao")" >Integralização de Capital/Incorporação, Fusão, Cisão ou Extinção de Pessoa Jurídica- Emissão de Certidão</FluentRadio>
+        
+    </FluentRadioGroup>
+</FluentCard>
 @code {
+    /*bool CompraeVenda = true;
+    bool Arrematacao = false;
+    bool Adjudicacao = false;
+    bool Permuta = false;
+    bool DivisaoAmigavel = false;
+    bool CessaoDeDireitos = false;
+    bool IntegralizacaoGuia = false;
+    bool IntegralizacaoCertidao = false;*/
+    string? tipotransferencia = "CompraeVenda"; 
 
+
+
+    [Parameter]
+    public EventCallback<string> TipoDeTransferenciaChanged { get; set; } 
+    public void OnRadioChange(ChangeEventArgs e)
+    {
+        TipoDeTransferenciaChanged.InvokeAsync(e.Value.ToString());
+    }
+    public void AtualizarTipoTransferencia()
+    {
+      
+        TipoDeTransferenciaChanged.InvokeAsync(tipotransferencia);
+       
+         
+        
+    }
 }

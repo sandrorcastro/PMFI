@@ -71,7 +71,7 @@
             <FluentEditForm Model="Imovel" FormName="transãcaoInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <TipoOperacaoForm Content="Adquirentes" ListaDeAdquirentes=@ListaDeAdquirentes ListaDeAdquirentesChanged="HandleListaDeAdquirentesChanged"/>
+                    <OperacaoForm TipoDeTransferenciaChanged="HandleTipoDeTransferenciaChanged"/>
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
