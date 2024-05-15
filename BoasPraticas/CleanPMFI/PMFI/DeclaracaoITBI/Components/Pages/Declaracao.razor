@@ -71,7 +71,7 @@
             <FluentEditForm Model="Imovel" FormName="transãcaoInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <OperacaoForm TipoDeTransferenciaChanged="HandleTipoDeTransferenciaChanged"/>
+                    <OperacaoForm TipoDeTransferenciaChanged="HandleTipoDeTransferenciaChanged" ObservacaoChanged="HandleObservacaoChanged"  ValorDeclaradoChanged="HandleValorDeclaradoChanged" />
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
@@ -84,7 +84,17 @@
                                   Height="300px" />
            --> 
         </FluentWizardStep>
-        <FluentWizardStep Label="Finish">
+        <FluentWizardStep Label="Emitir Guia"
+                          OnChange="@OnStepChange">
+            <FluentEditForm Model="Imovel" FormName="adquirentesInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <LegislacaoForm  ValorDeclarado=@ValorDeclarado ValorDeclaradoChanged="HandleValorDeclaradoChanged" />
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+        </FluentWizardStep>
+        <FluentWizardStep Label="Fim">
             <FluentEditForm Model="_finishFormData" FormName="finishForm" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
@@ -114,6 +124,8 @@
     public List<Contribuinte>? ListaDeTransmitentes = new List<Contribuinte>();
     public List<Contribuinte>? ListaDeAdquirentes = new List<Contribuinte>();
     public string? TipoDeTransferencia = string.Empty;
+    public string? Observacao = string.Empty;
+    public string? ValorDeclarado = string.Empty;
 
     private IQueryable<TribEdificacoesContrib>? Transmitentes;
     private IQueryable<Contribuinte>? Adquirentes;
@@ -231,6 +243,18 @@
     private void HandleTipoDeTransferenciaChanged(string tipodetransferencia)
     {
         TipoDeTransferencia = tipodetransferencia;
+    }
+    private void HandleObservacaoChanged(string observacao)
+    {
+        Observacao = observacao;
+    }
+    private void HandleValorDeclaradoChanged(string valordeclarado)
+    {
+        //ValorDeclarado = valordeclarado;
+        if (decimal.TryParse(valordeclarado.ToString(), out decimal valorDecimal))
+        {
+            ValorDeclarado = valorDecimal.ToString("N2");
+        }
     }
     
 

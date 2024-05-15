@@ -11,10 +11,9 @@
 @rendermode InteractiveServer
 
 <FluentCard Justify="@JustifyContent.Center" >
-    <p>Tipo de Transferência:</p>
-<FluentRadioGroup Required="true" aria-labelledby="label1" @bind-Value=@tipotransferencia Name="tipo" Orientation="Orientation.Vertical"> <!--  ValueChanged="@((ChangeEventArgs e)=> e)"> -->
+   <FluentRadioGroup Required="true" aria-labelledby="label1" @bind-Value=tipotransferencia  @onchange="OnRadioChange" Name="tipo" Orientation="Orientation.Vertical" Label="TIPO DE TRANSFERÊNCIA:">
    
-        <FluentRadio Value="@("CompraeVenda")" >Compra</FluentRadio>
+        <FluentRadio Value="@("CompraeVenda")" >Compra e Venda</FluentRadio>
         <FluentRadio Value="@("Arrematação")" >Arrematação</FluentRadio>
         <FluentRadio Value="@("Adjudicacao")" >Adjudicação</FluentRadio>
         <FluentRadio Value="@("Permuta")" >Permuta</FluentRadio>
@@ -24,7 +23,15 @@
         <FluentRadio Value="@("Integralizacao Certidao")" >Integralização de Capital/Incorporação, Fusão, Cisão ou Extinção de Pessoa Jurídica- Emissão de Certidão</FluentRadio>
         
     </FluentRadioGroup>
+
 </FluentCard>
+<FluentCard Justify="@JustifyContent.Center" >
+        <FluentTextField Required="true" @bind-Value=valordeclarado @onchange="OnTextFildChange" Label="VALOR DECLARADO:" />
+</FluentCard>
+<FluentCard Justify="@JustifyContent.Center" >
+        <FluentTextArea @bind-Value=observacao Label="OBSERVAÇÕES:" style="width: 100%;"/>
+</FluentCard>
+
 @code {
     /*bool CompraeVenda = true;
     bool Arrematacao = false;
@@ -34,22 +41,38 @@
     bool CessaoDeDireitos = false;
     bool IntegralizacaoGuia = false;
     bool IntegralizacaoCertidao = false;*/
-    string? tipotransferencia = "CompraeVenda"; 
-
+    private string? tipotransferencia { get; set; }
+    private string? valordeclarado { get; set; }
+    private string? observacao = "BASE DE CÁLCULO CONFORME VALOR DECLARADO. SE VERIFICADA DIVERGÊNCIA NO VALOR DECLARADO PELO CONTRIBUINTE INFORMAMOS QUE SERÁ ABERTO PROCEDIMENTO ADMINISTRATIVO FISCAL PARA APURAÇÃO DA BASE DE CÁLCULO CONFORME LEI COMPLEMENTAR 403/2023. PROT 54226/2024.";
 
 
     [Parameter]
-    public EventCallback<string> TipoDeTransferenciaChanged { get; set; } 
-    public void OnRadioChange(ChangeEventArgs e)
+    public EventCallback<string> TipoDeTransferenciaChanged { get; set; }
+    [Parameter]
+    public EventCallback<string> ObservacaoChanged { get; set; }
+    [Parameter]
+    public EventCallback<string> ValorDeclaradoChanged { get; set; }
+    public async Task  OnRadioChange(ChangeEventArgs e)
     {
-        TipoDeTransferenciaChanged.InvokeAsync(e.Value.ToString());
+        tipotransferencia = e.Value.ToString();
+        await TipoDeTransferenciaChanged.InvokeAsync(tipotransferencia);
     }
-    public void AtualizarTipoTransferencia()
+    public async Task OnTextAreaChange(ChangeEventArgs e)
     {
-      
-        TipoDeTransferenciaChanged.InvokeAsync(tipotransferencia);
-       
-         
-        
+        observacao = e.Value.ToString();
+        await ObservacaoChanged.InvokeAsync(observacao);
     }
+    public async Task OnTextFildChange(ChangeEventArgs e)
+    {
+        valordeclarado = e.Value.ToString();
+        await ValorDeclaradoChanged.InvokeAsync(valordeclarado);
+        if (decimal.TryParse(e.Value.ToString(), out decimal valorDecimal))
+        {
+            valordeclarado = valorDecimal.ToString("N2");
+        }
+    }
+
+
+
+   
 }

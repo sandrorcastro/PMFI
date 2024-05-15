@@ -22,7 +22,7 @@
             @{
 
                 var item = context as TribEdificacoesContrib;
-                <FluentButton Appearance="Appearance.Outline" OnClick="()=>AddRemovePlus(item.Con)"  IconStart="GetIcon(item.Con)">
+                <FluentButton Appearance="Appearance.Outline" OnClick="()=>AddRemovePlus(item.Con)"  IconStart="GetIcon2(item)">
             
                 </FluentButton>
             }
@@ -160,8 +160,22 @@
     //private MarkupString GetIcon(Contribuinte item)
     private Icon GetIcon(Contribuinte item)
     {
+
         // Retorna o ícone de exclusão se o item foi adicionado, caso contrário, retorna o ícone de adição
         return itemStates.TryGetValue(item, out bool isAdded) && isAdded
+         ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
+         : new Icons.Regular.Size24.AddSquare().WithColor(Color.Accent);
+    }
+    private Icon GetIcon2(TribEdificacoesContrib item)
+    {
+        if (item.Responsavel == "Sim")
+        {
+            return itemStates.TryGetValue(item.Con, out bool isAdded2) && isAdded2
+         ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Success)
+         : new Icons.Regular.Size24.AddSquare().WithColor(Color.Success);
+        }
+        // Retorna o ícone de exclusão se o item foi adicionado, caso contrário, retorna o ícone de adição
+        return itemStates.TryGetValue(item.Con, out bool isAdded) && isAdded
          ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
          : new Icons.Regular.Size24.AddSquare().WithColor(Color.Accent);
     }
