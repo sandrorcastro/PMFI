@@ -3,6 +3,7 @@ using Microsoft.FluentUI.AspNetCore.Components;
 using ITBI.Context;
 using ITBI.Services;
 using Microsoft.EntityFrameworkCore;
+using System.Net.Http;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -19,6 +20,11 @@ builder.Services.AddDbContextFactory<DbprosigaContext>(options => {
 builder.Services.AddDataGridEntityFrameworkAdapter();
 builder.Services.AddScoped<IContribuinteService, ContribuinteService>();
 builder.Services.AddScoped<IImovelService, ImovelService>();
+//builder.Services.AddScoped(sp=> new HttpClient { BaseAddress = new Uri(builder.Host.)})
+builder.Services.AddHttpClient();
+
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

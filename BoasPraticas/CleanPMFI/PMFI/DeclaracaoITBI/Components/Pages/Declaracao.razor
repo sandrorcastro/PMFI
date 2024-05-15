@@ -94,6 +94,17 @@
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
         </FluentWizardStep>
+        <FluentWizardStep Label="Emitir Certidão"
+                          OnChange="@OnStepChange">
+            <FluentEditForm Model="Imovel" FormName="adquirentesInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <LegislacaoForm ValorDeclarado=@ValorDeclarado ValorDeclaradoChanged="HandleValorDeclaradoChanged" />
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+        </FluentWizardStep>
+
         <FluentWizardStep Label="Fim">
             <FluentEditForm Model="_finishFormData" FormName="finishForm" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
@@ -146,7 +157,7 @@
         // await DialogService.ShowInfoAsync($"Go to step {e.TargetLabel} (#{e.TargetIndex})");
         if (e.TargetIndex == 1){
             Imovel = await BuscaImovel(Imovel.InscricaoImobiliaria.ToString().PadLeft(14,'0'));
-            Transmitentes = Imovel.TribEdificacoesContribs.AsQueryable();
+            Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
                /*   if(Imovel != null)
                    {
                    await DialogService.ShowInfoAsync("imovel Encontrado");
