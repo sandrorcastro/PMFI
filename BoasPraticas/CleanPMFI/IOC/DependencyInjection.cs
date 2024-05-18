@@ -31,6 +31,10 @@ namespace IOC
         {
 
             services.AddDbContextFactory<DBProsigaContext>(options => {
+                options.UseSqlServer(configuration.GetConnectionString("DefaultConnection-DBProsiga"),
+                b => b.MigrationsAssembly(typeof(DBProsigaContext).Assembly.FullName));
+            });
+            services.AddDbContextFactory<DBProsigaContext>(options => {
                 //services.AddDbContext<DBProsigaContext>(options => {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection-DBProsigaDev"),
                 b => b.MigrationsAssembly(typeof(DBProsigaContext).Assembly.FullName));
@@ -95,7 +99,10 @@ namespace IOC
             services.AddScoped<IMegaData_NFSE_AppService, MegaData_NFSE_AppService>();
             services.AddScoped<IMegaData_Export_AppService, MegaData_Export_AppService>();
             services.AddScoped<IMegaDataAppService, MegaDataAppService>();
-
+            //DBProsiga
+            //services.AddScoped<Application.Interfaces.DBProsiga.ILogradouroAppService, Application.Services.DBProsiga.LogradouroAppService>();
+            //services.AddScoped<Application.Interfaces.DBProsiga.ILogradouroTipoAppService, Application.Services.DBProsiga.LogradouroTipoAppService>();
+            services.AddScoped<Application.Interfaces.DBProsiga.ITribEdificacoesAppService, Application.Services.DBProsiga.TribEdificacoesAppService>();
 
 
             ////////////////////////////////////////////////////////////////////
@@ -110,6 +117,9 @@ namespace IOC
             services.AddScoped<INfseTblNfse_Service, NfseTblNfse_Service>();
             services.AddScoped<IMegaData_NFSE_Service, MegaData_NFSE_Service>();
             services.AddScoped<IMegaDataService, MegaDataService>();
+            //DBProsiga
+            services.AddScoped<Domain.Interfaces.Services.DBProsiga.ITribEdificacoesService, Domain.Services.DBProsiga.TribEdificacoesService>();
+
 
             //////////////////////////////////////////////////////////////////////
             services.AddScoped(typeof(IRepositoryBase<>),typeof(RepositoryBase<>));
@@ -125,7 +135,8 @@ namespace IOC
             services.AddScoped<INfseTblNfse_Repository, NfseTblNfse_Repository>();
             services.AddScoped<IMegaData_NFSE_Repository, MegaData_NFSE_Repository>();
             services.AddScoped<IMegaDataRepository, MegaDataRepository>();
-
+            //DBProsiga
+            services.AddScoped<Domain.Interfaces.Repositories.DBProsiga.ITribEdificacoesRepository, Infrastructure.Repositories.DBProsiga.TribEdificacoesRepository>();
 
             //////////////////////////////////////////////////////////////////////
             //services.AddScoped<ISpecificationEvaluator, SpecificationEvaluator>();

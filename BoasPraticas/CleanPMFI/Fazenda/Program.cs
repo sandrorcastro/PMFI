@@ -30,9 +30,9 @@ app.UseAuthorization();
 
 app.MapControllerRoute(
     name: "default",
-    //pattern: "{controller=Home}/{action=Index}/{id?}");
+    pattern: "{controller=Home}/{action=Index}/{id?}");
     // pattern: "{controller=IPTUs}/{action=Index}/{id?}");
     //pattern: "{controller=IPTUs}/{action=Index}/{id?}");
-    pattern: "{controller=IPTUSimulado}/{action=Index}/{id?}");
+   // pattern: "{controller=IPTUSimulado}/{action=Index}/{id?}");
 
 app.Run();

@@ -10,8 +10,4 @@
     <ProjectReference Include="..\GerarClasses\GerarClasses.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Interfaces\Repositories\DBProsiga\" />
-  </ItemGroup>
-
 </Project>

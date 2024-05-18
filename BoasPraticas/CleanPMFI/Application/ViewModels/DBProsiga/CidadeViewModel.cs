@@ -1,10 +1,9 @@
-﻿using Domain.Entities.DBProsiga;
-using Domain.Filters.DBProsiga;
+﻿using Domain.Entities;
+using Domain.Filters;
 using System;
 using System.Collections.Generic;
 
-namespace Application.ViewModels.DBProsiga
-
+namespace Application.ViewModels
 {
     public class CidadeViewModel
     {
@@ -17,8 +16,8 @@ namespace Application.ViewModels.DBProsiga
         public decimal? Latitude { get; set; }
         public decimal? Longitude { get; set; }
 
-        public virtual Paise? IdPaisNavigation { get; set; }
-       // public virtual Uf? IdUfNavigation { get; set; }
-       // public CidadeFilter CidadeFilter { get; set; }
+        public virtual Pais? IdPaisNavigation { get; set; }
+        public virtual Uf? IdUfNavigation { get; set; }
+        public CidadeFilter CidadeFilter { get; set; }
     }
 }
