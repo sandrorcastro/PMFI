@@ -1,0 +1,72 @@
+﻿@implements IDialogContentComponent<Logradouro>
+
+<!-- Header -->
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            @Dialog.Instance.Parameters.Title
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+<!-- Body -->
+<FluentDialogBody>
+    <FluentEditForm Model="Content" FormName="logradouroInfo" >
+        <DataAnnotationsValidator />
+        <FluentStack Orientation="Orientation.Horizontal">
+            <FluentTextField Placeholder="Nome" @bind-Value="Content!.LogradTipo">Tipo Logradouro</FluentTextField> 
+            <FluentTextField Placeholder="CPF/CNPJ" @bind-Value="Content!.LogradNome">CPF/CNPJ</FluentTextField> 
+       
+        </FluentStack>
+      
+       
+        <FluentValidationSummary style="color:darkred" />
+    </FluentEditForm>
+</FluentDialogBody>
+
+<!-- Footer -->
+<FluentDialogFooter>
+    <FluentButton Appearance="Appearance.Accent"
+                  
+                  OnClick="@SaveAsync">
+        Salvar
+    </FluentButton>
+    <FluentButton Appearance="Appearance.Neutral"
+                  OnClick="@CancelAsync">
+        Cancelar
+    </FluentButton>
+</FluentDialogFooter>
+
+@code
+{
+    
+    [Parameter]
+    public Logradouro? Content { get; set; } = default!;
+    
+    [CascadingParameter]
+    public FluentDialog Dialog { get; set; } = default!;
+
+
+    protected override void OnInitialized()
+    {
+        Content = new Logradouro();
+    }
+
+    private async Task SaveAsync()
+    {
+       // if (Content.Validate())
+        //{
+            await Dialog.CloseAsync(Content);
+            //await Dialog.CancelAsync();
+            //await Dialog.
+        //}
+    }
+
+    private async Task CancelAsync()
+    {
+        await Dialog.CancelAsync();
+    }
+
+   
+}

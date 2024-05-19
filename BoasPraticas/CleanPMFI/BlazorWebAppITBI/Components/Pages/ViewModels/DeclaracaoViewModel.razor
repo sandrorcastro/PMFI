@@ -1,4 +1,4 @@
-﻿@page "/declaracao"
+﻿@page "/declaracaoviewmodel"
 @inherits Microsoft.AspNetCore.Components.ComponentBase
 @rendermode InteractiveServer
 @inject IDialogService DialogService
@@ -69,6 +69,7 @@
     <FluentProgressRing />
 </FluentOverlay>
 @code{
+    public EdificacaoFilter ImovelFilter { get; set; } = new EdificacaoFilter() { InscricaoImobiliaria=string.Empty};
     public string? Inscricao { get; set; } = string.Empty;
     public TribEdificaco? Imovel { get; set; } = new TribEdificaco() 
         {
@@ -89,8 +90,10 @@
         {
             _overlayIsVisible = true;
             await Task.Delay(2000);
-            edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
+            //edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(ImovelFilter.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
+            edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14,'0'));
             Imovel = await edificacoesAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
+            //Imovel = await edificacoesAppService.   // GetBySpecAsync(edificacaoSpec, CancellationToken.None);
             Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
             _overlayIsVisible = false;
 

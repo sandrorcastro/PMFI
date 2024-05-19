@@ -11,17 +11,17 @@ public class EdificacaoByInscricaoImobiliariaSpec : SingleResultSpecification<Tr
 {
     //public string? InscricaoImobiliaria { get; set; }
 
-    public EdificacaoByInscricaoImobiliariaSpec(string inscricaoimobiliaria)
+    public EdificacaoByInscricaoImobiliariaSpec(string? inscricaoimobiliaria)
 
     {
         //InscricaoImobiliaria = _inscricaoimobiliaria;
-        Query.Where(x => x.InscricaoImobiliaria == inscricaoimobiliaria).Include(t => t.Terreno).Include(l => l.Lograd).Include(l => l.IdloteamentoNavigation).Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con);
+        Query.Where(x => x.InscricaoImobiliaria == inscricaoimobiliaria!).Include(t => t.Terreno).Include(l => l.Lograd).Include(l => l.IdloteamentoNavigation).Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con);
         //Query.Include(t => t.Terreno).Include(l => l.Lograd).Include(l => l.IdloteamentoNavigation).Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con); //.AsQueryable();
     }   
     public EdificacaoByInscricaoImobiliariaSpec(EdificacaoFilter edificacaoFilter)
     {
 
-        Query.Where(x => x.InscricaoImobiliaria == edificacaoFilter.InscricaoImobiliaria);
+        Query.Where(x => x.InscricaoImobiliaria == edificacaoFilter.InscricaoImobiliaria.ToString().PadLeft(14,'0')).Include(t => t.Terreno).Include(l => l.Lograd).Include(l => l.IdloteamentoNavigation).Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con); 
 
     }
     /*public Expression<Func<TribEdificaco, bool>> ToExpression()

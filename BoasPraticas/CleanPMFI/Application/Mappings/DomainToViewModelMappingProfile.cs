@@ -31,6 +31,7 @@ namespace Application.Mappings
             CreateMap<MegaData_NFSE, MegaData_NFSE_ViewModel>();
 
             CreateMap<Domain.Entities.DBProsiga.TribEdificaco, ViewModels.DBProsiga.TribEdificacoesViewModel>();
+            CreateMap<Domain.Entities.DBProsiga.Contribuinte, ViewModels.DBProsiga.ContribuinteViewModel>();
 
 
 

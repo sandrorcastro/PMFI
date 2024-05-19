@@ -9,5 +9,6 @@ namespace Application.ViewModels.DBProsiga
     public class ContribuinteViewModel : Contribuinte
     {
        
+
     }
 }
