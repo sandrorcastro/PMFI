@@ -103,6 +103,7 @@ namespace IOC
             //services.AddScoped<Application.Interfaces.DBProsiga.ILogradouroAppService, Application.Services.DBProsiga.LogradouroAppService>();
             //services.AddScoped<Application.Interfaces.DBProsiga.ILogradouroTipoAppService, Application.Services.DBProsiga.LogradouroTipoAppService>();
             services.AddScoped<Application.Interfaces.DBProsiga.ITribEdificacoesAppService, Application.Services.DBProsiga.TribEdificacoesAppService>();
+            services.AddScoped<Application.Interfaces.DBProsiga.IContribuinteAppService, Application.Services.DBProsiga.ContribuinteAppService>();
 
 
             ////////////////////////////////////////////////////////////////////
@@ -119,6 +120,7 @@ namespace IOC
             services.AddScoped<IMegaDataService, MegaDataService>();
             //DBProsiga
             services.AddScoped<Domain.Interfaces.Services.DBProsiga.ITribEdificacoesService, Domain.Services.DBProsiga.TribEdificacoesService>();
+            services.AddScoped<Domain.Interfaces.Services.DBProsiga.IContribuinteService, Domain.Services.DBProsiga.ContribuinteService>();
 
 
             //////////////////////////////////////////////////////////////////////
@@ -137,6 +139,7 @@ namespace IOC
             services.AddScoped<IMegaDataRepository, MegaDataRepository>();
             //DBProsiga
             services.AddScoped<Domain.Interfaces.Repositories.DBProsiga.ITribEdificacoesRepository, Infrastructure.Repositories.DBProsiga.TribEdificacoesRepository>();
+            services.AddScoped<Domain.Interfaces.Repositories.DBProsiga.IContribuinteRepository, Infrastructure.Repositories.DBProsiga.ContribuinteRepository>();
 
             //////////////////////////////////////////////////////////////////////
             //services.AddScoped<ISpecificationEvaluator, SpecificationEvaluator>();

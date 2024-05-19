@@ -5,7 +5,7 @@ using Domain.Filters.DBProsiga;
 using Domain.Specifications;
 using System.Linq.Expressions;
 
-namespace Domain.Specs;
+namespace Domain.Specs.DBProsiga;
 
 public class EdificacaoByInscricaoImobiliariaSpec : SingleResultSpecification<TribEdificaco>
 {

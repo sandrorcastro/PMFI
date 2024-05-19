@@ -31,6 +31,7 @@ namespace Application.Mappings
             //    CreateMap<PagedResponse<CidadeViewModel>,Cidade>();
             //    CreateMap<PagedResponse<List<CidadeViewModel>>, Cidade>();
             //    CreateMap<List<CidadeViewModel>,Cidade>();
+            CreateMap<ViewModels.DBProsiga.ContribuinteViewModel, Domain.Entities.DBProsiga.Contribuinte>();
         }
 
     }

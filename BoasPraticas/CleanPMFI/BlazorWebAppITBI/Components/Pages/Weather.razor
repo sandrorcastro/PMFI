@@ -52,7 +52,7 @@ else
        // Domain.Filters.DBProsiga.EdificacaoFilter edificacaoFilter = new Domain.Filters.DBProsiga.EdificacaoFilter() { InscricaoImobiliaria="06324040034001" };
         //Domain.Specs.EdificacaoByInscricaoImobiliariaSpec s1 = new Domain.Specs.EdificacaoByInscricaoImobiliariaSpec(edificacaoFilter);
         
-        Domain.Specs.EdificacaoByInscricaoImobiliariaSpec s1 = new Domain.Specs.EdificacaoByInscricaoImobiliariaSpec("06324040034001");
+        Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec s1 = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec("06324040034001");
         levw = await MyService.GetBySpecAsync(s1,CancellationToken.None);
         //levw = await MyService.GetByInscricaoImobiliaria("06324040034001");  //.GetBySpecAsync(s1);   // .FindAsync("06324040034001");;
         //                                                                    levw = await MyService.FindAsync(long.Parse("2"));;

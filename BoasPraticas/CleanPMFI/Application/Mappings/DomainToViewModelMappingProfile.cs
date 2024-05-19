@@ -1,9 +1,11 @@
 ﻿
 using Application.ViewModels;
+
 using Application.ViewModels.MegaData;
 using Application.ViewModels.NFSEDB;
 using AutoMapper;
 using Domain.Entities;
+
 using Domain.Entities.MegaData;
 using Domain.Entities.NFSEDB;
 using Domain.Pagination;
@@ -27,6 +29,8 @@ namespace Application.Mappings
             CreateMap<NfseTblNfse, LayoutNotasFiscais_MegaData>();
             CreateMap<NfseTblNfse, NFSEViewModel>();
             CreateMap<MegaData_NFSE, MegaData_NFSE_ViewModel>();
+
+            CreateMap<Domain.Entities.DBProsiga.TribEdificaco, ViewModels.DBProsiga.TribEdificacoesViewModel>();
 
 
 

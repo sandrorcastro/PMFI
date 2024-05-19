@@ -1,7 +1,5 @@
 ﻿@page "/declaracao"
 @inherits Microsoft.AspNetCore.Components.ComponentBase
-
-@using Microsoft.EntityFrameworkCore
 @rendermode InteractiveServer
 @inject IDialogService DialogService
 @inject ITribEdificacoesAppService edificacoesAppService
@@ -9,7 +7,7 @@
 <h1>Pagina de Declaração ITBI</h1>
 <FluentWizard StepperPosition="StepperPosition.Left"
               StepSequence="@WizardStepSequence.Visited"
-              DisplayStepNumber="@(WizardStepStatus.Current | WizardStepStatus.Next)"
+              DisplayStepNumber="@(WizardStepStatus.Current  | WizardStepStatus.Next)"
               Border="WizardBorder.Outside"
               StepTitleHiddenWhen="@GridItemHidden.XsAndDown"
               Height="auto"
@@ -18,7 +16,7 @@
     <Steps>
         <FluentWizardStep Label="Inscrição Imobiliária:"
                           OnChange="@OnStepChange">
-            <FluentEditForm Model="Imovel" FormName="personalInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+            <FluentEditForm Model="Imovel" FormName="imovelInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
                     <FluentTextField Placeholder="Inscrição Imobiliária" @bind-Value="Imovel!.InscricaoImobiliaria" />
@@ -35,6 +33,16 @@
                  <!-- 
                  <EnderecoForm Content="Imovel.Lograd" Bairro="@(Imovel.IdloteamentoNavigation.Descricao ?? " ")" Numero="@(Imovel.EdifNumeracao ?? " ")" />
                   --> 
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+        </FluentWizardStep>
+         <FluentWizardStep Label="Transmitentes"
+                          OnChange="@OnStepChange">
+            <FluentEditForm Model="Imovel" FormName="transmitenteInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <TransmitentesForm Content="Transmitentes" ListaDeTransmitentes=@ListaDeTransmitentes ListaDeTransmitentesChanged="HandleListaDeTransmitentesChanged"/>
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
@@ -69,7 +77,9 @@
             IdloteamentoNavigation = new Loteamento(),
             TribEdificacoesContribs = new List<TribEdificacoesContrib>()
         };
-    public Domain.Specs.EdificacaoByInscricaoImobiliariaSpec s1;
+    public List<Contribuinte>? ListaDeTransmitentes = new List<Contribuinte>();
+    private IQueryable<TribEdificacoesContrib>? Transmitentes;
+    public Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec edificacaoSpec;
     private bool _overlayIsVisible = false;
     async Task OnStepChange(FluentWizardStepChangeEventArgs e)
     {
@@ -77,8 +87,17 @@
         // await DialogService.ShowInfoAsync($"Go to step {e.TargetLabel} (#{e.TargetIndex})");
         if (e.TargetIndex == 1)
         {
-            s1 = new Domain.Specs.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
-            Imovel = await edificacoesAppService.GetBySpecAsync(s1, CancellationToken.None);
+            edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
+            Imovel = await edificacoesAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
+            Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
+
+            /*if(Imovel == null)
+            {
+               // await DialogService.ShowInfoAsync("Inscrição Informada Não Existe");
+                e.IsCancelled = true;
+                
+                return;
+            }*/
             //           Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
                 /*   if(Imovel != null)
                 {
@@ -90,6 +109,10 @@
             }*/
         }
 
+    }
+    private void HandleListaDeTransmitentesChanged(List<Contribuinte> listaAtualizada)
+    {
+        ListaDeTransmitentes = listaAtualizada;
     }
     protected override void OnInitialized()
     {
