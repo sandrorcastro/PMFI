@@ -2,6 +2,7 @@
 using Domain.Exceptions;
 using Domain.Interfaces.Evaluators;
 using Domain.Interfaces.Specifications;
+using System.Linq.Expressions;
 
 namespace Infrastructure.Evaluators;
 
@@ -56,6 +57,18 @@ public class SpecificationEvaluator : ISpecificationEvaluator
           ? query.Select(specification.Selector)
           : query.SelectMany(specification.SelectorMany!);
     }
+   /* public virtual IQueryable<T> GetQuery<T>(IQueryable<T> query, Expression<Func<T, bool>> specification) where T : class
+    {
+        if (specification is null) throw new ArgumentNullException(nameof(specification));
+        // if (specification.Selector is null && specification.SelectorMany is null) throw new SelectorNotFoundException();
+        // if (specification.Selector is not null && specification.SelectorMany is not null) throw new ConcurrentSelectorsException();
+
+        //query = GetQuery(query, (ISpecification<T>)specification);
+
+        return null; // specification.Selector is not null
+          //? query.Select(specification.Selector)
+          //: query.SelectMany(specification.SelectorMany!);
+    }*/
 
     /// <inheritdoc/>
     public virtual IQueryable<T> GetQuery<T>(IQueryable<T> query, ISpecification<T> specification, bool evaluateCriteriaOnly = false) where T : class

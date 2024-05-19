@@ -11,7 +11,12 @@ namespace Domain.Services.DBProsiga
         private readonly ITribEdificacoesRepository _Repository;
         public TribEdificacoesService(ITribEdificacoesRepository repository) : base(repository)
         {
-            _Repository = _Repository;
+            _Repository = repository;
+        }
+
+        public Task<TribEdificaco> GetByInscricaoImobiliaria(string? inscricao)
+        {
+            return _Repository.GetByInscricaoImobiliaria(inscricao);
         }
     }
 }

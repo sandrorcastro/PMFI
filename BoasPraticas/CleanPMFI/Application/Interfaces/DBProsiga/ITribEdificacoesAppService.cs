@@ -10,5 +10,6 @@ namespace Application.Interfaces.DBProsiga
 {
     public interface ITribEdificacoesAppService : IAppServiceBase<TribEdificaco>
     {
+        public Task<TribEdificaco> GetByInscricaoImobiliaria(string inscricao);
     }
 }

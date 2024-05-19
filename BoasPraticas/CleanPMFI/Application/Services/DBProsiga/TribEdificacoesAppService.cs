@@ -16,8 +16,15 @@ namespace Application.Services.DBProsiga
         {
             tribedificacoesService = _tribedificacoesService;
         }
-        /*public CidadeAppService(IServiceBase<Cidade> _serviceBase) : base(_serviceBase)
+
+        public async Task<TribEdificaco> GetByInscricaoImobiliaria(string inscricao)
         {
-        }*/
+            return await tribedificacoesService.GetByInscricaoImobiliaria(inscricao);
+        }
+
+
+        /*public CidadeAppService(IServiceBase<Cidade> _serviceBase) : base(_serviceBase)
+{
+}*/
     }
 }

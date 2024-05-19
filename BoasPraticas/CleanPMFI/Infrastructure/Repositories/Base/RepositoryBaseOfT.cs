@@ -2,6 +2,7 @@
 using AutoMapper.QueryableExtensions;
 using Domain.Filters;
 using Domain.Interfaces.Base;
+using Domain.Interfaces.Entities;
 using Domain.Interfaces.Evaluators;
 using Domain.Interfaces.Specifications;
 using Domain.Pagination;
@@ -9,6 +10,7 @@ using Infrastructure.Context;
 using Infrastructure.Evaluators;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using System.Linq.Expressions;
 using System.Threading;
 
 namespace Infrastructure.Repositories.Base;
@@ -16,7 +18,7 @@ namespace Infrastructure.Repositories.Base;
 /// <inheritdoc/>
 public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 {
-    private readonly DbContext _dbContext;
+    public readonly DbContext _dbContext;
    // private readonly ISpecificationEvaluator _specificationEvaluator;
     private readonly AutoMapper.IConfigurationProvider _configurationProvider;
     public  ISpecificationEvaluator Evaluator { get; }
@@ -27,14 +29,23 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     /// <inheritdoc/>
     //  protected RepositoryBase(DbContext dbContext, IMapper mapper) : this(dbContext, AppSpecificationEvaluator.Instance, mapper) { }
 
-    public RepositoryBase(DbContext dbContext)  { }
+    public RepositoryBase(DbContext dbContext)  {
+        _dbContext = dbContext;
+    }
     public RepositoryBase(DbContext dbContext, IMapper mapper) : this(dbContext, SpecificationEvaluator.Default, mapper) { }
+
 
     public RepositoryBase(DbContext dbContext, ISpecificationEvaluator specificationEvaluator, IMapper mapper)
     {
         _dbContext = dbContext;
         Evaluator = specificationEvaluator;
         _configurationProvider = mapper.ConfigurationProvider;
+    }
+    public RepositoryBase(DbContext dbContext, ISpecificationEvaluator specificationEvaluator)
+    {
+        _dbContext = dbContext;
+        Evaluator = specificationEvaluator;
+        
     }
 
     /// <inheritdoc/>
@@ -251,4 +262,9 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 
         // throw new NotImplementedException();
     }
+
+    /*public async Task<T?> GetBySpecAsync(Expression<Func<T, bool>> specification, CancellationToken cancellationToken = default)
+    {
+        return await _dbContext.Set<T>().FirstOrDefaultAsync(specification, cancellationToken);
+    }*/
 }

@@ -1,0 +1,120 @@
+﻿@page "/declaracao"
+@inherits Microsoft.AspNetCore.Components.ComponentBase
+
+@using Microsoft.EntityFrameworkCore
+@rendermode InteractiveServer
+@inject IDialogService DialogService
+@inject ITribEdificacoesAppService edificacoesAppService
+
+<h1>Pagina de Declaração ITBI</h1>
+<FluentWizard StepperPosition="StepperPosition.Left"
+              StepSequence="@WizardStepSequence.Visited"
+              DisplayStepNumber="@(WizardStepStatus.Current | WizardStepStatus.Next)"
+              Border="WizardBorder.Outside"
+              StepTitleHiddenWhen="@GridItemHidden.XsAndDown"
+              Height="auto"
+              Style="min-height: 300px;"
+              OnFinish="@OnFinishedAsync">
+    <Steps>
+        <FluentWizardStep Label="Inscrição Imobiliária:"
+                          OnChange="@OnStepChange">
+            <FluentEditForm Model="Imovel" FormName="personalInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <FluentTextField Placeholder="Inscrição Imobiliária" @bind-Value="Imovel!.InscricaoImobiliaria" />
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+        </FluentWizardStep>
+        <FluentWizardStep Label="Informações do Imóvel"
+                          OnChange="@OnStepChange">
+            <FluentEditForm Model="Imovel" FormName="imovelInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <ImovelForm Content="Imovel" />
+                 <!-- 
+                 <EnderecoForm Content="Imovel.Lograd" Bairro="@(Imovel.IdloteamentoNavigation.Descricao ?? " ")" Numero="@(Imovel.EdifNumeracao ?? " ")" />
+                  --> 
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+        </FluentWizardStep>
+   <!--
+
+   <FluentWizardStep Label="Fim">
+            <FluentEditForm Model="_finishFormData" FormName="finishForm" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <FluentTextField Label="Signature" Placeholder="Type your signature" @bind-Value="_finishFormData.Signature" />
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+        </FluentWizardStep>
+   --> 
+    </Steps>
+</FluentWizard>
+
+<FluentOverlay @bind-Visible=@_overlayIsVisible
+               Opacity="0.4"
+               Alignment="Align.Center"
+               Justification="@JustifyContent.Center">
+    <FluentProgressRing />
+</FluentOverlay>
+@code{
+    public string? Inscricao { get; set; } = string.Empty;
+    public TribEdificaco? Imovel { get; set; } = new TribEdificaco() 
+        {
+            Lograd = new Logradouro(),
+            Terreno = new TribTerreno(),
+            IdloteamentoNavigation = new Loteamento(),
+            TribEdificacoesContribs = new List<TribEdificacoesContrib>()
+        };
+    public Domain.Specs.EdificacaoByInscricaoImobiliariaSpec s1;
+    private bool _overlayIsVisible = false;
+    async Task OnStepChange(FluentWizardStepChangeEventArgs e)
+    {
+        //DilogService($"Go to step {e.TargetLabel} (#{e.TargetIndex})");
+        // await DialogService.ShowInfoAsync($"Go to step {e.TargetLabel} (#{e.TargetIndex})");
+        if (e.TargetIndex == 1)
+        {
+            s1 = new Domain.Specs.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
+            Imovel = await edificacoesAppService.GetBySpecAsync(s1, CancellationToken.None);
+            //           Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
+                /*   if(Imovel != null)
+                {
+                await DialogService.ShowInfoAsync("imovel Encontrado");
+            } else
+                {
+                await DialogService.ShowInfoAsync("Imóvel Não Encontrado");
+
+            }*/
+        }
+
+    }
+    protected override void OnInitialized()
+    {
+        //DialogService.ShowInfoAsync("Iniciando!");
+       // Imovel = new TribEdificaco();
+     //   s1 = new Domain.Specs.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14,'0'));
+
+
+    }
+    async Task OnValidSubmit()
+    {
+        //DemoLogger.WriteLine($"OnValidSubmit called");
+
+        _overlayIsVisible = true;
+        await Task.Delay(2000);
+        _overlayIsVisible = false;
+    }
+    void OnInvalidSubmit()
+    {
+        //  DemoLogger.WriteLine($"OnInvalidSubmit called");
+    }
+    async Task OnFinishedAsync()
+    {
+        await DialogService.ShowInfoAsync("Wizard completed");
+    }
+
+}
+

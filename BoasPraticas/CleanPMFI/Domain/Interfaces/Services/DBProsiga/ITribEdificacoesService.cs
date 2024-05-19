@@ -10,5 +10,6 @@ namespace Domain.Interfaces.Services.DBProsiga
 {
     public interface ITribEdificacoesService : IServiceBase<TribEdificaco>
     {
+        public Task<TribEdificaco> GetByInscricaoImobiliaria(string? inscricao);
     }
 }

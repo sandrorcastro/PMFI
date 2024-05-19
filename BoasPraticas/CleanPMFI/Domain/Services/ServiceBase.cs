@@ -85,13 +85,19 @@ namespace Domain.Services.Base
 
         public Task<T?> GetBySpecAsync(ISpecification<T> specification, CancellationToken cancellationToken = default)
         {
-            return repository.GetByIdAsync(specification, cancellationToken);
+            //return repository.GetByIdAsync(specification, cancellationToken);
+            return repository.GetBySpecAsync(specification, cancellationToken);
         }
 
         public Task<TResult?> GetBySpecAsync<TResult>(ISpecification<T, TResult> specification, CancellationToken cancellationToken = default)
         {
             return repository.GetBySpecAsync<TResult>(specification, cancellationToken);
         }
+
+    /*    public Task<T?> GetBySpecAsync(Expression<Func<T, bool>> specification, CancellationToken cancellationToken = default)
+        {
+            return repository.GetBySpecAsync(specification, cancellationToken);
+        }*/
 
         public Task<List<T>> ListAsync(CancellationToken cancellationToken = default)
         {

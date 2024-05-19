@@ -1,0 +1,25 @@
+﻿
+@implements IDialogContentComponent<TribEdificaco>
+
+    
+<FluentCard Justify="@JustifyContent.Center">
+    <FluentTextField @bind-Value="@Content.InscricaoImobiliaria">Inscrição Imobiliária:</FluentTextField>
+    <FluentNumberField @bind-Value="@Content.EdificacaoId">EdificacaoID:</FluentNumberField>
+    <FluentTextField @bind-Value="@Content.EdifMatricula">Matrícula:</FluentTextField>
+    <FluentTextField @bind-Value="@Content.EdifCaracteristica">Caracteristica</FluentTextField>
+    <FluentNumberField @bind-Value="@Content.EdifNumOficio">Número do Ofício:</FluentNumberField>
+    <FluentNumberField @bind-Value="@Content.Terreno.TerrAreaTerreno">Área do Terreno</FluentNumberField>
+    <FluentNumberField @bind-Value="@Content.EdifAreaConstruida">Área do Construída</FluentNumberField>
+    <FluentNumberField @bind-Value="@Content.EdifFracaoIdealEdificacao">Fração</FluentNumberField>
+
+</FluentCard>
+
+@code {
+    [Parameter]
+    public TribEdificaco Content { get; set; } = default!;
+
+    [CascadingParameter]
+    public FluentDialog? Dialog { get; set; }
+
+
+}

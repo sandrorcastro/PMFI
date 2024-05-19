@@ -7,6 +7,7 @@ using Domain.Interfaces.Specifications;
 using Domain.Pagination;
 using Infrastructure.Evaluators;
 using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace Infrastructure.Factories;
 
@@ -226,6 +227,10 @@ public abstract class ContextFactoryRepositoryBaseOfT<TEntity, TContext> : IRepo
     {
         return _specificationEvaluator.GetQuery(dbContext.Set<TEntity>().AsQueryable(), specification, evaluateCriteriaOnly);
     }
+   /* protected virtual IQueryable<TEntity> ApplySpecification(Expression<Func<TEntity,bool>> specification, TContext dbContext, bool evaluateCriteriaOnly = false)
+    {
+        return _specificationEvaluator.GetQuery(dbContext.Set<TEntity>().AsQueryable(), specification, evaluateCriteriaOnly);
+    }*/
 
     /// <summary>
     /// Filters all entities of <typeparamref name="TEntity" />, that matches the encapsulated query logic of the
@@ -273,4 +278,10 @@ public abstract class ContextFactoryRepositoryBaseOfT<TEntity, TContext> : IRepo
 
         // throw new NotImplementedException();
     }
+
+  /*  public async Task<TEntity?> GetBySpecAsync(Expression<Func<TEntity, bool>> specification, CancellationToken cancellationToken = default)
+    {
+        await using var dbContext = _dbContextFactory.CreateDbContext();
+        return await ApplySpecification(specification, dbContext).FirstOrDefaultAsync(cancellationToken); ;
+    }*/
 }

@@ -1067,6 +1067,7 @@ namespace Infrastructure.Context.DBProsiga
         public virtual DbSet<TribEdifNumPredial> TribEdifNumPredials { get; set; } = null!;
         public virtual DbSet<TribEdifParamCalculo> TribEdifParamCalculos { get; set; } = null!;
         public virtual DbSet<TribEdificaco> TribEdificacoes { get; set; } = null!;
+        //public DbSet<TribEdificaco> TribEdificacoes { get; set; }
         public virtual DbSet<TribEdificacoesAnexo> TribEdificacoesAnexos { get; set; } = null!;
         public virtual DbSet<TribEdificacoesBloqueada> TribEdificacoesBloqueadas { get; set; } = null!;
         public virtual DbSet<TribEdificacoesCancelada> TribEdificacoesCanceladas { get; set; } = null!;
@@ -1596,7 +1597,7 @@ namespace Infrastructure.Context.DBProsiga
         public virtual DbSet<_24hrsGuia> _24hrsGuias { get; set; } = null!;
         public virtual DbSet<_24hrsImpCarne> _24hrsImpCarnes { get; set; } = null!;
         public virtual DbSet<_24hrsMenu> _24hrsMenus { get; set; } = null!;
-
+    
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             if (!optionsBuilder.IsConfigured)
@@ -1608,7 +1609,7 @@ namespace Infrastructure.Context.DBProsiga
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<ATemp>(entity =>
+           modelBuilder.Entity<ATemp>(entity =>
             {
                 entity.HasNoKey();
 
@@ -44503,7 +44504,7 @@ namespace Infrastructure.Context.DBProsiga
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_TribEdifParamCalculos_TribParamCalculos");
             });
-
+      
             modelBuilder.Entity<TribEdificaco>(entity =>
             {
                 entity.HasKey(e => e.EdificacaoId);
@@ -44953,6 +44954,7 @@ namespace Infrastructure.Context.DBProsiga
                             j.IndexerProperty<int>("EquipId").HasColumnName("EquipID");
                         });
             });
+            
 
             modelBuilder.Entity<TribEdificacoesAnexo>(entity =>
             {
@@ -66035,7 +66037,7 @@ namespace Infrastructure.Context.DBProsiga
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_24HrsMenu_24HrsGuias");
             });
-
+            
             OnModelCreatingPartial(modelBuilder);
         }
 

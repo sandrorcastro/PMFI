@@ -3,6 +3,7 @@ using Domain.Interfaces.Specifications;
 using Domain.Pagination;
 using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,8 +14,11 @@ public interface IReadRepositoryBase<T> where T : class
     Task<T?> GetByIdAsync<TId>(TId id, CancellationToken cancellationToken = default) where TId : notnull;
     [Obsolete]
     Task<T?> GetBySpecAsync(ISpecification<T> specification, CancellationToken cancellationToken = default);
+  //  Task<T?> GetBySpecAsync(Expression<Func<T,bool>> specification, CancellationToken cancellationToken = default);
     [Obsolete]
     Task<TResult?> GetBySpecAsync<TResult>(ISpecification<T, TResult> specification, CancellationToken cancellationToken = default);
+    
+   // Task<T?> GetBySpecificationAsync(ISpecification<T> specification, CancellationToken cancellationToken = default);
     Task<T?> FirstOrDefaultAsync(ISpecification<T> specification, CancellationToken cancellationToken = default);
     Task<TResult?> FirstOrDefaultAsync<TResult>(ISpecification<T, TResult> specification, CancellationToken cancellationToken = default);
     Task<T?> SingleOrDefaultAsync(ISingleResultSpecification<T> specification, CancellationToken cancellationToken = default);

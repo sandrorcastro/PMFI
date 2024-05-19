@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Domain.Entities.DBProsiga
 {
@@ -23,9 +24,11 @@ namespace Domain.Entities.DBProsiga
         public string? EntrNumDoc { get; set; }
         public DateTime? EntrDataDoc { get; set; }
         public string? EntrObserv { get; set; }
-
+        [NotMapped]
         public virtual Almoxarifado? Almox { get; set; }
+        [NotMapped]
         public virtual Almoxarifado? EntrAlmoxOrigem { get; set; }
+
         public virtual Contribuinte? EntrFornecedor { get; set; }
         public virtual ModoAquisicao? EntrModoAquis { get; set; }
         public virtual Documento? EntrTipoDocNavigation { get; set; }

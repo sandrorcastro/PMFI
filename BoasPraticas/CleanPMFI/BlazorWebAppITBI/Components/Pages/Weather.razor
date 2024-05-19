@@ -1,5 +1,12 @@
 ﻿@page "/weather"
+@using Application.Interfaces.DBProsiga
+@using Application.ViewModels.DBProsiga
+@using Domain.Entities.DBProsiga
+@using Domain.Specifications
+@using Infrastructure.Context.DBProsiga
 @attribute [StreamRendering]
+@inject ITribEdificacoesAppService MyService
+@inject DBProsigaContext c
 
 <PageTitle>Weather</PageTitle>
 
@@ -13,17 +20,22 @@
 }
 else
 {
+    <FluentTextField @bind-Value="@levw!.InscricaoImobiliaria">
+        
+        
+    </FluentTextField>
     <FluentDataGrid Id="weathergrid" Items=@forecasts GridTemplateColumns="1fr 1fr 1fr 2fr" TGridItem=WeatherForecast>
-        <PropertyColumn Title="Date" Property="@(c => c!.Date)" Sortable="true" Align=Align.Start/>
-        <PropertyColumn Title="Temp. (C)" Property="@(c => c!.TemperatureC)" Sortable="true" Align=Align.Center/>
-        <PropertyColumn Title="Temp. (F)" Property="@(c => c!.TemperatureF)" Sortable="true" Align=Align.Center/>
-        <PropertyColumn Title="Summary" Property="@(c => c!.Summary)" Sortable="true" Align=Align.End/>
+        <PropertyColumn Title="Date" Property="@(c => c!.Date)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Temp. (C)" Property="@(c => c!.TemperatureC)" Sortable="true" Align=Align.Center />
+        <PropertyColumn Title="Temp. (F)" Property="@(c => c!.TemperatureF)" Sortable="true" Align=Align.Center />
+        <PropertyColumn Title="Summary" Property="@(c => c!.Summary)" Sortable="true" Align=Align.End />
     </FluentDataGrid>
 }
 
 @code {
     private IQueryable<WeatherForecast>? forecasts;
-
+    private IQueryable<TribEdificaco>? evw;
+    public  TribEdificaco? levw = new TribEdificaco();
     protected override async Task OnInitializedAsync()
     {
         // Simulate asynchronous loading to demonstrate streaming rendering
@@ -37,6 +49,16 @@ else
             TemperatureC = Random.Shared.Next(-20, 55),
             Summary = summaries[Random.Shared.Next(summaries.Length)]
         }).AsQueryable();
+       // Domain.Filters.DBProsiga.EdificacaoFilter edificacaoFilter = new Domain.Filters.DBProsiga.EdificacaoFilter() { InscricaoImobiliaria="06324040034001" };
+        //Domain.Specs.EdificacaoByInscricaoImobiliariaSpec s1 = new Domain.Specs.EdificacaoByInscricaoImobiliariaSpec(edificacaoFilter);
+        
+        Domain.Specs.EdificacaoByInscricaoImobiliariaSpec s1 = new Domain.Specs.EdificacaoByInscricaoImobiliariaSpec("06324040034001");
+        levw = await MyService.GetBySpecAsync(s1,CancellationToken.None);
+        //levw = await MyService.GetByInscricaoImobiliaria("06324040034001");  //.GetBySpecAsync(s1);   // .FindAsync("06324040034001");;
+        //                                                                    levw = await MyService.FindAsync(long.Parse("2"));;
+                                                     //levw = c.TribEdificacoes.Where(e=>e.InscricaoImobiliaria=="06324040034001").FirstOrDefault();
+
+        //evw = levw.AsQueryable();
     }
 
     private class WeatherForecast
