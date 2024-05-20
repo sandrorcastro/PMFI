@@ -1,4 +1,5 @@
 ﻿@page "/declaracao"
+@using Domain.Interfaces.Specifications
 @inherits Microsoft.AspNetCore.Components.ComponentBase
 @rendermode InteractiveServer
 @inject IDialogService DialogService
@@ -29,8 +30,8 @@
             <FluentEditForm Model="Imovel" FormName="imovelInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <ImovelForm Content="Imovel" />
                  <!-- 
+                    <ImovelForm Content="Imovel" />
                  <EnderecoForm Content="Imovel.Lograd" Bairro="@(Imovel.IdloteamentoNavigation.Descricao ?? " ")" Numero="@(Imovel.EdifNumeracao ?? " ")" />
                   --> 
                 </FluentStack>
@@ -70,7 +71,7 @@
 </FluentOverlay>
 @code{
     public string? Inscricao { get; set; } = string.Empty;
-    public TribEdificaco? Imovel { get; set; } = new TribEdificaco() 
+    public TribEdificaco Imovel { get; set; } = new TribEdificaco() 
         {
             Lograd = new Logradouro(),
             Terreno = new TribTerreno(),
@@ -79,7 +80,8 @@
         };
     public List<Contribuinte>? ListaDeTransmitentes = new List<Contribuinte>();
     private IQueryable<TribEdificacoesContrib>? Transmitentes;
-    public Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec edificacaoSpec;
+    //public Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec edificacaoSpec=null;
+    ISpecification<TribEdificaco> edificacaoSpec = null;
     private bool _overlayIsVisible = false;
     async Task OnStepChange(FluentWizardStepChangeEventArgs e)
     {
@@ -89,9 +91,11 @@
         {
             _overlayIsVisible = true;
             await Task.Delay(2000);
+           // Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel!.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
+            //edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel!.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
             edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
             Imovel = await edificacoesAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
-            Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
+            Transmitentes = Imovel?.TribEdificacoesContribs?.AsQueryable();
             _overlayIsVisible = false;
 
             /*if(Imovel == null)

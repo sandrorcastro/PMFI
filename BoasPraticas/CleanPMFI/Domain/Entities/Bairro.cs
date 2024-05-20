@@ -8,7 +8,7 @@ namespace Domain.Entities
 {
     public class Bairro
     {   public int IdBairro { get; set; }
-        public string Nome { get; set; }
+        public string? Nome { get; set; }
         public int? IdRegiao { get; set; }
         public virtual Regiao? Regiao { get; set; }
     }

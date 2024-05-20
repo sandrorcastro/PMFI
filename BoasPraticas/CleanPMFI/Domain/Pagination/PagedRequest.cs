@@ -3,7 +3,7 @@
 public class PagedRequest<T>
 {
     public T ViewModel { get; set; }
-    public Pagination Pagination { get; }
+    public Pagination? Pagination { get; }
     
 
     public PagedRequest(Pagination pagination)
