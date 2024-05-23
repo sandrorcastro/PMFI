@@ -110,8 +110,6 @@ namespace Domain.Entities.DBProsiga
         /// <summary>
         /// Cadastro Municipal de Contribuintes
         /// </summary>
-        /// 
-      
         public long? ConCmc { get; set; }
         public DateTime? ConDtNasc { get; set; }
         public string? ConSexo { get; set; }

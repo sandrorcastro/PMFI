@@ -87,12 +87,9 @@
         // await DialogService.ShowInfoAsync($"Go to step {e.TargetLabel} (#{e.TargetIndex})");
         if (e.TargetIndex == 1)
         {
-            _overlayIsVisible = true;
-            await Task.Delay(2000);
             edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
             Imovel = await edificacoesAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
             Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
-            _overlayIsVisible = false;
 
             /*if(Imovel == null)
             {
