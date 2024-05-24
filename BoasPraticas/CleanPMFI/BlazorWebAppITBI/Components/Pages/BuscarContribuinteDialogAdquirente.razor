@@ -10,7 +10,7 @@
 }
 *@
 @using System.ComponentModel.DataAnnotations
-@implements IDialogContentComponent<Contribuinte>
+@implements IDialogContentComponent<Adquirente>
 <!-- Header -->
 <FluentDialogHeader ShowDismiss="true">
     <FluentStack VerticalAlignment="VerticalAlignment.Center">
@@ -25,7 +25,7 @@
     <FluentEditForm Model="Content" FormName="buscarContribuinteInfo">
         <DataAnnotationsValidator />
         <FluentStack Orientation="Orientation.Vertical">
-            <FluentTextField @bind-Value="@Content.ConCnpjcpf">CPF/CNPJ:</FluentTextField>
+            <FluentTextField @bind-Value="@Content.Contribuinte.ConCnpjcpf">CPF/CNPJ:</FluentTextField>
         </FluentStack>
         
         <FluentValidationSummary style="color:darkred" />
@@ -45,12 +45,12 @@
 @code
 {
     [Parameter]
-    public Contribuinte Content { get; set; } = default!;
+    public Adquirente Content { get; set; } = default!;
     [CascadingParameter]
     public FluentDialog Dialog { get; set; } = default!;
     protected override void OnInitialized()
     {
-        Content = new Contribuinte();
+        Content = new Adquirente();
     }
     private async Task BuscarContribuinteAsync()
     {

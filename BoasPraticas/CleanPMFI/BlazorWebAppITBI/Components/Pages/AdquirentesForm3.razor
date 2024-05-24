@@ -8,7 +8,7 @@
 @inject IContribuinteAppService contribuinteAppService
 
 <FluentCard Justify="@JustifyContent.Center" >
-    <FluentButton OnClick="@( ()=> BuscarContribuinteDialog("Adquirente"))" Appearance="Appearance.Accent">Adicionar Novo Adquirente</FluentButton>
+    <FluentButton OnClick="@( ()=> BuscarContribuinteDialog("Adquirente"))" Appearance="Appearance.Accent">Adicionar Adquirente</FluentButton>
     <FluentDataGrid Items=@ContribuintesQ TGridItem=Adquirente>
         <!--  
             <PropertyColumn Title="ID" Property="@(c => c!.ConId)" Sortable="true" Align=Align.Start />
@@ -18,6 +18,8 @@
         <PropertyColumn Title="Nome/Razão" Property="@(c => c!.Contribuinte.ConNome)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="Email" Property="@(c => c!.Contribuinte.ConEmail)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="Celular" Property="@(c => c!.Contribuinte.ConTelefoneCelular)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="% Adquirido" Property="@(c => c!.percentualAdquirido)"  Sortable="true" Align=Align.Start />
+
         <TemplateColumn Align="@Align.End">
             @{
 
@@ -197,7 +199,7 @@
             {
 
 
-                await DialogService.ShowDialogAsync<ContribuinteFormDialog>(adquirente, new DialogParameters()
+                await DialogService.ShowDialogAsync<ContribuinteFormDialogAdquirente>(adquirente, new DialogParameters()
                     {
                         Title = $"Cadastro de {tipoContribuinte}",
                         OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),

@@ -58,6 +58,40 @@
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
         </FluentWizardStep>
+       <FluentWizardStep Label="Transação Imobiliária"
+                        
+                          IconPrevious="@(new Icons.Filled.Size24.Star())"
+                          IconCurrent="@(new Icons.Filled.Size24.StarEmphasis())"
+                          IconNext="@(new Icons.Regular.Size24.Star())"
+                          DisplayStepNumber="false"
+                          OnChange="@OnStepChange">
+           
+            <FluentEditForm Model="Imovel" FormName="transãcaoInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <OperacaoForm TipoDeTransferenciaChanged="HandleTipoDeTransferenciaChanged" ObservacaoChanged="HandleObservacaoChanged"  ValorDeclaradoChanged="HandleValorDeclaradoChanged" />
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+
+
+           <!--  
+
+                   <FluentSelect Items="@(Enumerable.Range(10, 80).Select(i => i.ToString()))"
+                                  Style="min-width: 70px;"
+                                  Height="300px" />
+           --> 
+        </FluentWizardStep>
+         <FluentWizardStep Label="Emitir Guia"
+                          OnChange="@OnStepChange">
+            <FluentEditForm Model="Imovel" FormName="adquirentesInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <LegislacaoForm  ValorDeclarado=@ValorDeclarado ValorDeclaradoChanged="HandleValorDeclaradoChanged" />
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+        </FluentWizardStep>
    <!--
 
    <FluentWizardStep Label="Fim">
@@ -91,7 +125,9 @@
     public List<Transmitente>? ListaDeTransmitentes = new List<Transmitente>();
     public List<Adquirente>? ListaDeAdquirentes = new List<Adquirente>();
     private IQueryable<TribEdificacoesContrib>? Transmitentes;
-    
+    public string? TipoDeTransferencia = string.Empty;
+    public string? Observacao = string.Empty;
+    public string? ValorDeclarado = string.Empty;
     public Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec edificacaoSpec;
     private bool _overlayIsVisible = false;
     async Task OnStepChange(FluentWizardStepChangeEventArgs e)
@@ -132,6 +168,22 @@
     private void HandleListaDeAdquirentesChanged(List<Adquirente> listaAtualizada)
     {
         ListaDeAdquirentes = listaAtualizada;
+    }
+    private void HandleTipoDeTransferenciaChanged(string tipodetransferencia)
+    {
+        TipoDeTransferencia = tipodetransferencia;
+    }
+    private void HandleObservacaoChanged(string observacao)
+    {
+        Observacao = observacao;
+    }
+    private void HandleValorDeclaradoChanged(string valordeclarado)
+    {
+        //ValorDeclarado = valordeclarado;
+        if (decimal.TryParse(valordeclarado.ToString(), out decimal valorDecimal))
+        {
+            ValorDeclarado = valorDecimal.ToString("N2");
+        }
     }
     protected override void OnInitialized()
     {

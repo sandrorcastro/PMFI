@@ -1,0 +1,78 @@
+﻿
+@* @inherits Microsoft.AspNetCore.Components.ComponentBase *@
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.FluentUI.AspNetCore.Components
+<!--
+    @using ITBI.Services
+    @implements IDialogContentComponent<IQueryable<Contribuinte>>
+    @inject IContribuinteService contribuinteService
+--> 
+@inject IDialogService DialogService
+@rendermode InteractiveServer
+
+<FluentCard Justify="@JustifyContent.Center" >
+   <FluentRadioGroup Required="true" aria-labelledby="label1" @bind-Value=tipotransferencia  @onchange="OnRadioChange" Name="tipo" Orientation="Orientation.Vertical" Label="TIPO DE TRANSFERÊNCIA:">
+   
+        <FluentRadio Value="@("CompraeVenda")" >Compra e Venda</FluentRadio>
+        <FluentRadio Value="@("Arrematação")" >Arrematação</FluentRadio>
+        <FluentRadio Value="@("Adjudicacao")" >Adjudicação</FluentRadio>
+        <FluentRadio Value="@("Permuta")" >Permuta</FluentRadio>
+        <FluentRadio Value="@("DivisaoAmigavel")" >Divisão Amigável</FluentRadio>
+        <FluentRadio Value="@("CessaoDeDireitos")" >Cessão De Direitos</FluentRadio>
+        <FluentRadio Value="@("Integralizacao Guia")" >Integralização de Capital/Incorporação, Fusão, Cisão ou Extinção de Pessoa Jurídica- Emissão de Guia </FluentRadio>
+        <FluentRadio Value="@("Integralizacao Certidao")" >Integralização de Capital/Incorporação, Fusão, Cisão ou Extinção de Pessoa Jurídica- Emissão de Certidão</FluentRadio>
+        
+    </FluentRadioGroup>
+
+</FluentCard>
+<FluentCard Justify="@JustifyContent.Center" >
+        <FluentTextField Required="true" @bind-Value=valordeclarado @onchange="OnTextFildChange" Label="VALOR DECLARADO:" />
+</FluentCard>
+<FluentCard Justify="@JustifyContent.Center" >
+        <FluentTextArea @bind-Value=observacao Label="OBSERVAÇÕES:" style="width: 100%;"/>
+</FluentCard>
+
+@code {
+    /*bool CompraeVenda = true;
+    bool Arrematacao = false;
+    bool Adjudicacao = false;
+    bool Permuta = false;
+    bool DivisaoAmigavel = false;
+    bool CessaoDeDireitos = false;
+    bool IntegralizacaoGuia = false;
+    bool IntegralizacaoCertidao = false;*/
+    private string? tipotransferencia { get; set; }
+    private string? valordeclarado { get; set; }
+    private string? observacao = "BASE DE CÁLCULO CONFORME VALOR DECLARADO. SE VERIFICADA DIVERGÊNCIA NO VALOR DECLARADO PELO CONTRIBUINTE INFORMAMOS QUE SERÁ ABERTO PROCEDIMENTO ADMINISTRATIVO FISCAL PARA APURAÇÃO DA BASE DE CÁLCULO CONFORME LEI COMPLEMENTAR 403/2023. PROT 54226/2024.";
+
+
+    [Parameter]
+    public EventCallback<string> TipoDeTransferenciaChanged { get; set; }
+    [Parameter]
+    public EventCallback<string> ObservacaoChanged { get; set; }
+    [Parameter]
+    public EventCallback<string> ValorDeclaradoChanged { get; set; }
+    public async Task  OnRadioChange(ChangeEventArgs e)
+    {
+        tipotransferencia = e.Value.ToString();
+        await TipoDeTransferenciaChanged.InvokeAsync(tipotransferencia);
+    }
+    public async Task OnTextAreaChange(ChangeEventArgs e)
+    {
+        observacao = e.Value.ToString();
+        await ObservacaoChanged.InvokeAsync(observacao);
+    }
+    public async Task OnTextFildChange(ChangeEventArgs e)
+    {
+        valordeclarado = e.Value.ToString();
+        await ValorDeclaradoChanged.InvokeAsync(valordeclarado);
+        if (decimal.TryParse(e.Value.ToString(), out decimal valorDecimal))
+        {
+            valordeclarado = valorDecimal.ToString("N2");
+        }
+    }
+
+
+
+   
+}
