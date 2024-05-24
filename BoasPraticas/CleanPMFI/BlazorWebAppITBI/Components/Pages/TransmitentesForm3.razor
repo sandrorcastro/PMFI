@@ -228,7 +228,7 @@
                 transmitente = result.Data as Transmitente;
                 //transmitente = await contribuinteService.GetContribuinte(transmitente.ConCnpjcpf);
                 contribuinteSpec = new Domain.Specs.DBProsiga.ContribuinteByCPFCNPJSpec(transmitente.Contribuinte.ConCnpjcpf);
-                 transmitente.Contribuinte = await contribuinteAppService.GetBySpecAsync(contribuinteSpec, CancellationToken.None);
+                transmitente.Contribuinte = await contribuinteAppService.GetBySpecAsync(contribuinteSpec, CancellationToken.None);
                 if (transmitente != null)
                 {
                     await ContribuinteFormDialog();
@@ -257,7 +257,7 @@
             {
 
 
-                await DialogService.ShowDialogAsync<ContribuinteFormDialog>(transmitente.Contribuinte, new DialogParameters()
+                await DialogService.ShowDialogAsync<ContribuinteFormDialogTransmitente>(transmitente, new DialogParameters()
                     {
                         Title = $"Cadastro de {tipoContribuinte}",
                         OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
@@ -289,8 +289,9 @@
 
             if (tipoContribuinte == "Transmitente")
             {
-
+                //result = result.Data as Contribuinte;
                 transmitente = result.Data as Transmitente;
+                //transmitente.Contribuinte = result;
                 //AtualizarTransmitente(transmitente, 1);
                 AddRemovePlus(transmitente);
                 //           transmitentesList = new List<Contribuinte>();
