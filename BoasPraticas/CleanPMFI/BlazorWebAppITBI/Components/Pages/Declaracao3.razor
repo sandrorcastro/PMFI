@@ -140,8 +140,8 @@
             Imovel = await edificacoesAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
             Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
             //AutoNumAnoNumero = await autoNumANoNumeroAppService.GetMaxAutoNumAnoNumero(2024,"ITBI");
-            AutoNumAnoNumeroSpec autoNumAnoNumeroSpec = new Domain.Specs.DBProsiga.AutoNumAnoNumeroSpec(2024,"ITBI");
-            AutoNumAnoNumero = await autoNumANoNumeroAppService.GetBySpecAsync(autoNumAnoNumeroSpec, CancellationToken.None);
+          //  AutoNumAnoNumeroSpec autoNumAnoNumeroSpec = new Domain.Specs.DBProsiga.AutoNumAnoNumeroSpec(2024,"ITBI");
+          //  AutoNumAnoNumero = await autoNumANoNumeroAppService.GetBySpecAsync(autoNumAnoNumeroSpec, CancellationToken.None);
               _overlayIsVisible = false;
             /*if(Imovel == null)
             {
@@ -165,10 +165,11 @@
     private async void HandleAutoNumAnoNumero()
     {
        // AutoNumAnoNumero = await autoNumANoNumeroAppService.GetMaxAutoNumAnoNumero(2024,"ITBI");
-        AutoNumAnoNumeroSpec autoNumAnoNumeroSpec = new Domain.Specs.DBProsiga.AutoNumAnoNumeroSpec(2024,"ITBI");
+        ///AutoNumAnoNumeroSpec autoNumAnoNumeroSpec = new Domain.Specs.DBProsiga.AutoNumAnoNumeroSpec(2024,"ITBI");
         
-        AutoNumAnoNumero = await autoNumANoNumeroAppService.GetBySpecAsync(autoNumAnoNumeroSpec, CancellationToken.None);
+       /// AutoNumAnoNumero = await autoNumANoNumeroAppService.GetBySpecAsync(autoNumAnoNumeroSpec, CancellationToken.None);
         //AutoNumAnoNumero = await autoNumANoNumeroAppService.
+
            
     }
     private void HandleListaDeTransmitentesChanged(List<Transmitente> listaAtualizada)
