@@ -10,5 +10,6 @@ namespace Domain.Interfaces.Services.DBProsiga
 {
     public interface IAutoNumAnoNumeroService : IServiceBase<AutoNumAnoNumero>
     {
+        public Task<AutoNumAnoNumero> GetMaxAutoNumAnoNumero(short AutoAno, string AutoTipo);
     }
 }

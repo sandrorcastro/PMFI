@@ -10,5 +10,6 @@ namespace Domain.Interfaces.Repositories.DBProsiga
 {
     public interface IAutoNumAnoNumeroRepository : IRepositoryBase<AutoNumAnoNumero>
     {
+        public Task<AutoNumAnoNumero> GetMaxAutoNumAnoNumero(short AutoAno, string AutoTipo);
     }
 }

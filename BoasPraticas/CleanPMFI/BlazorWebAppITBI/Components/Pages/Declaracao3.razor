@@ -4,6 +4,7 @@
 @rendermode InteractiveServer
 @inject IDialogService DialogService
 @inject ITribEdificacoesAppService edificacoesAppService
+@inject IAutoNumAnoNumeroAppService autoNumANoNumeroAppService
 
 <h1>Pagina de Declaração ITBI</h1>
 <FluentWizard StepperPosition="StepperPosition.Left"
@@ -84,26 +85,22 @@
         </FluentWizardStep>
          <FluentWizardStep Label="Emitir Guia"
                           OnChange="@OnStepChange">
-            <FluentEditForm Model="Imovel" FormName="adquirentesInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
-                <DataAnnotationsValidator />
-                <FluentStack Orientation="Orientation.Vertical">
-                    <LegislacaoForm  ValorDeclarado=@ValorDeclarado ValorDeclaradoChanged="HandleValorDeclaradoChanged" />
-                </FluentStack>
-                <FluentValidationSummary style="color:darkred" />
-            </FluentEditForm>
+           
+                    <LegislacaoForm  ValorDeclarado=@ValorDeclarado AutoNumAnoNumero="HandleAutoNumAnoNumero" ValorDeclaradoChanged="HandleValorDeclaradoChanged" />
+                
         </FluentWizardStep>
-   <!--
+   
 
    <FluentWizardStep Label="Fim">
-            <FluentEditForm Model="_finishFormData" FormName="finishForm" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+       <FluentEditForm Model="Imovel" FormName="adquirentesInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <FluentTextField Label="Signature" Placeholder="Type your signature" @bind-Value="_finishFormData.Signature" />
-                </FluentStack>
+                    
+            </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
         </FluentWizardStep>
-   --> 
+    
     </Steps>
 </FluentWizard>
 
@@ -124,6 +121,7 @@
         };
     public List<Transmitente>? ListaDeTransmitentes = new List<Transmitente>();
     public List<Adquirente>? ListaDeAdquirentes = new List<Adquirente>();
+    public AutoNumAnoNumero? AutoNumAnoNumero {get;set;}= new AutoNumAnoNumero();
     private IQueryable<TribEdificacoesContrib>? Transmitentes;
     public string? TipoDeTransferencia = string.Empty;
     public string? Observacao = string.Empty;
@@ -141,6 +139,9 @@
             edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
             Imovel = await edificacoesAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
             Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
+            //AutoNumAnoNumero = await autoNumANoNumeroAppService.GetMaxAutoNumAnoNumero(2024,"ITBI");
+            AutoNumAnoNumeroSpec autoNumAnoNumeroSpec = new Domain.Specs.DBProsiga.AutoNumAnoNumeroSpec(2024,"ITBI");
+            AutoNumAnoNumero = await autoNumANoNumeroAppService.GetBySpecAsync(autoNumAnoNumeroSpec, CancellationToken.None);
               _overlayIsVisible = false;
             /*if(Imovel == null)
             {
@@ -160,6 +161,15 @@
         }*/
         }
 
+    }
+    private async void HandleAutoNumAnoNumero()
+    {
+       // AutoNumAnoNumero = await autoNumANoNumeroAppService.GetMaxAutoNumAnoNumero(2024,"ITBI");
+        AutoNumAnoNumeroSpec autoNumAnoNumeroSpec = new Domain.Specs.DBProsiga.AutoNumAnoNumeroSpec(2024,"ITBI");
+        
+        AutoNumAnoNumero = await autoNumANoNumeroAppService.GetBySpecAsync(autoNumAnoNumeroSpec, CancellationToken.None);
+        //AutoNumAnoNumero = await autoNumANoNumeroAppService.
+           
     }
     private void HandleListaDeTransmitentesChanged(List<Transmitente> listaAtualizada)
     {

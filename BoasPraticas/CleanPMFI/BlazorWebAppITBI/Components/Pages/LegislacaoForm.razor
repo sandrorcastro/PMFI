@@ -14,7 +14,7 @@
     <FluentStack Orientation="Orientation.Horizontal">
     <FluentTextField Disabled="@(!IsAgreed)" @bind-Value="@valordeclarado" @onchange="OnTextFildChange"  Label="Valor Declarado/Base de Cálculo"></FluentTextField>
     <FluentTextField Disabled="@(!IsAgreed)" @bind-Value="@valorITBIdevido" @onchange="OnTextFildChange" Label="Valor ITBI Devido "></FluentTextField>
-    <FluentButton Disabled="@(!IsAgreed)" OnClick="Proceed" Appearance="Appearance.Accent">Gerar</FluentButton>
+    <FluentButton Disabled="@(!IsAgreed)" OnClick="GerarGuia" Appearance="Appearance.Accent">Gerar</FluentButton>
     </FluentStack>
 </FluentCard>
 
@@ -28,6 +28,8 @@
     decimal? vi = 0; //0.02m;
     [Parameter]
     public EventCallback<string> ValorDeclaradoChanged { get; set; }
+    [Parameter]
+    public EventCallback AutoNumAnoNumero { get; set; }
     protected override void OnInitialized()
     {
         // vd = decimal.Parse(valordeclarado.ToString());
@@ -40,6 +42,7 @@
         //  valordeclarado = valorDecimal.ToString("N2");
         //}
     }
+
     private void AgreementChanged(ChangeEventArgs e)
     {
         IsAgreed = !IsAgreed;
@@ -57,6 +60,12 @@
         valordeclarado = e.Value.ToString();
         await ValorDeclaradoChanged.InvokeAsync(valordeclarado);
         calculoITBI();
+    }
+    public async Task GerarGuia()
+    {
+        
+        await AutoNumAnoNumero.InvokeAsync();
+        
     }
     private void Proceed()
     {

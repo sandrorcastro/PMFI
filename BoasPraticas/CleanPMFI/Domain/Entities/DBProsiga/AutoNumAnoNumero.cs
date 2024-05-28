@@ -8,7 +8,7 @@ namespace Domain.Entities.DBProsiga
         /// <summary>
         /// Pode ser o nome da tabela ou algo que queira controlar.
         /// </summary>
-        public string AutTipo { get; set; } = null!;
+        public string AutTipo { get; set; } 
         public short AutAno { get; set; }
         public long AutNumero { get; set; }
     }
