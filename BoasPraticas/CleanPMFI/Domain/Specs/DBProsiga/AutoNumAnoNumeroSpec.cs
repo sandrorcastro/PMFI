@@ -8,6 +8,7 @@ using System.Linq.Expressions;
 namespace Domain.Specs.DBProsiga;
 
 public class AutoNumAnoNumeroSpec : SingleResultSpecification<AutoNumAnoNumero>
+//public class AutoNumAnoNumeroSpec : Specification<AutoNumAnoNumero>
 {
     
     public AutoNumAnoNumeroSpec(short AutoAno,string AutoTipo)
