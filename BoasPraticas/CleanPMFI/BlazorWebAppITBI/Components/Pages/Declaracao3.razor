@@ -6,6 +6,7 @@
 @inject ITribEdificacoesAppService edificacoesAppService
 @inject IAutoNumAnoNumeroAppService autoNumANoNumeroAppService
 
+
 <h1>Pagina de Declaração ITBI</h1>
 <FluentWizard StepperPosition="StepperPosition.Left"
               StepSequence="@WizardStepSequence.Visited"
@@ -134,15 +135,16 @@
         // await DialogService.ShowInfoAsync($"Go to step {e.TargetLabel} (#{e.TargetIndex})");
         if (e.TargetIndex == 1)
         {
-             _overlayIsVisible = true;
-                await Task.Delay(2000);
+            _overlayIsVisible = true;
+            await Task.Delay(2000);
             edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
             Imovel = await edificacoesAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
             Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
+            AutoNumAnoNumero = await autoNumANoNumeroAppService.GetMaxAutoNumAnoNumero(2024, "ITBI");
             //AutoNumAnoNumero = await autoNumANoNumeroAppService.GetMaxAutoNumAnoNumero(2024,"ITBI");
-          //  AutoNumAnoNumeroSpec autoNumAnoNumeroSpec = new Domain.Specs.DBProsiga.AutoNumAnoNumeroSpec(2024,"ITBI");
-          //  AutoNumAnoNumero = await autoNumANoNumeroAppService.GetBySpecAsync(autoNumAnoNumeroSpec, CancellationToken.None);
-              _overlayIsVisible = false;
+            ///  AutoNumAnoNumeroSpec autoNumAnoNumeroSpec = new Domain.Specs.DBProsiga.AutoNumAnoNumeroSpec(2024,"ITBI");
+             /// AutoNumAnoNumero = await autoNumANoNumeroAppService.GetBySpecAsync(autoNumAnoNumeroSpec, CancellationToken.None);
+            _overlayIsVisible = false;
             /*if(Imovel == null)
             {
             // await DialogService.ShowInfoAsync("Inscrição Informada Não Existe");
@@ -164,11 +166,13 @@
     }
     private async void HandleAutoNumAnoNumero()
     {
-       // AutoNumAnoNumero = await autoNumANoNumeroAppService.GetMaxAutoNumAnoNumero(2024,"ITBI");
-        ///AutoNumAnoNumeroSpec autoNumAnoNumeroSpec = new Domain.Specs.DBProsiga.AutoNumAnoNumeroSpec(2024,"ITBI");
-        
-       /// AutoNumAnoNumero = await autoNumANoNumeroAppService.GetBySpecAsync(autoNumAnoNumeroSpec, CancellationToken.None);
+        // AutoNumAnoNumero = await autoNumANoNumeroAppService.GetMaxAutoNumAnoNumero(2024,"ITBI");
+        ///  AutoNumAnoNumeroSpec autoNumAnoNumeroSpec = new Domain.Specs.DBProsiga.AutoNumAnoNumeroSpec(2024,"ITBI");
+
+        ///AutoNumAnoNumero = await autoNumANoNumeroAppService.GetBySpecAsync(autoNumAnoNumeroSpec, CancellationToken.None);
+        /// AutoNumAnoNumero = await autoNumANoNumeroAppService.ProjectToFirstOrDefaultAsync<AutoNumAnoNumero>(autoNumAnoNumeroSpec, CancellationToken.None);
         //AutoNumAnoNumero = await autoNumANoNumeroAppService.
+        //AutoNumAnoNumero = await autoNumANoNumeroAppService.GetMaxAutoNumAnoNumero(2024, "ITBI");
 
            
     }

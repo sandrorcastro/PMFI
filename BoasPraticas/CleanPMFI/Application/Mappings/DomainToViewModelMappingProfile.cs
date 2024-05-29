@@ -30,7 +30,10 @@ namespace Application.Mappings
             CreateMap<NfseTblNfse, NFSEViewModel>();
             CreateMap<MegaData_NFSE, MegaData_NFSE_ViewModel>();
 
+            
+
             CreateMap<Domain.Entities.DBProsiga.TribEdificaco, ViewModels.DBProsiga.TribEdificacoesViewModel>();
+            CreateMap<Domain.Entities.DBProsiga.AutoNumAnoNumero, Domain.Entities.DBProsiga.AutoNumAnoNumero>();
 
 
 
