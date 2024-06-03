@@ -11,6 +11,9 @@ namespace Application.Interfaces.Base
         Task<TResult?> ProjectToFirstOrDefaultAsync<TResult>(ISpecification<T> specification, CancellationToken cancellationToken);
         Task<List<TResult>> ProjectToListAsync<TResult>(ISpecification<T> specification, CancellationToken cancellationToken);
         Task<PagedResponse<TResult>> ProjectToListAsync<TResult>(ISpecification<T> specification, BaseFilter filter, CancellationToken cancellationToken);
+        
+       // public Task GetMaxAutoNumAnoNumero(short AutoAno, string AutoTipo);
+       // public Task<long> GetMaxAutoNumEntidades(string Etidade);
     }
    
 }

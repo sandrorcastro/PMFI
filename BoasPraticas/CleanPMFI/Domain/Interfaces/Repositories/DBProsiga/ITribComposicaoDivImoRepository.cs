@@ -1,4 +1,5 @@
-﻿using Domain.Entities.DBProsiga;
+﻿
+using Domain.Entities.DBProsiga;
 using Domain.Interfaces.Base;
 using System;
 using System.Collections.Generic;
@@ -8,8 +9,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces.Repositories.DBProsiga
 {
-    public interface IAutoNumEntidadesRepository : IRepositoryBase<AutoNumEntidade>
+    public interface ITribComposicaoDivImoRepository : IRepositoryBase<TribComposicaoDivImo>
     {
-        public Task<AutoNumEntidade> GetMaxAutoNumEntidade(string AutoNumEntidade);
     }
 }

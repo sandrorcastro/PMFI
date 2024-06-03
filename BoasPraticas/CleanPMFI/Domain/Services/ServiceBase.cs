@@ -3,6 +3,8 @@ using Domain.Interfaces.Base;
 using Domain.Interfaces.Specifications;
 using Domain.Pagination;
 using Domain.Specifications;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq.Expressions;
 
@@ -12,12 +14,24 @@ namespace Domain.Services.Base
     public class ServiceBase<T> : IServiceBase<T> where T : class
     {
         private readonly IRepositoryBase<T> repository;
+        private readonly IServiceScopeFactory scopeFactory;
 
         public ServiceBase(IRepositoryBase<T> _repository)
         {
             repository = _repository;
         }
-
+        public ServiceBase(IServiceScopeFactory _scopeFactory)
+        {
+            scopeFactory = _scopeFactory;
+        }
+        protected async Task<TResult> ExecuteInScopeAsync<TResult>(Func<DbContext, Task<TResult>> action)
+        {
+            using (var scope = scopeFactory.CreateScope())
+            {
+                var context = scope.ServiceProvider.GetRequiredService<DbContext>();
+                return await action(context);
+            }
+        }
         public Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
         {
             return repository.AddAsync(entity, cancellationToken);
@@ -154,5 +168,7 @@ namespace Domain.Services.Base
         {
             return repository.UpdateRangeAsync(entities, cancellationToken);
         }
+
+       
     }
 }

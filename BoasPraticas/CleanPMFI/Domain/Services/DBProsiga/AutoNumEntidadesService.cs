@@ -15,8 +15,13 @@ namespace Domain.Services.DBProsiga
         {
             _Repository = Repository;
         }
-      /*  public AutoNumEntidadesService(IRepositoryBase<AutoNumEntidades> _repository) : base(_repository)
+        public async Task<AutoNumEntidade> GetMaxAutoNumEntidade(string AutoNumEntidade)
         {
-        }*/
+            return await _Repository.GetMaxAutoNumEntidade(AutoNumEntidade);
+            //throw new NotImplementedException();
+        }
+        /*  public AutoNumEntidadesService(IRepositoryBase<AutoNumEntidades> _repository) : base(_repository)
+          {
+          }*/
     }
 }

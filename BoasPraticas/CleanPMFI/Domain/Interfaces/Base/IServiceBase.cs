@@ -2,6 +2,7 @@
 using Domain.Interfaces.Base;
 using Domain.Interfaces.Specifications;
 using Domain.Pagination;
+using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
 
 namespace Domain.Interfaces.Base
@@ -11,5 +12,6 @@ namespace Domain.Interfaces.Base
         Task<TResult?> ProjectToFirstOrDefaultAsync<TResult>(ISpecification<T> specification, CancellationToken cancellationToken);
         Task<List<TResult>> ProjectToListAsync<TResult>(ISpecification<T> specification, CancellationToken cancellationToken);
         Task<PagedResponse<TResult>> ProjectToListAsync<TResult>(ISpecification<T> specification, BaseFilter filter, CancellationToken cancellationToken);
+      //  Task<TResult> ExecuteInScopeAsync<TResult>(Func<DbContext, Task<TResult>> action);
     }
 }

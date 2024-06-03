@@ -15,7 +15,8 @@ namespace Domain.Entities.DBProsiga
         public string? Itbiobservacao { get; set; }
         public string? ItbiusuarioInclusao { get; set; }
         public DateTime? ItbidataInclusao { get; set; }
-        public int? Itbinumero { get; set; }
+         public int? Itbinumero { get; set; }
+       // public long? Itbinumero { get; set; }
         public int? Itbiano { get; set; }
         public string ItbidsTipo { get; set; } = null!;
         public long? ConId { get; set; }

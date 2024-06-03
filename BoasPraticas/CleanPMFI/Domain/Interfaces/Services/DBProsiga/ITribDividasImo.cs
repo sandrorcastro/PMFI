@@ -8,8 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces.Services.DBProsiga
 {
-    public interface IAutoNumEntidadesService : IServiceBase<AutoNumEntidade>
+    public interface ITribDividasImoService : IServiceBase<TribDividasImo>
     {
-        public Task<AutoNumEntidade> GetMaxAutoNumEntidade(string AutoNumEntidade);
     }
 }
