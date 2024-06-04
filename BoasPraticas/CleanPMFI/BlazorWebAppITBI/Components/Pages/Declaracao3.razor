@@ -336,11 +336,12 @@
         await tribITBICompradoresAppService.AddAsync(TribItbiCompradores, CancellationToken.None);
     }
     private async Task InsereVendedores(){
+        TribItbiVendedores.ItbiedifId = ITBIEdifID;
         if(ListaDeTransmitentes.Count>0){
-            //await tribITBIVendedoresAppService.
+            await tribITBIVendedoresAppService.DeleteAsync(TribItbiVendedores, CancellationToken.None);
             foreach (var transmitente in ListaDeTransmitentes)
             {
-                TribItbiVendedores.ItbiedifId = ITBIEdifID;
+                //TribItbiVendedores.ItbiedifId = ITBIEdifID;
                 TribItbiVendedores.ConId = transmitente.Contribuinte.ConId;
                 TribItbiVendedores.ImprimeNaGuia = "Sim";
                 await tribITBIVendedoresAppService.AddAsync(TribItbiVendedores, CancellationToken.None);
