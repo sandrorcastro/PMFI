@@ -1,6 +1,7 @@
 using BlazorWebAppITBI.Components;
 using Microsoft.FluentUI.AspNetCore.Components;
 using IOC;
+
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddInfrastructureAutoMapper(builder.Configuration);
@@ -8,6 +9,7 @@ builder.Services.AddInfrastructureAutoMapper(builder.Configuration);
 // Add services to the container.
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
+//builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<TribEdificacoesValidator>());
 
 builder.Services.AddFluentUIComponents();
 

@@ -1,5 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
+using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities.DBProsiga
 {
@@ -87,6 +89,8 @@ namespace Domain.Entities.DBProsiga
         /// </summary>
         public string EdifContinuacaoTerreno { get; set; } = null!;
         public string? EdifEconomia { get; set; }
+
+        [Required(ErrorMessage = "Inscrição Imobiliária é obrigatória")]
         public string InscricaoImobiliaria { get; set; } = null!;
         public string InscricaoImobiliariaGeo { get; set; } = null!;
         public decimal EdifFracaoIdealEdificacao { get; set; }

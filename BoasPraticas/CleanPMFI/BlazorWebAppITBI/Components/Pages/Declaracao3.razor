@@ -1,5 +1,7 @@
 ﻿@page "/declaracao3"
+@using BlazorWebAppITBI.MetaData
 @using BlazorWebAppITBI.Models
+
 @inherits Microsoft.AspNetCore.Components.ComponentBase
 @rendermode InteractiveServer
 @inject IDialogService DialogService
@@ -35,7 +37,8 @@
             <FluentEditForm Model="Imovel" FormName="imovelInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <FluentTextField Placeholder="Inscrição Imobiliária" @bind-Value="Imovel!.InscricaoImobiliaria" />
+                    <FluentTextField Placeholder="Inscrição Imobiliária" @bind-Value="Imovel!.InscricaoImobiliaria" Required />
+                    <ValidationMessage For="() => Imovel!.InscricaoImobiliaria" />
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
@@ -126,6 +129,7 @@
 </FluentOverlay>
 @code{
     public string? Inscricao { get; set; } = string.Empty;
+    // [MetadataType(typeof(ImovelMetaData))]
     public TribEdificaco? Imovel { get; set; } = new TribEdificaco() 
         {
             Lograd = new Logradouro(),
@@ -133,6 +137,7 @@
             IdloteamentoNavigation = new Loteamento(),
             TribEdificacoesContribs = new List<TribEdificacoesContrib>()
         };
+    private EditContext? editContext;
     public List<Transmitente>? ListaDeTransmitentes = new List<Transmitente>();
     public List<Adquirente>? ListaDeAdquirentes = new List<Adquirente>();
     public AutoNumAnoNumero? AutoNumAnoNumero {get;set;}= new AutoNumAnoNumero();
@@ -159,195 +164,197 @@
     {
         //DilogService($"Go to step {e.TargetLabel} (#{e.TargetIndex})");
         // await DialogService.ShowInfoAsync($"Go to step {e.TargetLabel} (#{e.TargetIndex})");
+        //if (!editContext.Validate())
+        //{
+        // Bloquear a mudança de etapa se o formulário não for válido
+        //  e.IsCancelled = true;
+        //}
+        //  if (!editContext.Validate())
+        //{
+        // Bloquear a mudança de etapa se o formulário não for válido
+        // e.IsCancelled=true; // = true;
+
+
         if (e.TargetIndex == 1)
         {
             _overlayIsVisible = true;
             await Task.Delay(2000);
             edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
             Imovel = await edificacoesAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
+            //  if(Imovel == null)
+            // {
+            //    await DialogService.ShowInfoAsync("Inscrição Informada Não Existe");
+            //  e.IsCancelled = true;
+            // _overlayIsVisible = false;
+            //return;
+            //}
             Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
-            //O que está abaixo é para falicilar- Excluir depois
-
-            AutoNumAnoNumero = await autoNumANoNumeroAppService.GetMaxAutoNumAnoNumero(2024, "ITBI");
-            ITBINumero = (int) AutoNumAnoNumero.AutNumero;
-            AutoNumEntidade = await autoNumEntidadesAppService.GetMaxAutoNumEntidade("TRIBITBI");
-            ITBIID = AutoNumEntidade.AutNumId;
-            AutoNumEntidade = await autoNumEntidadesAppService.GetMaxAutoNumEntidade("TRIBITBIEDIF");
-            ITBIEdifID = AutoNumEntidade.AutNumId;
-            AutoNumEntidade = await autoNumEntidadesAppService.GetMaxAutoNumEntidade("TribDividasImo");
-            ImoIDDivida = AutoNumEntidade.AutNumId;
-
-            TribItbi.Itbiid = ITBIID;
-            TribItbi.ItbidataLanc = DateTime.Now.Date;
-            TribItbi.Itbiobservacao = "Teste";
-            TribItbi.ItbiusuarioInclusao = null;
-            TribItbi.ItbidataInclusao = DateTime.Now;
-            TribItbi.Itbinumero = ITBINumero;
-            TribItbi.Itbiano = DateTime.Now.Date.Year;
-            TribItbi.ItbidsTipo = "COMPRA_VENDA";
-            TribItbi.ConId = null;
-            TribItbi.ItbidsAlerta = "Atenção - ITBI";
-            await tribITBIAppService.AddAsync(TribItbi, CancellationToken.None);
-
-            TribDividasImo.ImoIddivida = ImoIDDivida;
-            TribDividasImo.EdificacaoId = Imovel.EdificacaoId;
-            TribDividasImo.ImoDivAno = DateTime.Now.Date.Year;
-            TribDividasImo.TipoTribId = 79;
-            TribDividasImo.ImoDivSubDivida = 0;
-            TribDividasImo.ImoDivParcela = 0;
-            TribDividasImo.ImoDivVencimento = DateTime.Now.Date.AddDays(180);
-            //   TribDividasImo.ImoDivDataGeracao = DateTime.Now;
-            TribDividasImo.ImoDivTipoDivida = 1;
-            TribDividasImo.ImoDivDataBloqCorrecao = null;
-            TribDividasImo.ImoDivDataBloqJuros=null;
-            TribDividasImo.ImoDivDataBloqMulta = null;
-            TribDividasImo.ImoDivVlrUltimaCorrecao = 0; //  decimal.Parse(ValorDeclarado) * decimal.Parse(TxITBI);
-            TribDividasImo.ImoDivDataUltimaCorrecao = null; // DateTime.Now.Date;
-            TribDividasImo.ImoDivOrigemLancamento = "Automática";
-            TribDividasImo.ImoDivParcelaUnica = "Não";
-            TribDividasImo.TipoBxId = 1;
-            TribDividasImo.ImoDivMes =  DateTime.Now.Month;
-            TribDividasImo.ImoDivDataBaixa = null;
-            //    TribDividasImo.ImoDivValorHistorico = decimal.Parse(ValorDeclarado) * decimal.Parse(TxITBI);
-            //  TribDividasImo.ImoDivValorBaixa = 0;
-            TribDividasImo.UsuarioInclusao = "Sandro.src"; // null;
-                                                           //  TribDividasImo.ImoDivMotivoBaixa = "";
-                                                           //  TribDividasImo.ImoDivObs = null;
-                                                           //  TribDividasImo.ImoDivTipoLancamentoIptu = "";
-                                                           //  TribDividasImo.ImoDivQtdeBaixas = null;
-            TribDividasImo.AutoInfrId = null;
-            //  TribDividasImo.ImoDivBxVlrJuros = null;
-            //  TribDividasImo.ImoDivBxVlrMulta = null;
-            //  TribDividasImo.ImoDivBxVlrCorrecao = null;
-            //  TribDividasImo.ImoDivBxVlrDesconto = null;
-            //  TribDividasImo.ImoDivBxVlrMultaDa = null;
-            //  TribDividasImo.ImoDivDescDivida = null;
-            TribDividasImo.ImoDivSaiBoleto = "Sim";
-            TribDividasImo.Idmoeda = 1;// null; //1;
-                                       //   TribDividasImo.EdiId = null;
-            TribDividasImo.ImoDivValor = decimal.Parse(ValorDeclarado) * decimal.Parse(TxITBI);
-            //  TribDividasImo.Multa = null;
-            //  TribDividasImo.Juros = null;
-            //  TribDividasImo.Correcao = null;
-            //  TribDividasImo.MultaDividaAtiva = null;
-            //  TribDividasImo.DataCalculo=null;
-            //  TribDividasImo.ImoDivValorBkp = null;
-            TribDividasImo.ImoDivExcluido = null;
-            await tribDividasImoAppService.AddAsync(TribDividasImo, CancellationToken.None);
-
-            TribComposicaoDivImo.ImoIddivida = ImoIDDivida;
-            TribComposicaoDivImo.TipoTribId = 79;
-            TribComposicaoDivImo.CompDivImoValor = decimal.Parse(ValorDeclarado) * decimal.Parse(TxITBI);
-            await tribComposicaoDivImoAppService.AddAsync(TribComposicaoDivImo, CancellationToken.None);
-
-            TribItbiEdif.ItbiedifId = ITBIEdifID;
-            TribItbiEdif.Itbiid = ITBIID;
-            TribItbiEdif.EdificacaoId = Imovel.EdificacaoId;
-            TribItbiEdif.ImoIddivida = ImoIDDivida;
-            TribItbiEdif.ItbiedifPercTransacao = 2;
-            TribItbiEdif.ItbiedifAreaConstr = Imovel.EdifAreaConstruida;
-            TribItbiEdif.ItbiedifVlrVenalIptu = Imovel.ValorVenalCalculo;
-            TribItbiEdif.ItbiedifVlrDeclarado = decimal.Parse(ValorDeclarado);
-            TribItbiEdif.ItbiedifFinanciado = "Não";
-            TribItbiEdif.ItbiedifBaseCalcFin = 0;
-            TribItbiEdif.ItbiedifAliqFinanc = 0;
-            TribItbiEdif.ItbiedifVlrDevido = decimal.Parse(ValorDeclarado) * decimal.Parse(TxITBI);             ///
-            TribItbiEdif.ItbiedifDataVenc = DateTime.Now.Date.AddDays(180);
-            TribItbiEdif.ItbiedifAnoDiv = DateTime.Now.Date.Year;
-            TribItbiEdif.ItbiedifSubDivida = 0;
-            TribItbiEdif.ItbiedifMesDivida = DateTime.Now.Date.Month;
-            TribItbiEdif.ItbiedifParc=0;
-            TribItbiEdif.TipoTribId = 79;
-            //TribItbiEdif.ItbiedifTipoConstrucao;          ///
-            //TribItbiEdif.ItbiedifObservacao               ///
-            TribItbiEdif.ItbiedifBaseCalcImovel = decimal.Parse(ValorDeclarado); 
-            TribItbiEdif.ItbisomaEconomias = null;
-            TribItbiEdif.Itbiendereco = null;
-            TribItbiEdif.ItbiinscIncra = null;
-            TribItbiEdif.ItbiareaTotalImo = null;
-            TribItbiEdif.ConIddivida=null;
-            TribItbiEdif.Matricula = Imovel.EdifMatricula;
-            TribItbiEdif.ItbiedifPercTransmitir = 100;      ///
-            TribItbiEdif.ItbiedifDtMinhaCasa = null;
-            TribItbiEdif.InscricaoImobiliaria = Imovel.InscricaoImobiliaria;
-            TribItbiEdif.PStrEdifEnderecoCompleto = "nulo por enquanto";    /////
-            TribItbiEdif.EdifMatricula = Imovel.EdifMatricula;
-            TribItbiEdif.EdifCaracteristica = Imovel.EdifCaracteristica;
-            TribItbiEdif.TerrenoId = Imovel.TerrenoId;
-            TribItbiEdif.Idloteamento = Imovel.Idloteamento;
-            TribItbiEdif.QuadraLoteamento = null;                ///
-            TribItbiEdif.Loteamento = Imovel.Idloteamento;   ///
-            TribItbiEdif.TerrReferenciaAnterior = "Verificar de onde é isso";       ///
-            TribItbiEdif.InscricaoImobiliariaGeo = "";
-            TribItbiEdif.TerrAreaTerreno = Imovel.Terreno.TerrAreaTerreno;
-            TribItbiEdif.LoteLoteamento = "";           ////
-            TribItbiEdif.QuadraId = 0;                 //////
-            TribItbiEdif.PStredifBairro = "";               ////
-            TribItbiEdif.AreaAbertaCoberta = Imovel.EdifAreaCoberta;            ////
-            TribItbiEdif.LogradId = Imovel.LogradId;             /////
-            TribItbiEdif.DenoId = 0;                ///
-            TribItbiEdif.EdifNumeracao = Imovel.EdifNumeracao;
-            TribItbiEdif.EdifComplemento = Imovel.EdifComplemento;
-            TribItbiEdif.EdifAndarConstrucao = Imovel.EdifAndarConstrucao;
-            TribItbiEdif.EdifBloco = Imovel.EdifBloco;
-            TribItbiEdif.EdifNumAptoSalaLoja = Imovel.EdifNumAptoSalaLoja;
-            TribItbiEdif.EdifAreaCoberta = Imovel.EdifAreaCoberta;
-            await tribITBIEdifAppService.AddAsync(TribItbiEdif, CancellationToken.None);
-
-
-            TribItbiCompradores.ItbiedifId = ITBIEdifID;
-            TribItbiCompradores.ConId = 1120830;
-            TribItbiCompradores.ImprimeNaGuia = "Sim";
-            await tribITBICompradoresAppService.AddAsync(TribItbiCompradores, CancellationToken.None);
-
-            TribItbiVendedores.ItbiedifId = ITBIEdifID;
-            TribItbiVendedores.ConId = 13277;
-            TribItbiVendedores.ImprimeNaGuia = "Sim";
-            await tribITBIVendedoresAppService.AddAsync(TribItbiVendedores, CancellationToken.None);
-
-
-
-
-
-
-
-
-
-            // ITBIEdifDataVenc ITBIEdifAnoDiv ITBIEdifSubDivida ITBIEdifMesDivida ITBIEdifParc TipoTribID ITBIEdifTipoConstrucao ITBIEdifObservacao ITBIEdifBaseCalcImovel ITBISomaEconomias ITBIEndereco ITBIInscIncra ITBIAreaTotalImo ConIDDivida Matricula ITBIEdifPercTransmitir ITBIEdifDtMinhaCasa InscricaoImobiliaria pStrEdifEnderecoCompleto EdifMatricula EdifCaracteristica TerrenoID IDLoteamento QuadraLoteamento Loteamento TerrReferenciaAnterior InscricaoImobiliariaGEO TerrAreaTerreno LoteLoteamento QuadraID pStredifBairro AreaAbertaCoberta LogradID DenoID EdifNumeracao EdifComplemento EdifAndarConstrucao EdifAreaConstruida EdifBloco EdifNumAptoSalaLoja EdifAreaCoberta
-        //22  14  10992   6800362 2,00    0,00    1162,81 3500,00 Não 0,00    0,00    70,00   2004 - 03 - 03 00:00:00.000 2004    0   2   0   79          0,00    NULL NULL    NULL NULL    NULL NULL    NULL NULL    06516190384001  RUA: MARIAPOLIS, Nº 132 - LOTEAMENTO JARDIM JASMIM, NAO INFORMADO  66117   Predial 10992   281     0   A MESMA     250,11      886 LOTEAMENTO JARDIM JASMIM    250,11  1745    0   132     NULL    0,00    NULL NULL    NULL
-
-
-
-
-
-
-
-        //AutoNumAnoNumero = await autoNumANoNumeroAppService.GetMaxAutoNumAnoNumero(2024,"ITBI");
-            ///  AutoNumAnoNumeroSpec autoNumAnoNumeroSpec = new Domain.Specs.DBProsiga.AutoNumAnoNumeroSpec(2024,"ITBI");
-            /// AutoNumAnoNumero = await autoNumANoNumeroAppService.GetBySpecAsync(autoNumAnoNumeroSpec, CancellationToken.None);
-            /// 
-
-
-            ///////////////////////////////////////////////////////
+            //await InsereDeclaracao();
             _overlayIsVisible = false;
-            /*if(Imovel == null)
-            {
-            // await DialogService.ShowInfoAsync("Inscrição Informada Não Existe");
-            e.IsCancelled = true;
-
-            return;
-            }*/
-            //           Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
-            /*   if(Imovel != null)
-            {
-            await DialogService.ShowInfoAsync("imovel Encontrado");
-            } else
-            {
-            await DialogService.ShowInfoAsync("Imóvel Não Encontrado");
-
-        }*/
         }
+    }
+    private async Task PegaNovosIds(){
+        AutoNumAnoNumero = await autoNumANoNumeroAppService.GetMaxAutoNumAnoNumero(2024, "ITBI");
+        ITBINumero = (int) AutoNumAnoNumero.AutNumero;
+        AutoNumEntidade = await autoNumEntidadesAppService.GetMaxAutoNumEntidade("TRIBITBI");
+        ITBIID = AutoNumEntidade.AutNumId;
+        AutoNumEntidade = await autoNumEntidadesAppService.GetMaxAutoNumEntidade("TRIBITBIEDIF");
+        ITBIEdifID = AutoNumEntidade.AutNumId;
+        AutoNumEntidade = await autoNumEntidadesAppService.GetMaxAutoNumEntidade("TribDividasImo");
+        ImoIDDivida = AutoNumEntidade.AutNumId;
+    }
+    private async Task InsereNovoITBI(){
+        TribItbi.Itbiid = ITBIID;
+        TribItbi.ItbidataLanc = DateTime.Now.Date;
+        TribItbi.Itbiobservacao = "Teste";
+        TribItbi.ItbiusuarioInclusao = null;
+        TribItbi.ItbidataInclusao = DateTime.Now;
+        TribItbi.Itbinumero = ITBINumero;
+        TribItbi.Itbiano = DateTime.Now.Date.Year;
+        TribItbi.ItbidsTipo = "COMPRA_VENDA";
+        TribItbi.ConId = null;
+        TribItbi.ItbidsAlerta = "Atenção - ITBI";
+        await tribITBIAppService.AddAsync(TribItbi, CancellationToken.None);
 
+    }
+    private async Task InsereDivida(){
+        TribDividasImo.ImoIddivida = ImoIDDivida;
+        TribDividasImo.EdificacaoId = Imovel.EdificacaoId;
+        TribDividasImo.ImoDivAno = DateTime.Now.Date.Year;
+        TribDividasImo.TipoTribId = 79;
+        TribDividasImo.ImoDivSubDivida = 0;
+        TribDividasImo.ImoDivParcela = 0;
+        TribDividasImo.ImoDivVencimento = DateTime.Now.Date.AddDays(180);
+        //   TribDividasImo.ImoDivDataGeracao = DateTime.Now;
+        TribDividasImo.ImoDivTipoDivida = 1;
+        TribDividasImo.ImoDivDataBloqCorrecao = null;
+        TribDividasImo.ImoDivDataBloqJuros=null;
+        TribDividasImo.ImoDivDataBloqMulta = null;
+        TribDividasImo.ImoDivVlrUltimaCorrecao = 0; //  decimal.Parse(ValorDeclarado) * decimal.Parse(TxITBI);
+        TribDividasImo.ImoDivDataUltimaCorrecao = null; // DateTime.Now.Date;
+        TribDividasImo.ImoDivOrigemLancamento = "Automática";
+        TribDividasImo.ImoDivParcelaUnica = "Não";
+        TribDividasImo.TipoBxId = 1;
+        TribDividasImo.ImoDivMes =  DateTime.Now.Month;
+        TribDividasImo.ImoDivDataBaixa = null;
+        //    TribDividasImo.ImoDivValorHistorico = decimal.Parse(ValorDeclarado) * decimal.Parse(TxITBI);
+        //  TribDividasImo.ImoDivValorBaixa = 0;
+        TribDividasImo.UsuarioInclusao = "Sandro.src"; // null;
+                                                       //  TribDividasImo.ImoDivMotivoBaixa = "";
+                                                       //  TribDividasImo.ImoDivObs = null;
+                                                       //  TribDividasImo.ImoDivTipoLancamentoIptu = "";
+                                                       //  TribDividasImo.ImoDivQtdeBaixas = null;
+        TribDividasImo.AutoInfrId = null;
+        //  TribDividasImo.ImoDivBxVlrJuros = null;
+        //  TribDividasImo.ImoDivBxVlrMulta = null;
+        //  TribDividasImo.ImoDivBxVlrCorrecao = null;
+        //  TribDividasImo.ImoDivBxVlrDesconto = null;
+        //  TribDividasImo.ImoDivBxVlrMultaDa = null;
+        //  TribDividasImo.ImoDivDescDivida = null;
+        TribDividasImo.ImoDivSaiBoleto = "Sim";
+        TribDividasImo.Idmoeda = 1;// null; //1;
+                                   //   TribDividasImo.EdiId = null;
+        TribDividasImo.ImoDivValor = decimal.Parse(ValorDeclarado) * decimal.Parse(TxITBI);
+        //  TribDividasImo.Multa = null;
+        //  TribDividasImo.Juros = null;
+        //  TribDividasImo.Correcao = null;
+        //  TribDividasImo.MultaDividaAtiva = null;
+        //  TribDividasImo.DataCalculo=null;
+        //  TribDividasImo.ImoDivValorBkp = null;
+        TribDividasImo.ImoDivExcluido = null;
+        await tribDividasImoAppService.AddAsync(TribDividasImo, CancellationToken.None);
+
+
+    }
+    private async Task InsereComposicaoDivida(){
+        TribComposicaoDivImo.ImoIddivida = ImoIDDivida;
+        TribComposicaoDivImo.TipoTribId = 79;
+        TribComposicaoDivImo.CompDivImoValor = decimal.Parse(ValorDeclarado) * decimal.Parse(TxITBI);
+        await tribComposicaoDivImoAppService.AddAsync(TribComposicaoDivImo, CancellationToken.None);
+
+    }
+    private async Task InsereNovoITBIEdif(){
+        TribItbiEdif.ItbiedifId = ITBIEdifID;
+        TribItbiEdif.Itbiid = ITBIID;
+        TribItbiEdif.EdificacaoId = Imovel.EdificacaoId;
+        TribItbiEdif.ImoIddivida = ImoIDDivida;
+        TribItbiEdif.ItbiedifPercTransacao = 2;
+        TribItbiEdif.ItbiedifAreaConstr = Imovel.EdifAreaConstruida;
+        TribItbiEdif.ItbiedifVlrVenalIptu = Imovel.ValorVenalCalculo;
+        TribItbiEdif.ItbiedifVlrDeclarado = decimal.Parse(ValorDeclarado);
+        TribItbiEdif.ItbiedifFinanciado = "Não";
+        TribItbiEdif.ItbiedifBaseCalcFin = 0;
+        TribItbiEdif.ItbiedifAliqFinanc = 0;
+        TribItbiEdif.ItbiedifVlrDevido = decimal.Parse(ValorDeclarado) * decimal.Parse(TxITBI);             ///
+        TribItbiEdif.ItbiedifDataVenc = DateTime.Now.Date.AddDays(180);
+        TribItbiEdif.ItbiedifAnoDiv = DateTime.Now.Date.Year;
+        TribItbiEdif.ItbiedifSubDivida = 0;
+        TribItbiEdif.ItbiedifMesDivida = DateTime.Now.Date.Month;
+        TribItbiEdif.ItbiedifParc=0;
+        TribItbiEdif.TipoTribId = 79;
+        //TribItbiEdif.ItbiedifTipoConstrucao;          ///
+        //TribItbiEdif.ItbiedifObservacao               ///
+        TribItbiEdif.ItbiedifBaseCalcImovel = decimal.Parse(ValorDeclarado); 
+        TribItbiEdif.ItbisomaEconomias = null;
+        TribItbiEdif.Itbiendereco = null;
+        TribItbiEdif.ItbiinscIncra = null;
+        TribItbiEdif.ItbiareaTotalImo = null;
+        TribItbiEdif.ConIddivida=null;
+        TribItbiEdif.Matricula = Imovel.EdifMatricula;
+        TribItbiEdif.ItbiedifPercTransmitir = 100;      ///
+        TribItbiEdif.ItbiedifDtMinhaCasa = null;
+        TribItbiEdif.InscricaoImobiliaria = Imovel.InscricaoImobiliaria;
+        TribItbiEdif.PStrEdifEnderecoCompleto = "nulo por enquanto";    /////
+        TribItbiEdif.EdifMatricula = Imovel.EdifMatricula;
+        TribItbiEdif.EdifCaracteristica = Imovel.EdifCaracteristica;
+        TribItbiEdif.TerrenoId = Imovel.TerrenoId;
+        TribItbiEdif.Idloteamento = Imovel.Idloteamento;
+        TribItbiEdif.QuadraLoteamento = null;                ///
+        TribItbiEdif.Loteamento = Imovel.Idloteamento;   ///
+        TribItbiEdif.TerrReferenciaAnterior = "Verificar de onde é isso";       ///
+        TribItbiEdif.InscricaoImobiliariaGeo = "";
+        TribItbiEdif.TerrAreaTerreno = Imovel.Terreno.TerrAreaTerreno;
+        TribItbiEdif.LoteLoteamento = "";           ////
+        TribItbiEdif.QuadraId = 0;                 //////
+        TribItbiEdif.PStredifBairro = "";               ////
+        TribItbiEdif.AreaAbertaCoberta = Imovel.EdifAreaCoberta;            ////
+        TribItbiEdif.LogradId = Imovel.LogradId;             /////
+        TribItbiEdif.DenoId = 0;                ///
+        TribItbiEdif.EdifNumeracao = Imovel.EdifNumeracao;
+        TribItbiEdif.EdifComplemento = Imovel.EdifComplemento;
+        TribItbiEdif.EdifAndarConstrucao = Imovel.EdifAndarConstrucao;
+        TribItbiEdif.EdifBloco = Imovel.EdifBloco;
+        TribItbiEdif.EdifNumAptoSalaLoja = Imovel.EdifNumAptoSalaLoja;
+        TribItbiEdif.EdifAreaCoberta = Imovel.EdifAreaCoberta;
+        await tribITBIEdifAppService.AddAsync(TribItbiEdif, CancellationToken.None);
+
+    }
+    private async Task InsereCompradores(){
+        TribItbiCompradores.ItbiedifId = ITBIEdifID;
+        TribItbiCompradores.ConId = 1120830;
+        TribItbiCompradores.ImprimeNaGuia = "Sim";
+        await tribITBICompradoresAppService.AddAsync(TribItbiCompradores, CancellationToken.None);
+    }
+    private async Task InsereVendedores(){
+        if(ListaDeTransmitentes.Count>0){
+            //await tribITBIVendedoresAppService.
+            foreach (var transmitente in ListaDeTransmitentes)
+            {
+                TribItbiVendedores.ItbiedifId = ITBIEdifID;
+                TribItbiVendedores.ConId = transmitente.Contribuinte.ConId;
+                TribItbiVendedores.ImprimeNaGuia = "Sim";
+                await tribITBIVendedoresAppService.AddAsync(TribItbiVendedores, CancellationToken.None);
+            }
+        }
+    }
+    private async Task InsereDeclaracao(){
+            await PegaNovosIds();
+            await InsereNovoITBI();
+            await InsereDivida();
+            await InsereComposicaoDivida();
+            await InsereNovoITBIEdif();
+            await InsereCompradores();
+            await InsereVendedores();
     }
     private async void HandleAutoNumAnoNumero()
     {
@@ -358,9 +365,10 @@
         /// AutoNumAnoNumero = await autoNumANoNumeroAppService.ProjectToFirstOrDefaultAsync<AutoNumAnoNumero>(autoNumAnoNumeroSpec, CancellationToken.None);
         //AutoNumAnoNumero = await autoNumANoNumeroAppService.
         //AutoNumAnoNumero = await autoNumANoNumeroAppService.GetMaxAutoNumAnoNumero(2024, "ITBI");
+        await InsereDeclaracao();
 
-           
     }
+
     private void HandleListaDeTransmitentesChanged(List<Transmitente> listaAtualizada)
     {
         ListaDeTransmitentes = listaAtualizada;
@@ -390,7 +398,10 @@
         //DialogService.ShowInfoAsync("Iniciando!");
         // Imovel = new TribEdificaco();
         //   s1 = new Domain.Specs.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14,'0'));
-
+        
+        ////var validator = new TribEdificacoesValidator();
+       editContext = new EditContext(Imovel);
+        //editContext. .AddFluentValidation(validator);
 
     }
     async Task OnValidSubmit()
@@ -408,6 +419,12 @@
     async Task OnFinishedAsync()
     {
         await DialogService.ShowInfoAsync("Wizard completed");
+    }
+    private bool ImovelIsValid()
+    {
+        var validationResults = new List<ValidationResult>();
+        var context = new ValidationContext(Imovel);
+        return Validator.TryValidateObject(Imovel, context, validationResults, true);
     }
    
 
