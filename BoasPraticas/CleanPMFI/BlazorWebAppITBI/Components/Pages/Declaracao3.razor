@@ -1,6 +1,7 @@
 ﻿@page "/declaracao3"
 @using BlazorWebAppITBI.MetaData
 @using BlazorWebAppITBI.Models
+@using System.Text;
 
 @inherits Microsoft.AspNetCore.Components.ComponentBase
 @rendermode InteractiveServer
@@ -22,7 +23,7 @@
 
 
 
-<h1>Pagina de Declaração ITBI</h1>
+<h1>Página de Declaração ITBI</h1>
 <FluentWizard StepperPosition="StepperPosition.Left"
               StepSequence="@WizardStepSequence.Visited"
               DisplayStepNumber="@(WizardStepStatus.Current  | WizardStepStatus.Next)"
@@ -156,7 +157,9 @@
     private IQueryable<TribEdificacoesContrib>? Transmitentes;
     public string? TipoDeTransferencia = string.Empty;
     public string? Observacao = string.Empty;
-    public string? ValorDeclarado = "150000,00";// string.Empty;
+    public string? ObservacaoITBI = string.Empty;
+    public string? ObservacaoIBTIEdif = string.Empty;
+    public string? ValorDeclarado = string.Empty;
     public string? TxITBI = "0,02";// string.Empty;
     public Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec edificacaoSpec;
     private bool _overlayIsVisible = false;
@@ -206,12 +209,12 @@
     private async Task InsereNovoITBI(){
         TribItbi.Itbiid = ITBIID;
         TribItbi.ItbidataLanc = DateTime.Now.Date;
-        TribItbi.Itbiobservacao = "Teste";
+        TribItbi.Itbiobservacao = ObservacaoITBI;
         TribItbi.ItbiusuarioInclusao = null;
         TribItbi.ItbidataInclusao = DateTime.Now;
         TribItbi.Itbinumero = ITBINumero;
         TribItbi.Itbiano = DateTime.Now.Date.Year;
-        TribItbi.ItbidsTipo = "COMPRA_VENDA";
+        TribItbi.ItbidsTipo = TipoDeTransferencia;
         TribItbi.ConId = null;
         TribItbi.ItbidsAlerta = "Atenção - ITBI";
         await tribITBIAppService.AddAsync(TribItbi, CancellationToken.None);
@@ -330,32 +333,48 @@
 
     }
     private async Task InsereCompradores(){
-        TribItbiCompradores.ItbiedifId = ITBIEdifID;
-        TribItbiCompradores.ConId = 1120830;
-        TribItbiCompradores.ImprimeNaGuia = "Sim";
-        await tribITBICompradoresAppService.AddAsync(TribItbiCompradores, CancellationToken.None);
+        if (ListaDeAdquirentes.Count > 0)
+        {
+            foreach (var adquirente in ListaDeAdquirentes)
+            {
+                await tribITBICompradoresAppService.AddAsync(new TribItbicompradore()
+                    {
+                        ItbiedifId = ITBIEdifID,
+                        ConId = adquirente.Contribuinte.ConId,
+                        ImprimeNaGuia = "Sim"
+
+                    }, CancellationToken.None);
+            }
+        }
     }
     private async Task InsereVendedores(){
-        TribItbiVendedores.ItbiedifId = ITBIEdifID;
+        //  TribItbiVendedores.ItbiedifId = ITBIEdifID;
         if(ListaDeTransmitentes.Count>0){
-            await tribITBIVendedoresAppService.DeleteAsync(TribItbiVendedores, CancellationToken.None);
+            // await tribITBIVendedoresAppService.DeleteAsync(TribItbiVendedores, CancellationToken.None);
             foreach (var transmitente in ListaDeTransmitentes)
             {
+
                 //TribItbiVendedores.ItbiedifId = ITBIEdifID;
-                TribItbiVendedores.ConId = transmitente.Contribuinte.ConId;
-                TribItbiVendedores.ImprimeNaGuia = "Sim";
-                await tribITBIVendedoresAppService.AddAsync(TribItbiVendedores, CancellationToken.None);
+                //TribItbiVendedores.ConId = transmitente.Contribuinte.ConId;
+                //TribItbiVendedores.ImprimeNaGuia = "Sim";
+                await tribITBIVendedoresAppService.AddAsync(new TribItbivendedore()
+                {
+                        ItbiedifId = ITBIEdifID,
+                        ConId = transmitente.Contribuinte.ConId,
+                        ImprimeNaGuia = "Sim"
+
+                }, CancellationToken.None);
             }
         }
     }
     private async Task InsereDeclaracao(){
-            await PegaNovosIds();
-            await InsereNovoITBI();
-            await InsereDivida();
-            await InsereComposicaoDivida();
-            await InsereNovoITBIEdif();
-            await InsereCompradores();
-            await InsereVendedores();
+        await PegaNovosIds();
+        await InsereNovoITBI();
+        await InsereDivida();
+        await InsereComposicaoDivida();
+        await InsereNovoITBIEdif();
+        await InsereCompradores();
+        await InsereVendedores();
     }
     private async void HandleAutoNumAnoNumero()
     {
@@ -366,21 +385,50 @@
         /// AutoNumAnoNumero = await autoNumANoNumeroAppService.ProjectToFirstOrDefaultAsync<AutoNumAnoNumero>(autoNumAnoNumeroSpec, CancellationToken.None);
         //AutoNumAnoNumero = await autoNumANoNumeroAppService.
         //AutoNumAnoNumero = await autoNumANoNumeroAppService.GetMaxAutoNumAnoNumero(2024, "ITBI");
+        _overlayIsVisible = true;
         await InsereDeclaracao();
+        _overlayIsVisible = false;
 
     }
 
     private void HandleListaDeTransmitentesChanged(List<Transmitente> listaAtualizada)
     {
         ListaDeTransmitentes = listaAtualizada;
+
+        StringBuilder sbITBI = new StringBuilder(ObservacaoITBI);
+        sbITBI.AppendLine("Transmitentes: ");
+        if (ListaDeTransmitentes.Count > 0)
+        {
+            foreach (var transmitente in ListaDeTransmitentes)
+            {
+                //sbITBI.AppendLine(transmitente.Contribuinte.ConCnpjcpf.ToString() + "-" + transmitente.Contribuinte.ConNome + " Transmite: " + transmitente.percentualtransmitido + "|");
+                sbITBI.AppendLine(transmitente.Contribuinte.ConCnpjcpf.ToString() + "Transmite: " + transmitente.percentualtransmitido + "|");
+            }
+        }
+        ObservacaoITBI = sbITBI.ToString();
     }
     private void HandleListaDeAdquirentesChanged(List<Adquirente> listaAtualizada)
     {
         ListaDeAdquirentes = listaAtualizada;
+
+        StringBuilder sbITBI = new StringBuilder(ObservacaoITBI);
+        sbITBI.AppendLine("Adquirentes: ");
+        if (ListaDeAdquirentes.Count > 0)
+        {
+            foreach (var adquirente in ListaDeAdquirentes)
+            {
+                // sbITBI.AppendLine(adquirente.Contribuinte.ConCnpjcpf.ToString() + "-" + adquirente.Contribuinte.ConNome + " Transmite: " + adquirente.percentualAdquirido + " || ");
+                sbITBI.AppendLine(adquirente.Contribuinte.ConCnpjcpf.ToString()  + " Transmite: " + adquirente.percentualAdquirido + " || ");
+            }
+        }
+        ObservacaoITBI = sbITBI.ToString();
     }
     private void HandleTipoDeTransferenciaChanged(string tipodetransferencia)
     {
         TipoDeTransferencia = tipodetransferencia;
+        StringBuilder sbITBI = new StringBuilder(ObservacaoITBI);
+        sbITBI.AppendLine("Tipo de Transação: " + TipoDeTransferencia );
+        ObservacaoITBI = sbITBI.ToString();
     }
     private void HandleObservacaoChanged(string observacao)
     {
