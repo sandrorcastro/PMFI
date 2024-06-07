@@ -114,6 +114,7 @@
     public IQueryable<TribEdificacoesContrib> Content { get; set; } = default!;
     public IQueryable<Transmitente>? ContribuintesQ { get; set; }
     public Domain.Specs.DBProsiga.ContribuinteByCPFCNPJSpec contribuinteSpec;
+    private EditContext? editContext;
     private Dictionary<Transmitente, bool> itemStates = new Dictionary<Transmitente, bool>();
     [Parameter]
     public List<Transmitente>? ListaDeTransmitentes { get; set; }

@@ -34,8 +34,8 @@
               OnFinish="@OnFinishedAsync">
     <Steps>
         <FluentWizardStep Label="Inscrição Imobiliária:"
-                          OnChange="@OnStepChange">
-            <FluentEditForm Model="Imovel" FormName="imovelInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                        OnChange="@(e=>OnStepChange1(e,editContext))">
+            <FluentEditForm EditContext="editContext" FormName="imovelInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
                     <FluentTextField Placeholder="Inscrição Imobiliária" @bind-Value="Imovel!.InscricaoImobiliaria" Required />
@@ -133,6 +133,7 @@
     // [MetadataType(typeof(ImovelMetaData))]
     public TribEdificaco? Imovel { get; set; } = new TribEdificaco() 
         {
+            InscricaoImobiliaria=string.Empty,
             Lograd = new Logradouro(),
             Terreno = new TribTerreno(),
             IdloteamentoNavigation = new Loteamento(),
@@ -163,6 +164,36 @@
     public string? TxITBI = "0,02";// string.Empty;
     public Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec edificacaoSpec;
     private bool _overlayIsVisible = false;
+    async Task OnStepChange1(FluentWizardStepChangeEventArgs e, EditContext editContext)
+    {
+
+        if (!editContext.Validate())
+        {
+            // Bloquear a mudança de etapa se o formulário não for válido
+            e.IsCancelled = true;
+        }
+        else
+        {
+
+            if (e.TargetIndex == 1)
+            {
+                _overlayIsVisible = true;
+                await Task.Delay(2000);
+                edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
+                Imovel = await edificacoesAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
+                //  if(Imovel == null)
+                // {
+                //    await DialogService.ShowInfoAsync("Inscrição Informada Não Existe");
+                //  e.IsCancelled = true;
+                // _overlayIsVisible = false;
+                //return;
+                //}
+                Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
+                //await InsereDeclaracao();
+                _overlayIsVisible = false;
+            }
+        }
+    }
     async Task OnStepChange(FluentWizardStepChangeEventArgs e)
     {
         //DilogService($"Go to step {e.TargetLabel} (#{e.TargetIndex})");
@@ -450,6 +481,7 @@
         
         ////var validator = new TribEdificacoesValidator();
        editContext = new EditContext(Imovel);
+      //  edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel?.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
         //editContext. .AddFluentValidation(validator);
 
     }
@@ -464,6 +496,22 @@
     void OnInvalidSubmit()
     {
         //  DemoLogger.WriteLine($"OnInvalidSubmit called");
+    }
+    private async Task HandleNextClick()
+    {
+        if (editContext.Validate())
+        {
+            // Move to the next step
+            await GoToNextStep();
+        }
+        else
+        {
+            // Show validation errors
+        }
+    }
+    private async Task GoToNextStep()
+    {
+        // Implement the logic to move to the next step
     }
     async Task OnFinishedAsync()
     {
