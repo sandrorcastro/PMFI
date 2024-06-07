@@ -1,4 +1,4 @@
-﻿
+﻿@using BlazorWebAppITBI.Models
 <FluentCard Justify="@JustifyContent.Center" >
     <FluentTextArea overflow: auto Value=@lei style="width: 100%;" Appearance="FluentInputAppearance.Filled" Label="Legislação:" ReadOnly="true" Rows="20">
 
@@ -10,19 +10,38 @@
 <FluentCheckbox @bind-Value="@IsAgreed" @onchange="AgreementChanged">Eu concordo com os termos e condições.</FluentCheckbox>
 
 </FluentCard>
-<FluentCard Justify="@JustifyContent.FlexEnd" >
+<FluentCard Justify="@JustifyContent.FlexEnd" AreaRestricted="false">
+<!--  
+
+<div class="fluent-select-container">
+-->
     <FluentStack Orientation="Orientation.Horizontal">
     <FluentTextField Disabled="@(!IsAgreed)" @bind-Value="@valordeclarado" @onchange="OnTextFildChange"  Label="Valor Declarado/Base de Cálculo"></FluentTextField>
     <FluentTextField Disabled="@(!IsAgreed)" @bind-Value="@valorITBIdevido" @onchange="OnTextFildChange" Label="Valor ITBI Devido "></FluentTextField>
+        <FluentSelect Disabled="@(!IsAgreed)" Position="SelectPosition.Below" @bind-Value="selectedParcela" TOption="string">
+    @foreach (var option in ParcelasOption)
+    {
+        <FluentOption Value="@option.Parcela.ToString()">@option.Parcela parcela(s) - @option.Valor.ToString("C", CultureInfo.GetCultureInfo("pt-BR"))</FluentOption>
+    }
+</FluentSelect>
     <FluentButton Disabled="@(!IsAgreed)" OnClick="GerarGuia" Appearance="Appearance.Accent">Gerar</FluentButton>
     </FluentStack>
+<!--   
+
+</div>
+-->
 </FluentCard>
+
 
 
 @code {
     private bool IsAgreed { get; set; } = false;
     [Parameter]
-    public string? valordeclarado { get; set; }
+    public string? valordeclarado { get; set; } //= "12.000,00"; // { get; set; }
+
+    //   [Parameter]
+    public List<ParcelasOption> ParcelasOption { get; set; } = new List<ParcelasOption>();
+    public string selectedParcela { get; set; }
     public string? valorITBIdevido { get; set; }
     decimal? vd = 0;
     decimal? vi = 0; //0.02m;
@@ -41,6 +60,7 @@
         //{
         //  valordeclarado = valorDecimal.ToString("N2");
         //}
+        //  calculaParcelamento();
     }
 
     private void AgreementChanged(ChangeEventArgs e)
@@ -51,7 +71,7 @@
             // vi = 0;
             //   valorITBIdevido = "";
             Proceed();
-
+         //   calculaParcelamento();
         }
         //IsAgreed = (bool)e.Value;
     }
@@ -60,12 +80,13 @@
         valordeclarado = e.Value.ToString();
         await ValorDeclaradoChanged.InvokeAsync(valordeclarado);
         calculoITBI();
+        calculaParcelamento();
     }
     public async Task GerarGuia()
     {
-        
+
         await AutoNumAnoNumero.InvokeAsync();
-        
+
     }
     private void Proceed()
     {
@@ -78,6 +99,7 @@
         //  valordeclarado = valorDecimal.ToString("N2");
         //}
         calculoITBI();
+        calculaParcelamento();
     }
     private void calculoITBI(){
 
@@ -86,13 +108,67 @@
         vi = vd * vi;
         //ITBIdevido = (decimal.TryParse(valordeclarado.ToString(), out decimal valorDecimal){valorITBIdevido=valorDecimal * 0.02}).ToString();
         valorITBIdevido = vi?.ToString("N2");
-      //  valordeclarado = vd.ToString();
+        //  valordeclarado = vd.ToString();
 
     }
     private void AtualizaValorDeclarado()
     {
         //valordeclarado = vd.ToString();
         ValorDeclaradoChanged.InvokeAsync(valordeclarado);
+    }
+    private void calculaParcelamento(){
+        int maxquantidadeparcelas = 12;
+        int quantidadeparcelas = 12;
+        ParcelasOption.Clear();
+        StateHasChanged();
+        decimal uffi = Convert.ToDecimal(111.87);
+        decimal impdevido = Convert.ToDecimal(valordeclarado) * Convert.ToDecimal(0.02);
+        if(Math.Floor(impdevido/uffi) < 1)
+        {
+            quantidadeparcelas = 1;
+        }
+        else
+        {
+            int contador=1;
+            while (impdevido/contador >= uffi  && contador<=maxquantidadeparcelas)
+            {
+                quantidadeparcelas = contador;
+                contador = contador + 1;
+
+            }
+        }
+        for (int i = 1; i <= quantidadeparcelas; i++)
+        {
+            ParcelasOption.Add(new ParcelasOption
+                {
+                    Parcela = i,
+                    Valor = impdevido  / i
+                });
+        }
+      /*  if (decimal.TryParse(valordeclarado, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal totalValor))
+        {
+            for (int i = 1; i <= 12; i++)
+            {
+                ParcelasOption.Add(new ParcelasOption
+                    {
+                        Parcela = i,
+                        Valor = totalValor / i
+                    });
+            }
+        }
+        else
+        {
+            // Handle the error, e.g., set a default value or show an error message
+            valordeclarado = "0"; // or some appropriate default value
+            for (int i = 1; i <= 12; i++)
+            {
+                ParcelasOption.Add(new ParcelasOption
+                    {
+                        Parcela = i,
+                        Valor = 0
+                    });
+            }
+        }*/
     }
 
 

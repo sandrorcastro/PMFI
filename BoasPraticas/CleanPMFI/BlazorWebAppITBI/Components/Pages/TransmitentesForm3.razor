@@ -61,15 +61,33 @@
         <PropertyColumn Title="Nome/Razão" Property="@(c => c!.Contribuinte.ConNome)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="Email" Property="@(c => c!.Contribuinte.ConEmail)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="Celular" Property="@(c => c!.Contribuinte.ConTelefoneCelular)" Sortable="true" Align=Align.Start />
-        <PropertyColumn Title="% Transmitido" Property="@(c => c!.percentualtransmitido)"  Sortable="true" Align=Align.Start />
+        <!--     
+                <PropertyColumn Title="% Transmitido" Property="@(c => c!.percentualtransmitido)"  Sortable="true" Align=Align.Start />
         <TemplateColumn Align="@Align.End">
             @{
                 
                     var item = context as Transmitente;
-                    <FluentTextField Placeholder="Per" @bind-Value="item.percentualtransmitido">Per</FluentTextField> 
+                    <FluentTextField Required Placeholder="Per" @bind-Value="item.percentualtransmitido">Per</FluentTextField> 
                 
             }
         </TemplateColumn>
+        -->
+
+        <TemplateColumn Title="% Transmitido" Sortable="true" Align=Align.Start>
+          
+            @{
+                var item = context as Transmitente;
+                   
+                <FluentTextField Required @bind-Value="item!.percentualtransmitido" Placeholder="% Transmitido" />
+            }
+
+           
+        </TemplateColumn>
+
+
+
+
+
         <TemplateColumn Align="@Align.End">
             @{
 

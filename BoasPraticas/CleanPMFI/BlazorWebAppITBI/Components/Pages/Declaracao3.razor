@@ -155,7 +155,7 @@
     public long ImoIDDivida { get; set; } = 0;
 
     private IQueryable<TribEdificacoesContrib>? Transmitentes;
-    public string? TipoDeTransferencia = string.Empty;
+    public string? TipoDeTransferencia { get; set; } = "COMPRA_VENDA"; // string.Empty;
     public string? Observacao = string.Empty;
     public string? ObservacaoITBI = string.Empty;
     public string? ObservacaoIBTIEdif = string.Empty;
@@ -281,7 +281,7 @@
         TribItbiEdif.Itbiid = ITBIID;
         TribItbiEdif.EdificacaoId = Imovel.EdificacaoId;
         TribItbiEdif.ImoIddivida = ImoIDDivida;
-        TribItbiEdif.ItbiedifPercTransacao = 2;
+        TribItbiEdif.ItbiedifPercTransacao = decimal.Parse(TxITBI);
         TribItbiEdif.ItbiedifAreaConstr = Imovel.EdifAreaConstruida;
         TribItbiEdif.ItbiedifVlrVenalIptu = Imovel.ValorVenalCalculo;
         TribItbiEdif.ItbiedifVlrDeclarado = decimal.Parse(ValorDeclarado);
@@ -312,17 +312,17 @@
         TribItbiEdif.EdifCaracteristica = Imovel.EdifCaracteristica;
         TribItbiEdif.TerrenoId = Imovel.TerrenoId;
         TribItbiEdif.Idloteamento = Imovel.Idloteamento;
-        TribItbiEdif.QuadraLoteamento = null;                ///
-        TribItbiEdif.Loteamento = Imovel.Idloteamento;   ///
-        TribItbiEdif.TerrReferenciaAnterior = "Verificar de onde é isso";       ///
+        TribItbiEdif.QuadraLoteamento = Imovel.Terreno.QuadraLoteamento;                ///
+        TribItbiEdif.Loteamento = Imovel.Terreno.Loteamento;   /// Imovel.Idloteamento;   ///
+        TribItbiEdif.TerrReferenciaAnterior = Imovel.Terreno.TerrReferenciaAnterior;       ///
         TribItbiEdif.InscricaoImobiliariaGeo = "";
         TribItbiEdif.TerrAreaTerreno = Imovel.Terreno.TerrAreaTerreno;
-        TribItbiEdif.LoteLoteamento = "";           ////
-        TribItbiEdif.QuadraId = 0;                 //////
-        TribItbiEdif.PStredifBairro = "";               ////
-        TribItbiEdif.AreaAbertaCoberta = Imovel.EdifAreaCoberta;            ////
+        TribItbiEdif.LoteLoteamento = Imovel.Terreno.LoteLoteamento;           ////
+        TribItbiEdif.QuadraId = Imovel.Terreno.QuadraId;                 //////
+       // TribItbiEdif.PStredifBairro = Imovel.;               ////
+        TribItbiEdif.AreaAbertaCoberta = Imovel.Terreno.AreaAbertaCoberta;            ////
         TribItbiEdif.LogradId = Imovel.LogradId;             /////
-        TribItbiEdif.DenoId = 0;                ///
+        TribItbiEdif.DenoId = Imovel.DenoId;                ///
         TribItbiEdif.EdifNumeracao = Imovel.EdifNumeracao;
         TribItbiEdif.EdifComplemento = Imovel.EdifComplemento;
         TribItbiEdif.EdifAndarConstrucao = Imovel.EdifAndarConstrucao;

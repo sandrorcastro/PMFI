@@ -15,7 +15,7 @@ public class EdificacaoByInscricaoImobiliariaSpec : SingleResultSpecification<Tr
 
     {
         //InscricaoImobiliaria = _inscricaoimobiliaria;
-        Query.Where(x => x.InscricaoImobiliaria == inscricaoimobiliaria).Include(t => t.Terreno).Include(l => l.Lograd).Include(l => l.IdloteamentoNavigation).Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con);
+        Query.Where(x => x.InscricaoImobiliaria == inscricaoimobiliaria).Include(t => t.Terreno).Include(l => l.Lograd).ThenInclude(q=>q.TribQuadraLograds).Include(l => l.IdloteamentoNavigation).Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con);
         //Query.Include(t => t.Terreno).Include(l => l.Lograd).Include(l => l.IdloteamentoNavigation).Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con); //.AsQueryable();
     }   
     public EdificacaoByInscricaoImobiliariaSpec(EdificacaoFilter edificacaoFilter)
