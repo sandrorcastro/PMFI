@@ -29,6 +29,8 @@
                 var item = context as Adquirente;
 
                 <FluentTextField Required @bind-Value="item!.percentualAdquirido" Placeholder="% Adquirido" />
+                <ValidationMessage For="() => item!.percentualAdquirido" />
+            }
             }
 
 
@@ -40,7 +42,7 @@
             @{
 
                 var item = context as Adquirente;
-                <FluentTextField Placeholder="Per" @bind-Value="item.percentualAdquirido">Per</FluentTextField>
+            //    <FluentTextField Placeholder="Per" @bind-Value="item.percentualAdquirido">Per</FluentTextField>
 
             }
         </TemplateColumn>
@@ -60,7 +62,7 @@
             @{
                 var item = context as Contribuinte;
                 //bool isChecked = item.Responsavel == "Sim";
-                <FluentCheckbox onchange="@((ChangeEventArgs e)=>@AddRemove(e,item))"> </FluentCheckbox>
+               // <FluentCheckbox onchange="@((ChangeEventArgs e)=>@AddRemove(e,item))"> </FluentCheckbox>
             }
         </TemplateColumn>
 -->

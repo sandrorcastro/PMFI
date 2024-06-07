@@ -58,18 +58,19 @@
             </FluentEditForm>
         </FluentWizardStep>
          <FluentWizardStep Label="Transmitentes"
-                          OnChange="@OnStepChange">
-            <FluentEditForm Model="Imovel" FormName="transmitenteInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                          OnChange="(e=>OnStepChange2(e,editContext2))">
+            <FluentEditForm EditContext="editContext2" FormName="transmitenteInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
                     <TransmitentesForm3 Content="Transmitentes" ListaDeTransmitentes=@ListaDeTransmitentes ListaDeTransmitentesChanged="HandleListaDeTransmitentesChanged" />
+                     <ValidationMessage For="() => ListaDeTransmitentes" />
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
         </FluentWizardStep>
          <FluentWizardStep Label="Adquirentes"
-                          OnChange="@OnStepChange">
-            <FluentEditForm Model="Imovel" FormName="adquirentesInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                          OnChange="(e=>OnStepChange3(e,editContext3))">
+            <FluentEditForm EditContext="editContext3" FormName="adquirentesInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
                     <AdquirentesForm3 ListaDeAdquirentes=@ListaDeAdquirentes ListaDeAdquirentesChanged ="HandleListaDeAdquirentesChanged" />
@@ -140,6 +141,8 @@
             TribEdificacoesContribs = new List<TribEdificacoesContrib>()
         };
     private EditContext? editContext;
+    private EditContext? editContext2;
+    private EditContext? editContext3;
     public List<Transmitente>? ListaDeTransmitentes = new List<Transmitente>();
     public List<Adquirente>? ListaDeAdquirentes = new List<Adquirente>();
     public AutoNumAnoNumero? AutoNumAnoNumero {get;set;}= new AutoNumAnoNumero();
@@ -191,6 +194,36 @@
                 Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
                 //await InsereDeclaracao();
                 _overlayIsVisible = false;
+            }
+        }
+    }
+    async Task OnStepChange2(FluentWizardStepChangeEventArgs e, EditContext editContext)
+    {
+        if (ListaDeTransmitentes.Count() == 0)
+        {
+            e.IsCancelled = true;
+        }
+        else
+        {
+            if (!editContext2.Validate())
+            {
+                // Bloquear a mudança de etapa se o formulário não for válido
+                e.IsCancelled = true;
+            }
+        }
+    }
+    async Task OnStepChange3(FluentWizardStepChangeEventArgs e, EditContext editContext)
+    {
+        if (ListaDeAdquirentes.Count() == 0)
+        {
+            e.IsCancelled = true;
+        }
+        else
+        {
+            if (!editContext3.Validate())
+            {
+                // Bloquear a mudança de etapa se o formulário não for válido
+                e.IsCancelled = true;
             }
         }
     }
@@ -481,6 +514,8 @@
         
         ////var validator = new TribEdificacoesValidator();
        editContext = new EditContext(Imovel);
+        editContext2 = new EditContext(ListaDeTransmitentes);
+        editContext3 = new EditContext(ListaDeAdquirentes);
       //  edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel?.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
         //editContext. .AddFluentValidation(validator);
 

@@ -20,7 +20,10 @@
 
                 var item = context as TribEdificacoesContrib;
                 Transmitente t = new Transmitente() { Contribuinte = item.Con };
-                t.percentualtransmitido = item.Percentual.ToString();
+
+                //t.percentualtransmitido = item.Percentual.ToString();
+                //t.percentualtransmitido = string.Empty;
+
                 <FluentButton Appearance="Appearance.Outline" OnClick="()=>AddRemovePlus(t)" IconStart="GetIcon2(item)">
 
                 </FluentButton>
@@ -67,7 +70,7 @@
             @{
                 
                     var item = context as Transmitente;
-                    <FluentTextField Required Placeholder="Per" @bind-Value="item.percentualtransmitido">Per</FluentTextField> 
+                   // <FluentTextField Required Placeholder="Per" @bind-Value="item.percentualtransmitido">Per</FluentTextField> 
                 
             }
         </TemplateColumn>
@@ -79,6 +82,7 @@
                 var item = context as Transmitente;
                    
                 <FluentTextField Required @bind-Value="item!.percentualtransmitido" Placeholder="% Transmitido" />
+                <ValidationMessage For="() => item!.percentualtransmitido" />
             }
 
            
@@ -129,6 +133,7 @@
         //  await CarregaAlunos();
         //pagination.TotalItemCountChanged += (sender, eventArgs) => StateHasChanged();
         //ContribuintesQ = Content;
+        editContext = new EditContext(ListaDeTransmitentes);
         await base.OnInitializedAsync();
     }
     [Parameter]
