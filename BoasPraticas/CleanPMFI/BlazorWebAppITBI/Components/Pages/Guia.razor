@@ -1,0 +1,43 @@
+﻿@page "/guia"
+@inject HttpClient Http
+
+
+<PageTitle>Principal</PageTitle>
+<FluentBodyContent>
+    <iframe src="http://www2.pmfi.pr.gov.br//directprint/home/printx?p=AAEAAAD%2f%2f%2f%2f%2fAQAAAAAAAAAEAQAAABxTeXN0ZW0uQ29sbGVjdGlvbnMuSGFzaHRhYmxlBwAAAApMb2FkRmFjdG9yB1ZlcnNpb24IQ29tcGFyZXIQSGFzaENvZGVQcm92aWRlcghIYXNoU2l6ZQRLZXlzBlZhbHVlcwAAAwMABQULCBxTeXN0ZW0uQ29sbGVjdGlvbnMuSUNvbXBhcmVyJFN5c3RlbS5Db2xsZWN0aW9ucy5JSGFzaENvZGVQcm92aWRlcgjsUTg%2fBgAAAAoKCwAAAAkCAAAACQMAAAAQAgAAAAYAAAAGBAAAAAdzZXNzaW9uBgUAAAAKcmVwb3J0bmFtZQYGAAAAC0BAQGRhdGFiYXNlBgcAAAALQEBAZXhlY2RhdGUGCAAAAAxyZXBvcnRmb3JtYXQGCQAAAARwYXRoEAMAAAAGAAAABgoAAAAYYW8zdGJ2NTV4YXdkc29panZiZHpsdzQ1BgsAAAAMeFJlbEd1aWFJVEJJBgwAAAAJREJQcm9TaWdhBg0AAAAQMTAvMDYvMjAyNCAxNzo0MwYOAAAAA3BkZgYPAAAAH0M6XEdJSUdOZXRcUERGXHhSZWxHdWlhSVRCSS5wZGYL" width="100%" height="600px" frameborder="0" allowfullscreen></iframe>
+    <!--
+
+    <div>
+    @{
+
+        if (!string.IsNullOrEmpty(ExternalPageContent))
+        {
+                    <div>@ExternalPageContent</div>
+        }
+        else
+        {
+                    <p>Carregando...</p>
+        }
+    }
+    </div>
+    -->
+</FluentBodyContent>
+@code {
+    private string ExternalPageContent { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            ExternalPageContent = await Http.GetStringAsync("http://www2.pmfi.pr.gov.br//directprint/home/printx?p=AAEAAAD%2f%2f%2f%2f%2fAQAAAAAAAAAEAQAAABxTeXN0ZW0uQ29sbGVjdGlvbnMuSGFzaHRhYmxlBwAAAApMb2FkRmFjdG9yB1ZlcnNpb24IQ29tcGFyZXIQSGFzaENvZGVQcm92aWRlcghIYXNoU2l6ZQRLZXlzBlZhbHVlcwAAAwMABQULCBxTeXN0ZW0uQ29sbGVjdGlvbnMuSUNvbXBhcmVyJFN5c3RlbS5Db2xsZWN0aW9ucy5JSGFzaENvZGVQcm92aWRlcgjsUTg%2fBgAAAAoKCwAAAAkCAAAACQMAAAAQAgAAAAYAAAAGBAAAAAdzZXNzaW9uBgUAAAAKcmVwb3J0bmFtZQYGAAAAC0BAQGRhdGFiYXNlBgcAAAALQEBAZXhlY2RhdGUGCAAAAAxyZXBvcnRmb3JtYXQGCQAAAARwYXRoEAMAAAAGAAAABgoAAAAYYW8zdGJ2NTV4YXdkc29panZiZHpsdzQ1BgsAAAAMeFJlbEd1aWFJVEJJBgwAAAAJREJQcm9TaWdhBg0AAAAQMTAvMDYvMjAyNCAxNzo0MwYOAAAAA3BkZgYPAAAAH0M6XEdJSUdOZXRcUERGXHhSZWxHdWlhSVRCSS5wZGYL");
+        }
+        catch (Exception ex)
+        {
+            // Lidar com erros, se necessário
+            Console.WriteLine($"Erro ao buscar conteúdo: {ex.Message}");
+        }
+    }
+}
+<!-- 
+http://www2.pmfi.pr.gov.br//directprint/home/printx?p=AAEAAAD%2f%2f%2f%2f%2fAQAAAAAAAAAEAQAAABxTeXN0ZW0uQ29sbGVjdGlvbnMuSGFzaHRhYmxlBwAAAApMb2FkRmFjdG9yB1ZlcnNpb24IQ29tcGFyZXIQSGFzaENvZGVQcm92aWRlcghIYXNoU2l6ZQRLZXlzBlZhbHVlcwAAAwMABQULCBxTeXN0ZW0uQ29sbGVjdGlvbnMuSUNvbXBhcmVyJFN5c3RlbS5Db2xsZWN0aW9ucy5JSGFzaENvZGVQcm92aWRlcgjsUTg%2fBgAAAAoKCwAAAAkCAAAACQMAAAAQAgAAAAYAAAAGBAAAAAdzZXNzaW9uBgUAAAAKcmVwb3J0bmFtZQYGAAAAC0BAQGRhdGFiYXNlBgcAAAALQEBAZXhlY2RhdGUGCAAAAAxyZXBvcnRmb3JtYXQGCQAAAARwYXRoEAMAAAAGAAAABgoAAAAYYW8zdGJ2NTV4YXdkc29panZiZHpsdzQ1BgsAAAAMeFJlbEd1aWFJVEJJBgwAAAAJREJQcm9TaWdhBg0AAAAQMTAvMDYvMjAyNCAxNzo0MwYOAAAAA3BkZgYPAAAAH0M6XEdJSUdOZXRcUERGXHhSZWxHdWlhSVRCSS5wZGYL
+-->

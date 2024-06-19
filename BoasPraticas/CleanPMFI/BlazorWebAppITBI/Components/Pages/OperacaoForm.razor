@@ -27,34 +27,86 @@
 
 </FluentCard>
 <FluentCard Justify="@JustifyContent.Center" >
-      
-        <FluentTextField Required="true" @bind-Value=valordeclarado @onchange="OnTextFildChange" Label="VALOR DECLARADO:" />
-      
-</FluentCard>
-<FluentCard Justify="@JustifyContent.Center" >
-        <FluentTextArea @bind-Value=observacao Label="OBSERVAÇÕES:" style="width: 100%;"/>
+        <FluentTextArea  @bind-Value=observacao Label="OBSERVAÇÕES:" style="width: 100%;"/>
 </FluentCard>
 
+<FluentCard Justify="@JustifyContent.Center" AreaRestricted="false">
+       <FluentStack Orientation="Orientation.Horizontal">
+        <!--
+                   <FluentSelect Position="SelectPosition.Below" @bind-Value="selectedModoCompra" TOption="string" Label="Imóvel Financiado?">
+                    
+                   <FluentSelect Position="SelectPosition.Below" ValueChanged="@(e => selectedModoCompra = e)"  TOption="string" Label="Imóvel Financiado?">
+        -->
+        <FluentSelect Position="SelectPosition.Below" @bind-Value="selectedOption" @onchange="@OnSelectChange" TOption="string" Label="Imóvel Financiado?">
+            <FluentOption Value="Não" Selected="true">Não</FluentOption>
+            <FluentOption Value="Financiamento Normal">Financiamento Normal</FluentOption>
+            <FluentOption Value="Financiamento-Minha Casa Minha Vida">Financiamento-Minha Casa Minha Vida</FluentOption>
+        
+            
+            <!-- 
+
+            @foreach (var option in ParcelasOption)
+            {
+                <FluentOption Value="@option.Parcela.ToString()">@option.Parcela parcela(s) - @option.Valor.ToString("C", CultureInfo.GetCultureInfo("pt-BR"))</FluentOption>
+            }
+            -->
+        </FluentSelect>
+        @if (selectedOption=="Não")
+        {
+            <FluentTextField Required="true" @bind-Value=valordeclarado @onchange="OnTextFildChange" Placeholder="VALOR DECLARADO" />
+            @if (mostraobservacaoValorDeclarado)
+            {
+                <FluentTextArea ReadOnly @bind-Value=observacaoValorDeclarado style="width: 100%;" />
+            }
+        }
+        else if (selectedOption != "Não")
+        {
+            <FluentTextField Required="true" @bind-Value=valorfinanciado @onchange="OnTextFildChangeValorFinanciado" Placeholder="VALOR FINANCIADO" />
+                <FluentTextField  Required="true" @bind-Value=valorRecursoProprio @onchange="OnTextFildChangeValorRecursoProprio" Placeholder="RECURSO PRÓPRIO" />
+                <FluentTextField ReadOnly Required="true" @bind-Value=valordeclarado @onchange="OnTextFildChange" Placeholder="VALOR DECLARADO" />
+        }
+        
+       
+        
+       
+      </FluentStack>
+</FluentCard>
 @code {
-    /*bool CompraeVenda = true;
-        bool Arrematacao = false;
-        bool Adjudicacao = false;
-        bool Permuta = false;
-        bool DivisaoAmigavel = false;
-        bool CessaoDeDireitos = false;
-        bool IntegralizacaoGuia = false;
-        bool IntegralizacaoCertidao = false;*/
+                    /*bool CompraeVenda = true;
+                    bool Arrematacao = false;
+                    bool Adjudicacao = false;
+                    bool Permuta = false;
+                    bool DivisaoAmigavel = false;
+                    bool CessaoDeDireitos = false;
+                    bool IntegralizacaoGuia = false;
+                    bool IntegralizacaoCertidao = false;*/
+    private string selectedOption { get; set; } = "Não";
+    private bool isTextFieldDisabled { get; set; } = true;
+    private string? selectedModoCompra { get; set; } = "Não";
     private string? tipotransferencia { get; set; } = "COMPRA_VENDA";
     private string? valordeclarado { get; set; }
+    private string? valorfinanciado { get; set; }
+    private string? valorRecursoProprio { get; set; }
     private string? observacao = "BASE DE CÁLCULO CONFORME VALOR DECLARADO. SE VERIFICADA DIVERGÊNCIA NO VALOR DECLARADO PELO CONTRIBUINTE INFORMAMOS QUE SERÁ ABERTO PROCEDIMENTO ADMINISTRATIVO FISCAL PARA APURAÇÃO DA BASE DE CÁLCULO CONFORME LEI COMPLEMENTAR 403/2023. PROT 54226/2024.";
-
+    private string? observacaoValorDeclarado= "Você pode prosseguir! No entando estará sujeito a um Procedimento Administrativo, pois o Valor Declarado está abaixo do Valor Venal do Imóvel. ";
+    private bool mostraobservacaoValorDeclarado = false;
+    private bool enableValorDeclarado = false;
+    private bool enableFinanciado = false;
+    private decimal Uffi = 111.87m;
+    private ValoresOperacao? valoresOperacao { get; set; } = new ValoresOperacao();
 
     [Parameter]
+    public TribEdificaco? Imovel { get; set; }
+    [Parameter]
     public EventCallback<string> TipoDeTransferenciaChanged { get; set; }
+    [Parameter]
+    public EventCallback<ValoresOperacao> ValoresOperacaoChanged { get; set; }
     [Parameter]
     public EventCallback<string> ObservacaoChanged { get; set; }
     [Parameter]
     public EventCallback<string> ValorDeclaradoChanged { get; set; }
+    [Parameter]
+    public EventCallback<ValoresOperacao> ValoresOperacao { get; set; }
     public async Task  OnRadioChange(ChangeEventArgs e)
     {
         tipotransferencia = e.Value.ToString();
@@ -67,14 +119,71 @@
     }
     public async Task OnTextFildChange(ChangeEventArgs e)
     {
+        //if(valordeclarado==null)
         valordeclarado = e.Value.ToString();
+        valoresOperacao.Financimanto = selectedOption;
+        valoresOperacao.ValorDeclarado = decimal.Parse(valordeclarado);
+        //valoresOperacao.ValorFinanciado = decimal.Parse(valorfinanciado);
+        //valoresOperacao.ValorRecursoProprio = decimal.Parse(valorRecursoProprio);
+        valoresOperacao.isFinanciado = selectedOption != "Não" ? true : false;
+
+        // if (decimal.Parse(valordeclarado) <= Imovel.ValorVenalCalculo)
+        // {
+        //   mostraobservacaoValorDeclarado = true;
+        // }
+        await ValoresOperacaoChanged.InvokeAsync(valoresOperacao);
         await ValorDeclaradoChanged.InvokeAsync(valordeclarado);
+        //await ValoresOperacao.InvokeAsync(new Models.ValoresOperacao() { ValorDeclarado=decimal.Parse(valordeclarado),ValorFinanciado=decimal.Parse() };
         if (decimal.TryParse(e.Value.ToString(), out decimal valorDecimal))
         {
             valordeclarado = valorDecimal.ToString("N2");
         }
     }
+    public async Task OnTextFildChangeValorFinanciado(ChangeEventArgs e)
+    {
+        valorfinanciado = e.Value?.ToString();
+        valordeclarado = valorfinanciado;
+        
+        valoresOperacao.Financimanto = selectedOption;
+        valoresOperacao.ValorDeclarado = decimal.Parse(valordeclarado);
+        valoresOperacao.ValorFinanciado = decimal.Parse(valorfinanciado);
+        //valoresOperacao.ValorRecursoProprio = decimal.Parse(valorRecursoProprio);
+        valoresOperacao.isFinanciado = selectedOption != "Não" ? true : false;
+        await ValoresOperacaoChanged.InvokeAsync(valoresOperacao);
+        await ValorDeclaradoChanged.InvokeAsync(valordeclarado);
 
+        
+    }
+    public async Task OnTextFildChangeValorRecursoProprio(ChangeEventArgs e)
+    {
+        valorRecursoProprio = e.Value?.ToString();
+        valordeclarado = (decimal.Parse(valorfinanciado) + decimal.Parse(valorRecursoProprio)).ToString();
+       // valordeclarado = valorfinanciado;
+
+        valoresOperacao.Financimanto = selectedOption;
+        valoresOperacao.ValorDeclarado = decimal.Parse(valordeclarado);
+        valoresOperacao.ValorFinanciado = decimal.Parse(valorfinanciado);
+        valoresOperacao.ValorRecursoProprio = decimal.Parse(valorRecursoProprio);
+        valoresOperacao.isFinanciado = selectedOption != "Não" ? true : false;
+        await ValoresOperacaoChanged.InvokeAsync(valoresOperacao);
+        await ValorDeclaradoChanged.InvokeAsync(valordeclarado);
+        
+    }
+    private void OnSelectChange(ChangeEventArgs e)
+    {
+        /*if (e.Value == "Não")
+        {
+            //selectedOption = e.Value?.ToString();
+            //isTextFieldDisabled = selectedOption != "Não";
+            isTextFieldDisabled = true;  //selectedOption != "Não";
+        }
+        else
+        {
+            isTextFieldDisabled = false;
+        }*/
+        selectedOption = e.Value?.ToString();
+        StateHasChanged();
+    }
 
 
    

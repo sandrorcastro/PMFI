@@ -25,7 +25,7 @@ namespace Infrastructure.Context.DBProsiga
         public virtual DbSet<Aaplan2011> Aaplan2011s { get; set; } = null!;
         public virtual DbSet<Aaplan2012> Aaplan2012s { get; set; } = null!;
         public virtual DbSet<Aaplan2013> Aaplan2013s { get; set; } = null!;
-        public virtual DbSet<Abastecimento> Abastecimentos { get; set; } = null!;
+        public virtual DbSet<Abastecimento> Abastecimentos { get; set; } = null!; 
         public virtual DbSet<Acessorio> Acessorios { get; set; } = null!;
         public virtual DbSet<AcessoriosMoveisEquipamento> AcessoriosMoveisEquipamentos { get; set; } = null!;
         public virtual DbSet<AgeAgendaIntervalo> AgeAgendaIntervalos { get; set; } = null!;
@@ -51346,7 +51346,7 @@ namespace Infrastructure.Context.DBProsiga
                     .HasMaxLength(100)
                     .IsUnicode(false)
                     .HasColumnName("usuariologado");
-
+                entity.Property(e => e.AnexoPertenceA).HasColumnName("AnexoPertenceA");
                 entity.HasOne(d => d.Itbidoc)
                     .WithMany(p => p.TribItbiexAnexos)
                     .HasForeignKey(d => d.ItbidocId)

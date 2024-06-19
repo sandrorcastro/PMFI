@@ -15,7 +15,7 @@ namespace Domain.Services.DBProsiga
         {
             _Repository = Repository;
         }
-        public async Task<AutoNumEntidade> GetMaxAutoNumEntidade(string AutoNumEntidade)
+        public async Task<long> GetMaxAutoNumEntidade(string AutoNumEntidade)
         {
             return await _Repository.GetMaxAutoNumEntidade(AutoNumEntidade);
             //throw new NotImplementedException();

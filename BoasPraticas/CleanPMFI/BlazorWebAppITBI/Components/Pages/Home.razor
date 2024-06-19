@@ -1,7 +1,40 @@
 ﻿@page "/"
+@inject HttpClient Http
 
-<PageTitle>Página Principal</PageTitle>
 
-<h1>Olá, Esta é uma Aplicação WEB! Aqui conterá Informações da Secretária Municipal da Fazenda</h1>
+<PageTitle>Principal</PageTitle>
+<FluentBodyContent>
+    <iframe src="https://www5.pmfi.pr.gov.br/orgao-79" width="100%" height="600px" frameborder="0" allowfullscreen></iframe>
+    <!--
 
-Ben Vindo!
+    <div>
+    @{
+
+        if (!string.IsNullOrEmpty(ExternalPageContent))
+        {
+                <div>@ExternalPageContent</div>
+        }
+        else
+        {
+                <p>Carregando...</p>
+        }
+    }
+    </div>
+    -->
+</FluentBodyContent>
+@code {
+    private string ExternalPageContent { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            ExternalPageContent = await Http.GetStringAsync("https://www5.pmfi.pr.gov.br/orgao-79");
+        }
+        catch (Exception ex)
+        {
+            // Lidar com erros, se necessário
+            Console.WriteLine($"Erro ao buscar conteúdo: {ex.Message}");
+        }
+    }
+}

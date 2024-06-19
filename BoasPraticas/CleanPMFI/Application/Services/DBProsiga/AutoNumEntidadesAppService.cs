@@ -16,7 +16,7 @@ namespace Application.Services.DBProsiga
         {
             Service = _Service;
         }
-        public async Task<AutoNumEntidade> GetMaxAutoNumEntidade(string AutoNumEntidade) {
+        public async Task<long> GetMaxAutoNumEntidade(string AutoNumEntidade) {
             return await Service.GetMaxAutoNumEntidade(AutoNumEntidade);
 
         }

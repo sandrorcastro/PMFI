@@ -15,4 +15,19 @@
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\IOC\IOC.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="BaseClass">
+      <HintPath>..\..\..\..\..\tfs-GIIGNet\GIIGNet\Bibliotecas\Bibliotecas\NET\BaseClass.dll</HintPath>
+    </Reference>
+    <Reference Include="BC">
+      <HintPath>..\..\..\..\..\tfs-GIIGNet\GIIGNet\Bibliotecas\Bibliotecas\NET\BC.dll</HintPath>
+    </Reference>
+    <Reference Include="Tribuno">
+      <HintPath>..\..\..\..\..\tfs-GIIGNet\GIIGNet\Bibliotecas\Bibliotecas\NET\Tribuno.dll</HintPath>
+    </Reference>
+    <Reference Include="vbFEBRABAN">
+      <HintPath>..\..\..\..\..\tfs-GIIGNet\GIIGNet\Bibliotecas\Bibliotecas\NET\vbFEBRABAN.dll</HintPath>
+    </Reference>
+  </ItemGroup>
 </Project>

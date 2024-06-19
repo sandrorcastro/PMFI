@@ -10,7 +10,7 @@ builder.Services.AddInfrastructureAutoMapper(builder.Configuration);
 builder.Services.AddRazorComponents()
     .AddInteractiveServerComponents();
 //builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<TribEdificacoesValidator>());
-
+builder.Services.AddHttpClient();
 builder.Services.AddFluentUIComponents();
 
 var app = builder.Build();

@@ -8,9 +8,7 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces.DBProsiga
 {
-    public interface IAutoNumEntidadesAppService : IAppServiceBase<AutoNumEntidade>
+    public interface ITribItbidocumentoTipoAppService : IAppServiceBase<TribItbidocumentoTipo>
     {
-       // public Task<AutoNumEntidade> GetMaxAutoNumEntidade(string AutoNumEntidade);
-        public Task<long> GetMaxAutoNumEntidade(string AutoNumEntidade);
     }
 }

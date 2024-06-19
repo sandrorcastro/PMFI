@@ -38,17 +38,26 @@
     private bool IsAgreed { get; set; } = false;
     [Parameter]
     public string? valordeclarado { get; set; } //= "12.000,00"; // { get; set; }
-
-    //   [Parameter]
+    [Parameter]
+    public ValoresOperacao? ValoresOperacao { get; set; } //= "12.000,00"; // { get; set; }
+                                                          //   [Parameter]
     public List<ParcelasOption> ParcelasOption { get; set; } = new List<ParcelasOption>();
     public string selectedParcela { get; set; }
+    [Parameter]
+    public ParcelasOption? ParcelaOptionSelecionada { get; set; }
     public string? valorITBIdevido { get; set; }
     decimal? vd = 0;
     decimal? vi = 0; //0.02m;
+
+    private decimal Uffi = 111.87m;
     [Parameter]
     public EventCallback<string> ValorDeclaradoChanged { get; set; }
     [Parameter]
+    public EventCallback<ValoresOperacao> ValoresOperacaoChanged { get; set; }
+    [Parameter]
     public EventCallback AutoNumAnoNumero { get; set; }
+    [Parameter]
+    public EventCallback<ParcelasOption> ParcelaOptionSelecionadaChanged { get; set; }
     protected override void OnInitialized()
     {
         // vd = decimal.Parse(valordeclarado.ToString());
@@ -71,20 +80,22 @@
             // vi = 0;
             //   valorITBIdevido = "";
             Proceed();
-         //   calculaParcelamento();
+            //   calculaParcelamento();
         }
         //IsAgreed = (bool)e.Value;
     }
     public async Task OnTextFildChange(ChangeEventArgs e)
     {
         valordeclarado = e.Value.ToString();
+
         await ValorDeclaradoChanged.InvokeAsync(valordeclarado);
         calculoITBI();
         calculaParcelamento();
     }
     public async Task GerarGuia()
     {
-
+        ParcelaOptionSelecionada = ParcelasOption.Find(p => p.Parcela == int.Parse(selectedParcela));
+        await ParcelaOptionSelecionadaChanged.InvokeAsync(ParcelaOptionSelecionada);
         await AutoNumAnoNumero.InvokeAsync();
 
     }
@@ -102,14 +113,68 @@
         calculaParcelamento();
     }
     private void calculoITBI(){
+        if (ValoresOperacao.isFinanciado)
+        {
+            valorITBIdevido = (ValoresOperacao.ValorRecursoProprio * 0.02m + ValoresOperacao.ValorFinanciado * pegaTaxa()).ToString();
+
+
+        } else
+        {
+
+            vd = decimal.Parse(valordeclarado.ToString());
+            // vi = 0.02m;
+            vi = pegaTaxa();
+            vi = vd * vi;
+            //ITBIdevido = (decimal.TryParse(valordeclarado.ToString(), out decimal valorDecimal){valorITBIdevido=valorDecimal * 0.02}).ToString();
+            valorITBIdevido = vi?.ToString("N2");
+        }
+        //  valordeclarado = vd.ToString();
+
+    }
+    private void calculoITBIbk()
+    {
 
         vd = decimal.Parse(valordeclarado.ToString());
-        vi = 0.02m;
+        // vi = 0.02m;
+        vi = pegaTaxa();
         vi = vd * vi;
         //ITBIdevido = (decimal.TryParse(valordeclarado.ToString(), out decimal valorDecimal){valorITBIdevido=valorDecimal * 0.02}).ToString();
         valorITBIdevido = vi?.ToString("N2");
         //  valordeclarado = vd.ToString();
 
+    }
+    private decimal pegaTaxa()
+    {
+        //var totalRecursoProprio = 0.00m
+
+        var vl = decimal.Parse(valordeclarado.ToString());
+        if (ValoresOperacao.isFinanciado)
+        {
+
+            if (vl < (4000 * Uffi))
+            {
+                if(vl > (2700 * Uffi))
+                {
+                    return 0.02m;
+                }
+                if ((vl > (1400 * Uffi)) && (vl <= (2700 * Uffi))){
+                    return 0.01m;
+                }
+                if ((vl > (600 * Uffi)) && (vl <= (1400 * Uffi)))
+                {
+                    return 0.005m;
+                }
+                if (vl < (600 * Uffi))
+                {
+                    return 0.00m;
+                }
+
+            }
+
+            return 0.02m;
+
+        }
+        return 0.02m;
     }
     private void AtualizaValorDeclarado()
     {
@@ -122,8 +187,10 @@
         ParcelasOption.Clear();
         StateHasChanged();
         decimal uffi = Convert.ToDecimal(111.87);
-        decimal impdevido = Convert.ToDecimal(valordeclarado) * Convert.ToDecimal(0.02);
-        if(Math.Floor(impdevido/uffi) < 1)
+        //decimal impdevido = Convert.ToDecimal(valordeclarado) * Convert.ToDecimal(0.02);
+        decimal impdevido = Convert.ToDecimal(valorITBIdevido); // * Convert.ToDecimal(0.02);
+        //if(Math.Floor(impdevido/uffi) < 1)
+        if(Math.Floor(impdevido/uffi) < 1 || ValoresOperacao.isFinanciado)
         {
             quantidadeparcelas = 1;
         }
@@ -145,30 +212,10 @@
                     Valor = impdevido  / i
                 });
         }
-      /*  if (decimal.TryParse(valordeclarado, NumberStyles.Any, CultureInfo.InvariantCulture, out decimal totalValor))
+        if(selectedParcela == null)
         {
-            for (int i = 1; i <= 12; i++)
-            {
-                ParcelasOption.Add(new ParcelasOption
-                    {
-                        Parcela = i,
-                        Valor = totalValor / i
-                    });
-            }
+            selectedParcela = ParcelasOption[0].Parcela.ToString();
         }
-        else
-        {
-            // Handle the error, e.g., set a default value or show an error message
-            valordeclarado = "0"; // or some appropriate default value
-            for (int i = 1; i <= 12; i++)
-            {
-                ParcelasOption.Add(new ParcelasOption
-                    {
-                        Parcela = i,
-                        Valor = 0
-                    });
-            }
-        }*/
     }
 
 

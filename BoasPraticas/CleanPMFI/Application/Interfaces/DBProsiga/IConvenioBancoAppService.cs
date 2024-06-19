@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 
 namespace Application.Interfaces.DBProsiga
 {
-    public interface IAutoNumEntidadesAppService : IAppServiceBase<AutoNumEntidade>
+    public interface IConvenioBancoAppService : IAppServiceBase<ConvenioBanco>
     {
-       // public Task<AutoNumEntidade> GetMaxAutoNumEntidade(string AutoNumEntidade);
-        public Task<long> GetMaxAutoNumEntidade(string AutoNumEntidade);
+        public Task<long> GeraNossoNumero(int ConvenioId);
+        public Task<ConvenioBanco> GeraNossoNumero(ConvenioBanco ConvenioBanco);
     }
 }

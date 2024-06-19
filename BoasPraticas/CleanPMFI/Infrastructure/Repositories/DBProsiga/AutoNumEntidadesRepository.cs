@@ -21,7 +21,7 @@ namespace Infrastructure.Repositories.DBProsiga
         //  public AutoNumEntidadesRepository(DBProsigaContext dbContext, IMapper mapper) : base(dbContext, mapper){ }
         //  public AutoNumEntidadesRepository(DBProsigaContext dbContext, ISpecificationEvaluator specificationEvaluator, IMapper mapper) : base(dbContext, specificationEvaluator, mapper){ }
 
-        public async Task<AutoNumEntidade> GetMaxAutoNumEntidade(string AutoNumEntidade)
+        public async Task<long> GetMaxAutoNumEntidade(string AutoNumEntidade)
         {
 
             //using (var scope = _scopeFactory.CreateAsyncScope())
@@ -34,7 +34,7 @@ namespace Infrastructure.Repositories.DBProsiga
                 numero.AutNumId = numero.AutNumId + 1;
                 xdbcontexto.Update<AutoNumEntidade>(numero);
                 await xdbcontexto.SaveChangesAsync();
-                return numero;
+                return numero.AutNumId;
 
             }
 

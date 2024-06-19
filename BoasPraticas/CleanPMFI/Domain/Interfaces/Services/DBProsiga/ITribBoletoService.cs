@@ -8,8 +8,9 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces.Services.DBProsiga
 {
-    public interface IAutoNumEntidadesService : IServiceBase<AutoNumEntidade>
+    public interface ITribBoletoService : IServiceBase<TribBoleto>
     {
-        public Task<long> GetMaxAutoNumEntidade(string AutoNumEntidade);
+      /*  public Task<long> GeraNossoNumero(int ConvenioId);
+        public Task<ConvenioBanco> GeraNossoNumero(ConvenioBanco ConvenioBanco);*/
     }
 }

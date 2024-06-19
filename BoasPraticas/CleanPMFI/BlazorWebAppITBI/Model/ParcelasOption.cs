@@ -4,5 +4,8 @@
     {
            public int Parcela {  get; set; }
             public decimal Valor  { get; set;}
+           
+        //public string ValorDeclarado { get; set; }
+       
     }
 }
