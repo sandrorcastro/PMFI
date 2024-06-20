@@ -69,6 +69,12 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
         Evaluator = specificationEvaluator;
         
     }
+    public RepositoryBase(DbContext dbContext, ISpecificationEvaluator specificationEvaluator, IServiceScopeFactory serviceScopeFactory)
+    {
+        _dbContext = dbContext;
+        Evaluator = specificationEvaluator;
+        ServiceScopeFactory = serviceScopeFactory;
+    }
 
     /// <inheritdoc/>
     public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
@@ -250,6 +256,19 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
         return Evaluator.GetQuery(_dbContext.Set<T>().AsQueryable(), specification, evaluateCriteriaOnly);
         //return Evaluator.GetQuery(_dbContext.Set<T>(), specification, evaluateCriteriaOnly);
     }
+   /* public virtual IQueryable<T> ApplySpecification(ISpecification<T> specification, bool evaluateCriteriaOnly = false)
+    {
+        using (var scope = ServiceScopeFactory.CreateAsyncScope())
+        {
+            var serviceProvider = scope.ServiceProvider;
+            var xdbcontexto = serviceProvider.GetRequiredService<DBProsigaContext>();
+
+
+            //return await repository.ProjectToListAsync<TResult>(specification, filter, cancellationToken);
+            return Evaluator.GetQuery(xdbcontexto.Set<T>().AsQueryable(), specification, evaluateCriteriaOnly);
+            //return Evaluator.GetQuery(_dbContext.Set<T>(), specification, evaluateCriteriaOnly);
+        }
+    }*/
 
     /// <summary>
     /// Filters all entities of <typeparamref name="T" />, that matches the encapsulated query logic of the

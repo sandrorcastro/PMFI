@@ -22,7 +22,7 @@ public class TribItbidocumentoTipoSpec : SingleResultSpecification<TribItbidocum
 
     {
         //InscricaoImobiliaria = _inscricaoimobiliaria;
-        Query.Where(x => x.ItbidsDocDescricao == descricao);
+        Query.Where(x => x.ItbidsDocDescricao == descricao).AsNoTracking();
         //Query.Include(t => t.Terreno).Include(l => l.Lograd).Include(l => l.IdloteamentoNavigation).Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con); //.AsQueryable();
     }
     /*public TribItbidocumentoTipoSpec(EdificacaoFilter edificacaoFilter)

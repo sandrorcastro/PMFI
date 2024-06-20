@@ -51357,7 +51357,7 @@ namespace Infrastructure.Context.DBProsiga
                     .WithMany(p => p.TribItbiexAnexos)
                     .HasForeignKey(d => d.Itbiid)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_TribITBIexAnexos_TribITBIex");
+                    .HasConstraintName("FK_TribITBIexAnexos_TribITBI");
 
                 entity.HasOne(d => d.Objeto)
                     .WithMany(p => p.TribItbiexAnexos)

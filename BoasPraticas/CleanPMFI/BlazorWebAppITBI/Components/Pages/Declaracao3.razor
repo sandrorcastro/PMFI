@@ -65,7 +65,7 @@
             <FluentEditForm EditContext="editContext2" FormName="transmitenteInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <TransmitentesForm3 Content="Transmitentes" ListaDeTransmitentes=@ListaDeTransmitentes ListaDeTransmitentesChanged="HandleListaDeTransmitentesChanged" />
+                    <TransmitentesForm3 Content="Transmitentes" ListaDeTransmitentes=@ListaDeTransmitentes ListaDeTransmitentesChanged="HandleListaDeTransmitentesChanged" AnexosTransmitenteChanged="HandleAnexosTransmitenteChanged"/>
                      <ValidationMessage For="() => ListaDeTransmitentes" />
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
@@ -178,11 +178,11 @@
     public long ImoIDDivida { get; set; } = 0;
     public ValoresOperacao ValoresOperacao { get; set; } = new ValoresOperacao();
     //public List<byte[]>? AnexosImovel =new List<byte[]>();
+    //private List<IBrowserFile> AnexosImovelBF = new List<IBrowserFile>();
     public Anexo? AnexosImovel = new Anexo();
-    private List<IBrowserFile> AnexosImovelBF = new List<IBrowserFile>();
-    public List<byte[]> AnexosTransmitente;
-    public List<byte[]> AnexosAdquirente;
-    public List<byte[]> AnexosOperacao;
+    public Anexo? AnexosTransmitente;
+    public Anexo? AnexosAdquirente;
+    public Anexo? AnexosOperacao;
 
 
     private IQueryable<TribEdificacoesContrib>? Transmitentes;
@@ -562,8 +562,28 @@
                 await anex.OpenReadStream().ReadAsync(buffer);
 
                 var anexoinserido =  await InsereTribObjeto(buffer, extensao);
-               
+
                 if(anexoinserido != null)
+                {
+                    await InsereTribItbiexAnexo(itbi.Itbiid, anexoinserido.ObjetoId, AnexosImovel.Doc.ItbidocId, long.Parse(Imovel.InscricaoImobiliaria));
+                }
+            }
+
+        }
+    }
+    private async Task InsereAnexoTransmitente(TribItbi itbi)
+    {
+        if (AnexosImovel.AnexoBf.Count > 0)
+        {
+            foreach (var anex in AnexosImovel.AnexoBf)
+            {
+                var buffer = new byte[anex.Size];
+                var extensao = Path.GetExtension(anex.Name);
+                await anex.OpenReadStream().ReadAsync(buffer);
+
+                var anexoinserido = await InsereTribObjeto(buffer, extensao);
+
+                if (anexoinserido != null)
                 {
                     await InsereTribItbiexAnexo(itbi.Itbiid, anexoinserido.ObjetoId, AnexosImovel.Doc.ItbidocId, long.Parse(Imovel.InscricaoImobiliaria));
                 }
@@ -642,7 +662,7 @@
 
 
     }
-    
+
     private async Task InsereDeclaracao(){
         await PegaNovosIds();
         await InsereNovoITBI();
@@ -667,50 +687,21 @@
 
     }
 
-    //private void HandleAnexosImovelChanged(List<byte[]> anexos)
-    //private void HandleAnexosImovelChanged(List<IBrowserFile> anexos)
     private void HandleAnexosImovelChanged(Anexo anexos)
-    
     {
-        //AnexosImovelBF = anexos;
         AnexosImovel = anexos;
-        /*
-        if (addremove == "Adicionar")
-        {
-            AnexosImovel.Add(anexo);
-            StateHasChanged();
-        }
-        if (addremove == "Remover")
-        {
-            AnexosImovel.Remove(anexo);
-            StateHasChanged();
-        }*/
     }
-    private void HandleAnexosTransmitenteChanged(byte[] anexo, string addremove)
+    private void HandleAnexosTransmitenteChanged(Anexo anexos)
     {
-        if (addremove == "Adicionar")
-        {
-            AnexosTransmitente.Add(anexo);
-            StateHasChanged();
-        }
-        if (addremove == "Remover")
-        {
-            AnexosTransmitente.Remove(anexo);
-            StateHasChanged();
-        }
+        AnexosTransmitente = anexos;
+        StateHasChanged();
+        
     }
-    private void HandleAnexosAdquirenteChanged(byte[] anexo, string addremove)
+    private void HandleAnexosAdquirentesChanged(Anexo anexos)
     {
-        if (addremove == "Adicionar")
-        {
-            AnexosAdquirente.Add(anexo);
-            StateHasChanged();
-        }
-        if (addremove == "Remover")
-        {
-            AnexosAdquirente.Remove(anexo);
-            StateHasChanged();
-        }
+        AnexosAdquirente = anexos;
+        StateHasChanged();
+
     }
     
     private void HandleParcelaOptionSelecionadaChanged(ParcelasOption parcelaOptionSelecionada)

@@ -4,8 +4,10 @@
 @rendermode InteractiveServer
 @inject IDialogService DialogService
 @inject IContribuinteAppService contribuinteAppService
+@inject ITribItbidocumentoTipoAppService tribItbidocumentoTipoAppService
 <FluentCard Justify="@JustifyContent.Center">
     <p>Proprietários/Responsáveis</p>
+  
     <FluentDataGrid Items=@Content TGridItem=TribEdificacoesContrib>
         <PropertyColumn Title="CPF/CNPJ" Property="@(c => c!.Con.ConCnpjcpf)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="RG" Property="@(c => c!.Con.ConRg)" Sortable="true" Align=Align.Start />
@@ -17,81 +19,29 @@
         <PropertyColumn Title="Percentual" Property="@(c => c!.Percentual)" Sortable="true" Align=Align.Start />
         <TemplateColumn Align="@Align.End">
             @{
-
                 var item = context as TribEdificacoesContrib;
                 Transmitente t = new Transmitente() { Contribuinte = item.Con };
-
-                //t.percentualtransmitido = item.Percentual.ToString();
-                //t.percentualtransmitido = string.Empty;
-
                 <FluentButton Appearance="Appearance.Outline" OnClick="()=>AddRemovePlus(t)" IconStart="GetIcon2(item)">
-
                 </FluentButton>
             }
         </TemplateColumn>
-        <!--
-
-               <TemplateColumn Align="@Align.End">
-        @{
-            var item = context as TribEdificacoesContrib;
-            //bool isChecked = item.Responsavel == "Sim";
-                       <FluentCheckbox onchange="@((ChangeEventArgs e)=>@AddRemove(e,item.Con))"> </FluentCheckbox>
-        }
-
-           </TemplateColumn>
-        -->
-        <!--
-                    <FluentCheckbox onchange="@AddRemove(item)"> </FluentCheckbox>
-            <FluentTextField @bind-Value="@Content">:</FluentTextField>
-                <EnderecoForm Content="Imovel.Lograd" Bairro="@(Imovel.IdloteamentoNavigation.Descricao ?? " ")" Numero="@(Imovel.EdifNumeracao ?? " ")" />
-
-        <FluentTextField @bind-Value="@Content.Lograd.LogradNome">Logradouro:</FluentTextField>
-        <FluentTextField @bind-Value="@Content.EdifNumeracao">Número:</FluentTextField>
-        <FluentTextField @bind-Value="@Content.IdloteamentoNavigation.Descricao">Bairro:</FluentTextField>
-            -->
     </FluentDataGrid>
-
-
 </FluentCard>
 <FluentCard Justify="@JustifyContent.Center">
     <FluentButton OnClick="@( ()=> BuscarContribuinteDialog("Transmitente"))" Appearance="Appearance.Accent">Adicionar Novo Transmitente</FluentButton>
-    <FluentDataGrid Items=@ContribuintesQ TGridItem=Transmitente>
-        <!--
-            <PropertyColumn Title="ID" Property="@(c => c!.ConId)" Sortable="true" Align=Align.Start />
-        -->
+      <FluentDataGrid Items=@ContribuintesQ TGridItem=Transmitente>
         <PropertyColumn Title="CPF/CNPJ" Property="@(c => c!.Contribuinte.ConCnpjcpf)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="RG" Property="@(c => c!.Contribuinte.ConRg)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="Nome/Razão" Property="@(c => c!.Contribuinte.ConNome)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="Email" Property="@(c => c!.Contribuinte.ConEmail)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="Celular" Property="@(c => c!.Contribuinte.ConTelefoneCelular)" Sortable="true" Align=Align.Start />
-        <!--     
-                <PropertyColumn Title="% Transmitido" Property="@(c => c!.percentualtransmitido)"  Sortable="true" Align=Align.Start />
-        <TemplateColumn Align="@Align.End">
-            @{
-                
-                    var item = context as Transmitente;
-                   // <FluentTextField Required Placeholder="Per" @bind-Value="item.percentualtransmitido">Per</FluentTextField> 
-                
-            }
-        </TemplateColumn>
-        -->
-
         <TemplateColumn Title="% Transmitido" Sortable="true" Align=Align.Start>
-          
             @{
                 var item = context as Transmitente;
-                   
                 <FluentTextField Required @bind-Value="item!.percentualtransmitido" Placeholder="% Transmitido" />
                 <ValidationMessage For="() => item!.percentualtransmitido" />
             }
-
-           
         </TemplateColumn>
-
-
-
-
-
         <TemplateColumn Align="@Align.End">
             @{
 
@@ -102,24 +52,65 @@
                 </FluentButton>
             }
         </TemplateColumn>
-        <!--
-                <TemplateColumn Align="@Align.End">
-        @{
-            var item = context as Contribuinte;
-            //bool isChecked = item.Responsavel == "Sim";
-                            <FluentCheckbox onchange="@((ChangeEventArgs e)=>@AddRemove(e,item))"> </FluentCheckbox>
-        }
-                </TemplateColumn>
-        -->
     </FluentDataGrid>
 </FluentCard>
+<FluentCard Justify="@JustifyContent.Center">
+    <FluentButton OnClick="@( ()=> BuscarContribuinteDialog("Transmitente"))" Appearance="Appearance.Accent">Adicionar Novo Transmitente</FluentButton>
+<FluentAccordion>
+    @if(ContribuintesQ != null)
+    {
+        @foreach(var item in ContribuintesQ)
+        {
+            <FluentAccordionItem>
+                <HeadingTemplate>
+                         @item.Contribuinte.ConNome
+                         <FluentButton Appearance="Appearance.Outline" OnClick="()=>AddRemovePlus(item)"
+                                      IconStart="@(new Icons.Regular.Size20.SubtractSquare().WithColor(Color.Accent))">
+                         </FluentButton>
+                </HeadingTemplate>
+                <ChildContent>
+                        <FluentDataGrid Items=@AnexosExigidosQ TGridItem=Anexo>
+                            <PropertyColumn Title="Documento Obrigatório" Property="@(c => c!.Doc.ItbidsDocumento)" Sortable="true" Align=Align.Start />
+                            <PropertyColumn Title="Arquivo" Property="@(c => c!.nomearquivo)" Sortable="true" Align=Align.Start />
+                            <TemplateColumn Title="Ação" Sortable="true" Align=Align.Start>
+                                @{
+                                    var item = context as Anexo;
+                                    if (item.carregado)
+                                    {
+                                        <FluentButton Appearance="Appearance.Accent" OnClick="()=>OpenFileSelector(item)">
+                                            Excluir
+                                        </FluentButton>
+                                    }
+                                    else
+                                    {
+
+                                        <FluentButton Appearance="Appearance.Accent" OnClick="()=>OpenFileSelector(item)">
+                                            Carregar
+                                        </FluentButton>
+                                    }
+                                }
+                            </TemplateColumn>
+                        </FluentDataGrid>
+                </ChildContent>
+            </FluentAccordionItem>
+        }
+    }
+</FluentAccordion>
+</FluentCard>
 @code {
+    public TribItbidocumentoTipoSpec tribItbidocumentoTipoSpec = new TribItbidocumentoTipoSpec("Contribuinte");
+    public IQueryable<Anexo>? AnexosExigidosQ { get; set; }
+    public IEnumerable<TribItbidocumentoTipo> docsExigidos { get; set; }
+    [Parameter]
+    public EventCallback<Anexo> AnexosTransmitenteChanged { get; set; }
     [Parameter]
     public IQueryable<TribEdificacoesContrib> Content { get; set; } = default!;
     public IQueryable<Transmitente>? ContribuintesQ { get; set; }
     public Domain.Specs.DBProsiga.ContribuinteByCPFCNPJSpec contribuinteSpec;
+    public IQueryable<TribItbidocumentoTipo>? docsExigidosQ { get; set; }
     private EditContext? editContext;
     private Dictionary<Transmitente, bool> itemStates = new Dictionary<Transmitente, bool>();
+    private Dictionary<string, bool> itemStatesDocs = new Dictionary<string, bool>();
     [Parameter]
     public List<Transmitente>? ListaDeTransmitentes { get; set; }
     public string? tipoContribuinte = null;
@@ -127,6 +118,51 @@
     private Transmitente? transmitente = new Transmitente() { Contribuinte = new Contribuinte { ConCnpjcpf = string.Empty } };
     [CascadingParameter]
     public FluentDialog? Dialog { get; set; }
+    string activeId = "accordion-1";
+    FluentAccordionItem? changed;
+    private Anexo currentAnexo;
+    FluentInputFile? myFileByBuffer = default!;
+    private async void OpenFileSelector(Anexo anexo)
+    {
+        if (anexo.carregado)
+        {
+            if (itemStatesDocs.ContainsKey(anexo.nomearquivo))
+            {
+                itemStatesDocs.Remove(anexo.nomearquivo);
+                // var fileToRemove = filesBf.FirstOrDefault(f => f.Name == anexo.nomearquivo);
+                var fileToRemove = currentAnexo.AnexoBf.FirstOrDefault(f => f.Name == anexo.nomearquivo);
+                if (fileToRemove != null)
+                {
+                    currentAnexo.AnexoBf.Remove(fileToRemove);
+                    StateHasChanged();
+                }
+                currentAnexo.carregado = false;
+
+                //atualistaAnexosExigidosQ(f.Name);
+
+                currentAnexo.nomearquivo = "";
+                currentAnexo.nomeDEFINITIVO = "";
+                //  atualistaAnexosExigidosQ(currentAnexo);
+
+                //var extensao = Path.GetExtension(anexo.nomearquivo);
+                //var nomedefinitivo = anexo.Doc.ItbidocId.ToString() + '-' + Content.InscricaoImobiliaria.ToString() + '.' + extensao;
+                //filesBfdefinitivo = filesBf;
+
+                await AnexosTransmitenteChanged.InvokeAsync(currentAnexo);
+                StateHasChanged();
+            }
+
+        }
+        else
+        {
+            currentAnexo = anexo;
+            myFileByBuffer?.ShowFilesDialogAsync();
+        }
+    }
+    private void HandleOnAccordionItemChange(FluentAccordionItem item)
+    {
+        changed = item;
+    }
     protected override async Task OnInitializedAsync()
     {
         //    await Task.Delay(1000);
@@ -134,6 +170,15 @@
         //pagination.TotalItemCountChanged += (sender, eventArgs) => StateHasChanged();
         //ContribuintesQ = Content;
         editContext = new EditContext(ListaDeTransmitentes);
+        List<Anexo> listdoc = new List<Anexo>();
+        docsExigidos = await tribItbidocumentoTipoAppService.ListAsync(tribItbidocumentoTipoSpec, CancellationToken.None);
+        docsExigidosQ = docsExigidos.AsQueryable();
+
+        foreach (var doc in docsExigidosQ)
+        {
+            listdoc.Add(new Anexo() { Doc = doc, carregado = false, nomearquivo = null });
+        }
+        AnexosExigidosQ = listdoc.AsQueryable();
         await base.OnInitializedAsync();
     }
     [Parameter]
