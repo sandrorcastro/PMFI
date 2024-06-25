@@ -65,7 +65,7 @@
             <FluentEditForm EditContext="editContext2" FormName="transmitenteInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <TransmitentesForm3 Content="Transmitentes" ListaDeTransmitentes=@ListaDeTransmitentes ListaDeTransmitentesChanged="HandleListaDeTransmitentesChanged" AnexosTransmitenteChanged="HandleAnexosTransmitenteChanged"/>
+                    <TransmitentesForm3 Content="Transmitentes" Imovel="Imovel" ListaDeTransmitentes=@ListaDeTransmitentes ListaDeTransmitentesChanged="HandleListaDeTransmitentesChanged" AnexosTransmitenteChanged="HandleAnexosTransmitenteChanged"/>
                      <ValidationMessage For="() => ListaDeTransmitentes" />
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
@@ -180,10 +180,12 @@
     //public List<byte[]>? AnexosImovel =new List<byte[]>();
     //private List<IBrowserFile> AnexosImovelBF = new List<IBrowserFile>();
     public Anexo? AnexosImovel = new Anexo();
-    public Anexo? AnexosTransmitente;
+    public List<Anexo>? AnexosTransmitente;
     public Anexo? AnexosAdquirente;
     public Anexo? AnexosOperacao;
-
+    //public DbSet<TribEdificaco>? DbSetImovel;
+    //public DbSet DbSetImovel;
+    //public IQueryable<TribEdificaco> QueryImovel { get; set; }
 
     private IQueryable<TribEdificacoesContrib>? Transmitentes;
     public string? TipoDeTransferencia { get; set; } = "COMPRA_VENDA"; // string.Empty;
@@ -196,6 +198,9 @@
     private bool _overlayIsVisible = false;
     async Task OnStepChange1(FluentWizardStepChangeEventArgs e, EditContext editContext)
     {
+
+        //var DbSetImovel = await edificacoesAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
+        //var QueryImovel = await 
 
         if (!editContext.Validate())
         {
@@ -211,6 +216,10 @@
                 await Task.Delay(2000);
                 edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
                 Imovel = await edificacoesAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
+
+                //var ImovelQQ = QueryImovel.AsNoTracking().AsQueryable();
+                //Imovel = ImovelQQ.FirstOrDefault();
+
 
                 /*
                 //var paramBancos =  objGeraBoleto.
@@ -691,11 +700,11 @@
     {
         AnexosImovel = anexos;
     }
-    private void HandleAnexosTransmitenteChanged(Anexo anexos)
+    private void HandleAnexosTransmitenteChanged(List<Anexo> anexos)
     {
         AnexosTransmitente = anexos;
         StateHasChanged();
-        
+
     }
     private void HandleAnexosAdquirentesChanged(Anexo anexos)
     {
@@ -703,7 +712,7 @@
         StateHasChanged();
 
     }
-    
+
     private void HandleParcelaOptionSelecionadaChanged(ParcelasOption parcelaOptionSelecionada)
     {
         ParcelaOptionSelecionada = parcelaOptionSelecionada;
@@ -763,8 +772,9 @@
             ValorDeclarado = valorDecimal.ToString("N2");
         }
     }
-    protected override void OnInitialized()
+    protected override async void OnInitialized()
     {
+        _overlayIsVisible = true;
         //DialogService.ShowInfoAsync("Iniciando!");
         // Imovel = new TribEdificaco();
         //   s1 = new Domain.Specs.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14,'0'));
@@ -773,9 +783,12 @@
         editContext = new EditContext(Imovel);
         editContext2 = new EditContext(ListaDeTransmitentes);
         editContext3 = new EditContext(ListaDeAdquirentes);
+        //var DbSetImovel = await edificacoesAppService.GetDbSet();
+        //QueryImovel = DbSetImovel.Where(i => i.InscricaoImobiliaria == Imovel!.InscricaoImobiliaria);
+
         //  edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel?.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
         //editContext. .AddFluentValidation(validator);
-
+        _overlayIsVisible = false;
     }
     async Task OnValidSubmit()
     {

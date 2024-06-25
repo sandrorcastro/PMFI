@@ -3,6 +3,7 @@ using Domain.Filters;
 using Domain.Interfaces.Base;
 using Domain.Interfaces.Specifications;
 using Domain.Pagination;
+using Microsoft.EntityFrameworkCore;
 
 namespace Application.Services.Base
 {
@@ -143,6 +144,9 @@ namespace Application.Services.Base
         public Task UpdateRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default)
         {
             return serviceBase.UpdateRangeAsync(entities, cancellationToken);   
+        }
+        public async Task<DbSet<T>> GetDbSet(){
+            return await serviceBase.GetDbSet();
         }
     }
 }

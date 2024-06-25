@@ -5,9 +5,11 @@ using Domain.Interfaces.Base;
 using Domain.Interfaces.Evaluators;
 using Domain.Interfaces.Specifications;
 using Domain.Pagination;
+using Domain.Specifications;
 using Infrastructure.Evaluators;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Threading;
 
 namespace Infrastructure.Factories;
 
@@ -278,10 +280,14 @@ public abstract class ContextFactoryRepositoryBaseOfT<TEntity, TContext> : IRepo
 
         // throw new NotImplementedException();
     }
-
-  /*  public async Task<TEntity?> GetBySpecAsync(Expression<Func<TEntity, bool>> specification, CancellationToken cancellationToken = default)
+    public async Task<DbSet<TEntity>> GetDbSet()
     {
         await using var dbContext = _dbContextFactory.CreateDbContext();
-        return await ApplySpecification(specification, dbContext).FirstOrDefaultAsync(cancellationToken); ;
-    }*/
+        return dbContext.Set<TEntity>();
+    }
+    /*  public async Task<TEntity?> GetBySpecAsync(Expression<Func<TEntity, bool>> specification, CancellationToken cancellationToken = default)
+      {
+          await using var dbContext = _dbContextFactory.CreateDbContext();
+          return await ApplySpecification(specification, dbContext).FirstOrDefaultAsync(cancellationToken); ;
+      }*/
 }

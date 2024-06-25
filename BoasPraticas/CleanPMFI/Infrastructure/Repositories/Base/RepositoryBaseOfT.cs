@@ -27,6 +27,7 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
     // private readonly ISpecificationEvaluator _specificationEvaluator;
     private readonly AutoMapper.IConfigurationProvider _configurationProvider;
     public  ISpecificationEvaluator Evaluator { get; }
+    //public ISpecification<T> Specification { get; }
     /*  public RepositoryBase(DbContext dbContext) : this(dbContext, SpecificationEvaluator.Default)
       {
       }*/
@@ -69,12 +70,18 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
         Evaluator = specificationEvaluator;
         
     }
-    public RepositoryBase(DbContext dbContext, ISpecificationEvaluator specificationEvaluator, IServiceScopeFactory serviceScopeFactory)
+    /*public RepositoryBase(DbContext dbContext, ISpecification<T> specification, IServiceScopeFactory serviceScopeFactory)
+    {
+        _dbContext = dbContext;
+        Specification  = specification;
+        ServiceScopeFactory = serviceScopeFactory;
+    }*/
+   /* public RepositoryBase(DbContext dbContext, ISpecificationEvaluator specificationEvaluator, IServiceScopeFactory serviceScopeFactory)
     {
         _dbContext = dbContext;
         Evaluator = specificationEvaluator;
         ServiceScopeFactory = serviceScopeFactory;
-    }
+    }*/
 
     /// <inheritdoc/>
     public virtual async Task<T> AddAsync(T entity, CancellationToken cancellationToken = default)
@@ -315,6 +322,11 @@ public class RepositoryBase<T> : IRepositoryBase<T> where T : class
 
 
         // throw new NotImplementedException();
+    }
+    public async Task<DbSet<T>> GetDbSet()
+    {
+        return  _dbContext.Set<T>();
+
     }
 
     /*public async Task<T?> GetBySpecAsync(Expression<Func<T, bool>> specification, CancellationToken cancellationToken = default)

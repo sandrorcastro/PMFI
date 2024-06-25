@@ -8,8 +8,10 @@ using Domain.Interfaces.Base;
 using Domain.Interfaces.Evaluators;
 using Domain.Interfaces.Repositories;
 using Domain.Interfaces.Services;
+using Domain.Interfaces.Specifications;
 using Domain.Services;
 using Domain.Services.Base;
+using Domain.Specs.DBProsiga;
 using Infrastructure.Context;
 using Infrastructure.Context.DBProsiga;
 using Infrastructure.Evaluators;
@@ -188,6 +190,7 @@ namespace IOC
             services.AddScoped<Domain.Interfaces.Repositories.DBProsiga.ITribItbiexAnexoRepository, Infrastructure.Repositories.DBProsiga.TribItbiexAnexoRepository>();
             services.AddScoped<Domain.Interfaces.Repositories.DBProsiga.ITribItbidocumentoTipoRepository, Infrastructure.Repositories.DBProsiga.TribItbidocumentoTipoRepository>();
             //////////////////////////////////////////////////////////////////////
+            //services.AddScoped<ISpecification<Domain.Entities.DBProsiga.TribItbidocumentoTipo>, Domain.Specs.DBProsiga.TribItbidocumentoTipoSpec>();
             //services.AddScoped<ISpecificationEvaluator, SpecificationEvaluator>();
             return services;
         }

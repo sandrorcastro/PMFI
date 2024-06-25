@@ -16,9 +16,11 @@ namespace BlazorWebAppITBI.Models
 
         public string? nomearquivo { get; set; }
         public string? nomeDEFINITIVO { get; set; }
-
+        public string pertenceA {  get; set; }
+        public InputFile InputFile { get; set; }
         //[Required(ErrorMessage = "Percentual Adquirido é obrigatório")]
         public List<IBrowserFile> AnexoBf = new List<IBrowserFile>();
+        //public IBrowserFile Anexo = new IBrowserFile();
 
     }
 }

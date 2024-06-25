@@ -10,5 +10,7 @@ namespace Domain.Interfaces.Services.DBProsiga
 {
     public interface ITribItbidocumentoTipoService : IServiceBase<TribItbidocumentoTipo>
     {
+        public IQueryable<TribItbidocumentoTipo> GetQueryableDocumentosExigidos(string praquem);
+        public Task<List<TribItbidocumentoTipo>> GetDocumentosExigidos(string praquem);
     }
 }

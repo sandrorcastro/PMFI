@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -13,4 +14,5 @@ public interface IRepositoryBase<T> : IReadRepositoryBase<T> where T : class //,
     Task DeleteAsync(T entity, CancellationToken cancellationToken = default);
     Task DeleteRangeAsync(IEnumerable<T> entities, CancellationToken cancellationToken = default);
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
+    Task<DbSet<T>> GetDbSet();
 }

@@ -168,7 +168,10 @@ namespace Domain.Services.Base
         {
             return repository.UpdateRangeAsync(entities, cancellationToken);
         }
+        public async Task<DbSet<T>> GetDbSet() {
+            return await  repository.GetDbSet();
+        }
 
-       
+
     }
 }

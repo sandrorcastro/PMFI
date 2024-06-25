@@ -12,6 +12,7 @@ namespace Domain.Interfaces.Base
         Task<TResult?> ProjectToFirstOrDefaultAsync<TResult>(ISpecification<T> specification, CancellationToken cancellationToken);
         Task<List<TResult>> ProjectToListAsync<TResult>(ISpecification<T> specification, CancellationToken cancellationToken);
         Task<PagedResponse<TResult>> ProjectToListAsync<TResult>(ISpecification<T> specification, BaseFilter filter, CancellationToken cancellationToken);
+        Task<DbSet<T>> GetDbSet();
       //  Task<TResult> ExecuteInScopeAsync<TResult>(Func<DbContext, Task<TResult>> action);
     }
 }

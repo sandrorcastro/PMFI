@@ -239,7 +239,7 @@
 
             }
             StateHasChanged();
-            
+
             await AnexosImovelChanged.InvokeAsync(currentAnexo);
         }
 
@@ -259,8 +259,15 @@
     protected override async Task OnInitializedAsync()
     {
         List<Anexo> listdoc = new List<Anexo>();
-        docsExigidos = await tribItbidocumentoTipoAppService.ListAsync(tribItbidocumentoTipoSpec, CancellationToken.None);
-        docsExigidosQ = docsExigidos.AsQueryable();
+        //docsExigidos = await tribItbidocumentoTipoAppService.ListAsync(tribItbidocumentoTipoSpec, CancellationToken.None);
+        //--docsExigidos = await tribItbidocumentoTipoAppService.GetDocumentosExigidos("Imóvel");
+
+        var DbSetDocsExigidos = await tribItbidocumentoTipoAppService.GetDbSet();
+        var QueryDocsExigidos = DbSetDocsExigidos.Where(d=>d.ItbidsDocDescricao=="Imóvel" );
+        //docsExigidosQ = docsExigidos.AsQueryable();
+        //docsExigidosQ = tribItbidocumentoTipoAppService.GetQueryableDocumentosExigidos("Imovel");
+       //-- docsExigidosQ = docsExigidos.AsQueryable();
+        docsExigidosQ = QueryDocsExigidos.AsQueryable();
 
         foreach(var doc in docsExigidosQ)
         {

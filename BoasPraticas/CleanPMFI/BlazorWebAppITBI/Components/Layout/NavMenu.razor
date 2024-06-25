@@ -4,12 +4,8 @@
     <input type="checkbox" id="navmenu-toggle" />
     <nav class="sitenav" aria-labelledby="main-menu" onclick="document.getElementById('navmenu-toggle').click();">
         <FluentNavMenu Id="main-menu" Collapsible="true" Width="250" Title="Navigation menu" @bind-Expanded="expanded">
-            <FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Home())" IconColor="Color.Accent">Home</FluentNavLink>
             <FluentNavLink Href="declaracao3" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">AutoDeclaração</FluentNavLink>
-            <FluentNavLink Href="uploadmanual" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">UpLoadManual</FluentNavLink>
-            <FluentNavLink Href="uploadDefault" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">UpLoadDefaul</FluentNavLink>
-            <FluentNavLink Href="uploadBuffer" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">UpLoadBuffer</FluentNavLink>
-            <FluentNavLink Href="uploadStream" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">UpLoadStream</FluentNavLink>
+            <FluentNavLink Href="autodeclaracao" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">AutoDeclaração2</FluentNavLink>
         </FluentNavMenu>
     </nav>
 </div>
@@ -21,6 +17,11 @@
 
 
        <!-- 
+            <FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Home())" IconColor="Color.Accent">Home</FluentNavLink>
+            <FluentNavLink Href="uploadmanual" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">UpLoadManual</FluentNavLink>
+            <FluentNavLink Href="uploadDefault" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">UpLoadDefaul</FluentNavLink>
+            <FluentNavLink Href="uploadBuffer" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">UpLoadBuffer</FluentNavLink>
+            <FluentNavLink Href="uploadStream" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">UpLoadStream</FluentNavLink>
 
             <FluentNavLink Href="counter" Icon="@(new Icons.Regular.Size20.NumberSymbolSquare())" IconColor="Color.Accent">Counter</FluentNavLink>
             <FluentNavLink Href="weather" Icon="@(new Icons.Regular.Size20.WeatherPartlyCloudyDay())" IconColor="Color.Accent">Weather</FluentNavLink>

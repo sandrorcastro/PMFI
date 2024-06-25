@@ -15,8 +15,17 @@ namespace Domain.Services.DBProsiga
         {
             _Repository = Repository;
         }
-      /*  public TribItbidocumentoTipoService(IRepositoryBase<TribItbidocumentoTipo> _repository) : base(_repository)
+        public IQueryable<TribItbidocumentoTipo> GetQueryableDocumentosExigidos(string praquem)
         {
-        }*/
+
+            return _Repository.GetQueryableDocumentosExigidos(praquem);
+        }
+        public async Task<List<TribItbidocumentoTipo>> GetDocumentosExigidos(string praquem)
+        {
+            return await _Repository.GetDocumentosExigidos(praquem);
+        }
+        /*  public TribItbidocumentoTipoService(IRepositoryBase<TribItbidocumentoTipo> _repository) : base(_repository)
+          {
+          }*/
     }
 }
