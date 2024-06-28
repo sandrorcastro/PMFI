@@ -12,6 +12,7 @@ namespace BlazorWebAppITBI.Models
     {
         
         public TribItbidocumentoTipo Doc { get; set; }
+        public TribItbidocumentoTipo? Tipo { get; set; }
         public bool carregado { get; set; }
 
         public string? nomearquivo { get; set; }
@@ -21,6 +22,7 @@ namespace BlazorWebAppITBI.Models
         //[Required(ErrorMessage = "Percentual Adquirido é obrigatório")]
         public List<IBrowserFile> AnexoBf = new List<IBrowserFile>();
         //public IBrowserFile Anexo = new IBrowserFile();
+
 
     }
 }

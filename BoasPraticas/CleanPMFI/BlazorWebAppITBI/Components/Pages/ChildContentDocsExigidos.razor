@@ -1,0 +1,227 @@
+﻿@rendermode InteractiveServer
+@if(Content != null){
+                        <FluentDataGrid Items=@Content.AsQueryable() TGridItem=Anexo>
+                            <PropertyColumn Title="Documento Obrigatório" Property="@(c => c!.Doc.ItbidsDocumento)" Sortable="true" Align=Align.Start />
+                            <PropertyColumn Title="Arquivo" Property="@(c => c!.nomearquivo)" Sortable="true" Align=Align.Start />
+                            <TemplateColumn Title="Ação" Sortable="true" Align=Align.End>
+                                @{
+                                    var anexoSelecionado = context as Anexo;
+                                    //itemAnexo.pertenceA = item.Contribuinte.ConCnpjcpf.ToString();
+
+                                    <FluentButton Appearance="Appearance.Outline" OnClick="()=>UpdateAnexo(anexoSelecionado)" IconStart="GetIcon(anexoSelecionado)">
+                                    </FluentButton>
+                                    
+                                    
+                                    
+                                    <!--     
+                                    if (itemAnexo.carregado)
+                                    {
+                                        <FluentButton Appearance="Appearance.Accent" OnClick="()=>OpenFileSelector(itemAnexo)">
+                                            Excluir
+                                        </FluentButton>
+                                    }
+                                    else
+                                    {
+                                        <FluentButton Appearance="Appearance.Accent" OnClick="()=>OpenFileSelector(itemAnexo)">
+                                            Carregar
+                                        </FluentButton>
+                                    }
+                                    -->
+                                }
+                            </TemplateColumn>
+                        
+                        </FluentDataGrid>
+
+    /*<FluentDataGrid Items=@Content.AsQueryable() TGridItem=Anexo>
+            <TemplateColumn>
+            @{
+                var item = context as Anexo;
+                <AnexoComponent Anexo="item"></AnexoComponent>
+                }
+            </TemplateColumn>            
+             
+               
+    </FluentDataGrid>*/
+                    <FluentInputFile @ref="@myFileByBuffer"
+                             AnchorId="MyUploadBuffer"
+                             DragDropZoneVisible="false"
+                             Mode="InputFileMode.Buffer"
+                             Multiple="true"
+                             MaximumFileSize="@(1000 * 1024 * 1024)"
+                             Accept=".mp4, .mov, .avi"
+                             OnInputFileChange="OnProgressChangeAsyncTransmitente"
+                             OnCompleted="@OnCompleted" />
+}
+@code {
+    [Parameter]
+    public List<Anexo> Content { get; set; } = default!;
+    FluentInputFile? myFileByBuffer = default!;
+    private Dictionary<string, Dictionary<string, List<long>>> itemStatesDocsTrasmitente { get; set; } = new Dictionary<string, Dictionary<string, List<long>>>();
+    private Dictionary<Anexo, bool> itemStates = new Dictionary<Anexo, bool>();
+    Dictionary<int, string> Files = new();
+    private Anexo currentAnexo;
+    int? progressPercent;
+    string? progressTitle;
+    private async void OpenFileSelector(Anexo anexo)
+    {
+        if (anexo.carregado)
+        //if (currentAnexo.carregado)
+        {
+            //currentAnexo = anexo;
+            //-- RemoveFromDictionary(anexo);
+            UpdateAnexo(anexo);
+            StateHasChanged();
+            //RemoveFromDictionary(anexo, anexo.Doc.ItbidocId);
+            // RemoveFromListAnexos(anexo);
+            currentAnexo.carregado = false;
+
+            //atualistaAnexosExigidosQ(f.Name);
+
+            currentAnexo.nomearquivo = "";
+            currentAnexo.nomeDEFINITIVO = "";
+            currentAnexo.pertenceA = "";
+        }
+        else
+        {
+            currentAnexo = anexo;
+            myFileByBuffer?.ShowFilesDialogAsync();
+        }
+
+    }
+    async Task OnProgressChangeAsyncTransmitente(InputFileChangeEventArgs file)
+    {
+        var inputFile = file.GetMultipleFiles();
+
+        if (inputFile != null)
+        {
+            foreach (var f in inputFile)
+            {
+                currentAnexo.carregado = true;
+                var extensao = Path.GetExtension(f.Name);
+                currentAnexo.nomeDEFINITIVO = currentAnexo.Doc.ItbidocId.ToString().Trim() + '-' + currentAnexo.pertenceA.Trim() + extensao;
+                //f.Name = currentAnexo.nomeDEFINITIVO;
+                //filesBfdefinitivo = filesBf;
+
+                //filesBf.Add(f);
+                currentAnexo.AnexoBf.Add(f);
+                //filesBf.Add(new });
+                //atualistaAnexosExigidosQ(f.Name);
+                currentAnexo.nomearquivo = f.Name;
+                // AddToListAnexos(currentAnexo);
+                //--AddToDictionary(currentAnexo);
+                UpdateAnexo(currentAnexo);
+                StateHasChanged();
+
+            }
+        }
+    }
+    public void AddToDictionary(Anexo anexo)
+    {
+        if (!itemStatesDocsTrasmitente.ContainsKey(anexo.pertenceA))
+        {
+            itemStatesDocsTrasmitente[anexo.pertenceA] = new Dictionary<string, List<long>>();
+        }
+
+        var anexoDict = itemStatesDocsTrasmitente[anexo.pertenceA];
+
+        if (!anexoDict.ContainsKey(anexo.nomearquivo))
+        {
+            anexoDict[anexo.nomearquivo] = new List<long>();
+        }
+
+        anexoDict[anexo.nomearquivo].Add(anexo.Doc.ItbidocId);
+    }
+    public void UpdateAnexo(Anexo anexo)
+    {
+        if (itemStates.ContainsKey(anexo))
+        {
+            //itemStates[contribuinte] = !itemStates[contribuinte];
+            anexo.carregado = false;
+            anexo.nomearquivo = "";
+            itemStates.Remove(anexo);
+            //AtualizarTransmitente(contribuinte, 2);
+            //  itemStates.Add(contribuinte, false);
+        }
+        else
+        {
+            anexo.carregado = true;
+            anexo.nomearquivo = anexo.pertenceA;
+            itemStates.Add(anexo, true);
+            //AtualizarTransmitente(contribuinte, 1);
+        }
+        StateHasChanged();
+
+
+
+
+
+        /*var index = Content.FindIndex(a => a.pertenceA == anexo.pertenceA && a.Doc.ItbidocId == anexo.Doc.ItbitipoId);
+        if (index != -1)
+        {
+            Content[index] = anexo;
+        }
+        StateHasChanged();*/
+
+    }
+    private void RemoveFromDictionary(Anexo anexo)
+    //private void RemoveFromDictionary(Anexo key, long value)
+    {
+        if (itemStatesDocsTrasmitente.ContainsKey(anexo.pertenceA))
+        {
+            itemStatesDocsTrasmitente[anexo.pertenceA][anexo.nomearquivo].Remove(anexo.Doc.ItbidocId);
+            // Remove a chave se a lista associada estiver vazia
+            if (itemStatesDocsTrasmitente[anexo.pertenceA][anexo.nomearquivo].Count == 0)
+            {
+                itemStatesDocsTrasmitente.Remove(anexo.pertenceA);
+            }
+        }
+    }
+    void OnCompleted(IEnumerable<FluentInputFileEventArgs> files)
+    {
+        progressPercent = myFileByBuffer!.ProgressPercent;
+        progressTitle = myFileByBuffer!.ProgressTitle;
+
+        // For the demo, delete these files.
+        foreach (var file in Files)
+        {
+            File.Delete(file.Value);
+        }
+    }
+    private Icon GetIcon(Anexo anexoSelecionado)
+    {
+        return itemStates.TryGetValue(anexoSelecionado, out bool isAdded) && isAdded
+          ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
+          : new Icons.Regular.Size24.AddSquare().WithColor(Color.Accent);
+    }
+    /*
+    private void AddRemovePlus(Transmitente contribuinte)
+    {
+
+        //  AtualizarTransmitente(contribuinte, 1);
+        //ContribuintesQ = this.ListaDeTrasmitentes.AsQueryable();
+        if (itemStates.ContainsKey(contribuinte))
+        {
+            //itemStates[contribuinte] = !itemStates[contribuinte];
+            itemStates.Remove(contribuinte);
+          // -- AtualizarTransmitente(contribuinte, 2);
+            //  itemStates.Add(contribuinte, false);
+        }
+        else
+        {
+            itemStates.Add(contribuinte, true);
+            //--AtualizarTransmitente(contribuinte, 1);
+        }
+        StateHasChanged();
+
+    }*/
+    private void HandleEdit(Anexo item)
+    {
+        // Lógica para editar o item
+    }
+
+    private void HandleDelete(Anexo item)
+    {
+        // Lógica para deletar o item
+        //--models.Remove(item);
+    }
+}

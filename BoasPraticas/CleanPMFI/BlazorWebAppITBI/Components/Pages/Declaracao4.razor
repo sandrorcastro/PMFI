@@ -1,4 +1,4 @@
-﻿@page "/"
+﻿@page "/declaracao4"
 @using BlazorWebAppITBI.MetaData
 @using BlazorWebAppITBI.Models
 @using System.Text;
@@ -25,7 +25,6 @@
 @inject ITribBoletosDividasAppService tribBoletosDividasAppService
 @inject ITribBoletosBarraAppService tribBoletosBarraAppService
 @inject ITribObjetoAppService tribObjetoAppService
-@inject ITribItbidocumentoTipoAppService tribItbidocumentoTipoAppService
 @inject ITribItbiexAnexoAppService tribItbiexAnexoAppService
 <h1>Página de Declaração ITBI</h1>
 <FluentWizard StepperPosition="StepperPosition.Left"
@@ -38,8 +37,8 @@
               OnFinish="@OnFinishedAsync">
     <Steps>
         <FluentWizardStep Label="Inscrição Imobiliária:"
-                        OnChange="@(e=>OnStepChange1(e,editContextImovel))">
-            <FluentEditForm EditContext="editContextImovel" FormName="imovelInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                        OnChange="@(e=>OnStepChange1(e,editContext))">
+            <FluentEditForm EditContext="editContext" FormName="imovelInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
                     <FluentTextField Placeholder="Inscrição Imobiliária" @bind-Value="Imovel!.InscricaoImobiliaria" Required />
@@ -66,7 +65,7 @@
             <FluentEditForm EditContext="editContext2" FormName="transmitenteInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <TransmitentesForm5 Content="Transmitentes" Imovel="Imovel" ListaDeTransmitentes=@ListaDeTransmitentes ListaDeTransmitentesChanged="HandleListaDeTransmitentesChanged" AnexosTransmitenteChanged="HandleAnexosTransmitenteChanged"/>
+                    <TransmitentesForm4 Content="Transmitentes" Imovel="Imovel" ListaDeTransmitentes=@ListaDeTransmitentes ListaDeTransmitentesChanged="HandleListaDeTransmitentesChanged" AnexosTransmitenteChanged="HandleAnexosTransmitenteChanged"/>
                      <ValidationMessage For="() => ListaDeTransmitentes" />
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
@@ -160,7 +159,7 @@
         };
 
     public ParcelasOption? ParcelaOptionSelecionada { get; set; }
-    private EditContext? editContextImovel;
+    private EditContext? editContext;
     private EditContext? editContext2;
     private EditContext? editContext3;
     public List<Transmitente>? ListaDeTransmitentes = new List<Transmitente>();
@@ -197,17 +196,15 @@
     public string? TxITBI = "0,02";// string.Empty;
     public Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec edificacaoSpec;
     private bool _overlayIsVisible = false;
-    public IEnumerable<TribItbidocumentoTipo> docsExigidos { get; set; }
     async Task OnStepChange1(FluentWizardStepChangeEventArgs e, EditContext editContext)
     {
-        
+
         //var DbSetImovel = await edificacoesAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
         //var QueryImovel = await 
 
         if (!editContext.Validate())
         {
             // Bloquear a mudança de etapa se o formulário não for válido
-
             e.IsCancelled = true;
         }
         else
@@ -217,66 +214,42 @@
             {
                 _overlayIsVisible = true;
                 await Task.Delay(2000);
-                //edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
-                edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString());
+                edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
                 Imovel = await edificacoesAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
-                if (Imovel is null )
-                {
-                    await DialogService.ShowInfoAsync($"Inscrição Imobiliária Não Encontrada.");
-                    Imovel = new TribEdificaco() { InscricaoImobiliaria = string.Empty, Lograd = new Logradouro(), Terreno = new TribTerreno(),TribEdificacoesContribs = new List<TribEdificacoesContrib>()};
-                    ListaDeTransmitentes = new List<Transmitente>();
-                    ListaDeAdquirentes = new List<Adquirente>();
-
-                    e.IsCancelled = true;
-                }
-                else
-                {
-                    ListaDeTransmitentes = new List<Transmitente>();
-                    ListaDeAdquirentes = new List<Adquirente>();
-                    editContextImovel = new EditContext(Imovel);
-                    editContext2 = new EditContext(ListaDeTransmitentes);
-                    editContext3 = new EditContext(ListaDeAdquirentes);
-
-                    Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
-                    docsExigidos = await tribItbidocumentoTipoAppService.GetDocumentosExigidos("Contribuinte");
-                    //--------------
-                    //Carrega ListaDeTransmitente con devidos Documentos Exigidos
-                    if (Transmitentes.Count() > 0)
-                    {
+                //autoDeclaracao.Imovel = Imovel;
+                //var ImovelQQ = QueryImovel.AsNoTracking().AsQueryable();
+                //Imovel = ImovelQQ.FirstOrDefault();
 
 
-                        foreach (var edificacoesdoscontribuites in Transmitentes.ToList())
-                        {
-                            var transmitente = new Transmitente()
-                                {
-                                    Contribuinte = edificacoesdoscontribuites.Con,
-                                    AnexosExigidos = new List<Anexo>(),
-                                    percentualtransmitido = edificacoesdoscontribuites.Percentual.ToString()
-                                };
-                            foreach (var docexigido in docsExigidos.ToList())
-                            {
-                                transmitente.AnexosExigidos.Add(new Anexo()
-                                    {
-                                        carregado = false,
-                                        Doc = docexigido,
-                                        nomearquivo = string.Empty,
-                                        nomeDEFINITIVO = string.Empty,
-                                        pertenceA = transmitente.Contribuinte.ConCnpjcpf.Trim().PadLeft(14, '0'),
-                                        AnexoBf = new List<IBrowserFile>()
-                                        // InputFile = null,
-                                    });
-                            }
-                            ListaDeTransmitentes.Add(transmitente);
-                        }
-                    }
-                    //--------------
+                /*
+                //var paramBancos =  objGeraBoleto.
+                objBol.boleData = DateTime.Now;
+                objBol.boleDataInclusao = DateTime.Now;
+                objBol.boleVencimento = DateTime.Now; //DateValue("01/21/2024");
+                objBol.ConvenioId = 52;
+                //objBol.boleUsuarioInclusao = User.Identity.Name
+                objBol.boleMoeda = "9";
+                objBol.ConID = 827737;
+                objBol.boleOrigem = "Interna";
+                */
+                //   decimal v = 100.00m;
+                // await GeraBoleto(v ,DateTime.Now);
 
-                }
 
+
+
+                //  if(Imovel == null)
+                // {
+                //    await DialogService.ShowInfoAsync("Inscrição Informada Não Existe");
+                //  e.IsCancelled = true;
+                // _overlayIsVisible = false;
+                //return;
+                //}
+                Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
+                //await InsereDeclaracao();
                 _overlayIsVisible = false;
             }
         }
-        
     }
     async Task OnStepChange2(FluentWizardStepChangeEventArgs e, EditContext editContext)
     {
@@ -802,12 +775,20 @@
     protected override async void OnInitialized()
     {
         _overlayIsVisible = true;
-        
-        editContextImovel = new EditContext(Imovel);
+        //DialogService.ShowInfoAsync("Iniciando!");
+        // Imovel = new TribEdificaco();
+        //   s1 = new Domain.Specs.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14,'0'));
+
+        ////var validator = new TribEdificacoesValidator();
+        editContext = new EditContext(Imovel);
         editContext2 = new EditContext(ListaDeTransmitentes);
         editContext3 = new EditContext(ListaDeAdquirentes);
-    
-       _overlayIsVisible = false;
+        //var DbSetImovel = await edificacoesAppService.GetDbSet();
+        //QueryImovel = DbSetImovel.Where(i => i.InscricaoImobiliaria == Imovel!.InscricaoImobiliaria);
+
+        //  edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel?.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
+        //editContext. .AddFluentValidation(validator);
+        _overlayIsVisible = false;
     }
     async Task OnValidSubmit()
     {
@@ -823,7 +804,7 @@
     }
     private async Task HandleNextClick()
     {
-        if (editContextImovel.Validate())
+        if (editContext.Validate())
         {
             // Move to the next step
             await GoToNextStep();

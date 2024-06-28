@@ -1,0 +1,95 @@
+﻿@rendermode InteractiveServer
+<FluentCard Justify="@JustifyContent.Center">
+    <p>Proprietários/Responsáveis</p>
+    <FluentDataGrid Items=@Content TGridItem=TribEdificacoesContrib>
+        <PropertyColumn Title="CPF/CNPJ" Property="@(c => c!.Con.ConCnpjcpf)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="RG" Property="@(c => c!.Con.ConRg)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Nome/Razão" Property="@(c => c!.Con.ConNome)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Email" Property="@(c => c!.Con.ConEmail)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Celular" Property="@(c => c!.Con.ConTelefoneCelular)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Proprietário" Property="@(c => c!.Proprietario)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Responsável" Property="@(c => c!.Responsavel)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Percentual" Property="@(c => c!.Percentual)" Sortable="true" Align=Align.Start />
+        <TemplateColumn Align="@Align.End">
+            @{
+                var item = context as TribEdificacoesContrib;
+                Transmitente t = new Transmitente() { Contribuinte = item.Con };
+                <FluentButton Appearance="Appearance.Outline" OnClick="()=>AddRemovePlus(t)" IconStart="GetIcon2(item)">
+                </FluentButton>
+            }
+        </TemplateColumn>
+    </FluentDataGrid>
+</FluentCard>
+
+
+@code{
+    private Dictionary<Transmitente, bool> itemStates = new Dictionary<Transmitente, bool>();
+    public IQueryable<Anexo>? AnexosExigidosQ { get; set; }
+    public IQueryable<Transmitente>? ContribuintesQ { get; set; }
+    [Parameter]
+    public IQueryable<TribEdificacoesContrib> Content { get; set; } = default!;
+    private void AddRemovePlus(Transmitente contribuinte)
+    {
+/*
+        //  AtualizarTransmitente(contribuinte, 1);
+        //ContribuintesQ = this.ListaDeTrasmitentes.AsQueryable();
+        if (itemStates.ContainsKey(contribuinte))
+        {
+            //itemStates[contribuinte] = !itemStates[contribuinte];
+            itemStates.Remove(contribuinte);
+            AtualizarTransmitente(contribuinte, 2);
+            //  itemStates.Add(contribuinte, false);
+        }
+        else
+        {
+            itemStates.Add(contribuinte, true);
+            AtualizarTransmitente(contribuinte, 1);
+        }
+        StateHasChanged();
+        */
+    }
+    public void AtualizarTransmitente(Transmitente contribuinte, int operacao)
+    {
+        /*
+        if (operacao == 1)
+        {
+
+            //ListaDeTransmitentes[index] = contribuinte;
+            if (contribuinte.Contribuinte.ConTipoPessoa == "FISICA")
+            {
+                contribuinte.AnexosExigidos = AnexosExigidosQ.ToList();
+            }
+            else
+            {
+                contribuinte.AnexosExigidos = AnexosExigidosQ.ToList();
+            }
+
+            ListaDeTransmitentes.Add(contribuinte);
+            ContribuintesQ = ListaDeTransmitentes.AsQueryable();
+            //ListaDeTransmitentesChanged.InvokeAsync(ListaDeTransmitentes);
+        }
+        else if (operacao == 2)
+        {
+            ListaDeTransmitentes.Remove(contribuinte);
+            ContribuintesQ = ListaDeTransmitentes.AsQueryable();
+           // ListaDeTransmitentesChanged.InvokeAsync(ListaDeTransmitentes);
+        }
+        */
+    }
+    private Icon GetIcon2(TribEdificacoesContrib item)
+    {
+        Transmitente t = null;
+        t = new Transmitente() { Contribuinte = item.Con };
+
+        if (item.Responsavel == "Sim")
+        {
+            return itemStates.TryGetValue(t, out bool isAdded2) && isAdded2
+         ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Success)
+         : new Icons.Regular.Size24.AddSquare().WithColor(Color.Success);
+        }
+        // Retorna o ícone de exclusão se o item foi adicionado, caso contrário, retorna o ícone de adição
+        return itemStates.TryGetValue(t, out bool isAdded) && isAdded
+         ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
+         : new Icons.Regular.Size24.AddSquare().WithColor(Color.Accent);
+    }
+}

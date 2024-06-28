@@ -15,7 +15,7 @@
               OnFinish="@OnFinishedAsync">
     <Steps>
         <FluentWizardStep Label="Inscrição"
-                          OnChange="@OnStepChange">
+                          OnChange="@(e=>OnStepChange1(e,editContext))">
             <FluentEditForm EditContext="editContext" FormName="inscricaoForm" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
@@ -75,6 +75,7 @@
 
 @code
 {
+
     public AutoDeclaracao autoDeclaracao { get; set; } = new AutoDeclaracao() { Imovel = new TribEdificaco() {InscricaoImobiliaria=string.Empty } } ;
     public DbSet<TribEdificaco> dbSet; 
     public IQueryable queryInscricao; 
@@ -83,9 +84,12 @@
     private FormData1 _formData1 = new FormData1();
     private FormData2 _formData2 = new FormData2();
     private FinishFormData _finishFormData = new FinishFormData();
-    private bool _overlayIsVisible = false;
-
+    bool  _overlayIsVisible = false;
     async void OnStepChange(FluentWizardStepChangeEventArgs e)
+    {
+        
+    }
+    async void OnStepChange1(FluentWizardStepChangeEventArgs e, EditContext editContext)
     {
         if (!editContext.Validate())
         {
@@ -99,14 +103,12 @@
             {
                 _overlayIsVisible = true;
                 await Task.Delay(2000);
-               // autoDeclaracao.Imovel = await  queryInscricao.
-
-
-          //  Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
-          //await InsereDeclaracao();
-            _overlayIsVisible = false;
+                Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(autoDeclaracao.Imovel!.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
+                autoDeclaracao.Imovel = await tribEdificacoAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
+                this._overlayIsVisible = false;
             }
         }
+            _overlayIsVisible = false;
     }
 
     async Task OnFinishedAsync()
@@ -141,9 +143,9 @@
     protected override async void OnInitialized()
     {
         _overlayIsVisible = true;
-        Task.Delay(2000);
-        dbSet   = await  tribEdificacoAppService.GetDbSet();
-        queryInscricao = dbSet.Where(i => i.InscricaoImobiliaria == autoDeclaracao.Imovel!.InscricaoImobiliaria); //.AsNoTracking(); 
+        //Task.Delay(2000);
+       // dbSet   = await  tribEdificacoAppService.GetDbSet();
+        //queryInscricao = dbSet.Where(i => i.InscricaoImobiliaria == autoDeclaracao.Imovel!.InscricaoImobiliaria); //.AsNoTracking(); 
         //queryInscricao = dbSet.FirstOrDefaultAsync(i => i.InscricaoImobiliaria == autoDeclaracao.Imovel!.InscricaoImobiliaria); //.AsNoTracking();
         
         editContext = new EditContext(autoDeclaracao);

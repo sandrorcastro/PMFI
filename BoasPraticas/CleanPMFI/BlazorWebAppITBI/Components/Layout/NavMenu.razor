@@ -4,19 +4,34 @@
     <input type="checkbox" id="navmenu-toggle" />
     <nav class="sitenav" aria-labelledby="main-menu" onclick="document.getElementById('navmenu-toggle').click();">
         <FluentNavMenu Id="main-menu" Collapsible="true" Width="250" Title="Navigation menu" @bind-Expanded="expanded">
-            <FluentNavLink Href="declaracao3" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">AutoDeclaração</FluentNavLink>
-            <FluentNavLink Href="autodeclaracao" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">AutoDeclaração2</FluentNavLink>
+            <FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">AutoDeclaração</FluentNavLink>
         </FluentNavMenu>
     </nav>
 </div>
 
+             <FluentOverlay @bind-Visible=@_overlayIsVisible
+                       Opacity="0.4"
+                       Alignment="Align.Center"
+                       Justification="@JustifyContent.Center">
+            <FluentProgressRing />
+        </FluentOverlay>
+
 @code {
     private bool expanded = true;
+    private bool _overlayIsVisible = false;
+   /* protected override async void OnInitialized()
+    {
+        _overlayIsVisible = true;
 
+        await Task.Delay(100);
+
+        _overlayIsVisible = false;
+    }*/
 }
 
 
        <!-- 
+            <FluentNavLink Href="autodeclaracao" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">AutoDeclaração2</FluentNavLink>
             <FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Home())" IconColor="Color.Accent">Home</FluentNavLink>
             <FluentNavLink Href="uploadmanual" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">UpLoadManual</FluentNavLink>
             <FluentNavLink Href="uploadDefault" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">UpLoadDefaul</FluentNavLink>
