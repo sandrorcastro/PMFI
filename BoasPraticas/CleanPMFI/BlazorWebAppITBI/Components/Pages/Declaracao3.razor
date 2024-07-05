@@ -42,7 +42,7 @@
             <FluentEditForm EditContext="editContextImovel" FormName="imovelInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <FluentTextField Placeholder="Inscrição Imobiliária" @bind-Value="Imovel!.InscricaoImobiliaria" Required />
+                    <FluentTextField Placeholder="Inscrição Imobiliária" @bind-Value="Imovel!.InscricaoImobiliaria" Required style="width: 300px; height: 50px; border:none;outline: none;"/>
                     <ValidationMessage For="() => Imovel!.InscricaoImobiliaria" />
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
@@ -66,7 +66,7 @@
             <FluentEditForm EditContext="editContext2" FormName="transmitenteInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <TransmitentesForm5 Content="Transmitentes" Imovel="Imovel" ListaDeTransmitentes=@ListaDeTransmitentes ListaDeTransmitentesChanged="HandleListaDeTransmitentesChanged" AnexosTransmitenteChanged="HandleAnexosTransmitenteChanged"/>
+                    <TransmitentesForm5 Imovel="Imovel" ListaDeTransmitentes=@ListaDeTransmitentes ListaDeTransmitentesChanged="HandleListaDeTransmitentesChanged" DocsExigidos="docsExigidos" />
                      <ValidationMessage For="() => ListaDeTransmitentes" />
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
@@ -109,7 +109,7 @@
          <FluentWizardStep Label="Emitir Guia"
                           OnChange="@OnStepChange">
            
-                    <LegislacaoForm ValoresOperacao="ValoresOperacao" ValoresOperacaoChanged="HandleValoresOperacaoChanged" ValorDeclarado=@ValorDeclarado AutoNumAnoNumero="HandleAutoNumAnoNumero" ValorDeclaradoChanged="HandleValorDeclaradoChanged"  ParcelaOptionSelecionadaChanged="HandleParcelaOptionSelecionadaChanged"/>
+                    <LegislacaoForm ValoresOperacao="ValoresOperacao" ValoresOperacaoChanged="HandleValoresOperacaoChanged" ValorDeclarado=@ValorDeclarado Gerar="HandleGerarGuia" ValorDeclaradoChanged="HandleValorDeclaradoChanged"  ParcelaOptionSelecionadaChanged="HandleParcelaOptionSelecionadaChanged"/>
                 
         </FluentWizardStep>
          <FluentWizardStep Label="Guia"
@@ -157,6 +157,9 @@
             Terreno = new TribTerreno(),
             IdloteamentoNavigation = new Loteamento(),
             TribEdificacoesContribs = new List<TribEdificacoesContrib>()
+         //   {
+           //    new TribEdificacoesContrib() {Con = new Contribuinte(){ConCidade = new Cidade(){CidUf=""},ConBairro = new Bairro()}}
+            //}
         };
 
     public ParcelasOption? ParcelaOptionSelecionada { get; set; }
@@ -200,7 +203,7 @@
     public IEnumerable<TribItbidocumentoTipo> docsExigidos { get; set; }
     async Task OnStepChange1(FluentWizardStepChangeEventArgs e, EditContext editContext)
     {
-        
+
         //var DbSetImovel = await edificacoesAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
         //var QueryImovel = await 
 
@@ -251,8 +254,10 @@
                                 {
                                     Contribuinte = edificacoesdoscontribuites.Con,
                                     AnexosExigidos = new List<Anexo>(),
-                                    percentualtransmitido = edificacoesdoscontribuites.Percentual.ToString()
+                                    percentualtransmitido = edificacoesdoscontribuites.Percentual.ToString(),
+                                    Titularidade = await pegaTitularidade(edificacoesdoscontribuites)
                                 };
+
                             foreach (var docexigido in docsExigidos.ToList())
                             {
                                 transmitente.AnexosExigidos.Add(new Anexo()
@@ -276,7 +281,32 @@
                 _overlayIsVisible = false;
             }
         }
-        
+
+    }
+    async Task<string> pegaTitularidade(TribEdificacoesContrib Edificacoescontrib)
+    {
+        var result = string.Empty;
+        if(Edificacoescontrib.Proprietario == "Sim")
+        {
+            result = "Proprietário";
+        }
+        if (Edificacoescontrib.Responsavel == "Sim")
+        {
+            result = "Responsável";
+        }
+        if (Edificacoescontrib.Proprietario == "Sim" && Edificacoescontrib.Responsavel == "Sim"  )
+        {
+            result = "Propr./Resp.";
+        }
+        if (Edificacoescontrib.CoResponsavel == "Sim")
+        {
+            result = "CoResponsável";
+        }
+        if (Edificacoescontrib.Locatario == "Sim")
+        {
+            result = "Locatário";
+        }
+        return result;
     }
     async Task OnStepChange2(FluentWizardStepChangeEventArgs e, EditContext editContext)
     {
@@ -365,6 +395,7 @@
         TribItbi.ItbidsAlerta = "Atenção - ITBI";
         await tribITBIAppService.AddAsync(TribItbi, CancellationToken.None);
         await InsereAnexoImovel(TribItbi);
+        await InsereAnexoTransmitente(TribItbi);
 
     }
     private async Task InsereDivida(ParcelasOption parcelaOption){
@@ -609,24 +640,45 @@
     }
     private async Task InsereAnexoTransmitente(TribItbi itbi)
     {
-        if (AnexosImovel.AnexoBf.Count > 0)
+        if (ListaDeTransmitentes.Count > 0)
         {
-            foreach (var anex in AnexosImovel.AnexoBf)
+            foreach (var transmitente in ListaDeTransmitentes.ToList())
             {
-                var buffer = new byte[anex.Size];
-                var extensao = Path.GetExtension(anex.Name);
-                await anex.OpenReadStream().ReadAsync(buffer);
-
-                var anexoinserido = await InsereTribObjeto(buffer, extensao);
-
-                if (anexoinserido != null)
+                if(transmitente.AnexosExigidos.Count() > 0)
                 {
-                    await InsereTribItbiexAnexo(itbi.Itbiid, anexoinserido.ObjetoId, AnexosImovel.Doc.ItbidocId, long.Parse(Imovel.InscricaoImobiliaria));
+                    foreach (var anexo in transmitente.AnexosExigidos.ToList())
+                    {
+                        if(anexo.AnexoBf.Count > 0)
+                        {
+                            foreach (var file in anexo.AnexoBf.ToList())
+                            {
+                                try
+                                {
+
+                                    var buffer = new byte[file.Size];
+                                    var extensao = Path.GetExtension(file.Name);
+                                    await file.OpenReadStream().ReadAsync(buffer);
+
+                                    var anexoinserido = await InsereTribObjeto(buffer, extensao);
+
+                                    if (anexoinserido != null)
+                                    {
+                                        await InsereTribItbiexAnexo(itbi.Itbiid, anexoinserido.ObjetoId, anexo.Doc.ItbidocId, long.Parse(anexo.pertenceA));
+                                    }
+                                }catch(Exception ex)
+                                {
+                                    Console.WriteLine($"Error processing file {file.Name}: {ex.Message}");
+                                }
+
+                            }
+                        }
+
+                    }
                 }
             }
-
         }
     }
+  
     private async Task InsereCompradores(long itbiedifid){
         if (ListaDeAdquirentes.Count > 0)
         {
@@ -708,7 +760,7 @@
         //await InsereCompradores();
         //await InsereVendedores();
     }
-    private async void HandleAutoNumAnoNumero()
+    private async void HandleGerarGuia()
     {
         // AutoNumAnoNumero = await autoNumANoNumeroAppService.GetMaxAutoNumAnoNumero(2024,"ITBI");
         ///  AutoNumAnoNumeroSpec autoNumAnoNumeroSpec = new Domain.Specs.DBProsiga.AutoNumAnoNumeroSpec(2024,"ITBI");

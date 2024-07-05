@@ -9,6 +9,7 @@ namespace BlazorWebAppITBI.Models
         [Required(ErrorMessage = "Percentual Transmitido é obrigatório")]
         public string? percentualtransmitido { get; set; }
         public List<Anexo>? AnexosExigidos { get; set; }
+        public string Titularidade {  get; set; }
      
         
         /*public string? _percentualtransmitido { get; set; } = "100";

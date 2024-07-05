@@ -1,32 +1,17 @@
 ﻿@using BlazorWebAppITBI.Uteis
 @rendermode InteractiveServer
-
 @if(Content != null){
                         <FluentDataGrid Items=@Content.AsQueryable() TGridItem=Anexo>
                             <PropertyColumn Title="Documento Obrigatório" Property="@(c => c!.Doc.ItbidsDocumento)" Sortable="true" Align=Align.Start />
                             <PropertyColumn Title="Arquivo" Property="@(c => c!.nomearquivo)" Sortable="true" Align=Align.Start />
                             <TemplateColumn Title="Ação" Sortable="true" Align=Align.End>
-
                                     @{
                                            var anexoSelecionado = @context as Anexo;
                                           <FluentButton Appearance="Appearance.Outline" OnClick="()=>OpenFileSelector(anexoSelecionado)" IconStart="GetIcon(anexoSelecionado)"></FluentButton>
-                
-                                        
+                                        //  <FluentButton Appearance="Appearance.Outline" OnClick="()=>RemoveFileSelector(anexoSelecionado)" IconStart="@(new Icons.Regular.Size20.SubtractSquare().WithColor(Color.Accent))"></FluentButton>
                                     }
                             </TemplateColumn>
-                        
                         </FluentDataGrid>
-
-    /*<FluentDataGrid Items=@Content.AsQueryable() TGridItem=Anexo>
-            <TemplateColumn>
-            @{
-                var item = context as Anexo;
-                <AnexoComponent Anexo="item"></AnexoComponent>
-                }
-            </TemplateColumn>            
-             
-               
-    </FluentDataGrid>*/
                     <FluentInputFile @ref="@myFileByBuffer"
                              AnchorId="MyUploadBuffer"
                              DragDropZoneVisible="false"
@@ -40,93 +25,112 @@
 @code {
     [Parameter]
     public List<Anexo> Content { get; set; } = default!;
+    [Parameter]
+    public EventCallback<Anexo> AnexoChanged { get; set; }
     FluentInputFile? myFileByBuffer = default!;
-
-    private GerenciadorDeAnexos gerenciador = new GerenciadorDeAnexos();
-    //  private Dictionary<string, Dictionary<string, List<long>>> itemStatesDocsTrasmitente { get; set; } = new Dictionary<string, Dictionary<string, List<long>>>();
-    //  private Dictionary<string, Dictionary<string,bool>> estadoDosAnexosDoTrasmitente { get; set; } = new Dictionary<string, Dictionary<string,bool>>();
-    //  private Dictionary<Anexo, bool> itemStates = new Dictionary<Anexo, bool>();
-    //  private Dictionary<string, bool> estadoDoAnexo = new Dictionary<string, bool>();
-    //  private Dictionary<string, bool> estadoDoPertenceA = new Dictionary<string, bool>();
     Dictionary<int, string> Files = new();
     private Anexo? currentAnexo;
     int? progressPercent;
     string? progressTitle;
-    /* protected override async Task OnInitializedAsync()
-            {
-            if(Content is not null)
-            {
-            foreach(var anexo in Content.ToList())
-                {
-                if (!estadoDoAnexo.ContainsKey(anexo.Doc.ItbidsDocumento))
-                    {
-                    estadoDoAnexo.Add(anexo.Doc.ItbidsDocumento, true);
-        }
-
-        }
-        }
-        }*/
-
-    public async Task UpdateAnexo(Anexo anexoselecionado)
+   
+    public async Task UpdateAnexo(Anexo anexo, IBrowserFile f)
     {
-        // foreach(var anexo in Content)
-        // {
-        //var anexoParaAtualizar = Content.FirstOrDefault(a => a.pertenceA == anexoselecionado.pertenceA && a.Doc.ItbidsDocumento == anexoselecionado.Doc.ItbidsDocumento);
-        var indice = await ObterIndiceAnexo(anexoselecionado);
-
-        if(indice > -1 )
+        //var indiceanexo = 0;
+        if (anexo.carregado == true )
         {
-            Content[indice] = anexoselecionado;
-            /*
-            Content[indice].AnexoBf = anexoselecionado.AnexoBf;
-            Content[indice].carregado = !anexoselecionado.carregado;
-            Content[indice].nomearquivo = anexoselecionado.nomearquivo;
-            Content[indice].nomeDEFINITIVO = anexoselecionado.nomeDEFINITIVO;
-            Content[indice].pertenceA = anexoselecionado.pertenceA;
-            Content[indice].Doc = anexoselecionado.Doc;*/
+            var indicefile = await ObterIndiceFile(anexo);
+            var indiceanexo = await ObterIndiceAnexo(anexo);
+            Content[indiceanexo].AnexoBf.RemoveAt(indicefile);
+            await AnexoChanged.InvokeAsync(Content[indiceanexo]);
         }
-        //}
+        else
+        {
+            //indiceanexo = await ObterIndiceAnexo(anexo);
+            //Content[indiceanexo].AnexoBf.Add(f);
+            await AnexoChanged.InvokeAsync(anexo);
 
+        }
+
+        //    var indicefile = await ObterIndiceFile(anexo);
+        //    if(indicefile > -1)
+        //    {
+        //        Content[indice].AnexoBf[indicefile] = null;
+
+        //    }
+        StateHasChanged();
+        //}
+        //await AnexoChanged.InvokeAsync(Content[indiceanexo]);
     }
     public async Task<int> ObterIndiceAnexo(Anexo anexoselecionado)
     {
-        //return Content.FindIndex(a => a.pertenceA == anexoselecionado.pertenceA && a.Doc.ItbidsDocumento == anexoselecionado.Doc.ItbidsDocumento);
-        //Task<int> task  =
         return await Task.FromResult(Content.FindIndex(a => a.pertenceA == anexoselecionado.pertenceA && a.Doc.ItbidsDocumento == anexoselecionado.Doc.ItbidsDocumento));
-        //return task;
     }
+    public async Task<int> ObterIndiceFile(Anexo anexoselecionado)
+    {
+        var indiceanexo = await ObterIndiceAnexo(anexoselecionado);
+        return await Task.FromResult(Content[indiceanexo].AnexoBf.FindIndex(a => a.Name==anexoselecionado.nomearquivo));
+    }
+    private async void OpenFileSelectorbk(Anexo anexo)
+    {
+        currentAnexo = anexo;
+        myFileByBuffer?.ShowFilesDialogAsync();
+    }
+    private async void RemoveFileSelector(Anexo anexo)
+    {
+        Content.Remove(anexo);
+        await AnexoChanged.InvokeAsync(anexo);
+        StateHasChanged();
+    }
+    private async Task OnProgressChangeAsyncTransmitenteBK3(InputFileChangeEventArgs file)
+    {
+        var inputFiles = file.GetMultipleFiles();
 
+        if (inputFiles != null && currentAnexo != null)
+        {
+            foreach (var f in inputFiles)
+            {
+                try
+                {
+                    var extensao = Path.GetExtension(f.Name);
+                    var newAnexo = new Anexo
+                        {
+                            Doc = currentAnexo.Doc,
+                            pertenceA = currentAnexo.pertenceA,
+                            nomeDEFINITIVO = $"{currentAnexo.Doc.ItbidocId}-{currentAnexo.pertenceA}{extensao}",
+                            nomearquivo = f.Name,
+                            carregado = true,
+                            AnexoBf = new List<IBrowserFile> { f }
+                        };
 
+                    Content.Add(newAnexo);
+                    await AnexoChanged.InvokeAsync(newAnexo);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error processing file {f.Name}: {ex.Message}");
+                }
+            }
 
-
-
+            StateHasChanged();
+        }
+    }
     private async void OpenFileSelector(Anexo anexo)
     {
         if (anexo.carregado)
-        //if (currentAnexo.carregado)
         {
-            //gerenciador.RemoverAnexo(anexo.pertenceA, anexo.Doc.ItbidsDocumento);
-            //currentAnexo = anexo;
-            //-- RemoveFromDictionary(anexo);
-            //StateHasChanged();
-            //RemoveFromDictionary(anexo);
-            // RemoveFromListAnexos(anexo);
-            //currentAnexo.carregado = false;
-
-            //atualistaAnexosExigidosQ(f.Name);
-
+            //------------------
+          //  var indicefile = await ObterIndiceFile(anexo);
+          //  var indiceanexo = await ObterIndiceAnexo(anexo);
+          //  Content[indiceanexo].AnexoBf.RemoveAt(indicefile);
+          //  await AnexoChanged.InvokeAsync(Content[indiceanexo]);
+            //------------------
+            //--await UpdateAnexo(anexo,null);
             anexo.nomearquivo = string.Empty;
             anexo.nomeDEFINITIVO = string.Empty;
             anexo.carregado = false;
+            anexo.InputFile = null;
             anexo.AnexoBf.Clear();
-
-            //currentAnexo.pertenceA = "";
-
-            await UpdateAnexo(anexo);
-           // currentAnexo = new Anexo();
-
-
-            //currentAnexo = new Anexo();
+            await AnexoChanged.InvokeAsync(anexo);
             StateHasChanged();
         }
         else
@@ -134,7 +138,6 @@
             currentAnexo = anexo;
             myFileByBuffer?.ShowFilesDialogAsync();
         }
-
     }
     async Task OnProgressChangeAsyncTransmitente(InputFileChangeEventArgs file)
     {
@@ -144,161 +147,36 @@
         {
             foreach (var f in inputFile)
             {
-               // currentAnexo.carregado = true;
-                var extensao = Path.GetExtension(f.Name);
-
-                //currentAnexo.nomeDEFINITIVO = currentAnexo.Doc.ItbidocId.ToString().Trim() + '-' + currentAnexo.pertenceA.Trim() + extensao;
-                currentAnexo.nomeDEFINITIVO = $"{currentAnexo.Doc.ItbidocId}-{currentAnexo.pertenceA}{extensao}";
-                currentAnexo.AnexoBf.Add(f);
-                currentAnexo.nomearquivo = f.Name;
-                currentAnexo.carregado = true;
-                await UpdateAnexo(currentAnexo);
-                
-                //gerenciador.AdicionarAnexo(currentAnexo.pertenceA, currentAnexo.Doc.ItbidsDocumento, true);
-                //AddToDictionary(currentAnexo);
-                //StateHasChanged();
-
+                try
+                {
+                    var extensao = Path.GetExtension(f.Name);
+                    currentAnexo.nomeDEFINITIVO = $"{currentAnexo.Doc.ItbidocId}-{currentAnexo.pertenceA}{extensao}";
+                    currentAnexo.AnexoBf.Add(f);
+                    
+                    currentAnexo.nomearquivo = f.Name;
+                    currentAnexo.carregado = true;
+                    //--await UpdateAnexo(currentAnexo,f);
+                    await AnexoChanged.InvokeAsync(currentAnexo);
+                }catch(Exception ex)
+                {
+                    Console.WriteLine($"Error processing file {f.Name}: {ex.Message}");
+                }
             }
         }
     }
-    /*
-    public void AddToDictionary(Anexo anexo)
-    {
-        if (!itemStatesDocsTrasmitente.ContainsKey(anexo.pertenceA))
-        {
-            itemStatesDocsTrasmitente[anexo.pertenceA] = new Dictionary<string, List<long>>();
-        }
-
-        var anexoDict = itemStatesDocsTrasmitente[anexo.pertenceA];
-
-        if (!anexoDict.ContainsKey(anexo.nomearquivo))
-        {
-            anexoDict[anexo.nomearquivo] = new List<long>();
-        }
-
-        anexoDict[anexo.nomearquivo].Add(anexo.Doc.ItbidocId);
-        StateHasChanged();
-    }
-    */
-   /*
-    public void AddToDictionaryXX(Anexo anexo)
-    {
-        if (!itemStatesDocsTrasmitente.ContainsKey(anexo.pertenceA))
-        {
-            itemStatesDocsTrasmitente[anexo.pertenceA] = new Dictionary<string, List<long>>();
-        }
-
-        var anexoDict = itemStatesDocsTrasmitente[anexo.pertenceA];
-
-        if (!anexoDict.ContainsKey(anexo.nomearquivo))
-        {
-            anexoDict[anexo.nomearquivo] = new List<long>();
-        }
-
-        anexoDict[anexo.nomearquivo].Add(anexo.Doc.ItbidocId);
-        StateHasChanged();
-    }
-    */
-/*
-    public void UpdateAnexo(Anexo anexo)
-    {
-        if (itemStates.ContainsKey(anexo))
-        {
-            //itemStates[contribuinte] = !itemStates[contribuinte];
-            anexo.carregado = false;
-            anexo.nomearquivo = "";
-            itemStates.Remove(anexo);
-            //AtualizarTransmitente(contribuinte, 2);
-            //  itemStates.Add(contribuinte, false);
-        }
-        else
-        {
-            anexo.carregado = true;
-            //anexo.nomearquivo = anexo.pertenceA;
-            itemStates.Add(anexo, true);
-            //AtualizarTransmitente(contribuinte, 1);
-        }
-        StateHasChanged();
-
-  */   
-
-
- /*
-  * 
-        var index = Content.FindIndex(a => a.pertenceA == anexo.pertenceA && a.Doc.ItbidocId == anexo.Doc.ItbitipoId);
-        if (index != -1)
-            {
-            Content[index] = anexo;
-        }
-        StateHasChanged();
-
-    }*/
-    /*
-    private void RemoveFromDictionary(Anexo anexo)
-    //private void RemoveFromDictionary(Anexo key, long value)
-    {
-        if (itemStatesDocsTrasmitente.ContainsKey(anexo.pertenceA))
-        {
-            itemStatesDocsTrasmitente[anexo.pertenceA][anexo.nomearquivo].Remove(anexo.Doc.ItbidocId);
-            // Remove a chave se a lista associada estiver vazia
-            if (itemStatesDocsTrasmitente[anexo.pertenceA][anexo.nomearquivo].Count == 0)
-            {
-                itemStatesDocsTrasmitente.Remove(anexo.pertenceA);
-            }
-        }
-        StateHasChanged();
-    }*/
     void OnCompleted(IEnumerable<FluentInputFileEventArgs> files)
     {
         progressPercent = myFileByBuffer!.ProgressPercent;
         progressTitle = myFileByBuffer!.ProgressTitle;
-
-        // For the demo, delete these files.
         foreach (var file in Files)
         {
             File.Delete(file.Value);
         }
     }
-   
     private Icon GetIcon(Anexo anexoselecionado)
     {
-        //return itemStates.TryGetValue(anexoSelecionado, out bool isAdded) && isAdded
-
         var result = Content.FirstOrDefault(a => a.pertenceA == anexoselecionado.pertenceA && a.Doc.ItbidsDocumento == anexoselecionado.Doc.ItbidsDocumento);
         return result.carregado  ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
           : new Icons.Regular.Size24.AddSquare().WithColor(Color.Accent);
     }
-    /*
-    private void AddRemovePlus(Transmitente contribuinte)
-    {
-
-        //  AtualizarTransmitente(contribuinte, 1);
-        //ContribuintesQ = this.ListaDeTrasmitentes.AsQueryable();
-        if (itemStates.ContainsKey(contribuinte))
-        {
-            //itemStates[contribuinte] = !itemStates[contribuinte];
-            itemStates.Remove(contribuinte);
-          // -- AtualizarTransmitente(contribuinte, 2);
-            //  itemStates.Add(contribuinte, false);
-        }
-        else
-        {
-            itemStates.Add(contribuinte, true);
-            //--AtualizarTransmitente(contribuinte, 1);
-        }
-        StateHasChanged();
-
-    }*/
-    /*
-    private void HandleEdit(Anexo item)
-    {
-        // Lógica para editar o item
-    }
-
-    private void HandleDelete(Anexo item)
-    {
-        // Lógica para deletar o item
-        //--models.Remove(item);
-    }
-    */
 }

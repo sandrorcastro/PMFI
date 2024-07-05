@@ -55,7 +55,7 @@
     [Parameter]
     public EventCallback<ValoresOperacao> ValoresOperacaoChanged { get; set; }
     [Parameter]
-    public EventCallback AutoNumAnoNumero { get; set; }
+    public EventCallback Gerar { get; set; }
     [Parameter]
     public EventCallback<ParcelasOption> ParcelaOptionSelecionadaChanged { get; set; }
     protected override void OnInitialized()
@@ -96,7 +96,7 @@
     {
         ParcelaOptionSelecionada = ParcelasOption.Find(p => p.Parcela == int.Parse(selectedParcela));
         await ParcelaOptionSelecionadaChanged.InvokeAsync(ParcelaOptionSelecionada);
-        await AutoNumAnoNumero.InvokeAsync();
+        await Gerar.InvokeAsync();
 
     }
     private void Proceed()

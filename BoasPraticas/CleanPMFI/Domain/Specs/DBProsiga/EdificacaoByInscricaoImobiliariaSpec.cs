@@ -16,8 +16,15 @@ public class EdificacaoByInscricaoImobiliariaSpec : SingleResultSpecification<Tr
     {
         //InscricaoImobiliaria = _inscricaoimobiliaria;
         //Query.Where(x => x.InscricaoImobiliaria == inscricaoimobiliaria && x.EdifSituacao=="Normal" && ((x.EdifCaracteristica=="Predial" && x.EdifContinuacaoTerreno=="Não")||(x.EdifCaracteristica == "Territorial" && x.EdifContinuacaoTerreno == "Sim"))).Include(t => t.Terreno).Include(l => l.Lograd).ThenInclude(q=>q.TribQuadraLograds).Include(l => l.IdloteamentoNavigation).Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con);
-        Query.Where(x => x.InscricaoImobiliaria == inscricaoimobiliaria).Include(t => t.Terreno).Include(l => l.Lograd).ThenInclude(q => q.TribQuadraLograds).Include(l => l.IdloteamentoNavigation).Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con);
-        //Query.Include(t => t.Terreno).Include(l => l.Lograd).Include(l => l.IdloteamentoNavigation).Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con); //.AsQueryable();
+        Query.Where(x => x.InscricaoImobiliaria == inscricaoimobiliaria)
+                    .Include(t => t.Terreno)
+                    .Include(l => l.Lograd).ThenInclude(q => q.TribQuadraLograds)
+                    .Include(l => l.IdloteamentoNavigation)
+                    .Include(c => c.TribEdificacoesContribs)
+                        .ThenInclude(x => x.Con).ThenInclude(c => c.ConCidade)
+                    .Include(c => c.TribEdificacoesContribs)
+                        .ThenInclude(x => x.Con).ThenInclude(b=>b.ConBairro);
+                    //Query.Include(t => t.Terreno).Include(l => l.Lograd).Include(l => l.IdloteamentoNavigation).Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con); //.AsQueryable();
     }   
     public EdificacaoByInscricaoImobiliariaSpec(EdificacaoFilter edificacaoFilter)
     {

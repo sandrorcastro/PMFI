@@ -1,5 +1,4 @@
 ﻿@rendermode InteractiveServer
-
 <FluentAccordion>
     @if(Content != null)
     {
@@ -8,143 +7,73 @@
             <FluentAccordionItem>
                 <HeadingTemplate>
                     <FluentStack Orientation="Orientation.Horizontal">
-                        <FluentTextField ReadOnly @bind-value="@transmitente.Contribuinte.ConCnpjcpf" style="width: 10%;" Maxlength="14">CPF/CNPJ:</FluentTextField>
-                        <FluentTextField ReadOnly @bind-value="@transmitente.Contribuinte.ConNome" style="width: 25%;" Required Maxlength="50">Nome/Razão:</FluentTextField>
-                        <FluentTextField @bind-Value="@transmitente.Contribuinte.ConEmail" Required style="width: 18%;" Maxlength="50">Email:</FluentTextField>
-                        <FluentTextField @bind-Value="@transmitente.Contribuinte.ConTelefoneCelular" style="width: 10%;" Required Maxlength="14">Celular:</FluentTextField>
-                        <FluentTextField @bind-Value="@transmitente.percentualtransmitido" Required style="width: 8%;" Maxlength="5">%Transmitido</FluentTextField>
-                        
-                            <FluentButton Appearance="Appearance.Outline" OnClick="()=>AddRemove(transmitente)"
-                                          IconStart="@(new Icons.Regular.Size20.SubtractSquare().WithColor(Color.Accent))">
+                                <FluentTextField ReadOnly @bind-value="@transmitente.Contribuinte.ConCnpjcpf" style="width: 10%;font-size: 12px;" Maxlength="14">CPF/CNPJ:</FluentTextField>
+                                <FluentTextField ReadOnly @bind-value="@transmitente.Contribuinte.ConNome" style="width: 25%;font-size: 12px;" Required Maxlength="50">Nome/Razão:</FluentTextField>
+                                <FluentTextField @bind-Value="@transmitente.Contribuinte.ConEmail" Required style="width: 18%;font-size: 12px;" Maxlength="50">Email:</FluentTextField>
+                                <FluentTextField @bind-Value="@transmitente.Contribuinte.ConTelefoneCelular" style="width: 10%;font-size: 12px;" Required Maxlength="14">Celular:</FluentTextField>
+                                <FluentTextField ReadOnly @bind-Value="@transmitente.Titularidade" style="width: 10%;font-size: 12px;" Required Maxlength="14">Titularidade:</FluentTextField>
+                                <FluentTextField @bind-Value="@transmitente.percentualtransmitido" Required style="width: 6%;font-size: 12px;" Maxlength="5">%Transmitido</FluentTextField>
+                                      <FluentSpacer />
+                        <FluentButton Appearance="Appearance.Outline" OnClick="()=>RemoveTransmitente(transmitente)"
+                                          IconStart="@(new Icons.Regular.Size20.SubtractSquare().WithColor(Color.Accent))" >
                              </FluentButton>
-                         
                     </FluentStack>
+                             <FluentStack Orientation="Orientation.Horizontal">
+                                         <FluentTextField Size="2" ReadOnly @bind-value="@transmitente.Contribuinte.ConCep" style="width: 10%;font-size: 11px;" Maxlength="14"></FluentTextField>
+                                        <FluentTextField ReadOnly @bind-value="@transmitente.Contribuinte.ConTipoLograd" style="width: 9%;font-size: 11px;" Maxlength="14"></FluentTextField>
+                                        <FluentTextField ReadOnly @bind-value="@transmitente.Contribuinte.ConEndereco" style="width: 25%;font-size: 11px;" Required Maxlength="50"></FluentTextField>
+                                        <FluentTextField ReadOnly @bind-value="@transmitente.Contribuinte.ConNumero" style="width: 6%;font-size: 11px;" Required Maxlength="50"></FluentTextField>
+                                 
+                                         <FluentTextField @bind-Value="@transmitente.Contribuinte.ConBairro.BaiNome" Required style="width: 10%;font-size: 11px;" Maxlength="50"></FluentTextField>
+                                        <FluentTextField @bind-Value="@transmitente.Contribuinte.ConCidade.CidNome" style="width: 10%;font-size: 11px;" Required Maxlength="14"></FluentTextField>
+                                        <FluentTextField ReadOnly @bind-Value="@transmitente.Contribuinte.ConCidade.CidUf" style="width: 5%;font-size: 11px;" Required Maxlength="14"></FluentTextField>
+                                                            </FluentStack>
                 </HeadingTemplate>
+
                 <ChildContent>
-                        <ChildContentDocsExigidos Content="transmitente.AnexosExigidos"></ChildContentDocsExigidos>
+                                <ChildContentDocsExigidos Content="transmitente.AnexosExigidos" AnexoChanged="HandledAnexoChanged"></ChildContentDocsExigidos>
                 </ChildContent>
             </FluentAccordionItem>
         }
     }
 </FluentAccordion>
-
-
 @code{
     private Dictionary<Transmitente, bool> itemStates = new Dictionary<Transmitente, bool>();
     Dictionary<Transmitente, bool> itemStatesTransmitentes = new Dictionary<Transmitente, bool>();
-    //public IEnumerable<TribItbidocumentoTipo> docsExigidos { get; set; }
-    //  public IQueryable<Anexo>? AnexosExigidosQ { get; set; }
     [Parameter]
     public List<Transmitente>? Content { get; set; }
-    //public IQueryable<TribEdificacoesContrib> Content { get; set; } = default!;
-    //protected override async void OnInitialized()
-    /*protected override async void OnInitialized()
+    [Parameter]
+    public EventCallback<List<Transmitente>> ListTransmitenteChanged { get; set; }
+    private async void RemoveTransmitente(Transmitente transmitente)
     {
-        docsExigidos = await tribItbidocumentoTipoAppService.GetDocumentosExigidos("Contribuinte");
-        if (Content != null)
-        {           
-            foreach(var transmitente in Content)
-            {
-                if (transmitente.Contribuinte.ConTipoPessoa == "FISICA")
-                {
-                    foreach(var doc in docsExigidos)
-                    {
-                        transmitente.AnexosExigidos.Add(new Anexo()
-                            {
-                                //AnexoBf = null,
-                                carregado = false,
-                                Doc = doc,
-                                //InputFile = null,
-                                nomearquivo = string.Empty,
-                                nomeDEFINITIVO = string.Empty,
-                                pertenceA = transmitente.Contribuinte.ConCnpjcpf
-                            });
+        await Task.FromResult(Content.Remove(transmitente));
 
-                    }
-                }
-                else
-                {
-                    foreach (var doc in docsExigidos)
-                    {
-                        transmitente.AnexosExigidos.Add(new Anexo()
-                            {
-                                AnexoBf = null,
-                                carregado = false,
-                                Doc = doc,
-                                InputFile = null,
-                                nomearquivo = string.Empty,
-                                nomeDEFINITIVO = string.Empty,
-                                pertenceA = transmitente.Contribuinte.ConCnpjcpf
-                            });
+        await ListTransmitenteChanged.InvokeAsync(Content);
+    }
+    private async Task HandledAnexoChanged(Anexo anexoChanged)
+    {
+        var indice = await ObterIndiceTransmitente(anexoChanged);
+        var indiceanexo = await ObterIndiceAnexo(anexoChanged);
+        Content[indice].AnexosExigidos[indiceanexo]= anexoChanged;//.AnexoBf;
+        await ListTransmitenteChanged.InvokeAsync(Content);
 
-                    }
-                    
-                }
-            }
-        }
+    }
+   /* public async Task<int> ObterIndiceTransmitente(Transmitente transmitente)
+    {
+        return await Task.FromResult(Content.FindIndex(t => a.Contribuinte.ConCnpjcpf == anexoChanged.pertenceA));
+        
+
     }*/
-    private void AddRemove(Transmitente transmitente)
+    public async Task<int> ObterIndiceTransmitente(Anexo anexoChanged)
     {
-/*      
-        //  AtualizarTransmitente(contribuinte, 1);
-        //ContribuintesQ = this.ListaDeTrasmitentes.AsQueryable();
-        if (itemStates.ContainsKey(contribuinte))
-        {
-            //itemStates[contribuinte] = !itemStates[contribuinte];
-            itemStates.Remove(contribuinte);
-            AtualizarTransmitente(contribuinte, 2);
-            //  itemStates.Add(contribuinte, false);
-        }
-        else
-        {
-            itemStates.Add(contribuinte, true);
-            AtualizarTransmitente(contribuinte, 1);
-        }
-        StateHasChanged();
-        */
+        return await Task.FromResult(Content.FindIndex(a => a.Contribuinte.ConCnpjcpf == anexoChanged.pertenceA));
     }
-    public void AtualizarTransmitente(Transmitente transmitente, int operacao)
+    public async Task<int> ObterIndiceAnexo(Anexo anexochanged)
     {
-        /*
-        if (operacao == 1)
-        {
-
-            //ListaDeTransmitentes[index] = contribuinte;
-            if (contribuinte.Contribuinte.ConTipoPessoa == "FISICA")
-            {
-                contribuinte.AnexosExigidos = AnexosExigidosQ.ToList();
-            }
-            else
-            {
-                contribuinte.AnexosExigidos = AnexosExigidosQ.ToList();
-            }
-
-            ListaDeTransmitentes.Add(contribuinte);
-            ContribuintesQ = ListaDeTransmitentes.AsQueryable();
-            //ListaDeTransmitentesChanged.InvokeAsync(ListaDeTransmitentes);
-        }
-        else if (operacao == 2)
-        {
-            ListaDeTransmitentes.Remove(contribuinte);
-            ContribuintesQ = ListaDeTransmitentes.AsQueryable();
-           // ListaDeTransmitentesChanged.InvokeAsync(ListaDeTransmitentes);
-        }
-        */
+        var indice = await ObterIndiceTransmitente(anexochanged);
+        //var indiceanexo = Content[indice].AnexosExigidos.FindIndex(a => a.pertenceA == anexochanged.pertenceA && a.Doc.ItbidsDocumento==anexochanged.Doc.ItbidsDocumento);
+        //return indiceanexo;
+        return await Task.FromResult(Content[indice].AnexosExigidos.FindIndex(a => a.pertenceA == anexochanged.pertenceA && a.Doc.ItbidsDocumento == anexochanged.Doc.ItbidsDocumento));
     }
-    private Icon GetIcon2(TribEdificacoesContrib item)
-    {
-        Transmitente t = null;
-        t = new Transmitente() { Contribuinte = item.Con };
 
-        if (item.Responsavel == "Sim")
-        {
-            return itemStates.TryGetValue(t, out bool isAdded2) && isAdded2
-         ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Success)
-         : new Icons.Regular.Size24.AddSquare().WithColor(Color.Success);
-        }
-        // Retorna o ícone de exclusão se o item foi adicionado, caso contrário, retorna o ícone de adição
-        return itemStates.TryGetValue(t, out bool isAdded) && isAdded
-         ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
-         : new Icons.Regular.Size24.AddSquare().WithColor(Color.Accent);
-    }
 }
