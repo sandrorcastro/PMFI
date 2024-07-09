@@ -47,6 +47,7 @@
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
+            
         </FluentWizardStep>
         <FluentWizardStep Label="Informações do Imóvel"
                           OnChange="@OnStepChange">
@@ -62,8 +63,8 @@
             </FluentEditForm>
         </FluentWizardStep>
          <FluentWizardStep Label="Transmitentes"
-                          OnChange="(e=>OnStepChange2(e,editContext2))">
-            <FluentEditForm EditContext="editContext2" FormName="transmitenteInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                          OnChange="(e=>OnStepChange2(e,editContextTransmitentes))">
+            <FluentEditForm EditContext="editContextTransmitentes" FormName="transmitenteInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
                     <TransmitentesForm5 Imovel="Imovel" ListaDeTransmitentes=@ListaDeTransmitentes ListaDeTransmitentesChanged="HandleListaDeTransmitentesChanged" DocsExigidos="docsExigidos" />
@@ -72,16 +73,19 @@
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
         </FluentWizardStep>
-         <FluentWizardStep Label="Adquirentes"
+   
+
+   <FluentWizardStep Label="Adquirentes"
                           OnChange="(e=>OnStepChange3(e,editContext3))">
             <FluentEditForm EditContext="editContext3" FormName="adquirentesInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <AdquirentesForm3 ListaDeAdquirentes=@ListaDeAdquirentes ListaDeAdquirentesChanged ="HandleListaDeAdquirentesChanged" />
+                    <AdquirentesForm5 ListaDeAdquirentes=@ListaDeAdquirentes ListaDeAdquirentesChanged ="HandleListaDeAdquirentesChanged" DocsExigidos="docsExigidos"  />
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
         </FluentWizardStep>
+   
        <FluentWizardStep Label="Transação Imobiliária"
                         
                           IconPrevious="@(new Icons.Filled.Size24.Star())"
@@ -147,7 +151,7 @@
     //public vbFEBRABAN.cBoletoFEBRABAN objGeraBoleto = new vbFEBRABAN.cBoletoFEBRABAN();
     //public Tribuno.Boletos.Boleto objBol = new Tribuno.Boletos.Boleto();
     //public AutoDeclaracao autoDeclaracao { get; set; } = new AutoDeclaracao() { Imovel = new TribEdificaco() { InscricaoImobiliaria = string.Empty } };
-
+    private FluentWizard Wizard { get; set; }
     public string? Inscricao { get; set; } = string.Empty;
     // [MetadataType(typeof(ImovelMetaData))]
     public TribEdificaco? Imovel { get; set; } = new TribEdificaco() 
@@ -164,7 +168,7 @@
 
     public ParcelasOption? ParcelaOptionSelecionada { get; set; }
     private EditContext? editContextImovel;
-    private EditContext? editContext2;
+    private EditContext? editContextTransmitentes;
     private EditContext? editContext3;
     public List<Transmitente>? ListaDeTransmitentes = new List<Transmitente>();
     public List<Adquirente>? ListaDeAdquirentes = new List<Adquirente>();
@@ -237,7 +241,7 @@
                     ListaDeTransmitentes = new List<Transmitente>();
                     ListaDeAdquirentes = new List<Adquirente>();
                     editContextImovel = new EditContext(Imovel);
-                    editContext2 = new EditContext(ListaDeTransmitentes);
+                    editContextTransmitentes = new EditContext(ListaDeTransmitentes);
                     editContext3 = new EditContext(ListaDeAdquirentes);
 
                     Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
@@ -266,8 +270,8 @@
                                         Doc = docexigido,
                                         nomearquivo = string.Empty,
                                         nomeDEFINITIVO = string.Empty,
-                                        pertenceA = transmitente.Contribuinte.ConCnpjcpf.Trim().PadLeft(14, '0'),
-                                        AnexoBf = new List<IBrowserFile>()
+                                        pertenceA = transmitente.Contribuinte.ConCnpjcpf, //.Trim().PadLeft(14, '0'),
+                                       // AnexoBf = new List<IBrowserFile>()
                                         // InputFile = null,
                                     });
                             }
@@ -316,7 +320,7 @@
         }
         else
         {
-            if (!editContext2.Validate())
+            if (!editContextTransmitentes.Validate())
             {
                 // Bloquear a mudança de etapa se o formulário não for válido
                 e.IsCancelled = true;
@@ -396,6 +400,7 @@
         await tribITBIAppService.AddAsync(TribItbi, CancellationToken.None);
         await InsereAnexoImovel(TribItbi);
         await InsereAnexoTransmitente(TribItbi);
+        await InsereAnexoAdquirente(TribItbi);
 
     }
     private async Task InsereDivida(ParcelasOption parcelaOption){
@@ -638,7 +643,104 @@
 
         }
     }
+    
     private async Task InsereAnexoTransmitente(TribItbi itbi)
+    {
+        if (ListaDeTransmitentes.Count > 0)
+        {
+            foreach (var transmitente in ListaDeTransmitentes)
+            {
+                if(transmitente.AnexosExigidos.Count() > 0)
+                {
+                    foreach (var anexo in transmitente.AnexosExigidos.ToList())
+                    {
+                       // var arquivos = anexo.AnexoBf.ToList();
+                        foreach (var browserFile in anexo.AnexoBf)
+                        //foreach (var browserFile in arquivos)
+                        {
+                            if (browserFile != null)
+                            {
+                                try
+                                {
+                                    var buffer = new byte[browserFile.Size];
+                                    //var buffer = new byte[anexo.browserFile.Size];
+                                    var extensao = Path.GetExtension(browserFile.Name);
+                                    //var extensao = Path.GetExtension(anexo.browserFile.Name);
+                                    //await browserFile.OpenReadStream().ReadAsync(buffer);
+
+                                    using (var stream = browserFile.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024))
+                                   // using (var stream = anexo.browserFile.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024))
+                                    {
+                                        await stream.ReadAsync(buffer);
+                                    }
+                                    var anexoinserido = await InsereTribObjeto(buffer, extensao);
+                                    if (anexoinserido != null)
+                                    {
+                                        await InsereTribItbiexAnexo(itbi.Itbiid, anexoinserido.ObjetoId, anexo.Doc.ItbidocId, long.Parse(anexo.pertenceA));
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    //Console.WriteLine($"Error processing file {browserFile.Name}: {ex.Message}");
+                            Console.WriteLine($"Error processing file {anexo.browserFile.Name}: {ex.Message}");
+                                }
+                           }
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+    private async Task InsereAnexoAdquirente(TribItbi itbi)
+    {
+        if (ListaDeAdquirentes.Count > 0)
+        {
+            foreach (var adquirente in ListaDeAdquirentes)
+            {
+                if (adquirente.AnexosExigidos.Count() > 0)
+                {
+                    foreach (var anexo in adquirente.AnexosExigidos.ToList())
+                    {
+                        // var arquivos = anexo.AnexoBf.ToList();
+                        foreach (var browserFile in anexo.AnexoBf)
+                        //foreach (var browserFile in arquivos)
+                        {
+                            if (browserFile != null)
+                            {
+                                try
+                                {
+                                    var buffer = new byte[browserFile.Size];
+                                    //var buffer = new byte[anexo.browserFile.Size];
+                                    var extensao = Path.GetExtension(browserFile.Name);
+                                    //var extensao = Path.GetExtension(anexo.browserFile.Name);
+                                    //await browserFile.OpenReadStream().ReadAsync(buffer);
+
+                                    using (var stream = browserFile.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024))
+                                    // using (var stream = anexo.browserFile.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024))
+                                    {
+                                        await stream.ReadAsync(buffer);
+                                    }
+                                    var anexoinserido = await InsereTribObjeto(buffer, extensao);
+                                    if (anexoinserido != null)
+                                    {
+                                        await InsereTribItbiexAnexo(itbi.Itbiid, anexoinserido.ObjetoId, anexo.Doc.ItbidocId, long.Parse(anexo.pertenceA));
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    //Console.WriteLine($"Error processing file {browserFile.Name}: {ex.Message}");
+                                    Console.WriteLine($"Error processing file {anexo.browserFile.Name}: {ex.Message}");
+                                }
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+    /*private async Task InsereAnexoTransmitente(TribItbi itbi)
     {
         if (ListaDeTransmitentes.Count > 0)
         {
@@ -677,7 +779,7 @@
                 }
             }
         }
-    }
+    }*/
   
     private async Task InsereCompradores(long itbiedifid){
         if (ListaDeAdquirentes.Count > 0)
@@ -803,7 +905,7 @@
     private void HandleListaDeTransmitentesChanged(List<Transmitente> listaAtualizada)
     {
         ListaDeTransmitentes = listaAtualizada;
-
+        /*
         StringBuilder sbITBI = new StringBuilder(ObservacaoITBI);
         sbITBI.AppendLine("Transmitentes: ");
         if (ListaDeTransmitentes.Count > 0)
@@ -811,15 +913,16 @@
             foreach (var transmitente in ListaDeTransmitentes)
             {
                 //sbITBI.AppendLine(transmitente.Contribuinte.ConCnpjcpf.ToString() + "-" + transmitente.Contribuinte.ConNome + " Transmite: " + transmitente.percentualtransmitido + "|");
-                sbITBI.AppendLine(transmitente.Contribuinte.ConCnpjcpf.ToString() + "Transmite: " + transmitente.percentualtransmitido + "|");
+                //--sbITBI.AppendLine(transmitente.Contribuinte.ConCnpjcpf.ToString() + "Transmite: " + transmitente.percentualtransmitido + "|");
             }
         }
         ObservacaoITBI = sbITBI.ToString();
+        */
     }
     private void HandleListaDeAdquirentesChanged(List<Adquirente> listaAtualizada)
     {
         ListaDeAdquirentes = listaAtualizada;
-
+    /*
         StringBuilder sbITBI = new StringBuilder(ObservacaoITBI);
         sbITBI.AppendLine("Adquirentes: ");
         if (ListaDeAdquirentes.Count > 0)
@@ -831,6 +934,7 @@
             }
         }
         ObservacaoITBI = sbITBI.ToString();
+        */
     }
     private void HandleTipoDeTransferenciaChanged(string tipodetransferencia)
     {
@@ -856,7 +960,7 @@
         _overlayIsVisible = true;
         
         editContextImovel = new EditContext(Imovel);
-        editContext2 = new EditContext(ListaDeTransmitentes);
+        editContextTransmitentes = new EditContext(ListaDeTransmitentes);
         editContext3 = new EditContext(ListaDeAdquirentes);
     
        _overlayIsVisible = false;

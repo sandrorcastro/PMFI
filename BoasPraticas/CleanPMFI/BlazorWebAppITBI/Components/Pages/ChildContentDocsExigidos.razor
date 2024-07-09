@@ -32,7 +32,7 @@
     private Anexo? currentAnexo;
     int? progressPercent;
     string? progressTitle;
-   
+
     public async Task UpdateAnexo(Anexo anexo, IBrowserFile f)
     {
         //var indiceanexo = 0;
@@ -70,59 +70,16 @@
         var indiceanexo = await ObterIndiceAnexo(anexoselecionado);
         return await Task.FromResult(Content[indiceanexo].AnexoBf.FindIndex(a => a.Name==anexoselecionado.nomearquivo));
     }
-    private async void OpenFileSelectorbk(Anexo anexo)
-    {
-        currentAnexo = anexo;
-        myFileByBuffer?.ShowFilesDialogAsync();
-    }
-    private async void RemoveFileSelector(Anexo anexo)
-    {
-        Content.Remove(anexo);
-        await AnexoChanged.InvokeAsync(anexo);
-        StateHasChanged();
-    }
-    private async Task OnProgressChangeAsyncTransmitenteBK3(InputFileChangeEventArgs file)
-    {
-        var inputFiles = file.GetMultipleFiles();
 
-        if (inputFiles != null && currentAnexo != null)
-        {
-            foreach (var f in inputFiles)
-            {
-                try
-                {
-                    var extensao = Path.GetExtension(f.Name);
-                    var newAnexo = new Anexo
-                        {
-                            Doc = currentAnexo.Doc,
-                            pertenceA = currentAnexo.pertenceA,
-                            nomeDEFINITIVO = $"{currentAnexo.Doc.ItbidocId}-{currentAnexo.pertenceA}{extensao}",
-                            nomearquivo = f.Name,
-                            carregado = true,
-                            AnexoBf = new List<IBrowserFile> { f }
-                        };
-
-                    Content.Add(newAnexo);
-                    await AnexoChanged.InvokeAsync(newAnexo);
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine($"Error processing file {f.Name}: {ex.Message}");
-                }
-            }
-
-            StateHasChanged();
-        }
-    }
     private async void OpenFileSelector(Anexo anexo)
     {
         if (anexo.carregado)
         {
             //------------------
-          //  var indicefile = await ObterIndiceFile(anexo);
-          //  var indiceanexo = await ObterIndiceAnexo(anexo);
-          //  Content[indiceanexo].AnexoBf.RemoveAt(indicefile);
-          //  await AnexoChanged.InvokeAsync(Content[indiceanexo]);
+            //  var indicefile = await ObterIndiceFile(anexo);
+            //  var indiceanexo = await ObterIndiceAnexo(anexo);
+            //  Content[indiceanexo].AnexoBf.RemoveAt(indicefile);
+            //  await AnexoChanged.InvokeAsync(Content[indiceanexo]);
             //------------------
             //--await UpdateAnexo(anexo,null);
             anexo.nomearquivo = string.Empty;
@@ -150,13 +107,38 @@
                 try
                 {
                     var extensao = Path.GetExtension(f.Name);
-                    currentAnexo.nomeDEFINITIVO = $"{currentAnexo.Doc.ItbidocId}-{currentAnexo.pertenceA}{extensao}";
-                    currentAnexo.AnexoBf.Add(f);
-                    
+                    currentAnexo.nomeDEFINITIVO = $"{currentAnexo.Doc.ItbidocId}-{currentAnexo.pertenceA.Trim().PadLeft(14, '0')}{extensao}";
                     currentAnexo.nomearquivo = f.Name;
                     currentAnexo.carregado = true;
-                    //--await UpdateAnexo(currentAnexo,f);
+                    currentAnexo.AnexoBf[1] = f;
+
+                 /*   var indicefile = await ObterIndiceFile(currentAnexo);
+                    if( indicefile >= 0    ) {
+                        foreach(var browser in currentAnexo.AnexoBf.ToList())
+                        {
+                            if (currentAnexo.nomearquivo == f.Name)
+                            {
+                                currentAnexo.AnexoBf[indicefile] = f ;
+                                
+                            }
+                        }
+
+                    } else
+                    {
+                        currentAnexo.AnexoBf.Add(f);
+                    };*/
+
+                   // currentAnexo.AnexoBf.Add(f);
+                    // currentAnexo.browserFile = f;
+                   
                     await AnexoChanged.InvokeAsync(currentAnexo);
+                    currentAnexo.nomearquivo = string.Empty;
+                    currentAnexo.nomeDEFINITIVO = string.Empty;
+                    currentAnexo.carregado = false;
+                    currentAnexo.InputFile = null;
+                    currentAnexo.AnexoBf.Clear();
+                    //await AnexoChanged.InvokeAsync(anexo);
+                    StateHasChanged();
                 }catch(Exception ex)
                 {
                     Console.WriteLine($"Error processing file {f.Name}: {ex.Message}");
@@ -178,5 +160,9 @@
         var result = Content.FirstOrDefault(a => a.pertenceA == anexoselecionado.pertenceA && a.Doc.ItbidsDocumento == anexoselecionado.Doc.ItbidsDocumento);
         return result.carregado  ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
           : new Icons.Regular.Size24.AddSquare().WithColor(Color.Accent);
+    }
+    public async Task<int> ObterIndiceFile(Anexo a,IBrowserFile f)
+    {
+        return await Task.FromResult(a.AnexoBf.FindIndex(f => f.Name == a.nomearquivo));
     }
 }

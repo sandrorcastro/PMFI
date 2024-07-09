@@ -3,6 +3,7 @@ using Application.Services.DBProsiga;
 using Domain.Entities.DBProsiga;
 using Domain.Specs.DBProsiga;
 using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.FluentUI.AspNetCore.Components;
 using System.ComponentModel.DataAnnotations;
 
 
@@ -21,7 +22,9 @@ namespace BlazorWebAppITBI.Models
         public InputFile InputFile { get; set; }
         //[Required(ErrorMessage = "Percentual Adquirido é obrigatório")]
         public List<IBrowserFile> AnexoBf = new List<IBrowserFile>();
+        public IBrowserFile browserFile { get; set; }
         //public IBrowserFile Anexo = new IBrowserFile();
+        public FluentInputFile? fluentInputFile { get; set; }
 
 
     }
