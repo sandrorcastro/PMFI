@@ -2,6 +2,7 @@
 @* @inherits Microsoft.AspNetCore.Components.ComponentBase *@
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.FluentUI.AspNetCore.Components
+@inject ITribItbidocumentoTipoAppService tribItbidocumentoTipoAppService
 <!--
     @using ITBI.Services
     @implements IDialogContentComponent<IQueryable<Contribuinte>>
@@ -15,16 +16,47 @@
    <FluentRadioGroup Required="true" aria-labelledby="label1" @bind-Value=tipotransferencia  @onchange="OnRadioChange" Name="tipo" Orientation="Orientation.Vertical" Label="TIPO DE TRANSFERÊNCIA:">
    
         <FluentRadio Value="@("COMPRA_VENDA")">Compra e Venda</FluentRadio>
-        <FluentRadio Value="@("Arrematação")" >Arrematação</FluentRadio>
-        <FluentRadio Value="@("Adjudicacao")" >Adjudicação</FluentRadio>
-        <FluentRadio Value="@("Permuta")" >Permuta</FluentRadio>
-        <FluentRadio Value="@("DivisaoAmigavel")" >Divisão Amigável</FluentRadio>
-        <FluentRadio Value="@("CessaoDeDireitos")" >Cessão De Direitos</FluentRadio>
-        <FluentRadio Value="@("Integralizacao Guia")" >Integralização de Capital/Incorporação, Fusão, Cisão ou Extinção de Pessoa Jurídica- Emissão de Guia </FluentRadio>
-        <FluentRadio Value="@("Integralizacao Certidao")" >Integralização de Capital/Incorporação, Fusão, Cisão ou Extinção de Pessoa Jurídica- Emissão de Certidão</FluentRadio>
+        <FluentRadio Disabled="true" Value="@("Arrematação")" >Arrematação</FluentRadio>
+        <FluentRadio Disabled="true" Value="@("Adjudicacao")">Adjudicação</FluentRadio>
+        <FluentRadio Disabled="true" Value="@("Permuta")">Permuta</FluentRadio>
+        <FluentRadio Disabled="true" Value="@("DivisaoAmigavel")">Divisão Amigável</FluentRadio>
+        <FluentRadio Disabled="true" Value="@("CessaoDeDireitos")">Cessão De Direitos</FluentRadio>
+        <FluentRadio Disabled="true" Value="@("Integralizacao Guia")">Integralização de Capital/Incorporação, Fusão, Cisão ou Extinção de Pessoa Jurídica- Emissão de Guia </FluentRadio>
+        <FluentRadio Disabled="true" Value="@("Integralizacao Certidao")">Integralização de Capital/Incorporação, Fusão, Cisão ou Extinção de Pessoa Jurídica- Emissão de Certidão</FluentRadio>
         
     </FluentRadioGroup>
 
+</FluentCard>
+<FluentCard Justify="@JustifyContent.Center">
+    <FluentDataGrid Items=@AnexosOperacao.AsQueryable() TGridItem=Anexo>
+        <PropertyColumn Title="Documento Obrigatório" Property="@(c => c!.Doc.ItbidsDocumento)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Arquivo" Property="@(c => c!.nomearquivo)" Sortable="true" Align=Align.Start />
+        <TemplateColumn Title="Ação" Sortable="true" Align=Align.Start>
+            @{
+                var anexo = context as Anexo;
+              //  if (item.carregado)
+               // {
+                 //   <FluentButton Appearance="Appearance.Accent" OnClick="()=>OpenFileSelector(item)" IconStart="GetIcon(item)">
+               
+                   // </FluentButton>
+                //}
+                //else
+                //{
+
+                <FluentButton Appearance="Appearance.Outline" OnClick="()=>OpenFileSelector(anexo)" IconStart="GetIcon(anexo)"></FluentButton>
+                <FluentInputFile @ref="@anexo.fluentInputFile"
+                         
+                                 DragDropZoneVisible="false"
+                                 Mode="InputFileMode.Buffer"
+                                 Multiple="true"
+                                 MaximumFileSize="@(1000 * 1024 * 1024)"
+                                 Accept="*/*" 
+                                 OnInputFileChange="OnProgressChangeAsyncOperacao"
+                                 OnCompleted="@OnCompleted" />
+                //}
+            }
+        </TemplateColumn>
+    </FluentDataGrid>
 </FluentCard>
 <FluentCard Justify="@JustifyContent.Center" >
         <FluentTextArea  @bind-Value=observacao Label="OBSERVAÇÕES:" style="width: 100%;"/>
@@ -70,7 +102,10 @@
         
        
       </FluentStack>
+ 
+
 </FluentCard>
+
 @code {
                     /*bool CompraeVenda = true;
                     bool Arrematacao = false;
@@ -80,6 +115,11 @@
                     bool CessaoDeDireitos = false;
                     bool IntegralizacaoGuia = false;
                     bool IntegralizacaoCertidao = false;*/
+    [Parameter]
+    public TribEdificaco Content { get; set; } = default!;
+    private Anexo currentAnexo;
+    private Dictionary<string, bool> itemStates = new Dictionary<string, bool>();
+    FluentInputFile? myFileByBuffer = default!;
     private string selectedOption { get; set; } = "Não";
     private bool isTextFieldDisabled { get; set; } = true;
     private string? selectedModoCompra { get; set; } = "Não";
@@ -94,7 +134,9 @@
     private bool enableFinanciado = false;
     private decimal Uffi = 111.87m;
     private ValoresOperacao? valoresOperacao { get; set; } = new ValoresOperacao();
-
+    public IQueryable<Anexo>? AnexosExigidosQ { get; set; }
+    public List<Anexo>? AnexosOperacao;
+    public IQueryable<TribItbidocumentoTipo>? docsExigidosQ { get; set; }
     [Parameter]
     public TribEdificaco? Imovel { get; set; }
     [Parameter]
@@ -107,6 +149,23 @@
     public EventCallback<string> ValorDeclaradoChanged { get; set; }
     [Parameter]
     public EventCallback<ValoresOperacao> ValoresOperacao { get; set; }
+    //public TribItbidocumentoTipoSpec tribItbidocumentoTipoSpec = new TribItbidocumentoTipoSpec("Operacao");
+    [Parameter]
+    public EventCallback<List<Anexo>> AnexosOperacaoChanged { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        List<Anexo> listdoc = new List<Anexo>();
+        var DbSetDocsExigidos = await tribItbidocumentoTipoAppService.GetDbSet();
+        var QueryDocsExigidos = DbSetDocsExigidos.Where(d => d.ItbidsDocDescricao == "Operação");
+        docsExigidosQ = QueryDocsExigidos.AsQueryable();
+        foreach (var doc in docsExigidosQ)
+        {
+            listdoc.Add(new Anexo() { Doc = doc, carregado = false, nomearquivo = null });
+        }
+        //AnexosExigidosQ = listdoc.AsQueryable();
+        AnexosOperacao = listdoc;
+        await base.OnInitializedAsync();
+    }
     public async Task  OnRadioChange(ChangeEventArgs e)
     {
         tipotransferencia = e.Value.ToString();
@@ -143,7 +202,7 @@
     {
         valorfinanciado = e.Value?.ToString();
         valordeclarado = valorfinanciado;
-        
+
         valoresOperacao.Financimanto = selectedOption;
         valoresOperacao.ValorDeclarado = decimal.Parse(valordeclarado);
         valoresOperacao.ValorFinanciado = decimal.Parse(valorfinanciado);
@@ -152,13 +211,13 @@
         await ValoresOperacaoChanged.InvokeAsync(valoresOperacao);
         await ValorDeclaradoChanged.InvokeAsync(valordeclarado);
 
-        
+
     }
     public async Task OnTextFildChangeValorRecursoProprio(ChangeEventArgs e)
     {
         valorRecursoProprio = e.Value?.ToString();
         valordeclarado = (decimal.Parse(valorfinanciado) + decimal.Parse(valorRecursoProprio)).ToString();
-       // valordeclarado = valorfinanciado;
+        // valordeclarado = valorfinanciado;
 
         valoresOperacao.Financimanto = selectedOption;
         valoresOperacao.ValorDeclarado = decimal.Parse(valordeclarado);
@@ -167,24 +226,120 @@
         valoresOperacao.isFinanciado = selectedOption != "Não" ? true : false;
         await ValoresOperacaoChanged.InvokeAsync(valoresOperacao);
         await ValorDeclaradoChanged.InvokeAsync(valordeclarado);
-        
+
     }
     private void OnSelectChange(ChangeEventArgs e)
     {
         /*if (e.Value == "Não")
         {
-            //selectedOption = e.Value?.ToString();
-            //isTextFieldDisabled = selectedOption != "Não";
-            isTextFieldDisabled = true;  //selectedOption != "Não";
+        //selectedOption = e.Value?.ToString();
+        //isTextFieldDisabled = selectedOption != "Não";
+        isTextFieldDisabled = true;  //selectedOption != "Não";
         }
         else
         {
-            isTextFieldDisabled = false;
-        }*/
+        isTextFieldDisabled = false;
+    }*/
         selectedOption = e.Value?.ToString();
         StateHasChanged();
     }
 
+    private async void OpenFileSelector(Anexo anexo)
+    {
+        if (anexo.carregado)
+        {
+            anexo.nomearquivo = string.Empty;
+            anexo.nomeDEFINITIVO = string.Empty;
+            anexo.carregado = false;
+            anexo.InputFile = null;
+            anexo.AnexoBf.Clear();
+            anexo.pertenceA = null;
+            await AnexosOperacaoChanged.InvokeAsync(AnexosOperacao);
+            //await AnexoChanged.InvokeAsync(AnexosOperacao);
 
+
+
+        }
+        else
+        {
+            currentAnexo = anexo;
+            //myFileByBuffer?.ShowFilesDialogAsync();
+            currentAnexo.fluentInputFile.ShowFilesDialogAsync();
+        }
+        //await AnexosOperacaoChanged.InvokeAsync(AnexosOperacao);
+        //StateHasChanged();
+    }
+    private Icon GetIcon(Anexo anexoselecionado)
+    {
+        // var result = Content.  .FirstOrDefault(a => a.pertenceA == anexoselecionado.pertenceA && a.Doc.ItbidsDocumento == anexoselecionado.Doc.ItbidsDocumento);
+        //return result.carregado ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
+        return anexoselecionado.carregado ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
+          : new Icons.Regular.Size24.AddSquare().WithColor(Color.Accent);
+    }
+    async Task OnProgressChangeAsyncOperacao(InputFileChangeEventArgs file)
+    {
+        var inputFile = file.GetMultipleFiles();
+
+        if (inputFile != null && currentAnexo != null)
+        {
+            foreach (var f in inputFile)
+            {
+                try
+                {
+                    var extensao = Path.GetExtension(f.Name);
+                    var novoNomeArquivo = $"{currentAnexo.Doc.ItbidocId}-{Content.InscricaoImobiliaria.Trim().PadLeft(14, '0')}{extensao}";
+                    var arquivoExistente = currentAnexo.AnexoBf.FirstOrDefault(bf => bf.Name == f.Name);
+                    if (arquivoExistente == null)
+                    {
+                        currentAnexo.nomeDEFINITIVO = novoNomeArquivo;
+                        currentAnexo.nomearquivo = f.Name;
+                        currentAnexo.carregado = true;
+                        //currentAnexo.AnexoBf = f;
+                        currentAnexo.AnexoBf.Add(f);
+                        currentAnexo.browserFile = f;
+                        currentAnexo.pertenceA = Content.InscricaoImobiliaria;
+                        //currentAnexo.InputFile = f;
+                        //currentAnexo.fluentInputFile = file.GetMultipleFiles();
+                        //var indiceAdquirente = await ObterIndiceAdquirente(currentAdquirente);
+                        var indiceAnexo = await ObterIndiceAnexo(currentAnexo);
+                        if (indiceAnexo >= 0)
+                        {
+                            AnexosOperacao[indiceAnexo] = currentAnexo;
+                        }
+                        await AnexosOperacaoChanged.InvokeAsync(AnexosOperacao);
+                        StateHasChanged();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error processing file {f.Name}: {ex.Message}");
+                }
+            }
+        }
+
+    }
+    public async Task<int> ObterIndiceAnexo(Anexo anexoChanged)
+    {
+
+        var indiceAnexo =  await Task.FromResult(AnexosOperacao.FindIndex(a => a.Doc.ItbidsDocumento == anexoChanged.Doc.ItbidsDocumento));
+        if (indiceAnexo >= 0)
+        {
+            return indiceAnexo;
+            
+        }
+        return -1;
+    }
+
+    void OnCompleted(IEnumerable<FluentInputFileEventArgs> files)
+    {
+        //progressPercent = myFileByBuffer!.ProgressPercent;
+        //progressTitle = myFileByBuffer!.ProgressTitle;
+
+        // For the demo, delete these files.
+        //foreach (var file in Files)
+       // {
+         //   File.Delete(file.Value);
+        //}
+    }
    
 }

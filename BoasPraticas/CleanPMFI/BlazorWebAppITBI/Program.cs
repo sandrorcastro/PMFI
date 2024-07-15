@@ -1,8 +1,10 @@
 using BlazorWebAppITBI.Components;
 using Microsoft.FluentUI.AspNetCore.Components;
 using IOC;
+using BlazorWebAppITBI.Model;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.Configure<AppSettings>(builder.Configuration.GetSection("AppSettings"));
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddInfrastructureAutoMapper(builder.Configuration);
 

@@ -1,10 +1,10 @@
 ﻿@rendermode InteractiveServer
-<FluentAccordion ExpandMode="AccordionExpandMode.Single">
+<FluentAccordion ExpandMode="AccordionExpandMode.Single" style="background-color: blue; color: brown;">
     @if(Content != null)
     {
         @foreach(var transmitente in Content.AsQueryable())
         {
-            <FluentAccordionItem>
+            <FluentAccordionItem Expanded="false" >
                 <HeadingTemplate>
                     <FluentStack Orientation="Orientation.Horizontal">
                                 <FluentTextField ReadOnly @bind-value="@transmitente.Contribuinte.ConCnpjcpf" style="width: 10%;font-size: 12px;" Maxlength="14">CPF/CNPJ:</FluentTextField>
@@ -51,7 +51,7 @@
                                                         Mode="InputFileMode.Buffer"
                                                         Multiple="true"
                                                         MaximumFileSize="@(1000 * 1024 * 1024)"
-                                                        Accept=".mp4, .mov, .avi"
+                                                     Accept="*/*"
                                                         OnInputFileChange="OnProgressChangeAsyncTransmitente"
                                                         OnCompleted="@OnCompleted"/>
 

@@ -4,33 +4,15 @@
 @inject IJSRuntime JSRuntime
     
 <FluentCard Justify="@JustifyContent.Center">
-    <FluentTextField @bind-Value="@Content.InscricaoImobiliaria">Inscrição Imobiliária:</FluentTextField>
-    <FluentNumberField @bind-Value="@Content.EdificacaoId">EdificacaoID:</FluentNumberField>
-    <FluentTextField @bind-Value="@Content.EdifMatricula">Matrícula:</FluentTextField>
-    <FluentTextField @bind-Value="@Content.EdifCaracteristica">Caracteristica</FluentTextField>
-    <FluentNumberField @bind-Value="@Content.EdifNumOficio">Número do Ofício:</FluentNumberField>
-    <FluentNumberField @bind-Value="@Content.Terreno.TerrAreaTerreno">Área do Terreno</FluentNumberField>
-    <FluentNumberField @bind-Value="@Content.EdifAreaConstruida">Área do Construída</FluentNumberField>
-    <FluentNumberField @bind-Value="@Content.EdifFracaoIdealEdificacao">Fração</FluentNumberField>
+    <FluentTextField ReadOnly @bind-Value="@Content.InscricaoImobiliaria">Inscrição Imobiliária:</FluentTextField>
+    <FluentNumberField ReadOnly @bind-Value="@Content.EdificacaoId">EdificacaoID:</FluentNumberField>
+    <FluentTextField ReadOnly @bind-Value="@Content.EdifMatricula">Matrícula:</FluentTextField>
+    <FluentTextField ReadOnly @bind-Value="@Content.EdifCaracteristica">Caracteristica</FluentTextField>
+    <FluentNumberField ReadOnly @bind-Value="@Content.EdifNumOficio">Número do Ofício:</FluentNumberField>
+    <FluentNumberField ReadOnly @bind-Value="@Content.Terreno.TerrAreaTerreno">Área do Terreno</FluentNumberField>
+    <FluentNumberField ReadOnly @bind-Value="@Content.EdifAreaConstruida">Área do Construída</FluentNumberField>
+    <FluentNumberField ReadOnly @bind-Value="@Content.EdifFracaoIdealEdificacao">Fração</FluentNumberField>
 </FluentCard>
-
-
-<!--
-
-<FluentCard Justify="@JustifyContent.Center">
-    <FluentDataGrid Items=@docsExigidosQ TGridItem=TribItbidocumentoTipo>
-        <PropertyColumn Title="Documento Obrigatório" Property="@(c => c!.ItbidsDocumento)" Sortable="true" Align=Align.Start />
-        <TemplateColumn Title="UpLoad" Sortable="true" Align=Align.Start>
-            @{
-                var item = context as TribItbidocumentoTipo;
-                <FluentButton Appearance="Appearance.Accent" Id="MyUploadBuffer" >
-                    Carregar
-                </FluentButton>
-            }
-        </TemplateColumn>
-    </FluentDataGrid>
-</FluentCard>
--->
 <FluentCard Justify="@JustifyContent.Center">
     <FluentDataGrid Items=@AnexosExigidosQ TGridItem=Anexo>
         <PropertyColumn Title="Documento Obrigatório" Property="@(c => c!.Doc.ItbidsDocumento)" Sortable="true" Align=Align.Start />
@@ -38,52 +20,26 @@
         <TemplateColumn Title="Ação" Sortable="true" Align=Align.Start>
             @{
                 var item = context as Anexo;
-                if (item.carregado)
-                {
-                    <FluentButton Appearance="Appearance.Accent" OnClick="()=>OpenFileSelector(item)">
-                        Excluir
-                    </FluentButton>
-                }
-                else
-                {
-                    
-                    <FluentButton Appearance="Appearance.Accent" OnClick="()=>OpenFileSelector(item)">
-                        Carregar
-                    </FluentButton>
-                }
+                <FluentButton Appearance="Appearance.Outline" OnClick="()=>OpenFileSelector(item)" IconStart="GetIconAnexo(item)"></FluentButton>
             }
+           
         </TemplateColumn>
     </FluentDataGrid>
 </FluentCard>
-<FluentCard Justify="@JustifyContent.Center">
+
     <FluentInputFile @ref="@myFileByBuffer"
                      AnchorId="MyUploadBuffer"
                      DragDropZoneVisible="false"
                      Mode="InputFileMode.Buffer"
                      Multiple="true"
                      MaximumFileSize="@(1000 * 1024 * 1024)"
-                     Accept=".mp4, .mov, .avi"
+                     Accept="*/*" 
                      OnInputFileChange="OnProgressChangeAsyncBF"
-
                      OnCompleted="@OnCompleted" />
-
     <FluentProgress Visible="@(progressPercent > 0)" Min="0" Max="100" Value="@progressPercent" />
     <FluentLabel Alignment="HorizontalAlignment.Center">
         @progressTitle
     </FluentLabel>
-
-    <!--    
-                    Id="MyUploadBuffer" OnClick="()=>OpenFileSelector(item)"> 
-                     OnProgressChange="@OnProgressChangeAsyncBF"
-    <FluentButton Appearance="Appearance.Accent" Id="MyUploadBuffer">
-        Upload files
-    </FluentButton>
-
-    <FluentButton @onclick="@((e) => IsCanceled = true)">
-        Cancel
-    </FluentButton>
-    -->
-
     @if (Files.Any())
     {
         <h4>File(s) uploaded:</h4>
@@ -96,10 +52,6 @@
             }
         </ul>
     }
-
-
-</FluentCard>
-
 @code {
     private string buttonLabel = "Carregar";
     private Anexo currentAnexo;
@@ -107,44 +59,31 @@
     public TribEdificaco Content { get; set; } = default!;
     public TribItbidocumentoTipoSpec tribItbidocumentoTipoSpec = new TribItbidocumentoTipoSpec("Imóvel");
     public IEnumerable<TribItbidocumentoTipo> docsExigidos { get; set; }
-    //public IQueryable<TribItbidocumentoTipo>? docsExigidos { get; set; }
-    //public IEnumerable<TribItbidocumentoTipo>? docsExigidos { get; set; }
     public IQueryable<TribItbidocumentoTipo>? docsExigidosQ { get; set; }
     public IQueryable<Anexo>? AnexosExigidosQ { get; set; } 
     [CascadingParameter]
     public FluentDialog? Dialog { get; set; }
     private List<IBrowserFile> filesBf = new List<IBrowserFile>();
-    //private List<IBrowserFile> filesBfdefinitivo = new List<IBrowserFile>();
     private Dictionary<string, bool> itemStates = new Dictionary<string, bool>();
     FluentInputFile? myFileByBuffer = default!;
     int? progressPercent;
     string? progressTitle;
     bool IsCanceled;
-
     Dictionary<int, string> Files = new();
-    //Dictionary<TribItbidocumentoTipo, InputFile> docsexigidosDicionario = new();
-
     [Parameter]
-    //public EventCallback<List<IBrowserFile>> AnexosImovelChanged { get; set; }
     public EventCallback<Anexo> AnexosImovelChanged { get; set; }
-    //public EventCallback<List<byte[]>> AnexosImovelChanged { get; set; }
     async Task OnProgressChangeAsync(FluentInputFileEventArgs file)
     {
+       
         progressPercent = file.ProgressPercent;
         progressTitle = file.ProgressTitle;
-
-        // To cancel?
         file.IsCancelled = IsCanceled;
-
-        // New file
-        if (!Files.ContainsKey(file.Index))
-        {
-            var localFile = Path.GetTempFileName() + file.Name;
-            Files.Add(file.Index, localFile);
-        }
-
-        // Write to the FileStream
-        await file.Buffer.AppendToFileAsync(Files[file.Index]);
+      //  if (!Files.ContainsKey(file.Index))
+        //{
+          //  var localFile = Path.GetTempFileName() + file.Name;
+            //Files.Add(file.Index, localFile);
+       // }
+        //await file.Buffer.AppendToFileAsync(Files[file.Index]);
     }
     private async void OpenFileSelector(Anexo anexo)
     {
@@ -153,7 +92,6 @@
             if (itemStates.ContainsKey(anexo.nomearquivo))
             {
                 itemStates.Remove(anexo.nomearquivo);
-                // var fileToRemove = filesBf.FirstOrDefault(f => f.Name == anexo.nomearquivo);
                 var fileToRemove = currentAnexo.AnexoBf.FirstOrDefault(f => f.Name == anexo.nomearquivo);
                 if (fileToRemove != null)
                 {
@@ -161,21 +99,11 @@
                     StateHasChanged();
                 }
                 currentAnexo.carregado = false;
-
-                //atualistaAnexosExigidosQ(f.Name);
-
                 currentAnexo.nomearquivo = "";
                 currentAnexo.nomeDEFINITIVO = "";
-                //  atualistaAnexosExigidosQ(currentAnexo);
-
-                //var extensao = Path.GetExtension(anexo.nomearquivo);
-                //var nomedefinitivo = anexo.Doc.ItbidocId.ToString() + '-' + Content.InscricaoImobiliaria.ToString() + '.' + extensao;
-                //filesBfdefinitivo = filesBf;
-
                 await AnexosImovelChanged.InvokeAsync(currentAnexo);
                 StateHasChanged();
             }
-
         }
         else
         {
@@ -185,64 +113,42 @@
     }
     async Task OnProgressChangeAsyncBF(InputFileChangeEventArgs file)
     {
+       
         if (currentAnexo != null)
         {
-            // Process the file and the currentAnexo
-            // Your code to handle the file upload
-            // currentAnexo.nomearquivo=file
         }
-
         var inputFile = file.GetMultipleFiles();
         if(inputFile != null)
         {
             foreach(var f in inputFile )
             {
-                //bool carregado = AnexosExigidosQ.Where(a=> a.Doc.ItbidsDocumento );
-
                 if (itemStates.ContainsKey(f.Name))
                 {
                     itemStates.Remove(f.Name);
-                    // var fileToRemove = filesBf.FirstOrDefault(f => f.Name == f.Name);
                     var fileToRemove = currentAnexo.AnexoBf.FirstOrDefault(f => f.Name == f.Name);
                     if (fileToRemove!=null)
                     {
-                        //filesBf.Remove(fileToRemove);
                         currentAnexo.AnexoBf.Remove(fileToRemove);
                         StateHasChanged();
                     }
                     currentAnexo.carregado = false;
-
-                    //atualistaAnexosExigidosQ(f.Name);
                     currentAnexo.nomearquivo = "";
-                    //  atualistaAnexosExigidosQ(currentAnexo);
                     StateHasChanged();
                 }
                 else
                 {
-                    //  docsExigidosQ.Append(new TribItbidocumentoTipo(){ItbidsDocumento=f.Name});
-
                     itemStates.Add(f.Name,true);
                     var extensao = Path.GetExtension(f.Name);
                     currentAnexo.nomeDEFINITIVO = currentAnexo.Doc.ItbidocId.ToString() + '-' + Content.InscricaoImobiliaria.ToString() +  extensao;
-                    //f.Name = currentAnexo.nomeDEFINITIVO;
-                    //filesBfdefinitivo = filesBf;
-
-                    //filesBf.Add(f);
                     currentAnexo.AnexoBf.Add(f);
-                    //filesBf.Add(new });
-                    //atualistaAnexosExigidosQ(f.Name);
                     currentAnexo.nomearquivo = f.Name;
                     currentAnexo.carregado = true;
                     StateHasChanged();
-                    // atualistaAnexosExigidosQ(currentAnexo);
                 }
-
             }
             StateHasChanged();
-
             await AnexosImovelChanged.InvokeAsync(currentAnexo);
         }
-
     }
 
     void OnCompleted(IEnumerable<FluentInputFileEventArgs> files)
@@ -259,39 +165,24 @@
     protected override async Task OnInitializedAsync()
     {
         List<Anexo> listdoc = new List<Anexo>();
-        //docsExigidos = await tribItbidocumentoTipoAppService.ListAsync(tribItbidocumentoTipoSpec, CancellationToken.None);
-        //--docsExigidos = await tribItbidocumentoTipoAppService.GetDocumentosExigidos("Imóvel");
-
         var DbSetDocsExigidos = await tribItbidocumentoTipoAppService.GetDbSet();
         var QueryDocsExigidos = DbSetDocsExigidos.Where(d=>d.ItbidsDocDescricao=="Imóvel" );
-        //docsExigidosQ = docsExigidos.AsQueryable();
-        //docsExigidosQ = tribItbidocumentoTipoAppService.GetQueryableDocumentosExigidos("Imovel");
-       //-- docsExigidosQ = docsExigidos.AsQueryable();
         docsExigidosQ = QueryDocsExigidos.AsQueryable();
-
         foreach(var doc in docsExigidosQ)
         {
             listdoc.Add(new Anexo() { Doc = doc,carregado=false,nomearquivo=null } );
         }
         AnexosExigidosQ = listdoc.AsQueryable();
-
         await base.OnInitializedAsync();
     }
     private void atualistaAnexosExigidosQ(Anexo arquivo)
     {
         List<Anexo> listdoc = new List<Anexo>();
         listdoc = AnexosExigidosQ.ToList();
-
         var encontrado = listdoc.Find(d => d.nomearquivo == arquivo.nomearquivo);
-        //var f = filesBf.Where()
-        
-
-
         if (encontrado != null)
         {
-            //listdoc.Add(new Anexo() { nomearquivo=arquivo.nomearquivo });
             listdoc.Remove(arquivo);
-
         } else 
         {
             listdoc.Add(new Anexo() { nomearquivo = arquivo.nomearquivo });
@@ -301,8 +192,6 @@
     }
     private Icon GetIcon(string item)
     {
-        
-        
         if (item == "Excluir")
         {
             return itemStates.TryGetValue("Carregar", out bool isAdded2) && isAdded2
@@ -314,6 +203,9 @@
          ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
          : new Icons.Regular.Size24.AddSquare().WithColor(Color.Accent);
     }
-
-
+    private Icon GetIconAnexo(Anexo item)
+    {
+        return item.carregado ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
+          : new Icons.Regular.Size24.AddSquare().WithColor(Color.Accent);
+    }
 }

@@ -12,7 +12,7 @@
                                 <FluentTextField @bind-Value="@Adquirente.Contribuinte.ConEmail" style="width: 18%;font-size: 12px;" Required Maxlength="50">Email:</FluentTextField>
                                 <FluentTextField @bind-Value="@Adquirente.Contribuinte.ConTelefoneCelular" style="width: 10%;font-size: 12px;" Required Maxlength="14">Celular:</FluentTextField>
                                 <FluentTextField ReadOnly @bind-Value="@Adquirente.Titularidade" style="width: 10%;font-size: 12px;" Required Maxlength="14">Titularidade:</FluentTextField>
-                                <FluentTextField @bind-Value="@Adquirente.percentualAdquirido" Required style="width: 6%;font-size: 12px;" Maxlength="5">%Transmitido</FluentTextField>
+                                <FluentTextField @bind-Value="@Adquirente.percentualAdquirido" Required style="width: 6%;font-size: 12px;" Maxlength="5">%Adquirido</FluentTextField>
                                       <FluentSpacer />
                         <FluentButton Appearance="Appearance.Outline" OnClick="()=>RemoveAdquirente(Adquirente)"
                                           IconStart="@(new Icons.Regular.Size20.SubtractSquare().WithColor(Color.Accent))" >
@@ -51,7 +51,7 @@
                                                         Mode="InputFileMode.Buffer"
                                                         Multiple="true"
                                                         MaximumFileSize="@(1000 * 1024 * 1024)"
-                                                        Accept=".mp4, .mov, .avi"
+                                                     Accept="*/*"
                                                         OnInputFileChange="OnProgressChangeAsyncAdquirente"
                                                         OnCompleted="@OnCompleted"/>
 

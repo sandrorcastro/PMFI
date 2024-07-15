@@ -1,7 +1,10 @@
 ﻿@page "/"
 @using BlazorWebAppITBI.MetaData
+@using BlazorWebAppITBI.Model
 @using BlazorWebAppITBI.Models
 @using System.Text;
+@using System.Collections
+@using Microsoft.Extensions.Options
 
 @inherits Microsoft.AspNetCore.Components.ComponentBase
 @rendermode InteractiveServer
@@ -11,6 +14,9 @@
 @inject ITribITBIEdifAppService itbiEdifAppService
 @inject ITribITBICompradoresAppService itbiCimpradoresAppService
 @inject ITribITBIVendedoresAppService itbiVendedoresAppService
+@inject IWebHostEnvironment EnvironmentRazor
+@inject IOptions<AppSettings> AppSettings
+
 
 @inject IAutoNumAnoNumeroAppService autoNumANoNumeroAppService
 @inject IAutoNumEntidadesAppService autoNumEntidadesAppService
@@ -21,13 +27,22 @@
 @inject ITribDividasImoAppService tribDividasImoAppService
 @inject ITribComposicaoDivImoAppService tribComposicaoDivImoAppService
 @inject IConvenioBancoAppService ConvenioBancoAppService
+@inject IAgenciaAppService AgenciaAppService
 @inject ITribBoletoAppService tribBoletoAppService
 @inject ITribBoletosDividasAppService tribBoletosDividasAppService
 @inject ITribBoletosBarraAppService tribBoletosBarraAppService
 @inject ITribObjetoAppService tribObjetoAppService
 @inject ITribItbidocumentoTipoAppService tribItbidocumentoTipoAppService
 @inject ITribItbiexAnexoAppService tribItbiexAnexoAppService
+@inject ITribReportSqlAppService tribReportSqlAppService
+@inject ITribReportParAppService tribReportParAppService
+@inject ISisParametrosAppService sisParametrosAppService
+@inject ITribTextosAppService tribTextosAppService
 <h1>Página de Declaração ITBI</h1>
+<!--
+
+<FluentWizard @ref="_wizard" StepperPosition="StepperPosition.Left"
+-->
 <FluentWizard StepperPosition="StepperPosition.Left"
               StepSequence="@WizardStepSequence.Visited"
               DisplayStepNumber="@(WizardStepStatus.Current  | WizardStepStatus.Next)"
@@ -42,12 +57,11 @@
             <FluentEditForm EditContext="editContextImovel" FormName="imovelInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <FluentTextField Placeholder="Inscrição Imobiliária" @bind-Value="Imovel!.InscricaoImobiliaria" Required style="width: 300px; height: 50px; border:none;outline: none;"/>
+                    <FluentTextField Placeholder="Inscrição Imobiliária" @bind-Value="Imovel!.InscricaoImobiliaria" Required/>
                     <ValidationMessage For="() => Imovel!.InscricaoImobiliaria" />
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
-            
         </FluentWizardStep>
         <FluentWizardStep Label="Informações do Imóvel"
                           OnChange="@OnStepChange">
@@ -92,12 +106,12 @@
                           IconCurrent="@(new Icons.Filled.Size24.StarEmphasis())"
                           IconNext="@(new Icons.Regular.Size24.Star())"
                           DisplayStepNumber="false"
-                          OnChange="@OnStepChange">
+                          OnChange="@OnStepChangeTransacaoImobiliaria">
            
             <FluentEditForm Model="Imovel" FormName="transãcaoInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <OperacaoForm ValoresOperacaoChanged="HandleValoresOperacaoChanged" Imovel="Imovel" TipoDeTransferenciaChanged="HandleTipoDeTransferenciaChanged" ObservacaoChanged="HandleObservacaoChanged"  ValorDeclaradoChanged="HandleValorDeclaradoChanged" />
+                    <OperacaoForm Content="Imovel" ValoresOperacaoChanged="HandleValoresOperacaoChanged" Imovel="Imovel" TipoDeTransferenciaChanged="HandleTipoDeTransferenciaChanged" ObservacaoChanged="HandleObservacaoChanged"  ValorDeclaradoChanged="HandleValorDeclaradoChanged" AnexosOperacaoChanged="HandleAnexosOperacaoChanged"/>
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
@@ -151,6 +165,7 @@
     //public vbFEBRABAN.cBoletoFEBRABAN objGeraBoleto = new vbFEBRABAN.cBoletoFEBRABAN();
     //public Tribuno.Boletos.Boleto objBol = new Tribuno.Boletos.Boleto();
     //public AutoDeclaracao autoDeclaracao { get; set; } = new AutoDeclaracao() { Imovel = new TribEdificaco() { InscricaoImobiliaria = string.Empty } };
+    public bool passolivre=true;
     private FluentWizard Wizard { get; set; }
     public string? Inscricao { get; set; } = string.Empty;
     // [MetadataType(typeof(ImovelMetaData))]
@@ -190,11 +205,12 @@
     public Anexo? AnexosImovel = new Anexo();
     public List<Anexo>? AnexosTransmitente;
     public Anexo? AnexosAdquirente;
-    public Anexo? AnexosOperacao;
+    public List<Anexo>? AnexosOperacao;
     //public DbSet<TribEdificaco>? DbSetImovel;
     //public DbSet DbSetImovel;
     //public IQueryable<TribEdificaco> QueryImovel { get; set; }
-
+    bool possuiDividasPendentes;
+    List<TribItbiedif> ITBIEdfilancados = new List<TribItbiedif>();
     private IQueryable<TribEdificacoesContrib>? Transmitentes;
     public string? TipoDeTransferencia { get; set; } = "COMPRA_VENDA"; // string.Empty;
     public string? Observacao = string.Empty;
@@ -205,12 +221,19 @@
     public Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec edificacaoSpec;
     private bool _overlayIsVisible = false;
     public IEnumerable<TribItbidocumentoTipo> docsExigidos { get; set; }
+    string secao = "@@SandroTesteSession";
+    //private FluentWizard _wizard;
+    //async Task GoToStepAsync(int stepIndex)
+    //{
+    // Aguardar a renderização do componente para garantir que a navegação aconteça corretamente
+    //await InvokeAsync(() => _wizard.GoToStep(stepIndex));
+    //}
     async Task OnStepChange1(FluentWizardStepChangeEventArgs e, EditContext editContext)
     {
 
         //var DbSetImovel = await edificacoesAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
         //var QueryImovel = await 
-
+        //await GoToStepAsync(3);
         if (!editContext.Validate())
         {
             // Bloquear a mudança de etapa se o formulário não for válido
@@ -227,6 +250,11 @@
                 //edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
                 edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString());
                 Imovel = await edificacoesAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
+                //Teste
+                //var convbanco = await GetCodCedente(52);
+                // TribunoNet.frmITBINovo teste = new TribunoNet.frmITBINovo();
+                //var codcedente = teste.getCodCedente(52, System.Data.SqlClient.SqlTransaction);
+                //
                 if (Imovel is null )
                 {
                     await DialogService.ShowInfoAsync($"Inscrição Imobiliária Não Encontrada.");
@@ -238,6 +266,18 @@
                 }
                 else
                 {
+                    possuiDividasPendentes = await PossuiDividas(Imovel.EdificacaoId);
+                    if (possuiDividasPendentes)
+                    {
+                        await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas Pendentes!");
+                    }
+                    ITBIEdfilancados =  await possuiITBI(Imovel.EdificacaoId);
+                    if(ITBIEdfilancados.Count() > 0)
+                    {
+                        await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui ITBI lançado!");
+                    }
+
+
                     ListaDeTransmitentes = new List<Transmitente>();
                     ListaDeAdquirentes = new List<Adquirente>();
                     editContextImovel = new EditContext(Imovel);
@@ -260,7 +300,7 @@
                                     AnexosExigidos = new List<Anexo>(),
                                     percentualtransmitido = edificacoesdoscontribuites.Percentual.ToString(),
                                     Titularidade = await pegaTitularidade(edificacoesdoscontribuites)
-                                };
+                                }; 
 
                             foreach (var docexigido in docsExigidos.ToList())
                             {
@@ -314,35 +354,185 @@
     }
     async Task OnStepChange2(FluentWizardStepChangeEventArgs e, EditContext editContext)
     {
-        if (ListaDeTransmitentes.Count() == 0)
+        if (!passolivre)
         {
-            e.IsCancelled = true;
-        }
-        else
-        {
-            if (!editContextTransmitentes.Validate())
+
+            if (ListaDeTransmitentes.Count() == 0)
             {
-                // Bloquear a mudança de etapa se o formulário não for válido
+                await DialogService.ShowInfoAsync($"Você deve adicionar pelo menos um Transmitente!");
                 e.IsCancelled = true;
+                return;
+
+            }else{
+                foreach(var transmitente in ListaDeTransmitentes)
+                {
+                    foreach(var anexo in transmitente.AnexosExigidos)
+                    {
+                        if (anexo.carregado == false)
+                        {
+                            //await DialogService.ShowInfoAsync($"Você deve adicionar pelo menos um Transmitente!");
+                            await DialogService.ShowInfoAsync($"Anexo obrigatório para o Transmitente {transmitente.Contribuinte.ConCnpjcpf} : {anexo.Doc.ItbidsDocumento}");
+                            e.IsCancelled = true;
+                            return;
+                        }
+                    }
+                    if (transmitente.Contribuinte.ConEmail is null || transmitente.Contribuinte.ConEmail == "")
+                    {
+
+                        await DialogService.ShowInfoAsync($"Informe o email!");
+                        e.IsCancelled = true;
+                        return;
+                    }
+                    if (transmitente.Contribuinte.ConTelefoneCelular is null || transmitente.Contribuinte.ConTelefoneCelular == "")
+                    {
+                        await DialogService.ShowInfoAsync($"Informe o Telefone Celular!");
+                        e.IsCancelled = true;
+                        return;
+                    }
+                    if (transmitente.percentualtransmitido is null || transmitente.percentualtransmitido == "" || transmitente.percentualtransmitido == "0,00")
+                    {
+                        await DialogService.ShowInfoAsync($"Informe o Percentual Transmitido!");
+                        e.IsCancelled = true;
+                        return;
+                    }
+                }
+
+                if (!editContextTransmitentes.Validate())
+                {
+                    // Bloquear a mudança de etapa se o formulário não for válido
+                    e.IsCancelled = true;
+                }
             }
         }
     }
     async Task OnStepChange3(FluentWizardStepChangeEventArgs e, EditContext editContext)
     {
-        if (ListaDeAdquirentes.Count() == 0)
+        if (!passolivre)
         {
-            e.IsCancelled = true;
-        }
-        else
-        {
-            if (!editContext3.Validate())
+
+            if (ListaDeAdquirentes.Count() == 0)
             {
-                // Bloquear a mudança de etapa se o formulário não for válido
+                await DialogService.ShowInfoAsync($"Você deve adicionar pelo menos um Adquirente!");
                 e.IsCancelled = true;
+                return;
+
+            }
+            else
+            {
+                foreach (var adquirente in ListaDeAdquirentes)
+                {
+                    foreach (var anexo in adquirente.AnexosExigidos)
+                    {
+                        if (anexo.carregado == false)
+                        {
+                            await DialogService.ShowInfoAsync($"Anexo obrigatório para o Adquirente {adquirente.Contribuinte.ConCnpjcpf} : {anexo.Doc.ItbidsDocumento}");
+                            e.IsCancelled = true;
+                            return;
+                        }
+
+                    }
+                    if (adquirente.Contribuinte.ConEmail is null || adquirente.Contribuinte.ConEmail == "")
+                    {
+
+                        await DialogService.ShowInfoAsync($"Informe o email!");
+                        e.IsCancelled = true;
+                        return;
+                    }
+                    if (adquirente.Contribuinte.ConTelefoneCelular is null || adquirente.Contribuinte.ConTelefoneCelular == "")
+                    {
+                        await DialogService.ShowInfoAsync($"Informe o Telefone Celular!");
+                        e.IsCancelled = true;
+                        return;
+                    }
+                    if (adquirente.percentualAdquirido is null || adquirente.percentualAdquirido == "" || adquirente.percentualAdquirido == "0,00")
+                    {
+                        await DialogService.ShowInfoAsync($"Informe o Percentual Adquirido!");
+                        e.IsCancelled = true;
+                        return;
+                    }
+                }
+                if (!editContext3.Validate())
+                {
+                    // Bloquear a mudança de etapa se o formulário não for válido
+                    e.IsCancelled = true;
+                }
+            }
+        }
+    }
+    async Task OnStepChangeTransacaoImobiliaria(FluentWizardStepChangeEventArgs e)
+    {
+        if (!passolivre)
+        {
+
+            if (AnexosOperacao.Count() == 0)
+            {
+                await DialogService.ShowInfoAsync($"Você deve adicionar os Anexos Obrigatórios");
+                e.IsCancelled = true;
+                return;
+            }
+            else
+            {
+                foreach (var anexo in AnexosOperacao)
+                {
+                    if (anexo.carregado == false)
+                    {
+                        await DialogService.ShowInfoAsync($"Anexo obrigatório da Transação Imobiliária : {anexo.Doc.ItbidsDocumento}");
+                        e.IsCancelled = true;
+                        return;
+                    }
+                }
+            }
+            if (!ValoresOperacao.isFinanciado)
+            {
+                if (ValoresOperacao.ValorDeclarado == 0)
+                {
+                    await DialogService.ShowInfoAsync($"Informe o Valor Declarado!");
+                    e.IsCancelled = true;
+                    return;
+                }
+            }
+            else
+            {
+                if (ValoresOperacao.ValorDeclarado == 0)
+                {
+                    await DialogService.ShowInfoAsync($"Informe o Valor Declarado!");
+                    e.IsCancelled = true;
+                    return;
+                }
+                if (ValoresOperacao.ValorFinanciado == 0)
+                {
+                    await DialogService.ShowInfoAsync($"Informe o Valor Financiado!");
+                    e.IsCancelled = true;
+                    return;
+                }
+                if (ValoresOperacao.ValorRecursoProprio == 0)
+                {
+                    await DialogService.ShowInfoAsync($"Informe o Valor do Recurso Próprio!");
+                    e.IsCancelled = true;
+                    return;
+                }
             }
         }
     }
     async Task OnStepChange(FluentWizardStepChangeEventArgs e)
+    {
+        if (!passolivre)
+        {
+
+            if (e.TargetIndex == 2)
+            {
+                _overlayIsVisible = false;
+                //await Task.Delay(2000);
+                if(AnexosImovel.AnexoBf.Count() == 0 || AnexosImovel.AnexoBf == null)
+                {
+                    await DialogService.ShowInfoAsync($"Anexar Copia da Matrícula Atualizada!");
+                    e.IsCancelled = true;
+                }
+                //      _overlayIsVisible = ;
+            }
+        }
+    }
+    async Task OnStepChangeExcluiressa(FluentWizardStepChangeEventArgs e)
     {
         //DilogService($"Go to step {e.TargetLabel} (#{e.TargetIndex})");
         // await DialogService.ShowInfoAsync($"Go to step {e.TargetLabel} (#{e.TargetIndex})");
@@ -401,6 +591,7 @@
         await InsereAnexoImovel(TribItbi);
         await InsereAnexoTransmitente(TribItbi);
         await InsereAnexoAdquirente(TribItbi);
+        await InsereAnexoOperacao(TribItbi);
 
     }
     private async Task InsereDivida(ParcelasOption parcelaOption){
@@ -471,11 +662,14 @@
         tdi.ImoDivExcluido = null;
         await tribDividasImoAppService.AddAsync(tdi, CancellationToken.None);
         await InsereTribComposicaoDivImo(tdi.ImoIddivida, tdi?.TipoTribId ?? 0, tdi.ImoDivValor);
-        await InsereNovoITBIEdif(tdi.ImoIddivida, tdi?.TipoTribId ?? 0, parcelaOption,parcela);
+        var tribITBIEdif = await InsereNovoITBIEdif(tdi.ImoIddivida, tdi?.TipoTribId ?? 0, parcelaOption,parcela);
         //        decimal v = 100.00m;
         var boleto = await GeraBoleto(tdi.ImoDivValor, tdi.ImoDivVencimento);
         await GeraBoletosDividas(boleto,tdi);
         await GeraBoletosBarra(boleto);
+        //if(parcelaOption)
+        await GravaDadosRelatorio(boleto.BoleNossoNumero, 52, "Geral", false, false, tribITBIEdif, tdi, "0");
+        //GravaDadosRelatorio(string strNossoNumero, int ConvenioID, string TipoITBI, bool TemParcelamento, bool TemDividaPaga, TribItbiedif ITBIEdif, TribDividasImo tribDividasImo, string ? TipoDivida = "0")
 
 
     }
@@ -498,7 +692,7 @@
 
     }
 
-    private async Task InsereNovoITBIEdif(long imoIDDivida, int tipoTribID , ParcelasOption parcelaOption,int parcela)
+    private async Task<TribItbiedif> InsereNovoITBIEdif(long imoIDDivida, int tipoTribID , ParcelasOption parcelaOption,int parcela)
     {
         TribItbiedif tief = new TribItbiedif();
         tief.ItbiedifId = await autoNumEntidadesAppService.GetMaxAutoNumEntidade("TRIBITBIEDIF"); 
@@ -557,11 +751,11 @@
         tief.EdifBloco = Imovel.EdifBloco;
         tief.EdifNumAptoSalaLoja = Imovel.EdifNumAptoSalaLoja;
         tief.EdifAreaCoberta = Imovel.EdifAreaCoberta;
-        await tribITBIEdifAppService.AddAsync(tief, CancellationToken.None);
+        var tribITBIEdifadicionado = await tribITBIEdifAppService.AddAsync(tief, CancellationToken.None);
 
         await InsereCompradores(tief.ItbiedifId);
         await InsereVendedores(tief.ItbiedifId);
-
+        return tribITBIEdifadicionado;
 
     }
     private async Task InsereNovoITBIEdifbk()
@@ -643,7 +837,7 @@
 
         }
     }
-    
+
     private async Task InsereAnexoTransmitente(TribItbi itbi)
     {
         if (ListaDeTransmitentes.Count > 0)
@@ -654,7 +848,7 @@
                 {
                     foreach (var anexo in transmitente.AnexosExigidos.ToList())
                     {
-                       // var arquivos = anexo.AnexoBf.ToList();
+                        // var arquivos = anexo.AnexoBf.ToList();
                         foreach (var browserFile in anexo.AnexoBf)
                         //foreach (var browserFile in arquivos)
                         {
@@ -669,7 +863,7 @@
                                     //await browserFile.OpenReadStream().ReadAsync(buffer);
 
                                     using (var stream = browserFile.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024))
-                                   // using (var stream = anexo.browserFile.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024))
+                                    // using (var stream = anexo.browserFile.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024))
                                     {
                                         await stream.ReadAsync(buffer);
                                     }
@@ -682,9 +876,9 @@
                                 catch (Exception ex)
                                 {
                                     //Console.WriteLine($"Error processing file {browserFile.Name}: {ex.Message}");
-                            Console.WriteLine($"Error processing file {anexo.browserFile.Name}: {ex.Message}");
+                                    Console.WriteLine($"Error processing file {anexo.browserFile.Name}: {ex.Message}");
                                 }
-                           }
+                            }
                         }
 
                     }
@@ -740,47 +934,41 @@
             }
         }
     }
-    /*private async Task InsereAnexoTransmitente(TribItbi itbi)
+    private async Task InsereAnexoOperacao(TribItbi itbi)
     {
-        if (ListaDeTransmitentes.Count > 0)
+        if (AnexosOperacao.Count > 0)
         {
-            foreach (var transmitente in ListaDeTransmitentes.ToList())
+            foreach (var anexo in AnexosOperacao.ToList())
             {
-                if(transmitente.AnexosExigidos.Count() > 0)
+                foreach (var browserFile in anexo.AnexoBf)
                 {
-                    foreach (var anexo in transmitente.AnexosExigidos.ToList())
+                    if (browserFile != null)
                     {
-                        if(anexo.AnexoBf.Count > 0)
+                        try
                         {
-                            foreach (var file in anexo.AnexoBf.ToList())
+                            var buffer = new byte[browserFile.Size];
+                            var extensao = Path.GetExtension(browserFile.Name);
+                            using (var stream = browserFile.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024))
                             {
-                                try
-                                {
-
-                                    var buffer = new byte[file.Size];
-                                    var extensao = Path.GetExtension(file.Name);
-                                    await file.OpenReadStream().ReadAsync(buffer);
-
-                                    var anexoinserido = await InsereTribObjeto(buffer, extensao);
-
-                                    if (anexoinserido != null)
-                                    {
-                                        await InsereTribItbiexAnexo(itbi.Itbiid, anexoinserido.ObjetoId, anexo.Doc.ItbidocId, long.Parse(anexo.pertenceA));
-                                    }
-                                }catch(Exception ex)
-                                {
-                                    Console.WriteLine($"Error processing file {file.Name}: {ex.Message}");
-                                }
-
+                                await stream.ReadAsync(buffer);
+                            }
+                            var anexoinserido = await InsereTribObjeto(buffer, extensao);
+                            if (anexoinserido != null)
+                            {
+                                await InsereTribItbiexAnexo(itbi.Itbiid, anexoinserido.ObjetoId, anexo.Doc.ItbidocId, long.Parse(anexo.pertenceA));
                             }
                         }
-
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"Error processing file {anexo.browserFile.Name}: {ex.Message}");
+                        }
                     }
                 }
+
             }
         }
-    }*/
-  
+
+    }
     private async Task InsereCompradores(long itbiedifid){
         if (ListaDeAdquirentes.Count > 0)
         {
@@ -849,8 +1037,6 @@
                 //UsuarioInclusao = 
             };
         return await tribObjetoAppService.AddAsync(to, CancellationToken.None);
-
-
     }
 
     private async Task InsereDeclaracao(){
@@ -873,10 +1059,20 @@
         //AutoNumAnoNumero = await autoNumANoNumeroAppService.GetMaxAutoNumAnoNumero(2024, "ITBI");
         _overlayIsVisible = true;
         await InsereDeclaracao();
+
+
+        //-- Seria aqui para gerar a guia
+        //var enderecoRel = "?p=" + System.Web.HttpUtility.UrlEncode(CryptDP.Param.getQS4DP(ht));
+
+
+
         _overlayIsVisible = false;
 
     }
-
+    private void HandleAnexosOperacaoChanged(List<Anexo> anexos)
+    {
+        AnexosOperacao = anexos;
+    }
     private void HandleAnexosImovelChanged(Anexo anexos)
     {
         AnexosImovel = anexos;
@@ -907,34 +1103,34 @@
         ListaDeTransmitentes = listaAtualizada;
         /*
         StringBuilder sbITBI = new StringBuilder(ObservacaoITBI);
-        sbITBI.AppendLine("Transmitentes: ");
-        if (ListaDeTransmitentes.Count > 0)
-        {
-            foreach (var transmitente in ListaDeTransmitentes)
+            sbITBI.AppendLine("Transmitentes: ");
+            if (ListaDeTransmitentes.Count > 0)
             {
+            foreach (var transmitente in ListaDeTransmitentes)
+                {
                 //sbITBI.AppendLine(transmitente.Contribuinte.ConCnpjcpf.ToString() + "-" + transmitente.Contribuinte.ConNome + " Transmite: " + transmitente.percentualtransmitido + "|");
                 //--sbITBI.AppendLine(transmitente.Contribuinte.ConCnpjcpf.ToString() + "Transmite: " + transmitente.percentualtransmitido + "|");
-            }
+        }
         }
         ObservacaoITBI = sbITBI.ToString();
-        */
+    */
     }
     private void HandleListaDeAdquirentesChanged(List<Adquirente> listaAtualizada)
     {
         ListaDeAdquirentes = listaAtualizada;
-    /*
+        /*
         StringBuilder sbITBI = new StringBuilder(ObservacaoITBI);
-        sbITBI.AppendLine("Adquirentes: ");
-        if (ListaDeAdquirentes.Count > 0)
-        {
-            foreach (var adquirente in ListaDeAdquirentes)
+            sbITBI.AppendLine("Adquirentes: ");
+            if (ListaDeAdquirentes.Count > 0)
             {
+            foreach (var adquirente in ListaDeAdquirentes)
+                {
                 // sbITBI.AppendLine(adquirente.Contribuinte.ConCnpjcpf.ToString() + "-" + adquirente.Contribuinte.ConNome + " Transmite: " + adquirente.percentualAdquirido + " || ");
                 sbITBI.AppendLine(adquirente.Contribuinte.ConCnpjcpf.ToString()  + " Transmite: " + adquirente.percentualAdquirido + " || ");
-            }
+        }
         }
         ObservacaoITBI = sbITBI.ToString();
-        */
+    */
     }
     private void HandleTipoDeTransferenciaChanged(string tipodetransferencia)
     {
@@ -957,13 +1153,14 @@
     }
     protected override async void OnInitialized()
     {
+
         _overlayIsVisible = true;
-        
+
         editContextImovel = new EditContext(Imovel);
         editContextTransmitentes = new EditContext(ListaDeTransmitentes);
         editContext3 = new EditContext(ListaDeAdquirentes);
-    
-       _overlayIsVisible = false;
+
+        _overlayIsVisible = false;
     }
     async Task OnValidSubmit()
     {
@@ -1007,7 +1204,7 @@
     {
         vbFEBRABAN.cBoletoFEBRABAN objGeraBoleto = new vbFEBRABAN.cBoletoFEBRABAN();
         //Tribuno.CentralCobranca.NotificacaoDA bcImgBarra = new Tribuno.CentralCobranca.NotificacaoDA();
-        
+
         ConvenioBanco convenioBanco = new ConvenioBanco() { ConvenioId=52};
         convenioBanco = await ConvenioBancoAppService.GeraNossoNumero(convenioBanco);
         objGeraBoleto.pStrCarteira = convenioBanco.ConvCarteira;
@@ -1084,9 +1281,658 @@
     };
         return await tribBoletosBarraAppService.AddAsync(tribBoletosBarra, CancellationToken.None);
 
-        
+
+
+    }
+    public async Task<TribReportSql> InsereTribReportSql(TribReportSql tribReportSql)
+    {
+        return await tribReportSqlAppService.AddAsync(tribReportSql);
+    }
+    public async Task<TribReportPar> InsereTribReportPar(TribReportPar tribReportPar)
+    {
+        return await tribReportParAppService.AddAsync(tribReportPar);
+    }
+    //public async Task GravaDadosRelatorio(string strNossoNumero, int ConvenioID, string TipoITBI, bool TemParcelamento,bool TemDividaPaga , int ITBIEdifId, string? TipoDivida = "0")
+    public async Task GravaDadosRelatorio(string strNossoNumero, int ConvenioID, string TipoITBI, bool TemParcelamento, bool TemDividaPaga, TribItbiedif ITBIEdif, TribDividasImo tribDividasImo, string? TipoDivida = "0")
+    {
+        string sqlMain, sqlHeader, sqlDadosITBI, sqlBoleto, sqlWhereDados;
+        string CodCedente, titulo;
+        int IDTipoConstrucao, IDTextoNotif;
+        bool boolMostrarQL, boolMostrarNumAno, boolRefAnteriorGeo, boolMostrarEndereco;
+        TribTexto tribTextos;
+        //string secao = "@@SandroTesteSession";
+        string sSistema = "TRIBUNO";
+        string sCNPJMembro = "76206606000140";
+        SisParametro sisParam = new SisParametro();
+        //  TribReportSql tribReportSql;
+        //  TribReportPar tribReportPar;
+        try
+        {
+            //busca os ID dos parametros Tipo de Construção
+            //var sisParam = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "IdParamTipoConstr"), CancellationToken.None);
+
+            //SisParametrosSpec sisSpec= new SisParametrosSpec("Tribuno", "IdParamTipoConstr");
+            //Domain.Interfaces.Specifications.ISpecification<SisParametro> sisSpec = new SisParametrosSpec("Tribuno", "IdParamTipoConstr");
+            var DbSetSisParametros = await sisParametrosAppService.GetDbSet();
+            sisParam = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "IdParamTipoConstr"));
+            // sisParam = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "IdParamTipoConstr"), CancellationToken.None);
+            //sisParam = await sisParametrosAppService.GetBySpecAsync(sisSpec, CancellationToken.None);
+            //sisParam = await sisParametrosAppService.FirstOrDefaultAsync(); // .GetBySpecAsync(sisSpec, CancellationToken.None);
+            if(sisParam is null || int.Parse(sisParam.SiPaValorParametro) == 0)
+            {
+                throw new Exception("Parâmetro da aplicação tribuno - IdParamTipoConstr não encontrado!");
+            }
+            else
+            {
+                IDTipoConstrucao = int.Parse(sisParam.SiPaValorParametro);
+            }
+            //busca o texto para vizualizacao no boleto
+            //sisParam = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "GuiaITBINotificacao"), CancellationToken.None);
+            sisParam = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "GuiaITBINotificacao"));
+            if (sisParam is null || int.Parse(sisParam.SiPaValorParametro) == 0)
+            {
+                throw new Exception("Parâmetro da aplicação Tribuno - GuiaITBINotificacao não encontrado!");
+            }
+            else
+            {
+                IDTextoNotif = int.Parse(sisParam.SiPaValorParametro);
+            }
+            //mostrar informações do loteamento, quadra e lote
+            //sisParam = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "MostrarQuadraLoteLoteamento"), CancellationToken.None);
+            sisParam = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "MostrarQuadraLoteLoteamento"));
+            if (sisParam is null || sisParam.SiPaValorParametro.Trim().ToUpper() == "SIM")
+            {
+                boolMostrarQL = true;
+            }
+            else
+            {
+                boolMostrarQL = false;
+            }
+            //mostrar informações do ano e numero
+            //sisParam = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "AtivarAnoNumeroITBI"), CancellationToken.None);
+            sisParam = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "AtivarAnoNumeroITBI"));
+            if (sisParam is null || sisParam.SiPaValorParametro.Trim().ToUpper() == "SIM")
+            {
+                boolMostrarNumAno = true;
+            }
+            else
+            {
+                boolMostrarNumAno = false;
+            }
+            //verifica nos parametros qual tabela e campo está setado para exibir o valor da inscricao de referencia
+            //sisParam = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "InscricaoReferenciaAnterior"), CancellationToken.None);
+            sisParam = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "InscricaoReferenciaAnterior"));
+
+            if (sisParam is null || sisParam.SiPaValorParametro == "TribEdificacoes_InscricaoImobiliariaGEO")
+            {
+                boolRefAnteriorGeo = true;
+            }
+            else
+            {
+                boolRefAnteriorGeo = false;
+            }
+            //verifica se é para mostrar o endereço do comprador/vendedor
+            //sisParam = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "EsconderEnderecoGuiaITBI"), CancellationToken.None);
+            sisParam = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "EsconderEnderecoGuiaITBI"));
+            if (sisParam is null || sisParam.SiPaValorParametro !=   "")
+            {
+                boolMostrarEndereco = false;
+            }
+            else
+            {
+                boolMostrarEndereco = true;
+            }
+            //remove os dados dos relatorios emitidos anteriormente para a sessão atual
+            var DBSetReportPar = await tribReportParAppService.GetDbSet();
+            var RparSessionsParaRemover  = await DBSetReportPar.Where(e => e.RparSessionId == secao).ToListAsync();
+            if (RparSessionsParaRemover.Any())
+            {
+                DBSetReportPar.RemoveRange(RparSessionsParaRemover);
+                await tribReportParAppService.SaveChangesAsync();
+            }
+            //await Task.FromResult(DBSetReportPar.Remove(new TribReportPar() { RparSessionId = secao }));
+            //await tribReportParAppService.DeleteAsync(new TribReportPar() { RparSessionId = secao }, CancellationToken.None);
+
+            var DBSetReportSql = await tribReportSqlAppService.GetDbSet();
+            var RSqlSessionsParaRemover = await DBSetReportSql.Where(e => e.RsqlSessionId == secao).ToListAsync();
+            if (RSqlSessionsParaRemover.Any())
+            {
+                DBSetReportSql.RemoveRange(RSqlSessionsParaRemover);
+                await tribReportSqlAppService.SaveChangesAsync();
+            }
+
+
+            //await Task.FromResult(DBSetReportSql.Remove(new TribReportSql() { RsqlSessionId = secao }));
+            //await tribReportSqlAppService.DeleteAsync(new TribReportSql() { RsqlSessionId = secao }, CancellationToken.None);
+
+            //monta o codigo cedente conforme o convenio
+            if(ConvenioID == 0)
+            {
+                CodCedente = ".";
+            }
+            else
+            {
+                CodCedente = await GetCodCedente(ConvenioID);
+            }
+            //
+            if(TipoITBI == "Isento" && !TemDividaPaga && !TemParcelamento)
+            {
+                //Se o parametro estiver vasio, a vida segue normal, caso nao, sobre escreve
+                titulo = "CERTIDÃO DE NÃO INCIDÊNCIA DO ITBI";
+            }
+            else if (TipoITBI == "IsentoArt" && !TemDividaPaga && !TemParcelamento)
+            {
+                tribTextos = new TribTexto();
+                //var param = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "IdTextoIsensaoArt421ITBI"), CancellationToken.None);
+                var param = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "IdTextoIsensaoArt421ITBI"));
+                tribTextos = await tribTextosAppService.GetBySpecAsync(new TribTextosSpec(long.Parse(param.SiPaValorParametro)), CancellationToken.None);
+                //tribTextos.TextoId = long.Parse(param.SiPaValorParametro);
+                titulo = tribTextos is not null ? tribTextos.TextoTitulo : "ERRO AO MOSTAR TITULO. CONTATE O ADMINISTRADOR DO SISTEMA.";
+                TipoITBI = "Isento";
+
+            }
+            else
+            {
+                titulo = "ITBI - IMPOSTO SOBRE TRANSMISSÃO DE BENS IMÓVEIS";
+            }
+            //Grava os dados para o relatorio
+            if (TipoITBI == "Isento" || TipoITBI == "IsentoArt")
+            {
+                sqlMain = "SELECT '' AS boleNossoNumero, TribITBIEdif.ITBIEdifID, TribITBIEdif.ITBIID, TribITBI.ITBINumero, " +
+                 "TribITBI.ITBIAno, TribITBIEdif.InscricaoImobiliaria AS Inscricao, TribITBIEdif.ITBIEdifAnoDiv, TribITBIEdif.ITBIEdifMesDivida, " +
+                 "TribITBIEdif.TipoTribID, TribITBIEdif.ITBIEdifSubDivida, TribITBIEdif.ITBIEdifParc, " +
+                 "dbo.ITBINomeComprador(TribITBIEdif.ITBIEdifID) AS NomeComprador, dbo.ITBINomeVendedor(TribITBIEdif.ITBIEdifID) AS NomeVendedor, " +
+                 "TribDividasImo.ImoDivDataBaixa AS DataBaixa, 0 AS IDDivida, TribTipoBaixa.TipoBxNome AS TipoNome " +
+                 "FROM TribITBI " +
+                 "INNER JOIN TribITBIEdif ON TribITBI.ITBIID = TribITBIEdif.ITBIID " +
+                 "LEFT OUTER JOIN TribDividasImo ON TribITBIEdif.ImoIDDivida = TribDividasImo.ImoIDDivida AND ImoDivExcluido IS NULL " +
+                 "INNER JOIN TribTipoBaixa ON TribDividasImo.TipoBxID = TribTipoBaixa.TipoBxID " +
+                 "LEFT OUTER JOIN tribBoletosDividas ON TribDividasImo.ImoIDDivida = tribBoletosDividas.ImoIDDivida " +
+                 "WHERE TribITBIEdif.ITBIEdifID = " + Convert.ToInt32(ITBIEdif.ItbiedifId) ;
+            }
+            else
+            {
+                sqlMain = "SELECT tribBoletosDividas.boleNossoNumero, TribITBIEdif.ITBIEdifID, TribITBIEdif.ITBIID, TribITBI.ITBINumero, " +
+                 "TribITBI.ITBIAno, TribITBIEdif.InscricaoImobiliaria AS Inscricao, TribITBIEdif.ITBIEdifAnoDiv, TribITBIEdif.ITBIEdifMesDivida, " +
+                 "TribITBIEdif.TipoTribID, TribITBIEdif.ITBIEdifSubDivida, TribITBIEdif.ITBIEdifParc, " +
+                 "dbo.ITBINomeComprador(TribITBIEdif.ITBIEdifID) AS NomeComprador, dbo.ITBINomeVendedor(TribITBIEdif.ITBIEdifID) AS NomeVendedor, " +
+                 "TribDividasImo.ImoDivDataBaixa AS DataBaixa, TribDividasImo.ImoIDDivida AS IDDivida, TribTipoBaixa.TipoBxNome AS TipoNome " +
+                 "FROM TribITBI " +
+                 "INNER JOIN TribITBIEdif ON TribITBI.ITBIID = TribITBIEdif.ITBIID " +
+                 "INNER JOIN TribDividasImo ON TribITBIEdif.ImoIDDivida = TribDividasImo.ImoIDDivida AND ImoDivExcluido IS NULL " +
+                 "INNER JOIN TribTipoBaixa ON TribDividasImo.TipoBxID = TribTipoBaixa.TipoBxID " +
+                 "INNER JOIN tribBoletosDividas ON TribDividasImo.ImoIDDivida = tribBoletosDividas.ImoIDDivida " +
+                 "WHERE tribBoletosDividas.boleNossoNumero IN (" + strNossoNumero + ") " +
+                 "UNION " +
+                 "SELECT tribBoletosDividas.boleNossoNumero, TribITBIEdif.ITBIEdifID, TribITBIEdif.ITBIID, TribITBI.ITBINumero, " +
+                 "TribITBI.ITBIAno, TribITBIEdif.ITBIInscIncra AS Inscricao, TribITBIEdif.ITBIEdifAnoDiv, TribITBIEdif.ITBIEdifMesDivida, " +
+                 "TribITBIEdif.TipoTribID, TribITBIEdif.ITBIEdifSubDivida, TribITBIEdif.ITBIEdifParc, " +
+                 "dbo.ITBINomeComprador(TribITBIEdif.ITBIEdifID) AS NomeComprador, dbo.ITBINomeVendedor(TribITBIEdif.ITBIEdifID) AS NomeVendedor, " +
+                 "TribDividasContribuinte.ConDivDataBaixa AS DataBaixa, TribDividasContribuinte.ConIDDivida AS IDDivida, TribTipoBaixa.TipoBxNome AS TipoNome " +
+                 "FROM TribITBI " +
+                 "INNER JOIN TribITBIEdif ON TribITBI.ITBIID = TribITBIEdif.ITBIID " +
+                 "INNER JOIN TribDividasContribuinte ON TribITBIEdif.ConIDDivida = TribDividasContribuinte.ConIDDivida AND ConDivExcluido IS NULL " +
+                 "INNER JOIN TribTipoBaixa ON TribDividasContribuinte.TipoBxID = TribTipoBaixa.TipoBxID " +
+                 "INNER JOIN tribBoletosDividas ON TribDividasContribuinte.ConIDDivida = tribBoletosDividas.ConIDDivida " +
+                 "WHERE tribBoletosDividas.boleNossoNumero IN (" + strNossoNumero + ")";
+            }
+
+            await InsereTribReportSql(new TribReportSql()
+                {
+                    RsqlSessionId = secao, //Session.SessionID
+                    RsqlSubReport = "main",
+                    RsqlSql = sqlMain
+
+                });
+
+            sqlHeader = "SELECT MemCNPJ AS CNPJ, MemRazaoSocial AS RazaoSocial, MemImgLogo AS Logo, MemImgLogo2 AS Logo2, ISNULL(MemTipoLograd, '') AS TipoLograd, " +
+                               "ISNULL(MemEndereco, '') AS Endereco, ISNULL(MemEndNum, '') AS Numero, ISNULL(MemBairro, '') AS Bairro, ISNULL(MemCEP, '') AS CEP, " +
+                               "ISNULL(MemCidade, '') AS Cidade, ISNULL(MemUF, '') AS UF, MemEmail AS EndEmail, MemSite AS EndSite " +
+                               "FROM Membros " +
+                               "WHERE MemCNPJ = " + sCNPJMembro.Trim();
+            await InsereTribReportSql(new TribReportSql()
+                {
+                    RsqlSessionId = secao, //Session.SessionID
+                    RsqlSubReport = "xRelHeader.rpt",
+                    RsqlSql = sqlHeader
+
+                });
+            string texto = string.Empty;
+            StringBuilder sb = new StringBuilder();
+            // iremos verificar se o ITBI possi o valor da base de cálculo maior que o valor declarado...
+            // se o valor for superior, o sistema também irá carrecar outra mensagem
+            if(ITBIEdif.ItbiedifId > 0){
+                if(ITBIEdif.ItbiedifBaseCalcImovel > ITBIEdif.ItbiedifVlrDeclarado){
+                    //var param = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "IDTextoITBIBaseCalculoMaiorDeclarado"), CancellationToken.None);
+                    var param = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "IDTextoITBIBaseCalculoMaiorDeclarado"));
+                    tribTextos = await tribTextosAppService.GetBySpecAsync(new TribTextosSpec(long.Parse(param.SiPaValorParametro)), CancellationToken.None);
+                    sb.Append(tribTextos is not null ? tribTextos.TextoDescricao : "");
+                    sb.Append(Environment.NewLine);
+                    texto = sb.ToString();
+                }
+            }
+
+            //'condição nova (mostrar termo minhacasa)
+            string texto2 = string.Empty;
+            // TribDividasImo tribDividasImo;
+            TribTipoBaixa tribTipoBaixa;
+            //Dim mcSit As New Tribuno.Dividas.TribTipoBaixa(bc.getTransaction)
+
+
+            //var paramTipoBaixaIsencaoMinhaCasaMinhaVida = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "idTipoBaixaIsençãoMinhaCasaMinhaVida"), CancellationToken.None);
+            var paramTipoBaixaIsencaoMinhaCasaMinhaVida = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "idTipoBaixaIsençãoMinhaCasaMinhaVida"));
+            //var paramTipoBaixaIsencaoCasaVerdeAmarela = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "IdTipoBaixaIsençãoMinhaCasaVerdeAmarela"), CancellationToken.None);
+            var paramTipoBaixaIsencaoCasaVerdeAmarela = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "IdTipoBaixaIsençãoMinhaCasaVerdeAmarela"));
+            if (ITBIEdif.ImoIddivida > 0 || ITBIEdif is not null)
+            {
+                if (tribDividasImo.ImoIddivida > 0 || tribDividasImo is not null)
+                {
+                    //var paramTipoBxNaoIncidencia = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "TipoBxNaoIncidencia"), CancellationToken.None);
+                    var paramTipoBxNaoIncidencia = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "TipoBxNaoIncidencia"));
+                    //var paramTipoBxImune = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "TipoBxImune"), CancellationToken.None);
+                    var paramTipoBxImune = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "TipoBxImune"));
+                    //var paramTipoBxIsentoImposto = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "TipoBxIsentoImposto"), CancellationToken.None);
+                    var paramTipoBxIsentoImposto = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "TipoBxIsentoImposto"));
+                    //var paramTipoBaixaIsencaoMinhaCasaMinhaVida = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "idTipoBaixaIsençãoMinhaCasaMinhaVida"), CancellationToken.None);
+
+                    //tribTextos = await tribTextosAppService.GetBySpecAsync(new TribTextosSpec(long.Parse(param.SiPaValorParametro)), CancellationToken.None);
+                    if (tribDividasImo.TipoBxId == int.Parse(paramTipoBxNaoIncidencia.SiPaValorParametro) || tribDividasImo.TipoBxId == int.Parse(paramTipoBxImune.SiPaValorParametro))
+                    {
+                        texto = string.Empty;
+                        //var paramTextoImunidadeITBI = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "IdTextoImunidadeITBI"), CancellationToken.None);
+                        var paramTextoImunidadeITBI = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "IdTextoImunidadeITBI"));
+                        //var paramTextoImunidadeNaoIncidenciaITBI = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "IdTextoImunidadeNaoIncidenciaITBI"), CancellationToken.None);
+                        var paramTextoImunidadeNaoIncidenciaITBI = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "IdTextoImunidadeNaoIncidenciaITBI"));
+                        var pesquisatexto = (tribDividasImo.TipoBxId == int.Parse(paramTipoBxImune.SiPaValorParametro) ? paramTextoImunidadeITBI : paramTextoImunidadeNaoIncidenciaITBI);
+                        tribTextos = await tribTextosAppService.GetBySpecAsync(new TribTextosSpec(long.Parse(pesquisatexto.SiPaValorParametro)), CancellationToken.None);
+                        sb.Append(tribTextos is not null ? tribTextos.TextoDescricao : "");
+                        sb.Append(Environment.NewLine);
+                        texto2 = sb.ToString();
+                        if (tribDividasImo.TipoBxId == int.Parse(paramTipoBxImune.SiPaValorParametro))
+                        {
+
+                            titulo = "CERTIDÃO DE IMUNIDADE DO ITBI";
+                        }
+
+                    }
+                    else if (tribDividasImo.TipoBxId == int.Parse(paramTipoBxIsentoImposto.SiPaValorParametro))
+                    {
+                        texto = string.Empty;
+                        //var paramTextoIsensaoArt421ITBI = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "IdTextoIsensaoArt421ITBI"), CancellationToken.None);
+                        var paramTextoIsensaoArt421ITBI = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "IdTextoIsensaoArt421ITBI"));
+                        tribTextos = await tribTextosAppService.GetBySpecAsync(new TribTextosSpec(long.Parse(paramTextoIsensaoArt421ITBI.SiPaValorParametro)), CancellationToken.None);
+                        sb.Append(tribTextos is not null ? tribTextos.TextoDescricao : "");
+                        sb.Append(Environment.NewLine);
+                        texto2 = sb.ToString();
+
+                    }
+                    else if (tribDividasImo.TipoBxId == int.Parse(paramTipoBaixaIsencaoMinhaCasaMinhaVida.SiPaValorParametro))
+                    {
+                        texto = string.Empty;
+                        //var paramTextoTermoMinhaCasa = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "idTextoTermoMinhaCasa"), CancellationToken.None);
+                        var paramTextoTermoMinhaCasa = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "idTextoTermoMinhaCasa"));
+                        if (int.Parse(paramTextoTermoMinhaCasa.SiPaValorParametro) > 0 || paramTextoTermoMinhaCasa is not null)
+                        {
+                            tribTextos = await tribTextosAppService.GetBySpecAsync(new TribTextosSpec(long.Parse(paramTextoTermoMinhaCasa.SiPaValorParametro)), CancellationToken.None);
+                            sb.Append(tribTextos is not null ? tribTextos.TextoDescricao : "");
+                            sb.Append(Environment.NewLine);
+                            texto2 = sb.ToString();
+                            if( tribTextos.TextoTitulo.Trim() != "")
+                            {
+                                titulo = tribTextos.TextoTitulo.Trim();
+                            }
+
+                        }
+
+                    }
+                    else if (tribDividasImo.TipoBxId == int.Parse(paramTipoBaixaIsencaoCasaVerdeAmarela.SiPaValorParametro))
+                    {
+                        texto = string.Empty;
+                        //var paramTextoTermoMinhaCasaVerdeAmarela = await sisParametrosAppService.GetBySpecAsync(new SisParametrosSpec("Tribuno", "idTextoTermoMinhaCasaVerdeAmarela"), CancellationToken.None);
+                        var paramTextoTermoMinhaCasaVerdeAmarela = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "idTextoTermoMinhaCasaVerdeAmarela"));
+                        if (int.Parse(paramTextoTermoMinhaCasaVerdeAmarela.SiPaValorParametro) > 0 || paramTextoTermoMinhaCasaVerdeAmarela is not null)
+                        {
+                            tribTextos = await tribTextosAppService.GetBySpecAsync(new TribTextosSpec(long.Parse(paramTextoTermoMinhaCasaVerdeAmarela.SiPaValorParametro)), CancellationToken.None);
+                            sb.Append(tribTextos is not null ? tribTextos.TextoDescricao : "");
+                            sb.Append(Environment.NewLine);
+                            texto2 = sb.ToString();
+                            if (tribTextos.TextoTitulo.Trim() != "")
+                            {
+                                titulo = tribTextos.TextoTitulo.Trim();
+                            }
+
+                        }
+                    }
+
+                }
+            }
+            sqlDadosITBI = " SELECT  TribITBIEdif.ITBIEdifID, TribITBIEdif.ITBIEdifDataVenc, TribITBIEdif.InscricaoImobiliaria, TribITBIEdif.ITBIInscIncra, TribITBIEdif.EdifMatricula, " +
+                           "    TribITBIEdif.Matricula, TribITBIEdif.ITBIEndereco, ISNULL(Logradouro.LogradTipo,'') AS LogradTipo, ISNULL(Logradouro.LogradNome,'') AS LogradNome, " +
+                           "    ISNULL(TribITBIEdif.EdifNumeracao,'') AS EdifNumeracao, ISNULL(Loteamentos.Descricao,'') AS Descricao, ISNULL(TribITBIEdif.EdifComplemento,'') AS EdifComplemento, " +
+                           "    ISNULL(TribDenominacao.DenoID,'') AS DenoID, ISNULL(TribDenominacao.DenoNome,'') AS DenoNome, ISNULL(TribITBIEdif.EdifAndarConstrucao,'') AS EdifAndarConstrucao, " +
+                           "    ISNULL(TribITBIEdif.EdifBloco,'') AS EdifBloco, ISNULL(TribITBIEdif.EdifNumAptoSalaLoja,'') AS EdifNumAptoSalaLoja, TribITBIEdif.TerrAreaTerreno, TribITBIEdif.ITBIAreaTotalImo, " +
+                           "    ( SELECT TribParamCalculos.ParamNome FROM TribEdifParamCalculos " +
+                           "        INNER JOIN TribParamCalculos ON TribEdifParamCalculos.TParamID = TribParamCalculos.TParamID " +
+                           "        AND TribEdifParamCalculos.ParamID = TribParamCalculos.ParamID " +
+                           "      WHERE (TribEdifParamCalculos.TParamID = " + IDTipoConstrucao + ") And (TribEdifParamCalculos.EdificacaoID = TribITBIEdif.EdificacaoID) " +
+                           "    ) AS TipoConstrucao, " +                           "    TribITBIEdif.InscricaoImobiliariaGEO, TribITBIEdif.TerrReferenciaAnterior, TribITBIEdif.ITBIEdifAreaConstr, ISNULL(TribITBIEdif.EdifAreaCoberta, 0) AS [EdifAreaCoberta], ISNULL(TribITBIEdif.Loteamento,'') AS Loteamento, " +
+                           "    TribITBIEdif.QuadraLoteamento, TribITBIEdif.LoteLoteamento, TribITBIEdif.ITBIEdifVlrDeclarado, TribITBIEdif.ITBIEdifBaseCalcFin, " +
+                           "    TribITBIEdif.ITBIEdifBaseCalcImovel, TribITBIEdif.ITBIEdifVlrDevido, TribITBIEdif.ITBIEdifAliqFinanc, TribITBIEdif.ITBIEdifPercTransacao, " +
+                           "    TribITBIEdif.ITBIEdifObservacao, (cast(tblTexto.textodescricao as varchar(max))  + cast('" + texto + "' as varchar(max)) + '" + texto2  +"' +  ISNULL(TribITBI.ITBIDsAlerta,'')) textodescricao, (tblTexto.TextoTitulo) AS TextoTitulo, tblTexto.TextoImagemAssinatura, tblTexto.TextoNomeAssinatura, tblTexto.TextoCargoAssinatura, " +
+                           "    dbo.ITBINomeVendedor(TribITBIEdif.ITBIEdifID) AS Vendedor, dbo.ITBINomeComprador(TribITBIEdif.ITBIEdifID) AS Comprador, " +
+                           "    ( SELECT TOP 1 ISNULL(Contribuintes.ConTipoLograd,'') + ' ' + ISNULL(Contribuintes.ConEndereco,'') + ', ' + ISNULL(Contribuintes.ConNumero,'') + ' - ' + " +
+                           "        ISNULL(RTRIM(Bairro.BaiNome), '') + ' - ' + ISNULL(Cidade.CidNome, '') + ' - ' + ISNULL(Cidade.CidUF,'') + ' ' + " +
+                           "        ISNULL(Contribuintes.ConComplemento,'') " +
+                           "      FROM TribITBICompradores " +
+                           "        INNER JOIN Contribuintes ON TribITBICompradores.ConID = Contribuintes.ConID " +
+                           "        LEFT OUTER JOIN Bairro ON Contribuintes.ConBairroId = Bairro.BairroId " +
+                           "        LEFT OUTER JOIN Cidade ON Contribuintes.ConCidadeId = Cidade.CidadeId " +
+                           "      WHERE (TribITBICompradores.ITBIEdifID = TribITBIEdif.ITBIEdifID) " +
+                           "        AND (TribITBICompradores.ImprimeNaGuia = 'Sim') " +
+                           "      ORDER BY TribITBICompradores.ConID " +
+                           "    ) AS EnderecoComprador, " +
+                           "    ( SELECT TOP 1 ISNULL(Contribuintes.ConTipoLograd,'') + ' ' + ISNULL(Contribuintes.ConEndereco,'') + ', ' + ISNULL(Contribuintes.ConNumero,'') + ' - ' + " +
+                           "        ISNULL(RTRIM(Bairro.BaiNome), '') + ' - ' + ISNULL(Cidade.CidNome, '') + ' - ' + ISNULL(Cidade.CidUF,'') + ' ' + ISNULL(Contribuintes.ConComplemento,'') " +
+                           "      FROM TribITBIVendedores " +
+                           "        INNER JOIN Contribuintes ON TribITBIVendedores.ConID = Contribuintes.ConID " +
+                           "        LEFT OUTER JOIN Bairro ON Contribuintes.ConBairroId = Bairro.BairroId " +
+                           "        LEFT OUTER JOIN Cidade ON Contribuintes.ConCidadeId = Cidade.CidadeId " +
+                           "      WHERE (TribITBIVendedores.ITBIEdifID = TribITBIEdif.ITBIEdifID) " +
+                           "        AND (TribITBIVendedores.ImprimeNaGuia = 'Sim') " +
+                           "      ORDER BY TribITBIVendedores.ConID " +
+                           "    ) AS EnderecoVendedor, " +
+                           "	( SELECT TOP 1 Contribuintes.ConCNPJCPF " +
+                           "      FROM TribITBICompradores " +
+                           "        INNER JOIN Contribuintes ON TribITBICompradores.ConID = Contribuintes.ConID " +
+                           "      WHERE (TribITBICompradores.ITBIEdifID = TribITBIEdif.ITBIEdifID) " +
+                           "        AND (TribITBICompradores.ImprimeNaGuia = 'Sim') " +
+                           "      ORDER BY TribITBICompradores.ConID " +
+                           "    ) AS CPFCNPJComprador, " +
+                           "    ( SELECT TOP 1 Contribuintes.ConCNPJCPF " +
+                           "      FROM TribITBIVendedores " +
+                           "        INNER JOIN Contribuintes ON TribITBIVendedores.ConID = Contribuintes.ConID " +
+                           "      WHERE (TribITBIVendedores.ITBIEdifID = TribITBIEdif.ITBIEdifID) " +
+                           "      AND (TribITBIVendedores.ImprimeNaGuia = 'Sim') " +
+                           "      ORDER BY TribITBIVendedores.ConID " +
+                           "    ) AS CPFCNPJVendedor, TribITBI.ITBIUsuarioInclusao, TribITBIEdif.EdifCaracteristica, ISNULL(Logradouro_2.LogradTipo,'') AS LogradTipoTerr, " +
+                           "    ISNULL(Logradouro_2.LogradNome,'') AS LogradNomeTerr, ISNULL(Loteamentos_2.Descricao,'') AS DescricaoTerr, TribITBI.ITBIDataLanc, ISNULL(TribITBIEdif.ITBIEdifPercTransmitir,0) AS ITBIEdifPercTransmitir, " +
+                           "   ISNULL((SELECT TOP 1 1 FROM TribBaixaDevolucaoDividas WHERE TribBaixaDevolucaoDividas.ImoIDDivida = TribITBIEdif.ImoIDDivida),0) AS Restituido, " +
+                           "   ISNULL(TribITBIEdif.AreaAbertaCoberta,0) AS AreaAbertaCoberta " +
+                           " FROM TribITBIEdif " +
+                           "    LEFT OUTER JOIN Loteamentos ON TribITBIEdif.IDLoteamento = Loteamentos.IDLoteamento " +
+                           "    LEFT OUTER JOIN Logradouro ON TribITBIEdif.LogradID = Logradouro.LogradID " +
+                           "    LEFT OUTER JOIN TribDenominacao ON TribITBIEdif.DenoID = TribDenominacao.DenoID " +
+                           "    LEFT OUTER JOIN Loteamentos AS Loteamentos_1 ON TribITBIEdif.IDLoteamento = Loteamentos_1.IDLoteamento " +
+                           "    LEFT OUTER JOIN Logradouro AS Logradouro_1 ON TribITBIEdif.LogradID = Logradouro_1.LogradID " +
+                           "    INNER JOIN TribITBI ON TribITBIEdif.ITBIID = TribITBI.ITBIID " +
+                           "    LEFT OUTER JOIN (SELECT TextoID, TextoImagemAssinatura, TextoNomeAssinatura, TextoCargoAssinatura, TextoDescricao, TextoTitulo FROM TribTextos) tblTexto ON tblTexto.TextoID = " + IDTextoNotif +
+                           "    LEFT OUTER JOIN TribTestadasTerreno ON TribITBIEdif.TerrenoID = TribTestadasTerreno.TerrenoID AND TribTestadasTerreno.TestadasPrincipal = 'Sim' " +
+                           "    LEFT OUTER JOIN Logradouro Logradouro_2 ON TribTestadasTerreno.LogradID = Logradouro_2.LogradID " +
+                           "    LEFT OUTER JOIN TribQuadraLograd ON TribTestadasTerreno.LogradID = TribQuadraLograd.LogradID " +
+                           "    AND TribITBIEdif.QuadraID = TribQuadraLograd.QuadraID " +
+                           "    LEFT OUTER JOIN Loteamentos Loteamentos_2 ON Loteamentos_2.IDLoteamento = dbo.TribQuadraLograd.IDLoteamento ";
+
+            if(TipoITBI == "Isento" || TipoITBI == "IsentoArt")
+            {
+                sqlWhereDados = sqlDadosITBI + " WHERE TribITBIEdif.ITBIEdifID = " + ITBIEdif.ItbiedifId.ToString();
+            }
+            else
+            {
+                sqlWhereDados = sqlDadosITBI + " WHERE TribITBIEdif.ITBIID IN " +
+                           "    ( " +
+                           "        SELECT TribITBIEdif.ITBIID " +
+                           "        FROM tribBoletosDividas " +
+                           "            INNER JOIN TribDividasImo ON tribBoletosDividas.ImoIDDivida = TribDividasImo.ImoIDDivida AND ImoDivExcluido IS NULL " +
+                           "            INNER JOIN TribITBIEdif ON tribBoletosDividas.ImoIDDivida = TribITBIEdif.ImoIDDivida " +
+                           "        WHERE (tribBoletosDividas.boleNossoNumero IN (" + strNossoNumero + ")) " +
+                           "        UNION " +
+                           "        SELECT TribITBIEdif.ITBIID " +
+                           "        FROM tribBoletosDividas " + 
+                           "            INNER JOIN TribDividasContribuinte ON tribBoletosDividas.ConIDDivida = TribDividasContribuinte.ConIDDivida AND ConDivExcluido IS NULL " +
+                           "            INNER JOIN TribITBIEdif ON tribBoletosDividas.ImoIDDivida = TribITBIEdif.ImoIDDivida " +
+                           "        WHERE (tribBoletosDividas.boleNossoNumero IN (" + strNossoNumero + ")) " +
+                           "    )";
+            }
+            await InsereTribReportSql(new TribReportSql()
+                {
+                    RsqlSessionId = secao, //Session.SessionID
+                    RsqlSubReport = "xRelDadosITBI.rpt",
+                    RsqlSql = sqlWhereDados
+
+                });
+            if (TipoITBI == "Isento" || TipoITBI == "IsentoArt")
+            {
+                sqlBoleto = " SELECT 2 AS nrTipoCadastro, '' AS dsNossoNumero, '' AS vlBoleto, '' AS dsLinhaDigitavel, '' AS dtVencimento, '' AS dsLocalPagamento, " +
+                            "   '' AS imCodigoBarra, '' AS dsInscricoes, '' AS dsConvInstJuros, '' AS imBrasao, '' AS dsPrefeitura, '' AS dsSecretaria, '' AS dsCNPJMembro  ";
+            }
+            else
+            {
+                sqlBoleto = " SELECT 1 AS nrTipoCadastro, TribBoletos.boleNossoNumero AS dsNossoNumero, TribBoletos.boleValorBoleto AS vlBoleto, " +
+                            "   TribBoletos.boleLinhaDigitavel AS dsLinhaDigitavel, TribBoletos.boleVencimento AS dtVencimento, ConvenioBanco.ConvLocalPgto AS dsLocalPagamento, " +
+                            "   tribBoletosBarra.boleCodigoBarra AS imCodigoBarra, InscricaoImobiliaria AS dsInscricoes, ConvenioBanco.ConvInstJuros AS dsConvInstJuros, " +
+                            "   (SELECT MemImgLogo FROM Membros WHERE MemCNPJ = '" + sCNPJMembro.Trim() + "') AS imBrasao, " +
+                            "   (SELECT MemRazaoSocial FROM Membros WHERE MemCNPJ = '" + sCNPJMembro.Trim() + "') AS dsPrefeitura, " +
+                            "   (SELECT certnegTitulo FROM TribParametros WHERE TParamID = '" + sSistema.Trim() + "') AS dsSecretaria, " +
+                            "   '" + sCNPJMembro.Trim() + "' AS dsCNPJMembro " +
+                            " FROM TribBoletos " +
+                            "   JOIN tribBoletosDividas ON TribBoletos.boleNossoNumero = tribBoletosDividas.boleNossoNumero " +
+                            "   JOIN TribDividasImo ON tribBoletosDividas.ImoIDDivida = TribDividasImo.ImoIDDivida AND ImoDivExcluido IS NULL " +
+                            "   JOIN TribComposicaoDivImo ON TribDividasImo.ImoIDDivida = TribComposicaoDivImo.ImoIDDivida " +
+                            "   JOIN TribTipoTributos ON TribComposicaoDivImo.TipoTribID = TribTipoTributos.TipoTribID " +
+                            "   JOIN TribTipoTributos AS TribPrinc ON TribDividasImo.TipoTribID = TribPrinc.TipoTribID " +
+                            "   JOIN TribEdificacoes ON TribEdificacoes.EdificacaoID = TribDividasImo.EdificacaoID " +
+                            "   JOIN ConvenioBanco ON TribBoletos.ConvenioId = ConvenioBanco.ConvenioId " +
+                            "   LEFT JOIN tribBoletosBarra ON TribBoletos.boleNossoNumero = tribBoletosBarra.bolenossonumero " +
+                            " WHERE TribBoletos.boleNossoNumero IN (" + strNossoNumero + ") ";
+
+            }
+            await InsereTribReportSql(new TribReportSql()
+                {
+                    RsqlSessionId = secao, //Session.SessionID
+                    RsqlSubReport = "xRelSubBoletoRegistrado.rpt",
+                    RsqlSql = sqlBoleto
+                });
+
+            await InsereTribReportPar(new TribReportPar()
+                {
+                    RparSessionId = secao,
+                    RparParametro = "@mostraNumAnoITBI",
+                    RparTipo = "BOOLEAN",
+                    RparValor = boolMostrarNumAno.ToString()
+            });
+            await InsereTribReportPar(new TribReportPar()
+                {
+                    RparSessionId = secao,
+                    RparParametro = "@TipoGuiaITBI",
+                    RparTipo = "STRING",
+                    RparValor = TipoITBI
+                });
+            await InsereTribReportPar(new TribReportPar()
+                {
+                    RparSessionId = secao,
+                    RparParametro = "@UsuarioEmissaoITBI",
+                    RparTipo = "STRING",
+                    RparValor = "Sandro.src"
+                });
+            await InsereTribReportPar(new TribReportPar()
+                {
+                    RparSessionId = secao,
+                    RparParametro = "@possuiParcelamentoITBI",
+                    RparTipo = "BOOLEAN",
+                    RparValor = TemParcelamento.ToString()
+                });
+            await InsereTribReportPar(new TribReportPar()
+                {
+                    RparSessionId = secao,
+                    RparParametro = "@possuiDividasPagasITBI",
+                    RparTipo = "BOOLEAN",
+                    RparValor = TemDividaPaga.ToString()
+                });
+            await InsereTribReportPar(new TribReportPar()
+                {
+                    RparSessionId = secao,
+                    RparParametro = "@mostrarSomenteDadosITBI",
+                    RparTipo = "BOOLEAN",
+                    RparValor = boolMostrarQL.ToString()
+                });
+            await InsereTribReportPar(new TribReportPar()
+                {
+                    RparSessionId = secao,
+                    RparParametro = "@mostrarEndereco",
+                    RparTipo = "BOOLEAN",
+                    RparValor = boolMostrarEndereco.ToString()
+                });
+            await InsereTribReportPar(new TribReportPar()
+                {
+                    RparSessionId = secao,
+                    RparParametro = "@RefAnteriorInscricaoGeo",
+                    RparTipo = "BOOLEAN",
+                    RparValor =  boolRefAnteriorGeo.ToString()
+                });
+            await InsereTribReportPar(new TribReportPar()
+                {
+                    RparSessionId = secao,
+                    RparParametro = "@CodCedente",
+                    RparTipo = "STRING",
+                    RparValor = CodCedente.ToString()
+                });
+            await InsereTribReportPar(new TribReportPar()
+                {
+                    RparSessionId = secao,
+                    RparParametro = "@Titulo",
+                    RparTipo = "STRING",
+                    RparValor = titulo
+                });
+            await InsereTribReportPar(new TribReportPar()
+                {
+                    RparSessionId = secao,
+                    RparParametro = "@mostrarHeader",
+                    RparTipo = "STRING",
+                    RparValor = "Sim"
+                });
+        }
+        catch (Exception ex)
+        {
+            throw ex;
+        }
+    }
+
+    public async Task<string > GetCodCedente(int ConvenioID)
+    {
+        var DbSetConvenioBanco  = await ConvenioBancoAppService.GetDbSet();
+        var DbSetAgencia = await AgenciaAppService.GetDbSet();
+        ConvenioBanco convenioBanco;
+        Agencium agencia;
+        string CodCedente = "";
+        string DVAgencia = "";
+        try
+        {
+            //convenioBanco = await ConvenioBancoAppService.GetBySpecAsync(new ConvenioBancoSpec(ConvenioID), CancellationToken.None);
+            convenioBanco = await Task.FromResult(DbSetConvenioBanco.FirstOrDefault(c=>c.ConvenioId==ConvenioID));
+            CodCedente = ("" + convenioBanco.ConvCodCedente).Trim();
+            //agencia = await AgenciaAppService.GetBySpecAsync(new AgenciaSpec(convenioBanco.ConvAgenciaId,convenioBanco.ConvBancoId), CancellationToken.None);
+            agencia = await Task.FromResult(DbSetAgencia.FirstOrDefault(a=>a.AgenciaId==convenioBanco.ConvAgenciaId && a.AgBancoId==convenioBanco.ConvBancoId));
+            //if(agencia.AgDv.Trim() != "" || agencia is null)
+            if (agencia is not null)
+            {
+                DVAgencia = "-" + agencia.AgDv;
+            }
+            if (convenioBanco.ConvBancoId == vbFEBRABAN.cBoletoFEBRABAN.TipoConvenios.HSBC.ToString())
+            {
+                return CodCedente;
+            }
+            else
+            {
+                if(CodCedente.Substring(0,3).Trim() == ("" + convenioBanco.ConvAgenciaId).Trim() || CodCedente.Length >= 11)
+                {
+                    if (CodCedente.Substring(0,3).Trim() == convenioBanco.ConvAgenciaId)
+                    {
+                        return CodCedente.Insert(CodCedente.Length - 1, "-");
+                    }
+                    else
+                    {
+                        return ("" + convenioBanco.ConvAgenciaId).Trim() + "." + CodCedente.Insert(CodCedente.Length - 1, "-");
+                    }
+                }
+                else
+                {
+                    return ("" + convenioBanco.ConvAgenciaId).Trim() + DVAgencia + " / " + CodCedente.Insert(CodCedente.Length - 1, "-");
+                }
+            }
+            return "";
+
+        }
+        catch (Exception ex) 
+        {
+            throw ex;
+        }
+
+
+        return "";
+    }
+    public async Task Imprimir(string strNossoNumero, int ConvenioID, string TipoGuia, int ITBIEdifID, bool TemParcelamento, bool TemDividaPaga, TribItbiedif? ITBIEdfi, TribDividasImo tribDividasImo, string? TipoDivida = "0")
+    {
+        //await GravaDadosRelatorio(strNossoNumero, ConvenioID,TipoGuia,TemParcelamento,TemDividaPaga,ITBIEdfi,tribDividasImo,TipoDivida);
+        string ReportName = "xRelGuiaITBI";
+        TribunoNet.Funcoes Rel = new TribunoNet.Funcoes();
+        string enderecoRel = "";
+        Hashtable ht = new Hashtable();
+        string path = "";
+        // frmITBINovo.aspx.vb linha 2342      path = Page.MapPath("../pdf/") & ReportName & ".pdf"
+        path = Path.Combine(EnvironmentRazor.WebRootPath,"pdf",ReportName + ".pdf");
+        ht.Add("reportName", ReportName);
+        ht.Add("session", secao);
+        ht.Add("reportFormat", "pdf");
+        ht.Add("path", path);
+        enderecoRel = "?p=" + System.Web.HttpUtility.UrlEncode(CryptDP.Param.getQS4DP(ht));
+        var serverName  = AppSettings.Value.ServerName;
+        var directPrintx = AppSettings.Value.DirectPrintx;
+        //enderecoRel = ConfigurationManager.AppSettings("serverName") & ConfigurationManager.AppSettings("DirectPrintx") & enderecoRel
+        enderecoRel = $"{serverName}{directPrintx}{ enderecoRel}";
+
+
+        ReportName = secao + DateTime.Now.Millisecond + ReportName.Trim();
+
+        //   Script += Rel.AbreRelatorio(enderecoRel, ReportName)
+        Rel.AbreRelatorio(enderecoRel, ReportName);
+
 
     }
 
+    //public async Task GravaDadosRelatorio(string strNossoNumero, int ConvenioID, string TipoITBI, bool TemParcelamento, bool TemDividaPaga, TribItbiedif ITBIEdif, TribDividasImo tribDividasImo, string? TipoDivida = "0")
+
+    //Private Sub gravaDadosRelatorio(ByVal strNossoNumero As String, ByVal ConvenioID As Integer, ByVal TipoITBI As String, ByVal TemParcelamento As Boolean, ByVal TemDividaPaga As Boolean, ByVal ITBIEdifId As Integer, Optional ByVal TipoDivida As String = "0")
+    public async Task<bool> PossuiDividas(long Id){
+        var DBSetDividasImo = await tribDividasImoAppService.GetDbSet();
+        var dividas = await  Task.FromResult(DBSetDividasImo.Where(d=> d.EdificacaoId==Id && d.TipoBxId ==1).ToList());
+        if (dividas.Any())
+        {
+            return true;
+
+        }
+        return false;
+    }
+    public async Task<List<TribItbiedif>> possuiITBI(long Id)
+    {
+        var DBSetDividasImo = await tribDividasImoAppService.GetDbSet();
+        var DBSetITBIEdif = await tribITBIEdifAppService.GetDbSet();
+        List<TribItbiedif> itbiediflancados = new List<TribItbiedif>();
+        //var dividas = await Task.FromResult(DBSetDividasImo.Where(d => d.EdificacaoId == Id && d.TipoBxId == 1 && (d.TipoTribId == 79)).ToList());
+        //var dividas = await Task.FromResult(DBSetDividasImo.FirstOrDefault(d => d.EdificacaoId == Id && d.TipoBxId == 1 && (d.TipoTribId == 79)));
+        var dividas = await Task.FromResult(DBSetDividasImo.Where(d => d.EdificacaoId == Id && d.TipoBxId == 1 && (d.TipoTribId == 79)).ToList());
+        if (dividas is not null || dividas.Count() > 0)
+        {
+            //itbiediflancados = await Task.FromResult(DBSetITBIEdif.FirstOrDefault(ie => ie.EdificacaoId == divida.EdificacaoId && ie.ImoIddivida == divida.ImoIddivida));
+            //itbiediflancados = await Task.FromResult(DBSetITBIEdif.FirstOrDefault(ie => ie.EdificacaoId == divida.EdificacaoId && ie.ImoIddivida == divida.ImoIddivida));
+            foreach(var divida in dividas)
+            {
+                var newIE = await Task.FromResult(DBSetITBIEdif.FirstOrDefault(ie => ie.EdificacaoId == divida.EdificacaoId && ie.ImoIddivida == divida.ImoIddivida));
+                itbiediflancados.Add(newIE);
+            }
+           
+        }
+        return itbiediflancados;
+    }
+    
 }
 

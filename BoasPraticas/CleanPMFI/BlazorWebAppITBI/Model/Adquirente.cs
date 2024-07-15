@@ -10,5 +10,7 @@ namespace BlazorWebAppITBI.Models
         public string? percentualAdquirido { get; set; }
         public List<Anexo>? AnexosExigidos { get; set; }
         public string Titularidade { get; set; }
+        bool isento { get; set; } = false;
+
     }
 }
