@@ -4,7 +4,10 @@
 @using BlazorWebAppITBI.Models
 @using System.Text;
 @using System.Collections
+
 @using Microsoft.Extensions.Options
+@using System.Runtime.Serialization.Formatters.Binary
+@using System.Text.Json
 
 @inherits Microsoft.AspNetCore.Components.ComponentBase
 @rendermode InteractiveServer
@@ -15,6 +18,7 @@
 @inject ITribITBICompradoresAppService itbiCimpradoresAppService
 @inject ITribITBIVendedoresAppService itbiVendedoresAppService
 @inject IWebHostEnvironment EnvironmentRazor
+@inject IConfiguration Configuration
 @inject IOptions<AppSettings> AppSettings
 
 
@@ -132,12 +136,8 @@
         </FluentWizardStep>
          <FluentWizardStep Label="Guia"
                           OnChange="@OnStepChange">
-
-                    <Guia/>
-
+                    <GuiasForm Content=@ITBIEdiflancados ImprimirGuia="HandleImprimirGuia" ExternalPageContent=@ExternalPageContent/>
         </FluentWizardStep>
-   
-
    <FluentWizardStep Label="Fim">
        <FluentEditForm Model="Imovel" FormName="adquirentesInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
@@ -210,7 +210,7 @@
     //public DbSet DbSetImovel;
     //public IQueryable<TribEdificaco> QueryImovel { get; set; }
     bool possuiDividasPendentes;
-    List<TribItbiedif> ITBIEdfilancados = new List<TribItbiedif>();
+    List<TribItbiedif>? ITBIEdiflancados { get; set; } = new List<TribItbiedif>();
     private IQueryable<TribEdificacoesContrib>? Transmitentes;
     public string? TipoDeTransferencia { get; set; } = "COMPRA_VENDA"; // string.Empty;
     public string? Observacao = string.Empty;
@@ -271,8 +271,8 @@
                     {
                         await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas Pendentes!");
                     }
-                    ITBIEdfilancados =  await possuiITBI(Imovel.EdificacaoId);
-                    if(ITBIEdfilancados.Count() > 0)
+                    ITBIEdiflancados =  await possuiITBI(Imovel.EdificacaoId);
+                    if(ITBIEdiflancados.Count() > 0)
                     {
                         await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui ITBI lançado!");
                     }
@@ -1870,6 +1870,83 @@
 
         return "";
     }
+
+    public string? ExternalPageContent { get; set; }
+    /*
+    private async Task GenerateReport()
+    {
+        string reportPath = Path.Combine(EnvironmentRazor.WebRootPath, "reports", "YourReportFile.rpt");
+
+        var parameters = new
+        {
+            // Defina seus parâmetros aqui
+            ParameterName1 = "Value1",
+            ParameterName2 = "Value2"
+        };
+
+        byte[] reportData = await ReportService.GenerateReportAsync(reportPath, parameters);
+
+        // Você pode retornar o PDF gerado ao cliente para visualização ou download
+        var base64Report = Convert.ToBase64String(reportData);
+        var url = $"data:application/pdf;base64,{base64Report}";
+        //await JSRuntime.InvokeVoidAsync("open", url, "_blank");
+    }*/
+
+    public async void HandleImprimirGuia(TribItbiedif itbiedif)
+    {
+
+        string? PathPDFFisico;
+        string? PathPDFVirtual;
+        string? PathName;
+        string? ReportName;
+        TribunoNet.Funcoes Rel = new TribunoNet.Funcoes();
+        clsGeraCrystalPDF.cGeraCrystalPDF exporta = new clsGeraCrystalPDF.cGeraCrystalPDF();
+
+        ReportName = "xRelGuiaITBI.rpt";
+        PathName = Path.Combine(EnvironmentRazor.WebRootPath, "Relatorios");
+
+        //PathPDFFisico = Page.MapPath("../pdf/");
+        PathPDFFisico = Path.Combine(EnvironmentRazor.WebRootPath, "pdf");
+
+        // exporta.Servidor = Trim(Session("sServidor"))
+        //exporta.Database = Trim(Session("sDatabase"))
+        //exporta.Usuario = Trim(Session("Login"))
+        //exporta.Senha = Trim(Session("senha"))
+        exporta.Servidor = "172.27.1.94";
+        exporta.Database = "DBProsiga";
+        exporta.Usuario = "Gilberto.gc";
+        exporta.Senha = "Couto2408@@";
+
+
+    }
+
+    private async void HandleImprimirGuiaNãoFUnciona(TribItbiedif itbiedif)
+    {
+        string ReportName = "xRelGuiaITBI";
+        TribunoNet.Funcoes Rel = new TribunoNet.Funcoes();
+        string enderecoRel = "";
+        Hashtable ht = new Hashtable();
+        string path = Path.Combine(EnvironmentRazor.WebRootPath, "pdf", ReportName + ".pdf");
+
+        ht.Add("reportName", ReportName);
+        ht.Add("session", secao);
+        ht.Add("reportFormat", "pdf");
+        ht.Add("path", path);
+        //var cr = CryptDP.Param.getQS4DP(ht);
+        var cr = getQS4DP(ht);
+        enderecoRel = "?p=" + System.Net.WebUtility.UrlEncode(cr);
+        //var serverName = Configuration["ServerName"];
+        var serverName = AppSettings.Value.ServerName;
+        //var directPrintx = Configuration["DirectPrintx"];
+        var directPrintx = AppSettings.Value.DirectPrintx;
+        enderecoRel = $"{serverName}{directPrintx}{enderecoRel}";
+
+        ReportName = secao + DateTime.Now.Millisecond + ReportName.Trim();
+
+        //Rel.AbreRelatorio(enderecoRel, ReportName);
+        //ExternalPageContent = Rel.AbreRelatorio(enderecoRel, ReportName);
+        ExternalPageContent = $"{enderecoRel}{ReportName}";
+    }
     public async Task Imprimir(string strNossoNumero, int ConvenioID, string TipoGuia, int ITBIEdifID, bool TemParcelamento, bool TemDividaPaga, TribItbiedif? ITBIEdfi, TribDividasImo tribDividasImo, string? TipoDivida = "0")
     {
         //await GravaDadosRelatorio(strNossoNumero, ConvenioID,TipoGuia,TemParcelamento,TemDividaPaga,ITBIEdfi,tribDividasImo,TipoDivida);
@@ -1916,22 +1993,50 @@
     {
         var DBSetDividasImo = await tribDividasImoAppService.GetDbSet();
         var DBSetITBIEdif = await tribITBIEdifAppService.GetDbSet();
-        List<TribItbiedif> itbiediflancados = new List<TribItbiedif>();
+      //  List<TribItbiedif> itbiediflancados = new List<TribItbiedif>();
         //var dividas = await Task.FromResult(DBSetDividasImo.Where(d => d.EdificacaoId == Id && d.TipoBxId == 1 && (d.TipoTribId == 79)).ToList());
         //var dividas = await Task.FromResult(DBSetDividasImo.FirstOrDefault(d => d.EdificacaoId == Id && d.TipoBxId == 1 && (d.TipoTribId == 79)));
-        var dividas = await Task.FromResult(DBSetDividasImo.Where(d => d.EdificacaoId == Id && d.TipoBxId == 1 && (d.TipoTribId == 79)).ToList());
+        var dividas = await Task.FromResult(DBSetDividasImo.Where(d => d.EdificacaoId == Id && (d.TipoBxId == 1 || d.TipoBxId == 2) && (d.TipoTribId == 79)).ToList());
         if (dividas is not null || dividas.Count() > 0)
         {
             //itbiediflancados = await Task.FromResult(DBSetITBIEdif.FirstOrDefault(ie => ie.EdificacaoId == divida.EdificacaoId && ie.ImoIddivida == divida.ImoIddivida));
             //itbiediflancados = await Task.FromResult(DBSetITBIEdif.FirstOrDefault(ie => ie.EdificacaoId == divida.EdificacaoId && ie.ImoIddivida == divida.ImoIddivida));
             foreach(var divida in dividas)
             {
-                var newIE = await Task.FromResult(DBSetITBIEdif.FirstOrDefault(ie => ie.EdificacaoId == divida.EdificacaoId && ie.ImoIddivida == divida.ImoIddivida));
-                itbiediflancados.Add(newIE);
+                var newIE = await Task.FromResult(DBSetITBIEdif.Include(d=>d.ImoIddividaNavigation).Include(i=>i.Itbi).FirstOrDefault(ie => ie.EdificacaoId == divida.EdificacaoId && ie.ImoIddivida == divida.ImoIddivida));
+                 ITBIEdiflancados.Add(newIE);
             }
            
         }
-        return itbiediflancados;
+        return ITBIEdiflancados;
+    }
+    public static string getQS4DP(Hashtable paramDP)
+    {
+        MemoryStream memoryStream = null;
+        Hashtable hashtable = new Hashtable();
+        try
+        {
+            //BinaryFormatter binaryFormatter = new BinaryFormatter();
+            memoryStream = new MemoryStream();
+            paramDP.Add("@@@execdate", DateTime.Now.ToString("dd/MM/yyyy HH:mm"));
+            //paramDP.Add("@@@database", HttpContext.Current.Session["sDatabase"]);
+            foreach (string key in paramDP.Keys)
+            {
+                hashtable.Add(key.ToLower(), paramDP[key]);
+            }
+
+            //binaryFormatter.Serialize(memoryStream, hashtable);
+            JsonSerializer.Serialize(memoryStream, hashtable);
+            return Convert.ToBase64String(memoryStream.ToArray());
+        }
+        finally
+        {
+            if (memoryStream != null)
+            {
+                memoryStream.Close();
+                memoryStream.Dispose();
+            }
+        }
     }
     
 }
