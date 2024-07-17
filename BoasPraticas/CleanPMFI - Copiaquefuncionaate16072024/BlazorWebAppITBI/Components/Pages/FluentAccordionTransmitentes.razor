@@ -1,0 +1,289 @@
+﻿@rendermode InteractiveServer
+<FluentAccordion ExpandMode="AccordionExpandMode.Single" style="background-color: blue; color: brown;">
+    @if(Content != null)
+    {
+        @foreach(var transmitente in Content.AsQueryable())
+        {
+            <FluentAccordionItem Expanded="false" >
+                <HeadingTemplate>
+                    <FluentStack Orientation="Orientation.Horizontal">
+                                <FluentTextField ReadOnly @bind-value="@transmitente.Contribuinte.ConCnpjcpf" style="width: 10%;font-size: 12px;" Maxlength="14">CPF/CNPJ:</FluentTextField>
+                                <FluentTextField ReadOnly @bind-value="@transmitente.Contribuinte.ConNome" style="width: 25%;font-size: 12px;" Maxlength="50">Nome/Razão:</FluentTextField>
+                                <FluentTextField @bind-Value="@transmitente.Contribuinte.ConEmail" style="width: 18%;font-size: 12px;" Required Maxlength="50">Email:</FluentTextField>
+                                <FluentTextField @bind-Value="@transmitente.Contribuinte.ConTelefoneCelular" style="width: 10%;font-size: 12px;" Required Maxlength="14">Celular:</FluentTextField>
+                                <FluentTextField ReadOnly @bind-Value="@transmitente.Titularidade" style="width: 10%;font-size: 12px;" Required Maxlength="14">Titularidade:</FluentTextField>
+                                <FluentTextField @bind-Value="@transmitente.percentualtransmitido" Required style="width: 6%;font-size: 12px;" Maxlength="5">%Transmitido</FluentTextField>
+                                      <FluentSpacer />
+                        <FluentButton Appearance="Appearance.Outline" OnClick="()=>RemoveTransmitente(transmitente)"
+                                          IconStart="@(new Icons.Regular.Size20.SubtractSquare().WithColor(Color.Accent))" >
+                             </FluentButton>
+                    </FluentStack>
+                             <FluentStack Orientation="Orientation.Horizontal">
+                                         <FluentTextField Size="2"  @bind-value="@transmitente.Contribuinte.ConCep" style="width: 10%;font-size: 11px;" Required Maxlength="14"></FluentTextField>
+                                        <FluentTextField @bind-value="@transmitente.Contribuinte.ConTipoLograd" style="width: 9%;font-size: 11px;" Required Maxlength="14"></FluentTextField>
+                                        <FluentTextField @bind-value="@transmitente.Contribuinte.ConEndereco" style="width: 25%;font-size: 11px;" Required Maxlength="50"></FluentTextField>
+                                        <FluentTextField @bind-value="@transmitente.Contribuinte.ConNumero" style="width: 6%;font-size: 11px;" Required Maxlength="50"></FluentTextField>
+                                 
+                                        <FluentTextField @bind-Value="@transmitente.Contribuinte.ConBairro.BaiNome" style="width: 10%;font-size: 11px;" Required Maxlength="50"></FluentTextField>
+                                        <FluentTextField @bind-Value="@transmitente.Contribuinte.ConCidade.CidNome" style="width: 10%;font-size: 11px;" Required Maxlength="14"></FluentTextField>
+                                        <FluentTextField @bind-Value="@transmitente.Contribuinte.ConCidade.CidUf" style="width: 5%;font-size: 11px;" Required Maxlength="14"></FluentTextField>
+                                                            </FluentStack>
+                </HeadingTemplate>
+
+                <ChildContent>
+                             <!--
+                             <ChildContentDocsExigidos Content="transmitente.AnexosExigidos" AnexoChanged="HandledAnexoChanged"></ChildContentDocsExigidos>
+                                --> 
+                    @if (Content != null)
+                    {
+                                                <FluentDataGrid Items=transmitente.AnexosExigidos.AsQueryable() TGridItem=Anexo>
+                                        <PropertyColumn Title="Documento Obrigatório" Property="@(c => c!.Doc.ItbidsDocumento)" Sortable="true" Align=Align.Start />
+                                        <PropertyColumn Title="Arquivo" Property="@(c => c!.nomearquivo)" Sortable="true" Align=Align.Start />
+                                       
+                                     <!---->   
+                                        <TemplateColumn Title="Ação2" Sortable="true" Align=Align.End>
+                                @{
+                                    var anexoSelecionado = @context as Anexo;
+                                        <FluentButton  Appearance="Appearance.Outline" OnClick="()=>OpenFileSelector(anexoSelecionado,transmitente)" IconStart="GetIcon(anexoSelecionado)"></FluentButton>
+                                       <FluentInputFile @ref="@anexoSelecionado.fluentInputFile"
+                                                      
+                                                        DragDropZoneVisible="false"
+                                                        Mode="InputFileMode.Buffer"
+                                                        Multiple="true"
+                                                        MaximumFileSize="@(1000 * 1024 * 1024)"
+                                                     Accept="*/*"
+                                                        OnInputFileChange="OnProgressChangeAsyncTransmitente"
+                                                        OnCompleted="@OnCompleted"/>
+
+
+                                }
+                                        </TemplateColumn>
+
+                                    </FluentDataGrid>
+                                
+                    }
+                </ChildContent>
+            </FluentAccordionItem>
+        }
+    }
+</FluentAccordion>
+@code{
+    private Dictionary<Transmitente, bool> itemStates = new Dictionary<Transmitente, bool>();
+    Dictionary<Transmitente, bool> itemStatesTransmitentes = new Dictionary<Transmitente, bool>();
+    Dictionary<Anexo, FluentInputFile> dictFluenteInput = new Dictionary<Anexo, FluentInputFile>();
+    [Parameter]
+    public List<Transmitente>? Content { get; set; }
+    [Parameter]
+    public EventCallback<List<Transmitente>> ListTransmitenteChanged { get; set; }
+
+
+    private Anexo? currentAnexo;
+    private Transmitente? currentTransmitente;
+    int? progressPercent;
+    string? progressTitle;
+    FluentInputFile? myFileByBuffer = default!;
+    Dictionary<int, string> Files = new();
+
+
+    private async void RemoveTransmitente(Transmitente transmitente)
+    {
+        await Task.FromResult(Content.Remove(transmitente));
+
+        await ListTransmitenteChanged.InvokeAsync(Content);
+    }
+    private async Task HandledAnexoChanged(Anexo anexoChanged)
+    {
+        var indiceTransmitente = await ObterIndiceTransmitente(anexoChanged);
+        Console.WriteLine($"Índice do Transmitente: {indiceTransmitente}");
+        if (indiceTransmitente >= 0)
+        {
+            var indiceAnexo = await ObterIndiceAnexo(anexoChanged);
+            Console.WriteLine($"Índice do Anexo: {indiceAnexo}");
+            if (indiceAnexo >= 0)
+            {
+                Console.WriteLine($"Atualizando anexo para transmitente {indiceTransmitente}, anexo {indiceAnexo}");
+                var anexoExistente = Content[indiceTransmitente].AnexosExigidos[indiceAnexo];
+                anexoExistente.AnexoBf.AddRange(anexoChanged.AnexoBf);
+                anexoExistente.nomearquivo = anexoChanged.nomearquivo;
+                anexoExistente.nomeDEFINITIVO = anexoChanged.nomeDEFINITIVO;
+                anexoExistente.carregado = anexoChanged.carregado;
+            }
+            else
+            {
+                Console.WriteLine($"Anexo não encontrado para o transmitente {indiceTransmitente}");
+            }
+
+            await ListTransmitenteChanged.InvokeAsync(Content);
+        }
+        else
+        {
+            Console.WriteLine($"Transmitente não encontrado para anexo {anexoChanged.Doc.ItbidsDocumento}");
+        }
+    }
+    /* public async Task<int> ObterIndiceTransmitente(Transmitente transmitente)
+         {
+         return await Task.FromResult(Content.FindIndex(t => a.Contribuinte.ConCnpjcpf == anexoChanged.pertenceA));
+
+
+     }*/
+    public async Task<int> ObterIndiceTransmitente(Anexo anexoChanged)
+    {
+        return await Task.FromResult(Content.FindIndex(a => a.Contribuinte.ConCnpjcpf == anexoChanged.pertenceA));
+    }
+    public async Task<int> ObterIndiceTransmitente(Transmitente transmitente)
+    {
+        return await Task.FromResult(Content.FindIndex(t=> t.Contribuinte.ConCnpjcpf == transmitente.Contribuinte.ConCnpjcpf));
+    }
+    public async Task<Transmitente> ObterTransmitente(Anexo anexoChanged)
+    {
+        return await Task.FromResult(Content.FirstOrDefault(a => a.Contribuinte.ConCnpjcpf == anexoChanged.pertenceA));
+    }
+    public async Task<int> ObterIndiceAnexo(Anexo anexoChanged)
+    {
+        var indiceTransmitente = await ObterIndiceTransmitente(anexoChanged);
+        if (indiceTransmitente >= 0)
+        {
+            return await Task.FromResult(Content[indiceTransmitente].AnexosExigidos.FindIndex(a => a.Doc.ItbidsDocumento == anexoChanged.Doc.ItbidsDocumento));
+        }
+        return -1;
+    }
+    public async Task<int> ObterIndiceFile(Anexo anexoselecionado)
+    {
+        var indicetransmitente = await ObterIndiceTransmitente(anexoselecionado);
+        var indiceanexo= await ObterIndiceAnexo(anexoselecionado);
+        return await Task.FromResult(Content[indicetransmitente].AnexosExigidos[indiceanexo].AnexoBf.FindIndex(a => a.Name == anexoselecionado.nomearquivo));
+    }
+   
+    private async void OpenFileSelector(Anexo anexo, Transmitente transmitente)
+    {
+        if (anexo.carregado)
+        {
+            //------------------
+            //  var indicefile = await ObterIndiceFile(anexo);
+            //  var indiceanexo = await ObterIndiceAnexo(anexo);
+            //  Content[indiceanexo].AnexoBf.RemoveAt(indicefile);
+            //  await AnexoChanged.InvokeAsync(Content[indiceanexo]);
+            //------------------
+            //--await UpdateAnexo(anexo,null);
+
+            anexo.nomearquivo = string.Empty;
+            anexo.nomeDEFINITIVO = string.Empty;
+            anexo.carregado = false;
+            anexo.InputFile = null;
+            anexo.AnexoBf.Clear();
+            //await AnexoChanged.InvokeAsync(anexo);
+            await ListTransmitenteChanged.InvokeAsync(Content);
+            StateHasChanged();
+        }
+        else
+        {
+            currentAnexo = anexo;
+            currentTransmitente = transmitente;
+            currentAnexo.fluentInputFile.ShowFilesDialogAsync();
+            //myFileByBuffer?.ShowFilesDialogAsync();
+        }
+    }
+ 
+    async Task OnProgressChangeAsyncTransmitente(InputFileChangeEventArgs file)
+    {
+        var inputFile = file.GetMultipleFiles();
+
+        if (inputFile != null && currentAnexo != null)
+        {
+            foreach (var f in inputFile)
+            {
+                try
+                {
+                    var extensao = Path.GetExtension(f.Name);
+                    var novoNomeArquivo = $"{currentAnexo.Doc.ItbidocId}-{currentAnexo.pertenceA.Trim().PadLeft(14, '0')}{extensao}";
+                    var arquivoExistente = currentAnexo.AnexoBf.FirstOrDefault(bf => bf.Name == f.Name);
+
+                    //     var extensao = Path.GetExtension(f.Name);
+                    if(arquivoExistente == null)
+                    {
+
+                        currentAnexo.nomeDEFINITIVO = novoNomeArquivo;
+                        currentAnexo.nomearquivo = f.Name;
+                        currentAnexo.carregado = true;
+                        //currentAnexo.AnexoBf = f;
+                        currentAnexo.AnexoBf.Add(f);
+                        currentAnexo.browserFile = f;
+                        //currentAnexo.InputFile = f;
+                        //currentAnexo.fluentInputFile = file.GetMultipleFiles();
+                        var indiceTransmitente = await ObterIndiceTransmitente(currentTransmitente);
+                        var indiceAnexo = await ObterIndiceAnexo(currentAnexo);
+                        //IBrowserFile bf = new BrowserFile(f);
+
+                        //foreach (var b in Content[indiceTransmitente].AnexosExigidos[indiceAnexo].AnexoBf)
+                        //{
+                        if (indiceTransmitente >= 0 && indiceAnexo >= 0)
+                        {
+                            //    if (!Content[indiceTransmitente].AnexosExigidos[indiceAnexo].AnexoBf.Any(bf => bf.Name == f.Name))
+                            //  {
+                            //    Content[indiceTransmitente].AnexosExigidos[indiceAnexo].AnexoBf.Add(f);
+                            //}
+                            Content[indiceTransmitente].AnexosExigidos[indiceAnexo] = currentAnexo;
+                        }
+
+                        //   Content[indiceTransmitente].AnexosExigidos[indiceAnexo].AnexoBf.Add(f);
+                        //  Content[indiceTransmitente].AnexosExigidos[indiceAnexo].AnexoBf = currentAnexo;
+
+                        //};
+
+
+
+                        //Content[indiceTransmitente].AnexosExigidos[indiceAnexo].AnexoBf = currentAnexo.AnexoBf;
+
+                        //Content[indiceTransmitente].AnexosExigidos[indiceAnexo].nomeDEFINITIVO = $"{currentAnexo.Doc.ItbidocId}-{currentAnexo.pertenceA.Trim().PadLeft(14, '0')}{extensao}";
+
+
+
+                        // currentAnexo.AnexoBf.Add(f);
+                        // currentAnexo.browserFile = f;
+
+                        // await AnexoChanged.InvokeAsync(currentAnexo);
+                        //       currentAnexo.nomearquivo = string.Empty;
+                        //       currentAnexo.nomeDEFINITIVO = string.Empty;
+                        //       currentAnexo.carregado = false;
+                        //       currentAnexo.InputFile = null;
+                        //         currentAnexo.AnexoBf.Clear();
+
+                        //await AnexoChanged.InvokeAsync(anexo);
+                        await ListTransmitenteChanged.InvokeAsync(Content);
+                        //myFileByBuffer = new FluentInputFile();
+                        StateHasChanged();
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Error processing file {f.Name}: {ex.Message}");
+                }
+            }
+        }
+    }
+    void OnCompleted2(IEnumerable<FluentInputFileEventArgs> files)
+    {
+        
+    }
+    void OnCompleted(IEnumerable<FluentInputFileEventArgs> files)
+    {
+        progressPercent = myFileByBuffer!.ProgressPercent;
+        progressTitle = myFileByBuffer!.ProgressTitle;
+        foreach (var file in Files)
+        {
+            File.Delete(file.Value);
+        }
+    }
+    private Icon GetIcon(Anexo anexoselecionado)
+    {
+       // var result = Content.  .FirstOrDefault(a => a.pertenceA == anexoselecionado.pertenceA && a.Doc.ItbidsDocumento == anexoselecionado.Doc.ItbidsDocumento);
+        //return result.carregado ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
+        return anexoselecionado.carregado ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
+          : new Icons.Regular.Size24.AddSquare().WithColor(Color.Accent);
+    }
+    public async Task<int> ObterIndiceFile(Anexo a, IBrowserFile f)
+    {
+        return await Task.FromResult(a.AnexoBf.FindIndex(f => f.Name == a.nomearquivo));
+    }
+
+}

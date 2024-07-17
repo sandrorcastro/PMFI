@@ -1,0 +1,690 @@
+﻿@using BlazorWebAppITBI.Models
+@* @inherits Microsoft.AspNetCore.Components.ComponentBase *@
+@implements IDialogContentComponent<IQueryable<TribEdificacoesContrib>>
+@rendermode InteractiveServer
+@inject IDialogService DialogService
+@inject IContribuinteAppService contribuinteAppService
+@inject ITribItbidocumentoTipoAppService tribItbidocumentoTipoAppService
+<FluentCard Justify="@JustifyContent.Center">
+    <p>Proprietários/Responsáveis</p>
+  
+    <FluentDataGrid Items=@Content TGridItem=TribEdificacoesContrib>
+        <PropertyColumn Title="CPF/CNPJ" Property="@(c => c!.Con.ConCnpjcpf)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="RG" Property="@(c => c!.Con.ConRg)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Nome/Razão" Property="@(c => c!.Con.ConNome)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Email" Property="@(c => c!.Con.ConEmail)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Celular" Property="@(c => c!.Con.ConTelefoneCelular)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Proprietário" Property="@(c => c!.Proprietario)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Responsável" Property="@(c => c!.Responsavel)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Percentual" Property="@(c => c!.Percentual)" Sortable="true" Align=Align.Start />
+        <TemplateColumn Align="@Align.End">
+            @{
+                var item = context as TribEdificacoesContrib;
+                Transmitente t = new Transmitente() { Contribuinte = item.Con };
+                <FluentButton Appearance="Appearance.Outline" OnClick="()=>AddRemovePlus(t)" IconStart="GetIcon2(item)">
+                </FluentButton>
+            }
+        </TemplateColumn>
+    </FluentDataGrid>
+</FluentCard>
+<FluentCard Justify="@JustifyContent.Center">
+    <FluentButton OnClick="@( ()=> BuscarContribuinteDialog("Transmitente"))" Appearance="Appearance.Accent">Adicionar Novo Transmitente</FluentButton>
+      <FluentDataGrid Items=@ContribuintesQ TGridItem=Transmitente>
+        <PropertyColumn Title="CPF/CNPJ" Property="@(c => c!.Contribuinte.ConCnpjcpf)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="RG" Property="@(c => c!.Contribuinte.ConRg)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Nome/Razão" Property="@(c => c!.Contribuinte.ConNome)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Email" Property="@(c => c!.Contribuinte.ConEmail)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Celular" Property="@(c => c!.Contribuinte.ConTelefoneCelular)" Sortable="true" Align=Align.Start />
+        <TemplateColumn Title="% Transmitido" Sortable="true" Align=Align.Start>
+            @{
+                var item = context as Transmitente;
+                <FluentTextField Required @bind-Value="item!.percentualtransmitido" Placeholder="% Transmitido" />
+                <ValidationMessage For="() => item!.percentualtransmitido" />
+            }
+        </TemplateColumn>
+        <TemplateColumn Align="@Align.End">
+            @{
+
+                var item = context as Transmitente;
+                
+                <FluentButton Appearance="Appearance.Outline" OnClick="()=>AddRemovePlus(item)"
+                              IconStart="@(new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent))">
+                </FluentButton>
+            }
+        </TemplateColumn>
+    </FluentDataGrid>
+</FluentCard>
+<FluentCard Justify="@JustifyContent.Center">
+    <FluentButton OnClick="@( ()=> BuscarContribuinteDialog("Transmitente"))" Appearance="Appearance.Accent">Adicionar Novo Transmitente</FluentButton>
+<FluentAccordion>
+    @if(ContribuintesQ != null)
+    {
+        @foreach(var item in ContribuintesQ)
+        {
+            <FluentAccordionItem>
+                <HeadingTemplate>
+                    <FluentStack Orientation="Orientation.Horizontal">
+
+
+                            <FluentTextField ReadOnly @bind-value="@item.Contribuinte.ConCnpjcpf" style="width: 10%;" Maxlength="14">CPF/CNPJ:</FluentTextField>
+                            <FluentTextField ReadOnly @bind-value="@item.Contribuinte.ConNome" style="width: 25%;" Required Maxlength="50">Nome/Razão:</FluentTextField>
+                            <FluentTextField @bind-Value="@item.Contribuinte.ConEmail" Required style="width: 18%;"  Maxlength="50">Email:</FluentTextField>
+                            <FluentTextField @bind-Value="@item.Contribuinte.ConTelefoneCelular" style="width: 10%;"  Required Maxlength="14">Celular:</FluentTextField>
+                            <FluentTextField @bind-Value="@item.percentualtransmitido" Required style="width: 8%;" Maxlength="5">%Transmitido</FluentTextField>
+                         <FluentButton Appearance="Appearance.Outline" OnClick="()=>AddRemovePlus(item)"
+                                          IconStart="@(new Icons.Regular.Size20.SubtractSquare().WithColor(Color.Accent))">
+                         </FluentButton>
+                    </FluentStack>
+                </HeadingTemplate>
+                <ChildContent>
+                        <FluentDataGrid Items=@AnexosExigidosQ TGridItem=Anexo>
+                            <PropertyColumn Title="Documento Obrigatório" Property="@(c => c!.Doc.ItbidsDocumento)" Sortable="true" Align=Align.Start />
+                            <PropertyColumn Title="Arquivo" Property="@(c => c!.nomearquivo)" Sortable="true" Align=Align.Start />
+                            <TemplateColumn Title="Ação" Sortable="true" Align=Align.Start>
+                                @{
+                                    var itemAnexo = context as Anexo;
+                                    itemAnexo.pertenceA = @item.Contribuinte.ConCnpjcpf.ToString();
+
+                                    if (itemAnexo.carregado)
+                                    {
+                                        <FluentButton Appearance="Appearance.Accent" OnClick="()=>OpenFileSelector(itemAnexo)">
+                                            Excluir
+                                        </FluentButton>
+                                    }
+                                    else
+                                    {
+
+                                        <FluentButton Appearance="Appearance.Accent" OnClick="()=>OpenFileSelector(itemAnexo)">
+                                            Carregar
+                                        </FluentButton>
+                                    }
+                                }
+                            </TemplateColumn>
+                        </FluentDataGrid>
+                </ChildContent>
+            </FluentAccordionItem>
+        }
+    }
+</FluentAccordion>
+</FluentCard>
+<FluentCard Justify="@JustifyContent.Center">
+    <FluentInputFile @ref="@myFileByBuffer"
+                     AnchorId="MyUploadBuffer"
+                     DragDropZoneVisible="false"
+                     Mode="InputFileMode.Buffer"
+                     Multiple="true"
+                     MaximumFileSize="@(1000 * 1024 * 1024)"
+                     Accept=".mp4, .mov, .avi"
+                     OnInputFileChange="OnProgressChangeAsyncTransmitente"
+                     OnCompleted="@OnCompleted" />
+
+    <FluentProgress Visible="@(progressPercent > 0)" Min="0" Max="100" Value="@progressPercent" />
+    <FluentLabel Alignment="HorizontalAlignment.Center">
+        @progressTitle
+    </FluentLabel>
+
+    <!--
+                    Id="MyUploadBuffer" OnClick="()=>OpenFileSelector(item)">
+                     OnProgressChange="@OnProgressChangeAsyncBF"
+    <FluentButton Appearance="Appearance.Accent" Id="MyUploadBuffer">
+        Upload files
+    </FluentButton>
+
+    <FluentButton @onclick="@((e) => IsCanceled = true)">
+        Cancel
+    </FluentButton>
+    -->
+    @if (Files.Any())
+    {
+        <h4>File(s) uploaded:</h4>
+        <ul>
+            @foreach (var file in Files)
+            {
+                <li>
+                    @file.Value
+                </li>
+            }
+        </ul>
+    }
+
+
+</FluentCard>
+@code {
+    public TribItbidocumentoTipoSpec tribItbidocumentoTipoSpec = new TribItbidocumentoTipoSpec("Contribuinte");
+    public IQueryable<Anexo>? AnexosExigidosQ { get; set; }
+    public IQueryable<List<Anexo>>? ListAnexosExigidosQ { get; set; }
+    public IEnumerable<TribItbidocumentoTipo> docsExigidos { get; set; }
+    [Parameter]
+    public EventCallback<List<Anexo>> AnexosTransmitenteChanged { get; set; }
+    [Parameter]
+    public IQueryable<TribEdificacoesContrib> Content { get; set; } = default!;
+    [Parameter]
+    public TribEdificaco Imovel { get; set; } = default!;
+
+    public IQueryable<Transmitente>? ContribuintesQ { get; set; }
+    public Domain.Specs.DBProsiga.ContribuinteByCPFCNPJSpec contribuinteSpec;
+    public IQueryable<TribItbidocumentoTipo>? docsExigidosQ { get; set; }
+    private EditContext? editContext;
+    private Dictionary<Transmitente, bool> itemStates = new Dictionary<Transmitente, bool>();
+    private Dictionary<string, bool> itemStatesDocs = new Dictionary<string, bool>();
+    private Dictionary<string, List<long>> itemStatesDocsTrasmitente = new Dictionary<string, List<long>>();
+    [Parameter]
+    public List<Transmitente>? ListaDeTransmitentes { get; set; }
+    public string? tipoContribuinte = null;
+    private Contribuinte? adquirente = new Contribuinte() { ConCnpjcpf = string.Empty };
+    private Transmitente? transmitente = new Transmitente() { Contribuinte = new Contribuinte { ConCnpjcpf = string.Empty } };
+    [CascadingParameter]
+    public FluentDialog? Dialog { get; set; }
+    string activeId = "accordion-1";
+    FluentAccordionItem? changed;
+    private Anexo currentAnexo;
+    public List<Anexo>? currentAnexosTransmitentesChanged { get; set; } = new List<Anexo>();
+    FluentInputFile? myFileByBuffer = default!;
+    Dictionary<int, string> Files = new();
+    int? progressPercent;
+    string? progressTitle;
+    bool IsCanceled;
+    private async void OpenFileSelector(Anexo anexo)
+    {
+        if (anexo.carregado)
+        {
+            RemoveFromDictionary(anexo.pertenceA, anexo.Doc.ItbidocId);
+            RemoveFromListAnexos(anexo);
+            currentAnexo.carregado = false;
+
+            //atualistaAnexosExigidosQ(f.Name);
+
+            currentAnexo.nomearquivo = "";
+            currentAnexo.nomeDEFINITIVO = "";
+            currentAnexo.pertenceA = "";
+        }else{
+            currentAnexo = anexo;
+            myFileByBuffer?.ShowFilesDialogAsync();
+        }
+
+    }
+    private async void OpenFileSelector2(Anexo anexo)
+    {
+        if (anexo.carregado)
+        {
+            if (itemStatesDocs.ContainsKey(anexo.nomearquivo))
+            {
+                itemStatesDocs.Remove(anexo.nomearquivo);
+                // var fileToRemove = filesBf.FirstOrDefault(f => f.Name == anexo.nomearquivo);
+                var fileToRemove = currentAnexo.AnexoBf.FirstOrDefault(f => f.Name == anexo.nomearquivo);
+                if (fileToRemove != null)
+                {
+                    currentAnexo.AnexoBf.Remove(fileToRemove);
+                    StateHasChanged();
+                }
+                currentAnexo.carregado = false;
+
+                //atualistaAnexosExigidosQ(f.Name);
+
+                currentAnexo.nomearquivo = "";
+                currentAnexo.nomeDEFINITIVO = "";
+                currentAnexo.pertenceA = ""; //anexo.pertenceA;
+                                             //  atualistaAnexosExigidosQ(currentAnexo);
+
+                //var extensao = Path.GetExtension(anexo.nomearquivo);
+                //var nomedefinitivo = anexo.Doc.ItbidocId.ToString() + '-' + Content.InscricaoImobiliaria.ToString() + '.' + extensao;
+                //filesBfdefinitivo = filesBf;
+
+                //await AnexosTransmitenteChanged.InvokeAsync(currentAnexo);
+                StateHasChanged();
+            }
+
+        }
+        else
+        {
+            currentAnexo = anexo;
+            myFileByBuffer?.ShowFilesDialogAsync();
+        }
+    }
+    private void HandleOnAccordionItemChange(FluentAccordionItem item)
+    {
+        changed = item;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+        //    await Task.Delay(1000);
+        //  await CarregaAlunos();
+        //pagination.TotalItemCountChanged += (sender, eventArgs) => StateHasChanged();
+        //ContribuintesQ = Content;
+        editContext = new EditContext(ListaDeTransmitentes);
+        List<Anexo> listdoc = new List<Anexo>();
+        //docsExigidos = await tribItbidocumentoTipoAppService.ListAsync(tribItbidocumentoTipoSpec, CancellationToken.None);
+        //docsExigidosQ =     docsExigidos.AsQueryable();
+        docsExigidos = await tribItbidocumentoTipoAppService.GetDocumentosExigidos("Contribuinte");
+        //docsExigidosQ = tribItbidocumentoTipoAppService.GetQueryableDocumentosExigidos("Contribuinte");
+        docsExigidosQ = docsExigidos.AsQueryable();
+
+        foreach (var doc in docsExigidosQ)
+        {
+            listdoc.Add(new Anexo() { Doc = doc, carregado = false, nomearquivo = null });
+        }
+        AnexosExigidosQ = listdoc.AsQueryable();
+        //ListAnexosExigidosQ = 
+        await base.OnInitializedAsync();
+    }
+    [Parameter]
+    public EventCallback<List<Transmitente>> ListaDeTransmitentesChanged { get; set; }
+
+    public void AtualizarTransmitente(Transmitente contribuinte, int operacao)
+    {
+        if (operacao == 1)
+        {
+
+            //ListaDeTransmitentes[index] = contribuinte;
+            ListaDeTransmitentes.Add(contribuinte);
+            ContribuintesQ = ListaDeTransmitentes.AsQueryable();
+            ListaDeTransmitentesChanged.InvokeAsync(ListaDeTransmitentes);
+        }
+        else if (operacao == 2)
+        {
+            ListaDeTransmitentes.Remove(contribuinte);
+            ContribuintesQ = ListaDeTransmitentes.AsQueryable();
+            ListaDeTransmitentesChanged.InvokeAsync(ListaDeTransmitentes);
+        }
+    }
+    private void AddRemove(ChangeEventArgs e, Transmitente contribuinte)
+    {
+        //  bool isChecked = (bool) e.Value;
+        // Lógica a ser executada quando o checkbox é marcado
+        //await DialogService.ShowInfoAsync("Wizard completed");
+        //if(isChecked){
+        if (e.Value.ToString() == "True")
+        {
+
+            AtualizarTransmitente(contribuinte, 1);
+            //ContribuintesQ = this.ListaDeTrasmitentes.AsQueryable();
+        }
+        else
+        {
+            AtualizarTransmitente(contribuinte, 2);
+        }
+    }
+    private void AddRemovePlus(Transmitente contribuinte)
+    {
+
+        //  AtualizarTransmitente(contribuinte, 1);
+        //ContribuintesQ = this.ListaDeTrasmitentes.AsQueryable();
+        if (itemStates.ContainsKey(contribuinte))
+        {
+            //itemStates[contribuinte] = !itemStates[contribuinte];
+            itemStates.Remove(contribuinte);
+            AtualizarTransmitente(contribuinte, 2);
+            //  itemStates.Add(contribuinte, false);
+        }
+        else
+        {
+            itemStates.Add(contribuinte, true);
+            AtualizarTransmitente(contribuinte, 1);
+        }
+        StateHasChanged();
+
+    }
+    //private MarkupString GetIcon(Transmitente item)
+    private Icon GetIcon(Transmitente item)
+    {
+
+        // Retorna o ícone de exclusão se o item foi adicionado, caso contrário, retorna o ícone de adição
+        return itemStates.TryGetValue(item, out bool isAdded) && isAdded
+         ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
+         : new Icons.Regular.Size24.AddSquare().WithColor(Color.Accent);
+    }
+    private Icon GetIcon2(TribEdificacoesContrib item)
+    {
+        Transmitente t = null;
+        t = new Transmitente() { Contribuinte = item.Con };
+
+        if (item.Responsavel == "Sim")
+        {
+            return itemStates.TryGetValue(t, out bool isAdded2) && isAdded2
+         ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Success)
+         : new Icons.Regular.Size24.AddSquare().WithColor(Color.Success);
+        }
+        // Retorna o ícone de exclusão se o item foi adicionado, caso contrário, retorna o ícone de adição
+        return itemStates.TryGetValue(t, out bool isAdded) && isAdded
+         ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
+         : new Icons.Regular.Size24.AddSquare().WithColor(Color.Accent);
+    }
+
+    private async Task BuscarContribuinteDialog(string _tipoContribuinte)
+    {
+        tipoContribuinte = _tipoContribuinte;
+        //Contribuinte contribuinte = new Contribuinte();
+        if (tipoContribuinte == "Transmitente")
+        {
+
+            await DialogService.ShowDialogAsync<BuscarContribuinteDialogTransmitente>(transmitente, new DialogParameters()
+                {
+                    Title = $"Buscar {tipoContribuinte}",
+                    OnDialogResult = DialogService.CreateDialogCallback(this, HandleBuscarContribuinteDialog),
+                    //   Width = "500px",
+                    //   Height = "500px",
+                });
+        }
+
+
+
+    }
+    private async Task HandleBuscarContribuinteDialog(DialogResult result)
+    {
+        if (result.Cancelled)
+        {
+            return;
+        }
+        if (result.Data is not null)
+        {
+
+            if (tipoContribuinte == "Transmitente")
+            {
+                transmitente = result.Data as Transmitente;
+                //transmitente = await contribuinteService.GetContribuinte(transmitente.ConCnpjcpf);
+                contribuinteSpec = new Domain.Specs.DBProsiga.ContribuinteByCPFCNPJSpec(transmitente.Contribuinte.ConCnpjcpf);
+                transmitente.Contribuinte = await contribuinteAppService.GetBySpecAsync(contribuinteSpec, CancellationToken.None);
+                if (transmitente != null)
+                {
+                    await ContribuinteFormDialog();
+                }
+                else
+                {
+                    //await DialogService.ShowInfoAsync("Transmitente Não Encontrado!");
+                    //  tipoContribuinte = "NovoTransmitente";
+                    transmitente.Contribuinte = new Contribuinte() { ConBairro = new Bairro(), ConCidade = new Cidade() { Pais = new Paise() } };
+                    await ContribuinteFormDialog();
+
+                }
+
+            }
+
+        }
+
+        //await Task.Run(() => DemoLogger.WriteLine($"Dialog closed"));
+
+    }
+    private async Task ContribuinteFormDialog()
+    {
+        if (tipoContribuinte == "Transmitente")
+        {
+            if (transmitente != null)
+            {
+
+
+                await DialogService.ShowDialogAsync<ContribuinteFormDialogTransmitente>(transmitente, new DialogParameters()
+                    {
+                        Title = $"Cadastro de {tipoContribuinte}",
+                        OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
+                        //  Width = "500px",
+                        //  Height = "500px",
+                    });
+            }
+            else
+            {
+                //transmitente = new Contribuinte();
+                await DialogService.ShowDialogAsync<ContribuinteFormDialog>(transmitente, new DialogParameters()
+                    {
+                        Title = $"Cadastro de {tipoContribuinte}",
+                        OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
+                        //  Width = "500px",
+                        //  Height = "500px",
+                    });
+            }
+        }
+    }
+    private async Task HandleContribuinteFormDialog(DialogResult result)
+    {
+        if (result.Cancelled)
+        {
+            return;
+        }
+        if (result.Data is not null)
+        {
+
+            if (tipoContribuinte == "Transmitente")
+            {
+                //result = result.Data as Contribuinte;
+                transmitente = result.Data as Transmitente;
+                //transmitente.Contribuinte = result;
+                //AtualizarTransmitente(transmitente, 1);
+                AddRemovePlus(transmitente);
+                //           transmitentesList = new List<Contribuinte>();
+                //   transmitentesList = adquirentes.ToList();
+                // await Task.Run(() => DemoLogger.WriteLine($"Dialog closed by {simplePerson?.Firstname} {simplePerson?.Lastname} ({simplePerson?.Age})"));
+                // transmitente = await contribuinteService.GetContribuinte(transmitente.ConCnpjcpf);
+                /*
+                *
+                *   if (transmitente != null)
+                {
+                //             transmitentesList.Add(transmitente);
+                // transmitentes = transmitentesList.AsQueryable();
+                //await ContribuinteFormDialog();
+                }
+                else
+                {
+                //await DialogService.ShowInfoAsync("Dilog com informações do Contribuinte");
+                await DialogService.ShowInfoAsync("Transmitente Não Encontrado, Adicione-o!");
+            }*/
+
+                return;
+            }
+        }
+
+        //await Task.Run(() => DemoLogger.WriteLine($"Dialog closed"));
+
+    }
+    async Task OnProgressChangeAsyncBF(InputFileChangeEventArgs file)
+    {
+        if (currentAnexo != null)
+        {
+            // Process the file and the currentAnexo
+            // Your code to handle the file upload
+            // currentAnexo.nomearquivo=file
+        }
+
+        var inputFile = file.GetMultipleFiles();
+        if (inputFile != null)
+        {
+            foreach (var f in inputFile)
+            {
+                //bool carregado = AnexosExigidosQ.Where(a=> a.Doc.ItbidsDocumento );
+
+                if (itemStatesDocs.ContainsKey(f.Name))
+                {
+                    itemStatesDocs.Remove(f.Name);
+                    // var fileToRemove = filesBf.FirstOrDefault(f => f.Name == f.Name);
+                    var fileToRemove = currentAnexo.AnexoBf.FirstOrDefault(f => f.Name == f.Name);
+                    if (fileToRemove != null)
+                    {
+                        //filesBf.Remove(fileToRemove);
+                        currentAnexo.AnexoBf.Remove(fileToRemove);
+                        StateHasChanged();
+                    }
+                    currentAnexo.carregado = false;
+
+                    //atualistaAnexosExigidosQ(f.Name);
+                    currentAnexo.nomearquivo = "";
+                    //  atualistaAnexosExigidosQ(currentAnexo);
+                    StateHasChanged();
+                }
+                else
+                {
+                    //  docsExigidosQ.Append(new TribItbidocumentoTipo(){ItbidsDocumento=f.Name});
+
+                    itemStatesDocs.Add(f.Name, true);
+                    var extensao = Path.GetExtension(f.Name);
+                    //currentAnexo.nomeDEFINITIVO = currentAnexo.Doc.ItbidocId.ToString() + '-' + currentAnexo.InscricaoImobiliaria.ToString() + extensao;
+                    currentAnexo.nomeDEFINITIVO = currentAnexo.Doc.ItbidocId.ToString() + '-' + currentAnexo.pertenceA + extensao;
+                    //f.Name = currentAnexo.nomeDEFINITIVO;
+                    //filesBfdefinitivo = filesBf;
+
+                    //filesBf.Add(f);
+                    currentAnexo.AnexoBf.Add(f);
+                    //filesBf.Add(new });
+                    //atualistaAnexosExigidosQ(f.Name);
+                    currentAnexo.nomearquivo = f.Name;
+                    currentAnexo.carregado = true;
+                    StateHasChanged();
+                    // atualistaAnexosExigidosQ(currentAnexo);
+                }
+
+            }
+            StateHasChanged();
+
+            // await AnexosTransmitenteChanged.InvokeAsync(currentAnexo);
+        }
+
+    }
+    async Task OnProgressChangeAsyncTransmitente(InputFileChangeEventArgs file)
+    {
+        var inputFile = file.GetMultipleFiles();
+
+        if (inputFile != null)
+        {
+            foreach (var f in inputFile)
+            {
+                AddToDictionary(currentAnexo.pertenceA, currentAnexo.Doc.ItbidocId);
+                currentAnexo.carregado = true;
+                var extensao = Path.GetExtension(f.Name);
+                currentAnexo.nomeDEFINITIVO = currentAnexo.Doc.ItbidocId.ToString() + '-' + currentAnexo.pertenceA + extensao;
+                //f.Name = currentAnexo.nomeDEFINITIVO;
+                //filesBfdefinitivo = filesBf;
+
+                //filesBf.Add(f);
+                currentAnexo.AnexoBf.Add(f);
+                //filesBf.Add(new });
+                //atualistaAnexosExigidosQ(f.Name);
+                currentAnexo.nomearquivo = f.Name;
+                AddToListAnexos(currentAnexo);
+
+                StateHasChanged();
+
+
+
+
+                /*if (itemStatesDocsTrasmitente.ContainsKey(currentAnexo.pertenceA))
+                {
+                itemStatesDocsTrasmitente.Remove(currentAnexo.pertenceA);
+                // var fileToRemove = filesBf.FirstOrDefault(f => f.Name == f.Name);
+                var fileToRemove = currentAnexo.AnexoBf.FirstOrDefault(f => f.Name == f.Name);
+                    if (fileToRemove != null)
+                    {
+                    //filesBf.Remove(fileToRemove);
+                currentAnexo.AnexoBf.Remove(fileToRemove);
+                StateHasChanged();
+                }
+                currentAnexo.carregado = false;
+
+                //atualistaAnexosExigidosQ(f.Name);
+                currentAnexo.nomearquivo = "";
+                //  atualistaAnexosExigidosQ(currentAnexo);
+                StateHasChanged();
+
+
+                }
+                else
+                {
+                itemStatesDocsTrasmitente.Add(currentAnexo.pertenceA, currentAnexo.Doc.ItbidocId);
+                var extensao = Path.GetExtension(f.Name);
+                currentAnexo.nomeDEFINITIVO = currentAnexo.Doc.ItbidocId.ToString() + '-' + currentAnexo.pertenceA + extensao;
+                //f.Name = currentAnexo.nomeDEFINITIVO;
+                //filesBfdefinitivo = filesBf;
+
+                //filesBf.Add(f);
+                currentAnexo.AnexoBf.Add(f);
+                //filesBf.Add(new });
+                //atualistaAnexosExigidosQ(f.Name);
+                currentAnexo.nomearquivo = f.Name;
+                currentAnexo.carregado = true;
+                StateHasChanged();
+            }*/
+            }
+        }
+    }
+    void OnCompleted(IEnumerable<FluentInputFileEventArgs> files)
+    {
+        progressPercent = myFileByBuffer!.ProgressPercent;
+        progressTitle = myFileByBuffer!.ProgressTitle;
+
+        // For the demo, delete these files.
+        foreach (var file in Files)
+        {
+            File.Delete(file.Value);
+        }
+    }
+    private  void AddToDictionary(string key, long value)
+    {
+        if (itemStatesDocsTrasmitente.ContainsKey(key))
+        {
+            itemStatesDocsTrasmitente[key].Add(value);
+        }
+        else
+        {
+            itemStatesDocsTrasmitente[key] = new List<long> { value };
+        }
+    }
+    private void AddToListAnexos(Anexo anexo)
+    {
+        
+        if (!currentAnexosTransmitentesChanged.Contains(anexo))
+        {
+            currentAnexosTransmitentesChanged.Add(anexo);
+        }
+        /*else
+        {
+            currentAnexosTransmitentesChanged = new List<Anexo> { anexo };
+        }*/
+    }
+    private void RemoveFromDictionary(string key, long value)
+    {
+        if (itemStatesDocsTrasmitente.ContainsKey(key))
+        {
+            itemStatesDocsTrasmitente[key].Remove(value);
+            // Remove a chave se a lista associada estiver vazia
+            if (itemStatesDocsTrasmitente[key].Count == 0)
+            {
+                itemStatesDocsTrasmitente.Remove(key);
+            }
+        }
+    }
+    private void RemoveFromListAnexos(Anexo anexo)
+    {
+        //currentAnexosTransmitentesChanged
+        
+    if (currentAnexosTransmitentesChanged.Any(a => a.pertenceA == anexo.pertenceA))
+        {
+            //var fileToRemove = listaAnexos.AnexoBf.FirstOrDefault(f => f.Name == f.Name);
+            var fileToRemove = currentAnexosTransmitentesChanged.FirstOrDefault(a => a.pertenceA == anexo.pertenceA && a.Doc.ItbidocId == anexo.Doc.ItbidocId);
+            if (fileToRemove != null)
+            {
+                //filesBf.Remove(fileToRemove);
+                currentAnexosTransmitentesChanged.Remove(fileToRemove);
+                //StateHasChanged();
+            }
+            //listaAnexos[anexo].AnexoBf.
+            //dict[key].Remove(value);
+            // Remove a chave se a lista associada estiver vazia
+           // if (listAnexos.Count == 0)
+            //{
+              //  dict.Remove(key);
+           // }
+        }
+    }
+    private static bool KeyExists(Dictionary<string, List<long>> dict, string  key)
+    {
+        return dict.ContainsKey(key);
+    }
+
+    // Método para verificar se um valor existe para uma chave específica no dicionário
+    private static bool ValueExists(Dictionary<string, List<long>> dict, string key, long value)
+    {
+        if (dict.ContainsKey(key))
+        {
+            return dict[key].Contains(value);
+        }
+        return false;
+    }
+
+}
+

@@ -609,6 +609,7 @@
                 await InsereTribDividasImo(241, parcelaOption,i);
             } 
         }
+
     }
     private async Task InsereTribDividasImo(int tipoTribID,ParcelasOption parcelaOption,int parcela)
     {
@@ -1047,6 +1048,7 @@
         //await InsereNovoITBIEdif();
         //await InsereCompradores();
         //await InsereVendedores();
+        _overlayIsVisible = false;
     }
     private async void HandleGerarGuia()
     {
@@ -1891,8 +1893,11 @@
         var url = $"data:application/pdf;base64,{base64Report}";
         //await JSRuntime.InvokeVoidAsync("open", url, "_blank");
     }*/
-
     public async void HandleImprimirGuia(TribItbiedif itbiedif)
+    {
+        //await GenerateReport()
+    }
+    public async void HandleImprimirGuiacls(TribItbiedif itbiedif)
     {
 
         string? PathPDFFisico;

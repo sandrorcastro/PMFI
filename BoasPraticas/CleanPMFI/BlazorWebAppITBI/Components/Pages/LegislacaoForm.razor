@@ -70,7 +70,7 @@
         //  valordeclarado = valorDecimal.ToString("N2");
         //}
         //  calculaParcelamento();
-       
+        IsAgreed = false;
     }
 
     private void AgreementChanged(ChangeEventArgs e)
@@ -88,10 +88,12 @@
     public async Task OnTextFildChange(ChangeEventArgs e)
     {
         valordeclarado = e.Value.ToString();
-
+        ValoresOperacao.ValorDeclarado = decimal.Parse(e.Value.ToString());
+        await ValoresOperacaoChanged.InvokeAsync(ValoresOperacao);
         await ValorDeclaradoChanged.InvokeAsync(valordeclarado);
         calculoITBI();
         calculaParcelamento();
+        StateHasChanged();
     }
     public async Task GerarGuia()
     {
@@ -114,9 +116,20 @@
         calculaParcelamento();
     }
     private void calculoITBI(){
-        if (ValoresOperacao.isFinanciado)
+        if ((ValoresOperacao.isFinanciado == true ) && (ValoresOperacao.Financimanto.Trim() == "Financiamento-Minha Casa Minha Vida".Trim()))
+        //if (ValoresOperacao.Financimanto.Trim() == "Financiamento - Minha Casa Minha Vida")
         {
-            valorITBIdevido = (ValoresOperacao.ValorRecursoProprio * 0.02m + ValoresOperacao.ValorFinanciado * pegaTaxa()).ToString();
+            //if (ValoresOperacao.Financimanto == "Financiamento - Minha Casa Minha Vida")
+            //{
+                valorITBIdevido = (ValoresOperacao.ValorRecursoProprio * 0.02m + ValoresOperacao.ValorFinanciado * pegaTaxa()).ToString();
+
+            //}
+            //if (ValoresOperacao.Financimanto == "Financiamento Normal")
+            //{
+              //  valorITBIdevido = (ValoresOperacao.ValorRecursoProprio + ValoresOperacao.ValorFinanciado * 0.02m).ToString(); 
+
+            //}
+
 
 
         } else
@@ -149,7 +162,7 @@
         //var totalRecursoProprio = 0.00m
 
         var vl = decimal.Parse(valordeclarado.ToString());
-        if (ValoresOperacao.isFinanciado)
+        if ((ValoresOperacao.isFinanciado == true) && (ValoresOperacao.Financimanto.Trim() == "Financiamento-Minha Casa Minha Vida".Trim()))
         {
 
             if (vl < (4000 * Uffi))
@@ -190,10 +203,13 @@
         decimal uffi = Convert.ToDecimal(111.87);
         //decimal impdevido = Convert.ToDecimal(valordeclarado) * Convert.ToDecimal(0.02);
         decimal impdevido = Convert.ToDecimal(valorITBIdevido); // * Convert.ToDecimal(0.02);
-        //if(Math.Floor(impdevido/uffi) < 1)
-        if(Math.Floor(impdevido/uffi) < 1 || ValoresOperacao.isFinanciado)
+                                                                //if(Math.Floor(impdevido/uffi) < 1)
+        if (Math.Floor(impdevido / uffi) < 1 || ((ValoresOperacao.isFinanciado == true) && (ValoresOperacao.Financimanto.Trim() == "Financiamento-Minha Casa Minha Vida".Trim())))
         {
-            quantidadeparcelas = 1;
+            //if (ValoresOperacao.Financimanto == "Financiamento - Minha Casa Minha Vida")
+            //{
+                quantidadeparcelas = 1;
+            //}
         }
         else
         {

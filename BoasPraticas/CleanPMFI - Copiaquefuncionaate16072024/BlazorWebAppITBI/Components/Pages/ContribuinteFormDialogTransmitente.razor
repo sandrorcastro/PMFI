@@ -1,0 +1,89 @@
+﻿@implements IDialogContentComponent<Transmitente>
+@using BlazorWebAppITBI.Models
+<!-- Header -->
+<FluentDialogHeader ShowDismiss="true">
+    <FluentStack VerticalAlignment="VerticalAlignment.Center">
+        <FluentIcon Value="@(new Icons.Regular.Size24.WindowApps())" />
+        <FluentLabel Typo="Typography.PaneHeader">
+            @Dialog.Instance.Parameters.Title
+        </FluentLabel>
+    </FluentStack>
+</FluentDialogHeader>
+
+<!-- Body -->
+<FluentDialogBody>
+    <FluentEditForm Model="Content" FormName="inscricaoInfo" >
+        <DataAnnotationsValidator />
+        <FluentStack Orientation="Orientation.Horizontal">
+            <FluentTextField Placeholder="Nome" @bind-Value="Content!.Contribuinte.ConNome">Nome</FluentTextField> 
+        </FluentStack>
+        <FluentStack Orientation="Orientation.Horizontal">
+            <FluentTextField Placeholder="CPF/CNPJ" @bind-Value="Content!.Contribuinte.ConCnpjcpf">CPF/CNPJ</FluentTextField> 
+            <FluentTextField Placeholder="RG" @bind-Value="Content!.Contribuinte.ConRg">RG</FluentTextField> 
+        </FluentStack>
+        <FluentStack Orientation="Orientation.Horizontal">
+            <FluentTextField Placeholder="Email" @bind-Value="Content!.Contribuinte.ConEmail">Email</FluentTextField> 
+            <FluentTextField Placeholder="Celular" @bind-Value="Content!.Contribuinte.ConTelefoneCelular">Celular</FluentTextField> 
+        </FluentStack>
+        <FluentStack Orientation="Orientation.Horizontal">
+            <FluentTextField Placeholder="CEP" @bind-Value="Content!.Contribuinte.ConCep">CEP</FluentTextField> 
+            <FluentTextField Placeholder="Tipo Logradouro" @bind-Value="Content.Contribuinte.ConTipoLograd">Tipo Logradouro</FluentTextField> 
+            <FluentTextField Placeholder="Logradouro" @bind-Value="Content.Contribuinte.ConEndereco">Logradouro</FluentTextField> 
+            <FluentTextField Placeholder="Número" @bind-Value="Content!.Contribuinte.ConNumero">Número</FluentTextField> 
+        </FluentStack>
+       <FluentStack Orientation="Orientation.Horizontal">
+            <FluentTextField Placeholder="Bairro" @bind-Value="Content!.Contribuinte.ConBairro!.BaiNome">Bairro</FluentTextField> 
+            <FluentTextField Placeholder="Cidade" @bind-Value="Content!.Contribuinte.ConCidade!.CidNome">Cidade</FluentTextField> 
+            <FluentTextField Placeholder="Estado" @bind-Value="Content!.Contribuinte.ConCidade!.CidUf">Estado</FluentTextField> 
+            <FluentTextField Placeholder="Pais" @bind-Value="Content!.Contribuinte.ConCidade!.Pais!.PaisNome">País</FluentTextField> 
+        </FluentStack>
+       
+        <FluentValidationSummary style="color:darkred" />
+    </FluentEditForm>
+</FluentDialogBody>
+
+<!-- Footer -->
+<FluentDialogFooter>
+    <FluentButton Appearance="Appearance.Accent"
+                  
+                  OnClick="@SaveAsync">
+        Salvar
+    </FluentButton>
+    <FluentButton Appearance="Appearance.Neutral"
+                  OnClick="@CancelAsync">
+        Cancelar
+    </FluentButton>
+</FluentDialogFooter>
+
+@code
+{
+    
+    [Parameter]
+    public Transmitente? Content { get; set; } = default!;
+    
+    [CascadingParameter]
+    public FluentDialog Dialog { get; set; } = default!;
+
+
+    protected override void OnInitialized()
+    {
+        Content = new Transmitente();
+    }
+
+    private async Task SaveAsync()
+    {
+       // if (Content.Validate())
+        //{
+            await Dialog.CloseAsync(Content);
+            //await Dialog.CancelAsync();
+            //await Dialog.
+        //}
+    }
+
+    private async Task CancelAsync()
+    {
+        await Dialog.CancelAsync();
+    }
+
+   
+}

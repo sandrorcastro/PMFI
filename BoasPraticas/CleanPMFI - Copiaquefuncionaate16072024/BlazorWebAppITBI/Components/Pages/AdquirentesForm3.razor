@@ -1,0 +1,266 @@
+﻿@using BlazorWebAppITBI.Models
+@* @inherits Microsoft.AspNetCore.Components.ComponentBase *@
+@using System.ComponentModel.DataAnnotations
+@using Microsoft.FluentUI.AspNetCore.Components
+@implements IDialogContentComponent<IQueryable<Adquirente>>
+@rendermode InteractiveServer
+@inject IDialogService DialogService
+@inject IContribuinteAppService contribuinteAppService
+
+<FluentCard Justify="@JustifyContent.Center" >
+    <FluentButton OnClick="@( ()=> BuscarContribuinteDialog("Adquirente"))" Appearance="Appearance.Accent">Adicionar Adquirente</FluentButton>
+    <FluentDataGrid Items=@ContribuintesQ TGridItem=Adquirente>
+        <!--  
+            <PropertyColumn Title="ID" Property="@(c => c!.ConId)" Sortable="true" Align=Align.Start />
+        --> 
+        <PropertyColumn Title="CPF/CNPJ" Property="@(c => c!.Contribuinte.ConCnpjcpf)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="RG" Property="@(c => c!.Contribuinte.ConRg)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Nome/Razão" Property="@(c => c!.Contribuinte.ConNome)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Email" Property="@(c => c!.Contribuinte.ConEmail)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Celular" Property="@(c => c!.Contribuinte.ConTelefoneCelular)" Sortable="true" Align=Align.Start />
+        <!-- 
+
+            <PropertyColumn Title="% Adquirido" Property="@(c => c!.percentualAdquirido)"  Sortable="true" Align=Align.Start />
+        -->
+
+        <TemplateColumn Title="% Adquirido" Sortable="true" Align=Align.Start>
+
+            @{
+                var item = context as Adquirente;
+
+                <FluentTextField Required @bind-Value="item!.percentualAdquirido" Placeholder="% Adquirido" />
+                <ValidationMessage For="() => item!.percentualAdquirido" />
+            }
+            }
+
+
+        </TemplateColumn>
+
+<!--  
+
+        <TemplateColumn Align="@Align.End">
+            @{
+
+                var item = context as Adquirente;
+            //    <FluentTextField Placeholder="Per" @bind-Value="item.percentualAdquirido">Per</FluentTextField>
+
+            }
+        </TemplateColumn>
+-->
+        <TemplateColumn Align="@Align.End">
+            @{
+
+                var item = context as Adquirente;
+
+                <FluentButton Appearance="Appearance.Outline" OnClick="()=>AddRemovePlus(item)"
+                              IconStart="@(new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent))">
+                </FluentButton>
+            }
+        </TemplateColumn>
+<!--
+        <TemplateColumn Align="@Align.End">
+            @{
+                var item = context as Contribuinte;
+                //bool isChecked = item.Responsavel == "Sim";
+               // <FluentCheckbox onchange="@((ChangeEventArgs e)=>@AddRemove(e,item))"> </FluentCheckbox>
+            }
+        </TemplateColumn>
+-->
+    </FluentDataGrid>
+</FluentCard>
+@code {
+    [Parameter]
+    public IQueryable<Adquirente>? Content { get; set; } = default!;
+    public IQueryable<Adquirente>? ContribuintesQ { get; set; }
+    public Domain.Specs.DBProsiga.ContribuinteByCPFCNPJSpec contribuinteSpec;
+    private Dictionary<Adquirente, bool> itemStates = new Dictionary<Adquirente, bool>();
+    [Parameter]
+    public List<Adquirente>? ListaDeAdquirentes { get; set; } 
+    public string? tipoContribuinte = null;
+    private Adquirente? adquirente = new Adquirente() { Contribuinte = new Contribuinte { ConCnpjcpf = string.Empty } };
+    private Contribuinte? transmitente = new Contribuinte() { ConCnpjcpf = string.Empty };
+    [CascadingParameter]
+    public FluentDialog? Dialog { get; set; }
+    protected override async Task OnInitializedAsync()
+    {
+        //    await Task.Delay(1000);
+        //  await CarregaAlunos();
+        //pagination.TotalItemCountChanged += (sender, eventArgs) => StateHasChanged();
+        //ContribuintesQ = Content;
+        await base.OnInitializedAsync();
+    }
+    [Parameter]
+    public EventCallback<List<Adquirente>> ListaDeAdquirentesChanged { get; set; }
+
+    public void AtualizarAdquirente(Adquirente contribuinte, int operacao)
+    {
+        if (operacao == 1)
+        {
+
+            //ListaDeTransmitentes[index] = contribuinte;
+            ListaDeAdquirentes.Add(contribuinte);
+            ContribuintesQ = ListaDeAdquirentes.AsQueryable();
+            ListaDeAdquirentesChanged.InvokeAsync(ListaDeAdquirentes);
+        } else if (operacao == 2)
+        {
+            ListaDeAdquirentes.Remove(contribuinte);
+            ContribuintesQ = ListaDeAdquirentes.AsQueryable();
+            ListaDeAdquirentesChanged.InvokeAsync(ListaDeAdquirentes);
+        }
+    }
+    private void AddRemove(ChangeEventArgs e,Adquirente contribuinte)
+    {
+        //  bool isChecked = (bool) e.Value;
+        // Lógica a ser executada quando o checkbox é marcado
+        //await DialogService.ShowInfoAsync("Wizard completed");
+        //if(isChecked){
+        if (e.Value.ToString() == "True")
+        {
+
+            AtualizarAdquirente(contribuinte,1);
+            //ContribuintesQ = this.ListaDeTrasmitentes.AsQueryable();
+        } else
+        {
+            AtualizarAdquirente(contribuinte, 2);
+        }
+    }
+    private void AddRemovePlus(Adquirente contribuinte)
+    {
+
+        //  AtualizarTransmitente(contribuinte, 1);
+        //ContribuintesQ = this.ListaDeTrasmitentes.AsQueryable();
+        if(itemStates.ContainsKey(contribuinte))
+        {
+            //itemStates[contribuinte] = !itemStates[contribuinte];
+            itemStates.Remove(contribuinte);
+            AtualizarAdquirente(contribuinte, 2);
+            //  itemStates.Add(contribuinte, false);
+        }
+        else
+        {
+            itemStates.Add(contribuinte,true);
+            AtualizarAdquirente(contribuinte, 1);
+        }
+        StateHasChanged();
+
+    }
+    //private MarkupString GetIcon(Contribuinte item)
+    private Icon GetIcon(Adquirente item)
+    {
+        // Retorna o ícone de exclusão se o item foi adicionado, caso contrário, retorna o ícone de adição
+        return itemStates.TryGetValue(item, out bool isAdded) && isAdded
+         //? (MarkupString)@"<Icons.Regular.Size24.AddSquare().WithColor(Color.Accent)>"
+         //: (MarkupString)@"<Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)>";
+         // ? "icon-remover" // Nome do ícone de remoção
+         // : "icon-adicionar"; // Nome do ícone de adição
+         // ? (Icon)@"<Icons.Regular.Size24.AddSquare().WithColor(Color.Accent)>"
+         // : (Icon)@"<Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)>";
+         //? new Icon() { Name = "Icons.Regular.Size24.AddSquare().WithColor(Color.Accent)" }
+         //   : new Icon() { Name="Icons.Regular.size24.SubtractSquare().WithColor(Color.Accent)"} ;
+         ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
+         : new Icons.Regular.Size24.AddSquare().WithColor(Color.Accent);
+    }
+
+    private async Task BuscarContribuinteDialog(string _tipoContribuinte)
+    {
+        tipoContribuinte = _tipoContribuinte;
+        //Contribuinte contribuinte = new Contribuinte();
+        if (tipoContribuinte == "Adquirente")
+        {
+            await DialogService.ShowDialogAsync<BuscarContribuinteDialogAdquirente>(adquirente, new DialogParameters()
+                {
+                    Title = $"Buscar {tipoContribuinte}",
+                    OnDialogResult = DialogService.CreateDialogCallback(this, HandleBuscarContribuinteDialog),
+                    //   Width = "500px",
+                    //   Height = "500px",
+                });
+        }
+
+
+    }
+    private async Task HandleBuscarContribuinteDialog(DialogResult result)
+    {
+        if (result.Cancelled)
+        {
+            return;
+        }
+        if (result.Data is not null)
+        {
+
+            if (tipoContribuinte == "Adquirente")
+            {
+                adquirente = result.Data as Adquirente;
+                contribuinteSpec = new Domain.Specs.DBProsiga.ContribuinteByCPFCNPJSpec(adquirente.Contribuinte.ConCnpjcpf);
+                adquirente.Contribuinte = await contribuinteAppService.GetBySpecAsync(contribuinteSpec, CancellationToken.None);
+                if (adquirente != null)
+                {
+                    await ContribuinteFormDialog();
+                }
+                else
+                {
+                    //adquirente = new Adquirente() { ConBairro = new Bairro(), ConCidade = new Cidade() { Pais = new Paise() } };
+                    await ContribuinteFormDialog();
+                    //await DialogService.ShowInfoAsync("Adquirente Não Encontrado, Adicione-o!");
+
+                }
+
+            }
+        }
+
+        //await Task.Run(() => DemoLogger.WriteLine($"Dialog closed"));
+
+    }
+    private async Task ContribuinteFormDialog()
+    {
+        if (tipoContribuinte == "Adquirente")
+        {
+            if (adquirente != null)
+            {
+
+
+                await DialogService.ShowDialogAsync<ContribuinteFormDialogAdquirente>(adquirente, new DialogParameters()
+                    {
+                        Title = $"Cadastro de {tipoContribuinte}",
+                        OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
+                        //  Width = "500px",
+                        //  Height = "500px",
+                    });
+            }
+            else
+            {
+                //transmitente = new Contribuinte();
+                await DialogService.ShowDialogAsync<ContribuinteFormDialog>(adquirente, new DialogParameters()
+                    {
+                        Title = $"Cadastro de {tipoContribuinte}",
+                        OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
+                        //  Width = "500px",
+                        //  Height = "500px",
+                    });
+            }
+        }
+    }
+    private async Task HandleContribuinteFormDialog(DialogResult result)
+    {
+        if (result.Cancelled)
+        {
+            return;
+        }
+        if (result.Data is not null)
+        {
+
+            if (tipoContribuinte == "Adquirente")
+            {
+
+                adquirente = result.Data as Adquirente;
+                AddRemovePlus(adquirente);
+                return;
+            }
+
+        }
+
+        //await Task.Run(() => DemoLogger.WriteLine($"Dialog closed"));
+    }
+            
+         
+}
+ 

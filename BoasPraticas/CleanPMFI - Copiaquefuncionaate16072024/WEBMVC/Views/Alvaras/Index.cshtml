@@ -1,0 +1,353 @@
+﻿@model IEnumerable<Domain.Entities.TribAlvDocumento>
+
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.NrAno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrSequencia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrCmcExecucao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrCmcProjeto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DsObraEndereco)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DsObra)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrArt)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrCreaExecucao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrCreaProjeto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NmProprietario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrPropCpfcnpj)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DsPropFone)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DsPropEndereco)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DsArea)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrInscricao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DtDocumento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrNossoNumero)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FlComValor)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrProtocolo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrLote)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrQuadra)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DsObservacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DsAvaliacaoIssqn)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ImDocumento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DsTipoDocumento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DsTitulo)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DsTexto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdDocumentoOrigem)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrAreaTerreno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrSequenciaOrigem)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrAnoOrigem)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Dispensado)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CepObra)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.CepProprietario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VlTotalAreaConstrucao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FlOutorga)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VlVenalTerreno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VlAreaInfracionadaTerreno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.VlTaxaOutorga)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DsInscricaoEstatual)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.Situacao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DsMotivoCancelamento)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.RefAnterior)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DsDescAreaConstrucao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DtExclusaoAlvara)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DsUsuarioExclusao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdCpfcnpjExecucao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.IdCpfcnpjProjeto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrProcessoAno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.NrProcessoSequencia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.DsUsuarioInclusao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.FlTipoAlvara)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TpRespObraProjeto)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.TpRespObraExecucao)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrAno)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrSequencia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrCmcExecucao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrCmcProjeto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DsObraEndereco)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DsObra)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrArt)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrCreaExecucao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrCreaProjeto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NmProprietario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrPropCpfcnpj)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DsPropFone)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DsPropEndereco)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DsArea)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrInscricao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DtDocumento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrNossoNumero)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FlComValor)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrProtocolo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrLote)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrQuadra)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DsObservacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DsAvaliacaoIssqn)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ImDocumento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DsTipoDocumento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DsTitulo)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DsTexto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdDocumentoOrigem)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrAreaTerreno)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrSequenciaOrigem)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrAnoOrigem)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Dispensado)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CepObra)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CepProprietario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VlTotalAreaConstrucao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FlOutorga)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VlVenalTerreno)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VlAreaInfracionadaTerreno)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.VlTaxaOutorga)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DsInscricaoEstatual)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Situacao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DsMotivoCancelamento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.RefAnterior)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DsDescAreaConstrucao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DtExclusaoAlvara)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DsUsuarioExclusao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdCpfcnpjExecucao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdCpfcnpjProjeto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrProcessoAno)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrProcessoSequencia)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.DsUsuarioInclusao)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.FlTipoAlvara)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TpRespObraProjeto)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.TpRespObraExecucao)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdDocumento">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdDocumento">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdDocumento">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

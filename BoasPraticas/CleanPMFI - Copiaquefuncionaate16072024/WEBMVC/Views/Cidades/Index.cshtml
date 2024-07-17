@@ -1,0 +1,154 @@
+﻿@using Application.ViewModels;
+@using Domain.Pagination;
+@using Domain.Filters;
+
+@*
+@model PagedResponse<IEnumerable<CidadeViewModel>>
+@model IEnumerable<PagedResponse<CidadeViewModel>>
+@model PagedResponse<CidadeViewModel>
+@model IEnumerable<CidadeViewModel>
+funciona -> @model PagedResponse<CidadeViewModel>
+    *@
+@model PagedResponseViewModel<CidadeViewModel>
+
+@{
+    ViewData["Title"] = "Index";
+    var controllerAtual = ViewContext.RouteData.Values["controller"].ToString();
+    //CidadeFilter CidadeFilter = new CidadeFilter() { Nome="Teste"};
+    CidadeFilter CidadeFilter = ViewData["CidadeFilter"] as CidadeFilter; 
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+@{
+
+await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml");
+}
+
+@*
+<form asp-action="Index" method="get">
+    <div class="form-actions no-color">
+        <p>
+            Find by name: <input type="text" name="SearchString" value="@ViewData["CurrentFilter"]" />
+            <input type="submit" value="Search" class="btn btn-default" /> |
+            <a asp-action="Index">Back to Full List</a>
+        </p>
+    </div>
+</form>
+*@
+
+
+
+
+
+
+
+
+
+
+
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["IdCidadeSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">IdCidade</a>
+                @*
+                    <a asp-action="Index" asp-route-OrderBy="IdCidade" asp-route-SortBy=@CidadeFilter.SortBy>@Html.DisplayNameFor(model => model.ViewModel.IdCidade)</a>
+                *@
+            </th>
+            <th>
+                <a asp-action="Index" asp-route-sortOrder="@ViewData["NomeSortParm"]" asp-route-currentFilter="@ViewData["CurrentFilter"]">Nome</a>
+                @*<a asp-action="Index" asp-route-OrderBy="Nome" asp-route-SortBy=@CidadeFilter.SortBy>@Html.DisplayNameFor(model => model.ViewModel.Nome)</a>*@
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.CodigoIbge)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.SinCapital)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.Latitude)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.Longitude)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.IdPaisNavigation)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.IdUfNavigation)
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Data) {
+        <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.IdCidade)
+                </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.CodigoIbge)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.SinCapital)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Latitude)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Longitude)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdPaisNavigation.Nome)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IdUfNavigation.Nome)
+            </td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdCidade">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdCidade">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdCidade">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+@{
+
+    await Html.RenderPartialAsync("~/Views/Shared/Partials/_Paginacao.cshtml");
+}
+
+
+
+@*
+
+@{
+    var prevDisabled = !Model.Pagination.HasPrevious ? "disabled" : "";
+    var nextDisabled = !Model.Pagination.HasNext ? "disabled" : "";
+}
+
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.Pagination.Page - 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @prevDisabled">
+    Anterior
+</a>
+<a asp-action="Index"
+   asp-route-sortOrder="@ViewData["CurrentSort"]"
+   asp-route-pageNumber="@(Model.Pagination.Page + 1)"
+   asp-route-currentFilter="@ViewData["CurrentFilter"]"
+   class="btn btn-default @nextDisabled">
+    Próximo
+</a>
+
+*@
+

@@ -1,0 +1,173 @@
+﻿@using BlazorWebAppITBI.Models
+@rendermode InteractiveServer
+@inject IDialogService DialogService
+@inject IContribuinteAppService contribuinteAppService
+@inject ITribItbidocumentoTipoAppService tribItbidocumentoTipoAppService
+<FluentButton OnClick="@(()=> BuscarContribuinteDialog("Transmitente"))" Appearance="Appearance.Accent">Adicionar Transmitente</FluentButton>
+<FluentAccordionTransmitentes Content="@ListaDeTransmitentes" ListTransmitenteChanged="HandledListTransmitenteChanged" >  </FluentAccordionTransmitentes>
+
+@code {
+    [Parameter]
+    public IEnumerable<TribItbidocumentoTipo> DocsExigidos { get; set; }
+    [Parameter]
+    public TribEdificaco Imovel { get; set; } = default!;
+    public Domain.Specs.DBProsiga.ContribuinteByCPFCNPJSpec contribuinteSpec;
+    [Parameter]
+    public List<Transmitente>? ListaDeTransmitentes { get; set; }
+    public string? tipoContribuinte = null;
+    //private Contribuinte? adquirente = new Contribuinte() { ConCnpjcpf = string.Empty };
+    private Transmitente? transmitente = new Transmitente() { Contribuinte = new Contribuinte { ConCnpjcpf = string.Empty } };
+    [CascadingParameter]
+    public FluentDialog? Dialog { get; set; }
+    string activeId = "accordion-1";
+    FluentAccordionItem? changed;
+    [Parameter]
+    public EventCallback<List<Transmitente>> ListaDeTransmitentesChanged { get; set; }
+    private async Task HandledListTransmitenteChanged(List<Transmitente> listtransmitentes)
+    {
+       ListaDeTransmitentes = listtransmitentes;
+        await ListaDeTransmitentesChanged.InvokeAsync(ListaDeTransmitentes);
+       // StateHasChanged();
+    }
+    private async Task  NovoTransmitente(Transmitente transmitenteSelecionado)
+    {
+       /* var indice = await ObterIndiceTransmitente(transmitenteSelecionado);
+        if (indice > -1)
+        {
+            ListaDeTransmitentes.RemoveAt(indice); 
+            StateHasChanged();
+        }
+        else
+        {*/
+            var transmitente = new Transmitente()
+                {
+                    Contribuinte = transmitenteSelecionado.Contribuinte,
+                    AnexosExigidos = new List<Anexo>(),
+                    percentualtransmitido = string.Empty,
+                };
+             foreach (var docexigido in DocsExigidos.ToList())
+                            {
+                                    transmitente.AnexosExigidos.Add(new Anexo()
+                                    {
+                                        carregado = false,
+                                        Doc = docexigido,
+                                        nomearquivo = string.Empty,
+                                        nomeDEFINITIVO = string.Empty,
+                                        pertenceA = transmitente.Contribuinte.ConCnpjcpf.Trim().PadLeft(14, '0'),
+                                        AnexoBf = new List<IBrowserFile>()
+                                        // InputFile = null,
+                                    });
+                            }
+
+            ListaDeTransmitentes.Add(transmitente);
+       // }
+        ListaDeTransmitentesChanged.InvokeAsync(ListaDeTransmitentes);
+        StateHasChanged();
+    }
+    private Task<int> ObterIndiceTransmitente(Transmitente transmitenteSelecionado)
+    {
+        return Task.FromResult(ListaDeTransmitentes.FindIndex(t=>t.Contribuinte.ConCnpjcpf==transmitenteSelecionado.Contribuinte.ConCnpjcpf));
+    }
+    private void HandleOnAccordionItemChange(FluentAccordionItem item)
+    {
+        changed = item;
+    }
+    protected override async Task OnInitializedAsync()
+    {
+      //  List<Anexo> listdoc = new List<Anexo>();
+            await base.OnInitializedAsync();
+    }
+    private async Task BuscarContribuinteDialog(string _tipoContribuinte)
+    {
+        tipoContribuinte = _tipoContribuinte;
+        //Contribuinte contribuinte = new Contribuinte();
+        transmitente = new Transmitente() { Contribuinte = new Contribuinte { ConCnpjcpf = string.Empty } };
+        if (tipoContribuinte == "Transmitente")
+        {
+            await DialogService.ShowDialogAsync<BuscarContribuinteDialogTransmitente>(transmitente, new DialogParameters()
+                {
+                    Title = $"Buscar {tipoContribuinte}",
+                    OnDialogResult = DialogService.CreateDialogCallback(this, HandleBuscarContribuinteDialog),
+                    //   Width = "500px",
+                    //   Height = "500px",
+                });
+        }
+    }
+    private async Task HandleBuscarContribuinteDialog(DialogResult result)
+    {
+        if (result.Cancelled)
+        {
+            return;
+        }
+        if (result.Data is not null)
+        {
+            if (tipoContribuinte == "Transmitente")
+            {
+                transmitente = result.Data as Transmitente;
+                contribuinteSpec = new Domain.Specs.DBProsiga.ContribuinteByCPFCNPJSpec(transmitente.Contribuinte.ConCnpjcpf);
+                transmitente.Contribuinte = await contribuinteAppService.GetBySpecAsync(contribuinteSpec, CancellationToken.None);
+                if (transmitente != null)
+                {
+                    await ContribuinteFormDialog();
+                }
+                else
+                {
+                    //await DialogService.ShowInfoAsync("Transmitente Não Encontrado!");
+                    //  tipoContribuinte = "NovoTransmitente";
+                    transmitente.Contribuinte = new Contribuinte() { ConBairro = new Bairro(), ConCidade = new Cidade() { Pais = new Paise() } };
+                    await ContribuinteFormDialog();
+
+                }
+
+            }
+
+        }
+    }
+    private async Task ContribuinteFormDialog()
+    {
+        if (tipoContribuinte == "Transmitente")
+        {
+            if (transmitente != null)
+            {
+                await DialogService.ShowDialogAsync<ContribuinteFormDialogTransmitente>(transmitente, new DialogParameters()
+                    {
+                        Title = $"Cadastro de {tipoContribuinte}",
+                        OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
+                        //  Width = "500px",
+                        //  Height = "500px",
+                    });
+            }
+            else
+            {
+                //transmitente = new Contribuinte();
+                await DialogService.ShowDialogAsync<ContribuinteFormDialog>(transmitente, new DialogParameters()
+                    {
+                        Title = $"Cadastro de {tipoContribuinte}",
+                        OnDialogResult = DialogService.CreateDialogCallback(this, HandleContribuinteFormDialog),
+                        //  Width = "500px",
+                        //  Height = "500px",
+                    });
+            }
+        }
+    }
+    private async Task HandleContribuinteFormDialog(DialogResult result)
+    {
+        if (result.Cancelled)
+        {
+            return;
+        }
+        if (result.Data is not null)
+        {
+            if (tipoContribuinte == "Transmitente")
+            {
+                transmitente = result.Data as Transmitente;
+                await NovoTransmitente(transmitente);
+                return;
+            }
+        }
+
+    
+
+    }
+}
+

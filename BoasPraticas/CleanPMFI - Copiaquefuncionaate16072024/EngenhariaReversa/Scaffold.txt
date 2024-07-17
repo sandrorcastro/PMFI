@@ -1,0 +1,29 @@
+Scaffold-DbContext "Data Source=172.27.84.102;Initial Catalog=DBProsiga;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=rpdesenv;Password=visual" Microsoft.EntityFrameworkCore.SqlServer -o Entities 
+Scaffold-DbContext "Data Source=172.27.84.102;Initial Catalog=DBProsiga;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=rpdesenv;Password=visual" Microsoft.EntityFrameworkCore.SqlServer -o Entities.DBProsiga -t dbo.TribAlvDocumento 
+
+
+
+
+Scaffold-DbContext "Data Source=172.27.1.94;Initial Catalog=GIIGAlvaraConstrucaoDB;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=Gilberto.gc;Password=Couto2408@@" Microsoft.EntityFrameworkCore.SqlServer -o Entities.GIIGAlvaraConstrucaoDB
+Scaffold-DbContext "Data Source=172.27.1.94;Initial Catalog=GIIGReportsDB;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=Gilberto.gc;Password=Couto2408@@" Microsoft.EntityFrameworkCore.SqlServer -o Entities.GIIGReportsDB
+
+Scaffold-DbContext "Data Source=172.27.1.94;Initial Catalog=GIIGConsultaPreviaDB;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=Gilberto.gc;Password=Couto2408@@" Microsoft.EntityFrameworkCore.SqlServer -o Entities.GIIGConsultaPreviaDB
+Scaffold-DbContext "Data Source=172.27.1.94;Initial Catalog=GIIGPortalDBNFSE;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=Gilberto.gc;Password=Couto2408@@" Microsoft.EntityFrameworkCore.SqlServer -o Entities.GIIGPortalDBNFSE
+Scaffold-DbContext "Data Source=172.27.1.94;Initial Catalog=GIIGProjetosDB;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=Gilberto.gc;Password=Couto2408@@" Microsoft.EntityFrameworkCore.SqlServer -o Entities.GIIGProjetosDB
+
+
+
+
+
+Scaffold-DbContext "Data Source=172.27.1.94;Initial Catalog=NFSEDB;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=Gilberto.gc;Password=Couto2408@@" Microsoft.EntityFrameworkCore.SqlServer -o Entities.NFSEDB
+
+
+
+Scaffold-DbContext "Data Source=172.27.1.94;Initial Catalog=NFSEDB;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=Gilberto.gc;Password=Couto2408@@" Microsoft.EntityFrameworkCore.SqlServer -o Entities.NFSEDB.namespaceAlterado -Namespace Domain.Entities.NFSEDB
+
+
+Scaffold-DbContext "Data Source=172.27.84.102;Initial Catalog=DBProsiga;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=Gilberto.gc;Password=Couto2408@@" Microsoft.EntityFrameworkCore.SqlServer -o Entities.DBProsiga -Namespace Domain.Entities.DBProsiga
+
+Scaffold-DbContext "Data Source=172.27.84.102;Initial Catalog=DBProsiga;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=rpdesenv;Password=visual" Microsoft.EntityFrameworkCore.SqlServer -o Entities.DBProsiga -Namespace Fazenda.Entities.DBProsiga
+
+Scaffold-DbContext "Data Source=172.27.84.102;Initial Catalog=DBProsiga;Persist Security Info=false;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;User ID=rpdesenv;Password=visual" Microsoft.EntityFrameworkCore.SqlServer -o Entities.DBProsiga.BLAZOR -Namespace RP.SMF.Blazor.DBProsiga

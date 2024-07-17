@@ -1,0 +1,44 @@
+﻿@model Domain.Entities.MegaData.MegaData_NFSE
+
+@{
+    ViewData["Title"] = "Edit";
+}
+
+<h1>Edit</h1>
+
+<h4>MegaData_NFSE</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="DataGeracao" />
+            <div class="form-group">
+                <label asp-for="DataInicioPeriodo" class="control-label"></label>
+                <input asp-for="DataInicioPeriodo" class="form-control" />
+                <span asp-validation-for="DataInicioPeriodo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataFinalPeriodo" class="control-label"></label>
+                <input asp-for="DataFinalPeriodo" class="form-control" />
+                <span asp-validation-for="DataFinalPeriodo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataEnvio" class="control-label"></label>
+                <input asp-for="DataEnvio" class="form-control" />
+                <span asp-validation-for="DataEnvio" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

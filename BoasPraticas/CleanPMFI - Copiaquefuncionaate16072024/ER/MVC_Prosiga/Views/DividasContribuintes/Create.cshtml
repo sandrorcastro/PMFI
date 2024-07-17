@@ -1,0 +1,203 @@
+﻿@model DBProsiga.Entities.TribDividasContribuinte
+
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create</h1>
+
+<h4>TribDividasContribuinte</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Create">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <div class="form-group">
+                <label asp-for="ConIddivida" class="control-label"></label>
+                <input asp-for="ConIddivida" class="form-control" />
+                <span asp-validation-for="ConIddivida" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivAno" class="control-label"></label>
+                <input asp-for="ConDivAno" class="form-control" />
+                <span asp-validation-for="ConDivAno" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TipoTribId" class="control-label"></label>
+                <input asp-for="TipoTribId" class="form-control" />
+                <span asp-validation-for="TipoTribId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivSubDivida" class="control-label"></label>
+                <input asp-for="ConDivSubDivida" class="form-control" />
+                <span asp-validation-for="ConDivSubDivida" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivParcela" class="control-label"></label>
+                <input asp-for="ConDivParcela" class="form-control" />
+                <span asp-validation-for="ConDivParcela" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivVencimento" class="control-label"></label>
+                <input asp-for="ConDivVencimento" class="form-control" />
+                <span asp-validation-for="ConDivVencimento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivTipoDivida" class="control-label"></label>
+                <input asp-for="ConDivTipoDivida" class="form-control" />
+                <span asp-validation-for="ConDivTipoDivida" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivDataBloqCorrecao" class="control-label"></label>
+                <input asp-for="ConDivDataBloqCorrecao" class="form-control" />
+                <span asp-validation-for="ConDivDataBloqCorrecao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivDataBloqJuros" class="control-label"></label>
+                <input asp-for="ConDivDataBloqJuros" class="form-control" />
+                <span asp-validation-for="ConDivDataBloqJuros" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivDataBloqMulta" class="control-label"></label>
+                <input asp-for="ConDivDataBloqMulta" class="form-control" />
+                <span asp-validation-for="ConDivDataBloqMulta" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivDataUltimaCorrecao" class="control-label"></label>
+                <input asp-for="ConDivDataUltimaCorrecao" class="form-control" />
+                <span asp-validation-for="ConDivDataUltimaCorrecao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivOrigemLancamento" class="control-label"></label>
+                <input asp-for="ConDivOrigemLancamento" class="form-control" />
+                <span asp-validation-for="ConDivOrigemLancamento" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="TipoBxId" class="control-label"></label>
+                <input asp-for="TipoBxId" class="form-control" />
+                <span asp-validation-for="TipoBxId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivMes" class="control-label"></label>
+                <input asp-for="ConDivMes" class="form-control" />
+                <span asp-validation-for="ConDivMes" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivDataBaixa" class="control-label"></label>
+                <input asp-for="ConDivDataBaixa" class="form-control" />
+                <span asp-validation-for="ConDivDataBaixa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivValorHistorico" class="control-label"></label>
+                <input asp-for="ConDivValorHistorico" class="form-control" />
+                <span asp-validation-for="ConDivValorHistorico" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivValorBaixa" class="control-label"></label>
+                <input asp-for="ConDivValorBaixa" class="form-control" />
+                <span asp-validation-for="ConDivValorBaixa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivQtdeBaixas" class="control-label"></label>
+                <input asp-for="ConDivQtdeBaixas" class="form-control" />
+                <span asp-validation-for="ConDivQtdeBaixas" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="AutoInfrId" class="control-label"></label>
+                <input asp-for="AutoInfrId" class="form-control" />
+                <span asp-validation-for="AutoInfrId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivBxVlrJuros" class="control-label"></label>
+                <input asp-for="ConDivBxVlrJuros" class="form-control" />
+                <span asp-validation-for="ConDivBxVlrJuros" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivBxVlrMulta" class="control-label"></label>
+                <input asp-for="ConDivBxVlrMulta" class="form-control" />
+                <span asp-validation-for="ConDivBxVlrMulta" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivBxVlrCorrecao" class="control-label"></label>
+                <input asp-for="ConDivBxVlrCorrecao" class="form-control" />
+                <span asp-validation-for="ConDivBxVlrCorrecao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivBxVlrDesconto" class="control-label"></label>
+                <input asp-for="ConDivBxVlrDesconto" class="form-control" />
+                <span asp-validation-for="ConDivBxVlrDesconto" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivBxVlrMultaDa" class="control-label"></label>
+                <input asp-for="ConDivBxVlrMultaDa" class="form-control" />
+                <span asp-validation-for="ConDivBxVlrMultaDa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivDescDivida" class="control-label"></label>
+                <input asp-for="ConDivDescDivida" class="form-control" />
+                <span asp-validation-for="ConDivDescDivida" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Idmoeda" class="control-label"></label>
+                <input asp-for="Idmoeda" class="form-control" />
+                <span asp-validation-for="Idmoeda" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EdiId" class="control-label"></label>
+                <input asp-for="EdiId" class="form-control" />
+                <span asp-validation-for="EdiId" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivValor" class="control-label"></label>
+                <input asp-for="ConDivValor" class="form-control" />
+                <span asp-validation-for="ConDivValor" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Multa" class="control-label"></label>
+                <input asp-for="Multa" class="form-control" />
+                <span asp-validation-for="Multa" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Juros" class="control-label"></label>
+                <input asp-for="Juros" class="form-control" />
+                <span asp-validation-for="Juros" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Correcao" class="control-label"></label>
+                <input asp-for="Correcao" class="form-control" />
+                <span asp-validation-for="Correcao" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="MultaDividaAtiva" class="control-label"></label>
+                <input asp-for="MultaDividaAtiva" class="form-control" />
+                <span asp-validation-for="MultaDividaAtiva" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DataCalculo" class="control-label"></label>
+                <input asp-for="DataCalculo" class="form-control" />
+                <span asp-validation-for="DataCalculo" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivValorBkp" class="control-label"></label>
+                <input asp-for="ConDivValorBkp" class="form-control" />
+                <span asp-validation-for="ConDivValorBkp" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="ConDivExcluido" class="control-label"></label>
+                <input asp-for="ConDivExcluido" class="form-control" />
+                <span asp-validation-for="ConDivExcluido" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Create" class="btn btn-primary" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

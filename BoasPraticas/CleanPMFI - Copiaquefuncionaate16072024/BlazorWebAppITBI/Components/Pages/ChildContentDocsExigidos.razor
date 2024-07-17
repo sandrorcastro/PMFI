@@ -1,0 +1,168 @@
+﻿@using BlazorWebAppITBI.Uteis
+@rendermode InteractiveServer
+@if(Content != null){
+                        <FluentDataGrid Items=@Content.AsQueryable() TGridItem=Anexo>
+                            <PropertyColumn Title="Documento Obrigatório" Property="@(c => c!.Doc.ItbidsDocumento)" Sortable="true" Align=Align.Start />
+                            <PropertyColumn Title="Arquivo" Property="@(c => c!.nomearquivo)" Sortable="true" Align=Align.Start />
+                            <TemplateColumn Title="Ação" Sortable="true" Align=Align.End>
+                                    @{
+                                           var anexoSelecionado = @context as Anexo;
+                                          <FluentButton Appearance="Appearance.Outline" OnClick="()=>OpenFileSelector(anexoSelecionado)" IconStart="GetIcon(anexoSelecionado)"></FluentButton>
+                                        //  <FluentButton Appearance="Appearance.Outline" OnClick="()=>RemoveFileSelector(anexoSelecionado)" IconStart="@(new Icons.Regular.Size20.SubtractSquare().WithColor(Color.Accent))"></FluentButton>
+                                    }
+                            </TemplateColumn>
+                        </FluentDataGrid>
+                    <FluentInputFile @ref="@myFileByBuffer"
+                             AnchorId="MyUploadBuffer"
+                             DragDropZoneVisible="false"
+                             Mode="InputFileMode.Buffer"
+                             Multiple="true"
+                             MaximumFileSize="@(1000 * 1024 * 1024)"
+                             Accept=".mp4, .mov, .avi"
+                             OnInputFileChange="OnProgressChangeAsyncTransmitente"
+                             OnCompleted="@OnCompleted" />
+}
+@code {
+    [Parameter]
+    public List<Anexo> Content { get; set; } = default!;
+    [Parameter]
+    public EventCallback<Anexo> AnexoChanged { get; set; }
+    FluentInputFile? myFileByBuffer = default!;
+    Dictionary<int, string> Files = new();
+    private Anexo? currentAnexo;
+    int? progressPercent;
+    string? progressTitle;
+
+    public async Task UpdateAnexo(Anexo anexo, IBrowserFile f)
+    {
+        //var indiceanexo = 0;
+        if (anexo.carregado == true )
+        {
+            var indicefile = await ObterIndiceFile(anexo);
+            var indiceanexo = await ObterIndiceAnexo(anexo);
+            Content[indiceanexo].AnexoBf.RemoveAt(indicefile);
+            await AnexoChanged.InvokeAsync(Content[indiceanexo]);
+        }
+        else
+        {
+            //indiceanexo = await ObterIndiceAnexo(anexo);
+            //Content[indiceanexo].AnexoBf.Add(f);
+            await AnexoChanged.InvokeAsync(anexo);
+
+        }
+
+        //    var indicefile = await ObterIndiceFile(anexo);
+        //    if(indicefile > -1)
+        //    {
+        //        Content[indice].AnexoBf[indicefile] = null;
+
+        //    }
+        StateHasChanged();
+        //}
+        //await AnexoChanged.InvokeAsync(Content[indiceanexo]);
+    }
+    public async Task<int> ObterIndiceAnexo(Anexo anexoselecionado)
+    {
+        return await Task.FromResult(Content.FindIndex(a => a.pertenceA == anexoselecionado.pertenceA && a.Doc.ItbidsDocumento == anexoselecionado.Doc.ItbidsDocumento));
+    }
+    public async Task<int> ObterIndiceFile(Anexo anexoselecionado)
+    {
+        var indiceanexo = await ObterIndiceAnexo(anexoselecionado);
+        return await Task.FromResult(Content[indiceanexo].AnexoBf.FindIndex(a => a.Name==anexoselecionado.nomearquivo));
+    }
+
+    private async void OpenFileSelector(Anexo anexo)
+    {
+        if (anexo.carregado)
+        {
+            //------------------
+            //  var indicefile = await ObterIndiceFile(anexo);
+            //  var indiceanexo = await ObterIndiceAnexo(anexo);
+            //  Content[indiceanexo].AnexoBf.RemoveAt(indicefile);
+            //  await AnexoChanged.InvokeAsync(Content[indiceanexo]);
+            //------------------
+            //--await UpdateAnexo(anexo,null);
+            anexo.nomearquivo = string.Empty;
+            anexo.nomeDEFINITIVO = string.Empty;
+            anexo.carregado = false;
+            anexo.InputFile = null;
+            anexo.AnexoBf.Clear();
+            await AnexoChanged.InvokeAsync(anexo);
+            StateHasChanged();
+        }
+        else
+        {
+            currentAnexo = anexo;
+            myFileByBuffer?.ShowFilesDialogAsync();
+        }
+    }
+    async Task OnProgressChangeAsyncTransmitente(InputFileChangeEventArgs file)
+    {
+        var inputFile = file.GetMultipleFiles();
+
+        if (inputFile != null && currentAnexo != null)
+        {
+            foreach (var f in inputFile)
+            {
+                try
+                {
+                    var extensao = Path.GetExtension(f.Name);
+                    currentAnexo.nomeDEFINITIVO = $"{currentAnexo.Doc.ItbidocId}-{currentAnexo.pertenceA.Trim().PadLeft(14, '0')}{extensao}";
+                    currentAnexo.nomearquivo = f.Name;
+                    currentAnexo.carregado = true;
+                    currentAnexo.AnexoBf[1] = f;
+
+                 /*   var indicefile = await ObterIndiceFile(currentAnexo);
+                    if( indicefile >= 0    ) {
+                        foreach(var browser in currentAnexo.AnexoBf.ToList())
+                        {
+                            if (currentAnexo.nomearquivo == f.Name)
+                            {
+                                currentAnexo.AnexoBf[indicefile] = f ;
+                                
+                            }
+                        }
+
+                    } else
+                    {
+                        currentAnexo.AnexoBf.Add(f);
+                    };*/
+
+                   // currentAnexo.AnexoBf.Add(f);
+                    // currentAnexo.browserFile = f;
+                   
+                    await AnexoChanged.InvokeAsync(currentAnexo);
+                    currentAnexo.nomearquivo = string.Empty;
+                    currentAnexo.nomeDEFINITIVO = string.Empty;
+                    currentAnexo.carregado = false;
+                    currentAnexo.InputFile = null;
+                    currentAnexo.AnexoBf.Clear();
+                    //await AnexoChanged.InvokeAsync(anexo);
+                    StateHasChanged();
+                }catch(Exception ex)
+                {
+                    Console.WriteLine($"Error processing file {f.Name}: {ex.Message}");
+                }
+            }
+        }
+    }
+    void OnCompleted(IEnumerable<FluentInputFileEventArgs> files)
+    {
+        progressPercent = myFileByBuffer!.ProgressPercent;
+        progressTitle = myFileByBuffer!.ProgressTitle;
+        foreach (var file in Files)
+        {
+            File.Delete(file.Value);
+        }
+    }
+    private Icon GetIcon(Anexo anexoselecionado)
+    {
+        var result = Content.FirstOrDefault(a => a.pertenceA == anexoselecionado.pertenceA && a.Doc.ItbidsDocumento == anexoselecionado.Doc.ItbidsDocumento);
+        return result.carregado  ? new Icons.Regular.Size24.SubtractSquare().WithColor(Color.Accent)
+          : new Icons.Regular.Size24.AddSquare().WithColor(Color.Accent);
+    }
+    public async Task<int> ObterIndiceFile(Anexo a,IBrowserFile f)
+    {
+        return await Task.FromResult(a.AnexoBf.FindIndex(f => f.Name == a.nomearquivo));
+    }
+}

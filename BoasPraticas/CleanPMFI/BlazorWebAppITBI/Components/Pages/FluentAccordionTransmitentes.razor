@@ -41,7 +41,7 @@
                                         <PropertyColumn Title="Arquivo" Property="@(c => c!.nomearquivo)" Sortable="true" Align=Align.Start />
                                        
                                      <!---->   
-                                        <TemplateColumn Title="Ação2" Sortable="true" Align=Align.End>
+                                        <TemplateColumn Title="Ação" Sortable="true" Align=Align.End>
                                 @{
                                     var anexoSelecionado = @context as Anexo;
                                         <FluentButton  Appearance="Appearance.Outline" OnClick="()=>OpenFileSelector(anexoSelecionado,transmitente)" IconStart="GetIcon(anexoSelecionado)"></FluentButton>

@@ -7,11 +7,23 @@
             <FluentAccordionItem>
                 <HeadingTemplate>
                     <FluentStack Orientation="Orientation.Horizontal">
-                                <FluentTextField ReadOnly @bind-value="@Adquirente.Contribuinte.ConCnpjcpf" style="width: 10%;font-size: 12px;" Maxlength="14">CPF/CNPJ:</FluentTextField>
-                                <FluentTextField ReadOnly @bind-value="@Adquirente.Contribuinte.ConNome" style="width: 25%;font-size: 12px;" Maxlength="50">Nome/Razão:</FluentTextField>
-                                <FluentTextField @bind-Value="@Adquirente.Contribuinte.ConEmail" style="width: 18%;font-size: 12px;" Required Maxlength="50">Email:</FluentTextField>
-                                <FluentTextField @bind-Value="@Adquirente.Contribuinte.ConTelefoneCelular" style="width: 10%;font-size: 12px;" Required Maxlength="14">Celular:</FluentTextField>
-                                <FluentTextField ReadOnly @bind-Value="@Adquirente.Titularidade" style="width: 10%;font-size: 12px;" Required Maxlength="14">Titularidade:</FluentTextField>
+                        <FluentTextField ReadOnly @bind-value="@Adquirente.Contribuinte.ConCnpjcpf" style="width: 10%;font-size: 12px;" Maxlength="14">CPF/CNPJ:</FluentTextField>
+                        <FluentTextField ReadOnly @bind-value="@Adquirente.Contribuinte.ConNome" style="width: 25%;font-size: 12px;" Maxlength="50">Nome/Razão:</FluentTextField>
+                        <FluentTextField @bind-Value="@Adquirente.Contribuinte.ConEmail" style="width: 18%;font-size: 12px;" Required Maxlength="50">Email:</FluentTextField>
+                        <FluentTextField @bind-Value="@Adquirente.Contribuinte.ConTelefoneCelular" style="width: 10%;font-size: 12px;" Required Maxlength="14">Celular:</FluentTextField>
+                        @if (Adquirente.isento)
+                        {
+                            <FluentTextField ReadOnly @bind-Value="@Adquirente.Titularidade" style="width: 10%;font-size: 12px;" Required Maxlength="14">Titularidade:</FluentTextField>
+                            <FluentTextField ReadOnly Value="Sim" style="width: 10%;font-size: 12px;" Maxlength="14">Isento:</FluentTextField>
+                        }
+                        else
+                        {
+                            <FluentTextField ReadOnly Value="Não" style="width: 10%;font-size: 12px;" Maxlength="14">Isento:</FluentTextField>
+                        }
+                        <!--
+
+                        <FluentTextField ReadOnly @bind-Value="@Adquirente.Titularidade" style="width: 10%;font-size: 12px;" Required Maxlength="14">Titularidade:</FluentTextField>
+                        -->
                                 <FluentTextField @bind-Value="@Adquirente.percentualAdquirido" Required style="width: 6%;font-size: 12px;" Maxlength="5">%Adquirido</FluentTextField>
                                       <FluentSpacer />
                         <FluentButton Appearance="Appearance.Outline" OnClick="()=>RemoveAdquirente(Adquirente)"
@@ -41,7 +53,7 @@
                                         <PropertyColumn Title="Arquivo" Property="@(c => c!.nomearquivo)" Sortable="true" Align=Align.Start />
                                        
                                      <!---->   
-                                        <TemplateColumn Title="Ação2" Sortable="true" Align=Align.End>
+                                        <TemplateColumn Title="Ação" Sortable="true" Align=Align.End>
                                 @{
                                     var anexoSelecionado = @context as Anexo;
                                         <FluentButton  Appearance="Appearance.Outline" OnClick="()=>OpenFileSelector(anexoSelecionado,Adquirente)" IconStart="GetIcon(anexoSelecionado)"></FluentButton>

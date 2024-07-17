@@ -1,0 +1,272 @@
+﻿@page "/declaracao"
+@using System.ComponentModel.DataAnnotations
+@using ITBI.Entities.DBProsiga;
+@using ITBI.Context;
+@inherits Microsoft.AspNetCore.Components.ComponentBase
+@using Microsoft.EntityFrameworkCore
+@rendermode InteractiveServer
+@inject IDialogService DialogService
+@inject IDbContextFactory<DbprosigaContext> DbFactory
+
+<FluentWizard StepperPosition="StepperPosition.Left"
+              StepSequence="@WizardStepSequence.Visited"
+              DisplayStepNumber="@(WizardStepStatus.Current | WizardStepStatus.Next)"
+              Border="WizardBorder.Outside"
+              StepTitleHiddenWhen="@GridItemHidden.XsAndDown"
+              Height="auto"
+              Style="min-height: 300px;"
+              OnFinish="@OnFinishedAsync">
+    <Steps>
+        <FluentWizardStep Label="Inscrição Imobiliária:"
+                          OnChange="@OnStepChange">
+            <FluentEditForm Model="Imovel" FormName="personalInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <FluentTextField Placeholder="Inscrição Imobiliária" @bind-Value="Imovel!.InscricaoImobiliaria" />
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+        </FluentWizardStep>
+        <FluentWizardStep Label="Informações do Imóvel"
+                          OnChange="@OnStepChange">
+            <FluentEditForm Model="Imovel" FormName="imovelInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <ImovelForm Content="Imovel" />
+                    <EnderecoForm Content="Imovel.Lograd" Bairro="@(Imovel.IdloteamentoNavigation.Descricao ?? " ")" Numero="@(Imovel.EdifNumeracao ?? " ")" />
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+        </FluentWizardStep>
+        <FluentWizardStep Label="Transmitentes"
+                          OnChange="@OnStepChange">
+            <FluentEditForm Model="Imovel" FormName="transmitenteInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <TransmitentesForm Content="Transmitentes" ListaDeTransmitentes=@ListaDeTransmitentes ListaDeTransmitentesChanged="HandleListaDeTransmitentesChanged"/>
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+        </FluentWizardStep>
+
+         <FluentWizardStep Label="Adquirentes"
+                          OnChange="@OnStepChange">
+            <FluentEditForm Model="Imovel" FormName="adquirentesInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <AdquirentesForm Content="Adquirentes" ListaDeAdquirentes=@ListaDeAdquirentes ListaDeAdquirentesChanged="HandleListaDeAdquirentesChanged"/>
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+        </FluentWizardStep>
+
+        <FluentWizardStep Label="Transação Imobiliária"
+                        
+                          IconPrevious="@(new Icons.Filled.Size24.Star())"
+                          IconCurrent="@(new Icons.Filled.Size24.StarEmphasis())"
+                          IconNext="@(new Icons.Regular.Size24.Star())"
+                          DisplayStepNumber="false"
+                          OnChange="@OnStepChange">
+           
+            <FluentEditForm Model="Imovel" FormName="transãcaoInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <OperacaoForm TipoDeTransferenciaChanged="HandleTipoDeTransferenciaChanged" ObservacaoChanged="HandleObservacaoChanged"  ValorDeclaradoChanged="HandleValorDeclaradoChanged" />
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+
+
+           <!--  
+
+                   <FluentSelect Items="@(Enumerable.Range(10, 80).Select(i => i.ToString()))"
+                                  Style="min-width: 70px;"
+                                  Height="300px" />
+           --> 
+        </FluentWizardStep>
+        <FluentWizardStep Label="Emitir Guia"
+                          OnChange="@OnStepChange">
+            <FluentEditForm Model="Imovel" FormName="adquirentesInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <LegislacaoForm  ValorDeclarado=@ValorDeclarado ValorDeclaradoChanged="HandleValorDeclaradoChanged" />
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+        </FluentWizardStep>
+        <FluentWizardStep Label="Emitir Certidão"
+                          OnChange="@OnStepChange">
+            <FluentEditForm Model="Imovel" FormName="adquirentesInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <LegislacaoForm ValorDeclarado=@ValorDeclarado ValorDeclaradoChanged="HandleValorDeclaradoChanged" />
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+        </FluentWizardStep>
+
+        <FluentWizardStep Label="Fim">
+            <FluentEditForm Model="_finishFormData" FormName="finishForm" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
+                <DataAnnotationsValidator />
+                <FluentStack Orientation="Orientation.Vertical">
+                    <FluentTextField Label="Signature" Placeholder="Type your signature" @bind-Value="_finishFormData.Signature" />
+                </FluentStack>
+                <FluentValidationSummary style="color:darkred" />
+            </FluentEditForm>
+        </FluentWizardStep>
+    </Steps>
+</FluentWizard>
+
+<FluentOverlay @bind-Visible=@_overlayIsVisible
+               Opacity="0.4"
+               Alignment="Align.Center"
+               Justification="@JustifyContent.Center">
+    <FluentProgressRing />
+</FluentOverlay>
+
+@code
+{
+
+    private TribEdificaco? Imovel = new TribEdificaco() { Lograd = new Logradouro(), 
+                                                            Terreno = new TribTerreno(), 
+                                                            IdloteamentoNavigation = new Loteamento(),
+                                                            TribEdificacoesContribs = new List<TribEdificacoesContrib>()
+        };
+    public List<Contribuinte>? ListaDeTransmitentes = new List<Contribuinte>();
+    public List<Contribuinte>? ListaDeAdquirentes = new List<Contribuinte>();
+    public string? TipoDeTransferencia = string.Empty;
+    public string? Observacao = string.Empty;
+    public string? ValorDeclarado = string.Empty;
+
+    private IQueryable<TribEdificacoesContrib>? Transmitentes;
+    private IQueryable<Contribuinte>? Adquirentes;
+    private FormData1 _formData1 = new FormData1();
+    private FormData2 _formData2 = new FormData2();
+    private FinishFormData _finishFormData = new FinishFormData();
+    private bool _overlayIsVisible = false;
+    protected override void OnInitialized()
+    {
+        //DialogService.ShowInfoAsync("Iniciando!");
+
+
+    }
+
+    async Task OnStepChange(FluentWizardStepChangeEventArgs e)
+    {
+        //DilogService($"Go to step {e.TargetLabel} (#{e.TargetIndex})");
+        // await DialogService.ShowInfoAsync($"Go to step {e.TargetLabel} (#{e.TargetIndex})");
+        if (e.TargetIndex == 1){
+            Imovel = await BuscaImovel(Imovel.InscricaoImobiliaria.ToString().PadLeft(14,'0'));
+            Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
+               /*   if(Imovel != null)
+                   {
+                   await DialogService.ShowInfoAsync("imovel Encontrado");
+               } else
+               {
+                   await DialogService.ShowInfoAsync("Imóvel Não Encontrado");
+
+               }*/
+        }
+
+    }
+
+    async Task OnFinishedAsync()
+    {
+        await DialogService.ShowInfoAsync("Wizard completed");
+    }
+
+    async Task OnValidSubmit()
+    {
+        //DemoLogger.WriteLine($"OnValidSubmit called");
+
+        _overlayIsVisible = true;
+        await Task.Delay(2000);
+        _overlayIsVisible = false;
+    }
+
+    void OnInvalidSubmit()
+    {
+        //  DemoLogger.WriteLine($"OnInvalidSubmit called");
+    }
+
+    private class FormData1
+    {
+
+        public string? FirstName { get; set; }
+
+
+        public string? LastName { get; set; }
+    }
+
+    private class FormData2
+    {
+        [Required]
+        public string? AddressLine1 { get; set; }
+
+        public string? AddressLine2 { get; set; }
+
+        [Required]
+        public string? City { get; set; }
+
+        [Required]
+        public string? StateOrProvince { get; set; }
+
+        [Required]
+        public string? Country { get; set; }
+
+        [Required]
+        public string? PostalCode { get; set; }
+    }
+    private async Task<TribEdificaco> BuscaImovel(string? inscricaoimobiliaria){
+        // var resultado=null;
+        _overlayIsVisible = true;
+        await Task.Delay(2000);
+        if (inscricaoimobiliaria != null){
+            using (var contexto = DbFactory.CreateDbContext()){
+                var resultado = await contexto.TribEdificacoes.Where(i => i.InscricaoImobiliaria == inscricaoimobiliaria)
+                 .Include(t => t.Terreno)
+                .Include(i=>i.Lograd)
+                .Include(l => l.IdloteamentoNavigation)
+                .Include(c => c.TribEdificacoesContribs).ThenInclude(x => x.Con).AsQueryable()
+                .FirstOrDefaultAsync();
+                _overlayIsVisible = false;
+                return resultado;
+            }
+
+        }
+        _overlayIsVisible = false;
+        return null;
+    }
+    private class FinishFormData
+    {
+        [Required]
+        [MinLength(5)]
+        public string? Signature { get; set; }
+    }
+    private void HandleListaDeTransmitentesChanged(List<Contribuinte> listaAtualizada)
+    {
+        ListaDeTransmitentes = listaAtualizada;
+    }
+    private void HandleListaDeAdquirentesChanged(List<Contribuinte> listaAtualizada)
+    {
+        ListaDeAdquirentes = listaAtualizada;
+    }
+    private void HandleTipoDeTransferenciaChanged(string tipodetransferencia)
+    {
+        TipoDeTransferencia = tipodetransferencia;
+    }
+    private void HandleObservacaoChanged(string observacao)
+    {
+        Observacao = observacao;
+    }
+    private void HandleValorDeclaradoChanged(string valordeclarado)
+    {
+        //ValorDeclarado = valordeclarado;
+        if (decimal.TryParse(valordeclarado.ToString(), out decimal valorDecimal))
+        {
+            ValorDeclarado = valorDecimal.ToString("N2");
+        }
+    }
+    
+
+}

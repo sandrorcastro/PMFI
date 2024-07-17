@@ -1,0 +1,95 @@
+﻿using Application.ViewModels;
+@using Application.ViewModels;
+@using Domain.Pagination;
+@using Domain.Filters;
+@model PagedResponseViewModel<TribAlvDocumentoViewModel>
+@{
+    ViewData["Title"] = "Index";
+    var controllerAtual = ViewContext.RouteData.Values["controller"].ToString();
+    //CidadeFilter CidadeFilter = new CidadeFilter() { Nome="Teste"};
+    CidadeFilter CidadeFilter = ViewData["CidadeFilter"] as CidadeFilter;
+}
+
+<h1>Index</h1>
+
+<p>
+    <a asp-action="Create">Create New</a>
+</p>
+@{
+
+    await Html.RenderPartialAsync("~/Views/Shared/Partials/_Buscar.cshtml");
+}
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.NrAno)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.NrSequencia)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.NmProprietario)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.NrPropCpfcnpj)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.NrInscricao)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.DsTipoDocumento)
+            </th>
+            
+            <th>
+                @Html.DisplayNameFor(model => model.ViewModel.Situacao)
+            </th>
+           
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model.Data) {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrAno)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrSequencia)
+            </td>
+            
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.NmProprietario)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrPropCpfcnpj)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.NrInscricao)
+            </td>
+            
+            <td>
+                @Html.DisplayFor(modelItem => item.DsTipoDocumento)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Situacao)
+            </td>
+            
+            
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.IdDocumento">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.IdDocumento">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.IdDocumento">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>
+
+
+@{
+
+    await Html.RenderPartialAsync("~/Views/Shared/Partials/_Paginacao.cshtml");
+}
