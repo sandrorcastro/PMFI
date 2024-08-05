@@ -8,6 +8,9 @@
         public bool isFinanciado { get; set; } = false;
 
         public string? Financimanto { get; set; }
+        public  decimal aliquotafinanciamento { get; set; }
+        public string ValorImpostoDevido { get; set; }
+
        
     }
 }

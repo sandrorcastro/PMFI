@@ -1,9 +1,19 @@
-﻿@using BlazorWebAppITBI.Models
+﻿@using BlazorWebAppITBI.Model
+@using BlazorWebAppITBI.Models
 @using System.Collections
+@using BlazorWebAppITBI.Uteis
+@using Microsoft.Extensions.Options
 @rendermode InteractiveServer
 @inject IDialogService DialogService
 @inject HttpClient Http
-
+@inject ReportService ReportService
+@inject IOptions<AppSettings> AppSettings
+@inject IWebHostEnvironment EnvironmentRazor
+@inject ITribITBIAppService tribITBIAppService
+@inject ITribDividasImoAppService tribDividasImoAppService
+@inject ITribBoletoAppService tribBoletoAppService
+@inject ITribBoletosBarraAppService tribBoletosBarraAppService
+@inject ISisParametrosAppService sisParametrosAppService
 <FluentAccordion ExpandMode="AccordionExpandMode.Single">
     @if (Content != null)
     {
@@ -16,45 +26,210 @@
                         {
                             <FluentNumberField ReadOnly @bind-Value="@divida.ItbiedifVlrDevido">Parcela Única</FluentNumberField>
                         }else{
-                            <FluentNumberField ReadOnly @bind-Value="@divida.ItbiedifVlrDevido">Parcela : $"{divida.ItbiedifVlrDevido}"</FluentNumberField>
+                            <FluentNumberField ReadOnly @bind-Value="@divida.ItbiedifVlrDevido">Parcela : @divida.ItbiedifParc</FluentNumberField>
                         }
                         @{
                             var dt = divida.ItbiedifDataVenc.ToString();
                             <FluentTextField ReadOnly @bind-Value="@dt">Data Vencimento:</FluentTextField>
                             var sit = divida.ImoIddividaNavigation.TipoBxId == 1 ? "Pendente" : "Paga";
                             <FluentTextField ReadOnly @bind-Value=@sit >Situação:</FluentTextField>
-                            <FluentButton Appearance="Appearance.Outline" OnClick="()=>Imprimir(divida)"
+
+                                var habilitabotao = divida.ImoIddividaNavigation.TipoBxId == 1 ? false : true;
+                            <FluentButton Disabled=@habilitabotao Appearance="Appearance.Outline" OnClick="()=>GetDadosGUIAbyImoIdDivida(divida)"
                                           IconStart="@(new Icons.Regular.Size20.DocumentPrint().WithColor(Color.Accent))">
                             </FluentButton>
+                            <FluentButton Disabled=@habilitabotao Appearance="Appearance.Outline" OnClick="()=>Get24HorasITBI(divida)"
+                                          IconStart="@(new Icons.Regular.Size20.Document().WithColor(Color.Accent))">
+                            </FluentButton>
+                            
                         }
                     </FluentStack>
                 </HeadingTemplate>
-             
+                <ChildContent>
+
+                    @if (reportData != null)
+                    {
+                        <iframe src="@reportUrl" width="100%" height="600px"></iframe>
+                    }
+                  
+                    <iframe src="@reportUrl" width="100%" height="600px"></iframe>
+                </ChildContent>
             </FluentAccordionItem>
         }
     }
 </FluentAccordion>
 @code {
+    public DbSet<TribItbi> DbSetItbi; // = await tribITBIAppService.GetDbSet();
+    public DbSet<TribDividasImo> DbSetDividaImo;
+    public DbSet<TribBoleto> DbSetBoleto;
+    public DbSet<TribBoletosBarra> DbSetBoletosBarra;
+    private byte[] reportData;
+    public string reportUrl { get; set; }
+    private string pathFastReport; // = Path.Combine(EnvironmentRazor.WebRootPath,"pdf",ReportName + ".pdf");
+
     [Parameter]
     public string? ExternalPageContent { get; set; }
     [Parameter]
     public List<TribItbiedif>? Content { get; set; }
     [Parameter]
-    public EventCallback<TribItbiedif> ImprimirGuia { get; set; }
-    private async void Imprimir(TribItbiedif dividaitbi)
+    public List<TribItbiedif>? UltimoITBI { get; set; }
+    //[Parameter]
+    //public EventCallback<TribItbiedif> ImprimirGuia { get; set; }
+        /*private async void Imprimir(TribItbiedif dividaitbi)
+     {
+     await ImprimirGuia.InvokeAsync(dividaitbi);
+     StateHasChanged();
+     try
+     {
+     ExternalPageContent = await Http.GetStringAsync(ExternalPageContent);
+     }
+     catch (Exception ex)
+     {
+     // Lidar com erros, se necessário
+     Console.WriteLine($"Erro ao buscar conteúdo: {ex.Message}");
+         }
+         }*/
+     /* private async Task GenerateReport()
     {
-        await ImprimirGuia.InvokeAsync(dividaitbi);
-        StateHasChanged();
+    var ReportName = "FastReportTeste.frx";
+    pathFastReport = Path.Combine(EnvironmentRazor.WebRootPath,"Relatorios",ReportName);
+    reportData = await ReportService.GenerateReportAsync(pathFastReport);
+    reportUrl = $"data:application/pdf;base64,{Convert.ToBase64String(reportData)}";
+         }
+    private async Task GenerateReport(TribItbiedif itbiedif)
+    {
+    DbSetItbi = await tribITBIAppService.GetDbSet();
+    DbSetDividaImo = await tribDividasImoAppService.GetDbSet();
+    DbSetBoleto = await tribBoletoAppService.GetDbSet();
+    DbSetBoletosBarra = await tribBoletosBarraAppService.GetDbSet();
+    var itbi = await  DbSetItbi.FirstOrDefaultAsync(i=>i.Itbiid==itbiedif.Itbiid);
+    //var dividaImo = await DbSetDividaImo.FirstOrDefaultAsync(d => d.EdificacaoId == itbiedif.EdificacaoId && d.ImoIddivida == itbiedif.ImoIddivida);
+    var dividaImo = await DbSetDividaImo.Include(bd=>bd.TribBoletosDivida).ThenInclude(b=>b.BoleNossoNumeroNavigation).FirstOrDefaultAsync(d => d.EdificacaoId == itbiedif.EdificacaoId && d.ImoIddivida == itbiedif.ImoIddivida);
+    //var boleto  = await DbSetBoleto.FirstOrDefaultAsync(b=>b.BoleNossoNumero == dividaImo.TribBoletosDivida.bo);
+    var boleto = dividaImo.TribBoletosDivida.FirstOrDefault().BoleNossoNumeroNavigation;
+    var boletoBarra = await DbSetBoletosBarra.FirstOrDefaultAsync(b=>b.Bolenossonumero==boleto.BoleNossoNumero);
+
+    var ReportName = "FastReportTeste.frx";
+    pathFastReport = Path.Combine(EnvironmentRazor.WebRootPath, "Relatorios", ReportName);
+
+    // rodar uma vez para erar o  "FastReportTeste.frx"; await ReportService.CreateReportAsync(pathFastReport, itbiedif);
+
+    reportData = await ReportService.GenerateReportAsync(pathFastReport,itbiedif,itbi,dividaImo,boleto,boletoBarra);
+    //reportData = await ReportService.GenerateReportAsync(pathFastReport, itbiedif);
+    reportUrl = $"data:application/pdf;base64,{Convert.ToBase64String(reportData)}";
+    }*/
+    private async Task Get24HorasITBI(TribItbiedif itbiedif)
+    {
+        
+        reportUrl = await Http.GetStringAsync("https://www5.pmfi.pr.gov.br/orgao-79");
+    }
+    private async Task GetDadosGUIAbyImoIdDivida(TribItbiedif itbiedif)
+    {
+        var ReportName = "GuiaITBI.frx";
+        pathFastReport = Path.Combine(EnvironmentRazor.WebRootPath, "Relatorios", ReportName);
+        reportData = await ReportService.GetDadosGUIAbyImoIdDivida(pathFastReport, itbiedif);
+        reportUrl = $"data:application/pdf;base64,{Convert.ToBase64String(reportData)}";
+
+    }
+    private async Task ImprimirCertidaoPgto(TribItbiedif itbiedif)
+    {
+        var ReportName = "TribRelITBICertidaoPagamento.rpt";
+        pathFastReport = Path.Combine(EnvironmentRazor.WebRootPath, "Relatorios", ReportName);
+        reportData = await ReportService.ImprimirCertidaoPgto(pathFastReport, itbiedif);
+        reportUrl = $"data:application/pdf;base64,{Convert.ToBase64String(reportData)}";
+
+    }
+   /* private async Task ImprimirCertidaoPgto(int ITBIID)
+    {
+
+        //Dim mcPar As New SisParametros.SisParametros(Trim(ConfigurationManager.AppSettings("sStrConADONET")))
+        var DbSetSisParametros = await sisParametrosAppService.GetDbSet();
+        //   sisParam = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "IdParamTipoConstr"));
+        string PathPDFFisico;
+        string PathPDFVirtual;
+        string PathName;
+        string ReportName;
+        //TribunoNet.Funcoes Rel = new Funcoes();
+        ProxyCrystalService.CrystalReport exporta = new ProxyCrystalService.CrystalReport();
+        int TextoID;
+        string NomeCidade;
         try
         {
-            ExternalPageContent = await Http.GetStringAsync(ExternalPageContent);
-        }
-        catch (Exception ex)
+
+            // pega o nome da cidade da empresa membro selecionada
+            NomeCidade = "Foz do Iguaçu"; // getNomeCidade(mcPar.getTransaction)
+            TextoID = await Task.FromResult(DbSetSisParametros.FirstOrDefault(x => x.SiPaIdSistema == "Tribuno" && x.SiPaIdParametro == "IDTextoITBICertidaoPagto"));
+            //if (TextoID) {
+            //  throw new Exception("Texto da certidão de pagamento do ITBI não esta cadastrado. Informe o administrador do sistema.");
+            //}
+
+            //PathName = Page.MapPath("Relatorios/")
+            PathName = "C:\\GIIGNet\\Relatorios\\24Horas\\";
+
+            ReportName = "TribRelITBICertidaoPagamento.rpt";
+
+            //PathPDFFisico = Page.MapPath("../pdf/")
+            PathPDFFisico = "C:\\GIIGNet\\pdf\\";
+
+
+            //    PathPDFVirtual = "../pdf/"
+
+            exporta.Servidor = "172.27.1.98"; // ConfigurationManager.AppSettings.Get("Server")
+            exporta.Database = "DBProsiga"; //  ConfigurationManager.AppSettings.Get("DataBase")
+            exporta.Usuario = "usergiigteste";//ConfigurationManager.AppSettings.Get("Login")
+            exporta.Senha = "PMFI@dien"; // ConfigurationManager.AppSettings.Get("Senha")
+
+            exporta.AddParameter(".", "@TextoID", TextoID);
+            exporta.AddParameter(".", "@ITBIID", ITBIID);
+            exporta.AddParameter(".", "@Cidade", NomeCidade);
+            exporta.AddParameter("SubMarcadAgua.rpt", "@cTParamID", "Tribuno");
+            //exporta.AddParameter("SubHeader.rpt", "@varCnpjMembros", ConfigurationManager.AppSettings.Get("sCNPJMembro"));
+            exporta.AddParameter("SubHeader.rpt", "@varCnpjMembros", "76206606000140");
+            exporta.PathFile = PathName +ReportName; //       ' Aqui ta o nome do Rel. do Crystal
+            exporta.PathPDF = PathPDFFisico; //     ' Path onde sera salvo o PDF convertido
+                                             //ReportName = Session.SessionID & Now.Millisecond & ReportName ' Nome do Relatorio PDF
+            ReportName = ReportName; // ' Nome do Relatorio PDF
+
+            //'Endereco Virtual do PDF
+            //exporta.NomeRelatorio = Session.SessionID & ReportName ' Nome do Relatorio PDF
+            exporta.NomeRelatorio = ReportName; // ' Nome do Relatorio PDF
+
+            //'Gera o Arquivo PDF
+
+            var o = exporta.GerarRelatorio();
+
+                if ((exporta.Erro).Trim() != "")
+                {
+
+                    //script += Rel.MsgboxAviso(exporta.Erro)
+                }
+                else
+                {
+
+                    if (IsNothing(o)){
+                        ReportName = PathPDFVirtual & Session.SessionID & Replace(Trim(ReportName), ".rpt", ".pdf")
+                }else{
+                            VisualizadorCrystal.setRelatorio(Session.SessionID, o)
+                            ReportName = "/24Horas/Visualizador/VisualizadorCrystal.aspx"
+                }
+                        script += Rel.AbreRelatorio(ReportName, "wfrmITBIExConsulta")
+             
+                }
+        catch(Exception ex)
         {
-            // Lidar com erros, se necessário
-            Console.WriteLine($"Erro ao buscar conteúdo: {ex.Message}");
+            
+            //    script += Rel.MsgboxAviso(ex.Message)
+        
+            //finally
+              //  mcPar.Dispose()
+            //mcPar = Nothing
         }
+    
+    
     }
+    */
+
+
    
 }
 

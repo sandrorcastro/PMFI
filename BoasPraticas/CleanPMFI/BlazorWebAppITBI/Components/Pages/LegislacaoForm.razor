@@ -18,13 +18,16 @@
     <FluentStack Orientation="Orientation.Horizontal">
     <FluentTextField Disabled="@(!IsAgreed)" @bind-Value="@valordeclarado" @onchange="OnTextFildChange"  Label="Valor Declarado/Base de Cálculo"></FluentTextField>
     <FluentTextField Disabled="@(!IsAgreed)" @bind-Value="@valorITBIdevido" @onchange="OnTextFildChange" Label="Valor ITBI Devido "></FluentTextField>
-        <FluentSelect Disabled="@(!IsAgreed)" Position="SelectPosition.Below" @bind-Value="selectedParcela" TOption="string">
+    <FluentSelect Disabled="@(!IsAgreed)" Position="SelectPosition.Below" @bind-Value="selectedParcela" TOption="string">
     @foreach (var option in ParcelasOption)
     {
         <FluentOption Value="@option.Parcela.ToString()">@option.Parcela parcela(s) - @option.Valor.ToString("C", CultureInfo.GetCultureInfo("pt-BR"))</FluentOption>
     }
+
 </FluentSelect>
+<!--
     <FluentButton Disabled="@(!IsAgreed)" OnClick="GerarGuia" Appearance="Appearance.Accent">Gerar</FluentButton>
+-->
     </FluentStack>
 <!--   
 
@@ -121,12 +124,12 @@
         {
             //if (ValoresOperacao.Financimanto == "Financiamento - Minha Casa Minha Vida")
             //{
-                valorITBIdevido = (ValoresOperacao.ValorRecursoProprio * 0.02m + ValoresOperacao.ValorFinanciado * pegaTaxa()).ToString();
-
+            valorITBIdevido = (ValoresOperacao.ValorRecursoProprio * 0.02m + ValoresOperacao.ValorFinanciado * pegaTaxa()).ToString();
+            ValoresOperacao.ValorImpostoDevido = valorITBIdevido;
             //}
             //if (ValoresOperacao.Financimanto == "Financiamento Normal")
             //{
-              //  valorITBIdevido = (ValoresOperacao.ValorRecursoProprio + ValoresOperacao.ValorFinanciado * 0.02m).ToString(); 
+            //  valorITBIdevido = (ValoresOperacao.ValorRecursoProprio + ValoresOperacao.ValorFinanciado * 0.02m).ToString(); 
 
             //}
 
@@ -141,6 +144,7 @@
             vi = vd * vi;
             //ITBIdevido = (decimal.TryParse(valordeclarado.ToString(), out decimal valorDecimal){valorITBIdevido=valorDecimal * 0.02}).ToString();
             valorITBIdevido = vi?.ToString("N2");
+            ValoresOperacao.ValorImpostoDevido = valorITBIdevido;
         }
         //  valordeclarado = vd.ToString();
 
@@ -169,25 +173,30 @@
             {
                 if(vl > (2700 * Uffi))
                 {
+                    ValoresOperacao.aliquotafinanciamento = 0.02m;
                     return 0.02m;
                 }
                 if ((vl > (1400 * Uffi)) && (vl <= (2700 * Uffi))){
+                    ValoresOperacao.aliquotafinanciamento = 0.01m;
                     return 0.01m;
                 }
                 if ((vl > (600 * Uffi)) && (vl <= (1400 * Uffi)))
                 {
+                    ValoresOperacao.aliquotafinanciamento = 0.005m;
                     return 0.005m;
                 }
                 if (vl < (600 * Uffi))
                 {
+                    ValoresOperacao.aliquotafinanciamento = 0.00m;
                     return 0.00m;
                 }
 
             }
-
+            ValoresOperacao.aliquotafinanciamento = 0.02m;
             return 0.02m;
 
         }
+        ValoresOperacao.aliquotafinanciamento = 0.02m;
         return 0.02m;
     }
     private void AtualizaValorDeclarado()
@@ -195,7 +204,7 @@
         //valordeclarado = vd.ToString();
         ValorDeclaradoChanged.InvokeAsync(valordeclarado);
     }
-    private void calculaParcelamento(){
+    private async void calculaParcelamento(){
         int maxquantidadeparcelas = 12;
         int quantidadeparcelas = 12;
         ParcelasOption.Clear();
@@ -208,7 +217,7 @@
         {
             //if (ValoresOperacao.Financimanto == "Financiamento - Minha Casa Minha Vida")
             //{
-                quantidadeparcelas = 1;
+            quantidadeparcelas = 1;
             //}
         }
         else
@@ -231,8 +240,12 @@
         }
         if(selectedParcela == null)
         {
+            ParcelasOption[0].unica = true;
             selectedParcela = ParcelasOption[0].Parcela.ToString();
+
         }
+        ParcelaOptionSelecionada = ParcelasOption.Find(p => p.Parcela == int.Parse(selectedParcela));
+        await ParcelaOptionSelecionadaChanged.InvokeAsync(ParcelaOptionSelecionada);
     }
 
 

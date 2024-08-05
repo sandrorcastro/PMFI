@@ -72,5 +72,6 @@ namespace Domain.Entities.DBProsiga
         public virtual TribTipoTributo? TipoTrib { get; set; }
         public virtual ICollection<TribItbicompradore> TribItbicompradores { get; set; }
         public virtual ICollection<TribItbivendedore> TribItbivendedores { get; set; }
+       // public virtual bool paga { get; set; }
     }
 }

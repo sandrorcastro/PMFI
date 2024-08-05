@@ -25,27 +25,32 @@
     public EventCallback<List<Transmitente>> ListaDeTransmitentesChanged { get; set; }
     private async Task HandledListTransmitenteChanged(List<Transmitente> listtransmitentes)
     {
-       ListaDeTransmitentes = listtransmitentes;
+        ListaDeTransmitentes = listtransmitentes;
         await ListaDeTransmitentesChanged.InvokeAsync(ListaDeTransmitentes);
-       // StateHasChanged();
+        // StateHasChanged();
     }
     private async Task  NovoTransmitente(Transmitente transmitenteSelecionado)
     {
-       /* var indice = await ObterIndiceTransmitente(transmitenteSelecionado);
-        if (indice > -1)
-        {
-            ListaDeTransmitentes.RemoveAt(indice); 
-            StateHasChanged();
-        }
-        else
-        {*/
-            var transmitente = new Transmitente()
+        /* var indice = await ObterIndiceTransmitente(transmitenteSelecionado);
+          if (indice > -1)
+              {
+              ListaDeTransmitentes.RemoveAt(indice);
+              StateHasChanged();
+          }
+          else
+          {*/
+        var docsExigidosPF = await tribItbidocumentoTipoAppService.GetDocumentosExigidos("ContribuintePF");
+        var docsExigidosPJ = await tribItbidocumentoTipoAppService.GetDocumentosExigidos("ContribuintePJ");
+        var transmitente = new Transmitente()
                 {
                     Contribuinte = transmitenteSelecionado.Contribuinte,
                     AnexosExigidos = new List<Anexo>(),
                     percentualtransmitido = string.Empty,
                 };
-             foreach (var docexigido in DocsExigidos.ToList())
+        if (transmitente.Contribuinte.ConTipoPessoa == "FISICA")
+        {
+            
+                             foreach (var docexigido in docsExigidosPF.ToList())
                             {
                                     transmitente.AnexosExigidos.Add(new Anexo()
                                     {
@@ -58,6 +63,24 @@
                                         // InputFile = null,
                                     });
                             }
+        }
+        if (transmitente.Contribuinte.ConTipoPessoa == "JURIDICA")
+        {
+
+            foreach (var docexigido in docsExigidosPJ.ToList())
+            {
+                transmitente.AnexosExigidos.Add(new Anexo()
+                    {
+                        carregado = false,
+                        Doc = docexigido,
+                        nomearquivo = string.Empty,
+                        nomeDEFINITIVO = string.Empty,
+                        pertenceA = transmitente.Contribuinte.ConCnpjcpf.Trim().PadLeft(14, '0'),
+                        AnexoBf = new List<IBrowserFile>()
+                        // InputFile = null,
+                    });
+            }
+        }
 
             ListaDeTransmitentes.Add(transmitente);
        // }
@@ -106,7 +129,7 @@
                 transmitente = result.Data as Transmitente;
                 contribuinteSpec = new Domain.Specs.DBProsiga.ContribuinteByCPFCNPJSpec(transmitente.Contribuinte.ConCnpjcpf);
                 transmitente.Contribuinte = await contribuinteAppService.GetBySpecAsync(contribuinteSpec, CancellationToken.None);
-                if (transmitente != null)
+                if (transmitente.Contribuinte != null)
                 {
                     await ContribuinteFormDialog();
                 }

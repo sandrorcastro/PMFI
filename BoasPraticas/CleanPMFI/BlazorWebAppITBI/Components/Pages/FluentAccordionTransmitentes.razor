@@ -13,6 +13,11 @@
                                 <FluentTextField @bind-Value="@transmitente.Contribuinte.ConTelefoneCelular" style="width: 10%;font-size: 12px;" Required Maxlength="14">Celular:</FluentTextField>
                                 <FluentTextField ReadOnly @bind-Value="@transmitente.Titularidade" style="width: 10%;font-size: 12px;" Required Maxlength="14">Titularidade:</FluentTextField>
                                 <FluentTextField @bind-Value="@transmitente.percentualtransmitido" Required style="width: 6%;font-size: 12px;" Maxlength="5">%Transmitido</FluentTextField>
+                                <FluentSelect Position="SelectPosition.Below" @bind-Value="transmitente.sainoboleto" TOption="string">
+                                    <FluentOption Value="Indefinido">Sai Na Guia?</FluentOption>
+                                    <FluentOption Value="Sim">Sim</FluentOption>
+                                    <FluentOption Value="Não">Não</FluentOption>
+                                </FluentSelect>
                                       <FluentSpacer />
                         <FluentButton Appearance="Appearance.Outline" OnClick="()=>RemoveTransmitente(transmitente)"
                                           IconStart="@(new Icons.Regular.Size20.SubtractSquare().WithColor(Color.Accent))" >

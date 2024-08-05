@@ -27,41 +27,6 @@
     </FluentRadioGroup>
 
 </FluentCard>
-<FluentCard Justify="@JustifyContent.Center">
-    <FluentDataGrid Items=@AnexosOperacao.AsQueryable() TGridItem=Anexo>
-        <PropertyColumn Title="Documento Obrigatório" Property="@(c => c!.Doc.ItbidsDocumento)" Sortable="true" Align=Align.Start />
-        <PropertyColumn Title="Arquivo" Property="@(c => c!.nomearquivo)" Sortable="true" Align=Align.Start />
-        <TemplateColumn Title="Ação" Sortable="true" Align=Align.Start>
-            @{
-                var anexo = context as Anexo;
-              //  if (item.carregado)
-               // {
-                 //   <FluentButton Appearance="Appearance.Accent" OnClick="()=>OpenFileSelector(item)" IconStart="GetIcon(item)">
-               
-                   // </FluentButton>
-                //}
-                //else
-                //{
-
-                <FluentButton Appearance="Appearance.Outline" OnClick="()=>OpenFileSelector(anexo)" IconStart="GetIcon(anexo)"></FluentButton>
-                <FluentInputFile @ref="@anexo.fluentInputFile"
-                         
-                                 DragDropZoneVisible="false"
-                                 Mode="InputFileMode.Buffer"
-                                 Multiple="true"
-                                 MaximumFileSize="@(1000 * 1024 * 1024)"
-                                 Accept="*/*" 
-                                 OnInputFileChange="OnProgressChangeAsyncOperacao"
-                                 OnCompleted="@OnCompleted" />
-                //}
-            }
-        </TemplateColumn>
-    </FluentDataGrid>
-</FluentCard>
-<FluentCard Justify="@JustifyContent.Center" >
-        <FluentTextArea  @bind-Value=observacao Label="OBSERVAÇÕES:" style="width: 100%;"/>
-</FluentCard>
-
 <FluentCard Justify="@JustifyContent.Center" AreaRestricted="false">
        <FluentStack Orientation="Orientation.Horizontal">
         <!--
@@ -97,24 +62,35 @@
                 <FluentTextField  Required="true" @bind-Value=valorRecursoProprio @onchange="OnTextFildChangeValorRecursoProprio" Placeholder="RECURSO PRÓPRIO" />
                 <FluentTextField ReadOnly Required="true" @bind-Value=valordeclarado @onchange="OnTextFildChange" Placeholder="VALOR DECLARADO" />
         }
-        
-       
-        
-       
       </FluentStack>
- 
-
+</FluentCard>
+<FluentCard Justify="@JustifyContent.Center">
+    <FluentDataGrid Items=@AnexosOperacao.AsQueryable() TGridItem=Anexo>
+        <PropertyColumn Title="Documento Obrigatório" Property="@(c => c!.Doc.ItbidsDocumento)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Arquivo" Property="@(c => c!.nomearquivo)" Sortable="true" Align=Align.Start />
+        <TemplateColumn Title="Ação" Sortable="true" Align=Align.Start>
+            @{
+                var anexo = context as Anexo;
+                <FluentButton Appearance="Appearance.Outline" OnClick="()=>OpenFileSelector(anexo)" IconStart="GetIcon(anexo)"></FluentButton>
+                <FluentInputFile @ref="@anexo.fluentInputFile"
+                         
+                                 DragDropZoneVisible="false"
+                                 Mode="InputFileMode.Buffer"
+                                 Multiple="true"
+                                 MaximumFileSize="@(1000 * 1024 * 1024)"
+                                 Accept="*/*" 
+                                 OnInputFileChange="OnProgressChangeAsyncOperacao"
+                                 OnCompleted="@OnCompleted" />
+            }
+        </TemplateColumn>
+    </FluentDataGrid>
+</FluentCard>
+<FluentCard Justify="@JustifyContent.Center" >
+        <FluentTextArea  @bind-Value=observacao Label="OBSERVAÇÕES:" style="width: 100%;"/>
 </FluentCard>
 
+
 @code {
-                    /*bool CompraeVenda = true;
-                    bool Arrematacao = false;
-                    bool Adjudicacao = false;
-                    bool Permuta = false;
-                    bool DivisaoAmigavel = false;
-                    bool CessaoDeDireitos = false;
-                    bool IntegralizacaoGuia = false;
-                    bool IntegralizacaoCertidao = false;*/
     [Parameter]
     public TribEdificaco Content { get; set; } = default!;
     private Anexo currentAnexo;
@@ -154,17 +130,35 @@
     public EventCallback<List<Anexo>> AnexosOperacaoChanged { get; set; }
     protected override async Task OnInitializedAsync()
     {
-        List<Anexo> listdoc = new List<Anexo>();
+        /*   List<Anexo> listdoc = new List<Anexo>();
         var DbSetDocsExigidos = await tribItbidocumentoTipoAppService.GetDbSet();
         var QueryDocsExigidos = DbSetDocsExigidos.Where(d => d.ItbidsDocDescricao == "Operação");
+        docsExigidosQ = QueryDocsExigidos.AsQueryable();
+        foreach (var doc in docsExigidosQ)
+            {
+            listdoc.Add(new Anexo() { Doc = doc, carregado = false, nomearquivo = null });
+        }
+        //AnexosExigidosQ = listdoc.AsQueryable();
+        AnexosOperacao = listdoc;
+        */
+        AnexosOperacao = await InsereDocsExigidosOperacao("OperaçãoNormal");
+        AnexosOperacaoChanged.InvokeAsync(AnexosOperacao);
+        //AnexosOperacao = new List<Anexo>();
+        await base.OnInitializedAsync();
+    }
+    public  async Task<List<Anexo>> InsereDocsExigidosOperacao(string tipo)
+    {
+        List<Anexo> listdoc = new List<Anexo>();
+        var DbSetDocsExigidos = await tribItbidocumentoTipoAppService.GetDbSet();
+        var QueryDocsExigidos = DbSetDocsExigidos.Where(d => d.ItbidsDocDescricao == tipo);
         docsExigidosQ = QueryDocsExigidos.AsQueryable();
         foreach (var doc in docsExigidosQ)
         {
             listdoc.Add(new Anexo() { Doc = doc, carregado = false, nomearquivo = null });
         }
         //AnexosExigidosQ = listdoc.AsQueryable();
-        AnexosOperacao = listdoc;
-        await base.OnInitializedAsync();
+        //AnexosOperacao = listdoc;
+        return listdoc;
     }
     public async Task  OnRadioChange(ChangeEventArgs e)
     {
@@ -228,19 +222,24 @@
         await ValorDeclaradoChanged.InvokeAsync(valordeclarado);
 
     }
-    private void OnSelectChange(ChangeEventArgs e)
+    private async void OnSelectChange(ChangeEventArgs e)
     {
-        /*if (e.Value == "Não")
-        {
-        //selectedOption = e.Value?.ToString();
-        //isTextFieldDisabled = selectedOption != "Não";
-        isTextFieldDisabled = true;  //selectedOption != "Não";
-        }
-        else
-        {
-        isTextFieldDisabled = false;
-    }*/
+
+
         selectedOption = e.Value?.ToString();
+        if (selectedOption == "Não")
+        {
+            AnexosOperacao = await InsereDocsExigidosOperacao("OperaçãoNormal");
+        }
+        if (selectedOption == "Financiamento Normal")
+        {
+            AnexosOperacao = await InsereDocsExigidosOperacao("OperaçãoComFinanciamento");
+        }
+        if (selectedOption == "Financiamento-Minha Casa Minha Vida")
+        {
+            AnexosOperacao = await InsereDocsExigidosOperacao("OperaçãoComFinanciamentoMinhaCasaMinhaVIda");
+        }
+        //AnexosOperacaoChanged.InvokeAsync(AnexosOperacao);
         StateHasChanged();
     }
 
@@ -341,5 +340,6 @@
          //   File.Delete(file.Value);
         //}
     }
+
    
 }

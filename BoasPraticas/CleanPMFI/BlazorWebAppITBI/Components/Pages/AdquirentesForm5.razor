@@ -25,27 +25,32 @@
     public EventCallback<List<Adquirente>> ListaDeAdquirentesChanged { get; set; }
     private async Task HandledListAdquirenteChanged(List<Adquirente> listAdquirentes)
     {
-       ListaDeAdquirentes = listAdquirentes;
+        ListaDeAdquirentes = listAdquirentes;
         await ListaDeAdquirentesChanged.InvokeAsync(ListaDeAdquirentes);
-       // StateHasChanged();
+        // StateHasChanged();
     }
     private async Task  NovoAdquirente(Adquirente AdquirenteSelecionado)
     {
-       /* var indice = await ObterIndiceAdquirente(AdquirenteSelecionado);
-        if (indice > -1)
-        {
-            ListaDeAdquirentes.RemoveAt(indice); 
-            StateHasChanged();
-        }
-        else
-        {*/
-            var Adquirente = new Adquirente()
+        /* var indice = await ObterIndiceAdquirente(AdquirenteSelecionado);
+          if (indice > -1)
+              {
+              ListaDeAdquirentes.RemoveAt(indice);
+              StateHasChanged();
+          }
+          else
+          {*/
+        var docsExigidosPF = await tribItbidocumentoTipoAppService.GetDocumentosExigidos("ContribuintePF");
+        var docsExigidosPJ = await tribItbidocumentoTipoAppService.GetDocumentosExigidos("ContribuintePJ");
+        var Adquirente = new Adquirente()
                 {
                     Contribuinte = AdquirenteSelecionado.Contribuinte,
                     AnexosExigidos = new List<Anexo>(),
                     percentualAdquirido = string.Empty,
                 };
-             foreach (var docexigido in DocsExigidos.ToList())
+        if (Adquirente.Contribuinte.ConTipoPessoa == "FISICA")
+        {
+            
+             foreach (var docexigido in docsExigidosPF.ToList())
                             {
                                     Adquirente.AnexosExigidos.Add(new Anexo()
                                     {
@@ -58,8 +63,26 @@
                                         // InputFile = null,
                                     });
                             }
+        }
+        if (Adquirente.Contribuinte.ConTipoPessoa == "JURIDICA")
+        {
 
-            ListaDeAdquirentes.Add(Adquirente);
+            foreach (var docexigido in docsExigidosPJ.ToList())
+            {
+                Adquirente.AnexosExigidos.Add(new Anexo()
+                    {
+                        carregado = false,
+                        Doc = docexigido,
+                        nomearquivo = string.Empty,
+                        nomeDEFINITIVO = string.Empty,
+                        pertenceA = Adquirente.Contribuinte.ConCnpjcpf.Trim().PadLeft(14, '0'),
+                        AnexoBf = new List<IBrowserFile>()
+                        // InputFile = null,
+                    });
+            }
+        }
+
+        ListaDeAdquirentes.Add(Adquirente);
        // }
         ListaDeAdquirentesChanged.InvokeAsync(ListaDeAdquirentes);
         StateHasChanged();

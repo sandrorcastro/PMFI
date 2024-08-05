@@ -4,11 +4,14 @@
 @using BlazorWebAppITBI.Models
 @using System.Text;
 @using System.Collections
-
+@using BlazorWebAppITBI.Uteis
 @using Microsoft.Extensions.Options
 @using System.Runtime.Serialization.Formatters.Binary
 @using System.Text.Json
+@using ProxyCrystalService
 
+@inject IHttpClientFactory ClientFactory
+@inject IJSRuntime JS
 @inherits Microsoft.AspNetCore.Components.ComponentBase
 @rendermode InteractiveServer
 @inject IDialogService DialogService
@@ -20,8 +23,6 @@
 @inject IWebHostEnvironment EnvironmentRazor
 @inject IConfiguration Configuration
 @inject IOptions<AppSettings> AppSettings
-
-
 @inject IAutoNumAnoNumeroAppService autoNumANoNumeroAppService
 @inject IAutoNumEntidadesAppService autoNumEntidadesAppService
 @inject ITribITBIAppService tribITBIAppService
@@ -45,9 +46,13 @@
 <h1>Página de Declaração ITBI</h1>
 <!--
 
-<FluentWizard @ref="_wizard" StepperPosition="StepperPosition.Left"
--->
 <FluentWizard StepperPosition="StepperPosition.Left"
+-->
+<!-- 
+
+<button @onclick="SubmitConsulta">Consultar</button>
+-->
+<FluentWizard @ref="Wizard" StepperPosition="StepperPosition.Left"
               StepSequence="@WizardStepSequence.Visited"
               DisplayStepNumber="@(WizardStepStatus.Current  | WizardStepStatus.Next)"
               Border="WizardBorder.Outside"
@@ -56,7 +61,7 @@
               Style="min-height: 300px;"
               OnFinish="@OnFinishedAsync">
     <Steps>
-        <FluentWizardStep Label="Inscrição Imobiliária:"
+        <FluentWizardStep Id=1 Label="Inscrição Imobiliária:"
                         OnChange="@(e=>OnStepChange1(e,editContextImovel))">
             <FluentEditForm EditContext="editContextImovel" FormName="imovelInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
@@ -67,7 +72,7 @@
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
         </FluentWizardStep>
-        <FluentWizardStep Label="Informações do Imóvel"
+        <FluentWizardStep  Disabled=@(temITBIPendente is false ? false : true)   Id=2 Label="Informações do Imóvel"
                           OnChange="@OnStepChange">
             <FluentEditForm Model="Imovel" FormName="imovelInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
@@ -80,7 +85,7 @@
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
         </FluentWizardStep>
-         <FluentWizardStep Label="Transmitentes"
+         <FluentWizardStep Disabled=@(temITBIPendente is false ? false : true) Id=3 Label="Transmitentes"
                           OnChange="(e=>OnStepChange2(e,editContextTransmitentes))">
             <FluentEditForm EditContext="editContextTransmitentes" FormName="transmitenteInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
@@ -93,7 +98,7 @@
         </FluentWizardStep>
    
 
-   <FluentWizardStep Label="Adquirentes"
+   <FluentWizardStep Disabled=@(temITBIPendente is false ? false : true) Id=4 Label="Adquirentes"
                           OnChange="(e=>OnStepChange3(e,editContext3))">
             <FluentEditForm EditContext="editContext3" FormName="adquirentesInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
@@ -104,7 +109,7 @@
             </FluentEditForm>
         </FluentWizardStep>
    
-       <FluentWizardStep Label="Transação Imobiliária"
+       <FluentWizardStep Disabled=@(temITBIPendente is false ? false : true) Id=5 Label="Transação Imobiliária"
                         
                           IconPrevious="@(new Icons.Filled.Size24.Star())"
                           IconCurrent="@(new Icons.Filled.Size24.StarEmphasis())"
@@ -128,17 +133,29 @@
                                   Height="300px" />
            --> 
         </FluentWizardStep>
-         <FluentWizardStep Label="Emitir Guia"
-                          OnChange="@OnStepChange">
+         <FluentWizardStep Disabled=@(temITBIPendente is false ? false : true) Id=6 Label="Emitir Guia"
+                          OnChange="@OnStepChangeEmitirGuia">
            
                     <LegislacaoForm ValoresOperacao="ValoresOperacao" ValoresOperacaoChanged="HandleValoresOperacaoChanged" ValorDeclarado=@ValorDeclarado Gerar="HandleGerarGuia" ValorDeclaradoChanged="HandleValorDeclaradoChanged"  ParcelaOptionSelecionadaChanged="HandleParcelaOptionSelecionadaChanged"/>
                 
         </FluentWizardStep>
-         <FluentWizardStep Label="Guia"
+      
+      <FluentWizardStep Id=7 Label="Guia"
                           OnChange="@OnStepChange">
-                    <GuiasForm Content=@ITBIEdiflancados ImprimirGuia="HandleImprimirGuia" ExternalPageContent=@ExternalPageContent/>
+                          <!--
+                                <GuiasForm Content=@ITBIEdiflancados ImprimirGuia="HandleImprimirGuiacls" ExternalPageContent=@ExternalPageContent/>
+                          -->
+                        <GuiasForm Content=@ITBIEdiflancados ExternalPageContent=@ExternalPageContent/>
         </FluentWizardStep>
-   <FluentWizardStep Label="Fim">
+            
+        <FluentWizardStep Id=8 Label="Guia24Horas"
+                          OnChange="@OnStepChange">
+                          <!--
+                                <GuiasForm Content=@ITBIEdiflancados ImprimirGuia="HandleImprimirGuiacls" ExternalPageContent=@ExternalPageContent/>
+                          -->
+                         <Guias24Horas Content=@ITBIEdiflancados ExternalPageContent=@ExternalPageContent/>
+        </FluentWizardStep>
+   <FluentWizardStep Id=9 Label="Fim">
        <FluentEditForm Model="Imovel" FormName="adquirentesInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
@@ -149,6 +166,32 @@
         </FluentWizardStep>
     
     </Steps>
+                            <!-- 
+    <ButtonTemplate>
+        @{
+            var index = context;
+            var lastStepIndex = 3;
+
+                <div>
+                @if (index > 0)
+                {
+                                <FluentButton OnClick="@(() => Wizard.GoToStepAsync(0))">Go to first page</FluentButton>
+                            
+                            <FluentButton OnClick="@(() => Wizard.GoToStepAsync(Value - 1))">Voltar</FluentButton>
+                }
+                </div>
+                <FluentSpacer />
+                <div>
+                @if (index != lastStepIndex)
+                {
+                            <FluentButton OnClick="@(() => Wizard.GoToStepAsync(Value + 1))" Appearance="Appearance.Accent">Próximo</FluentButton>
+                            
+                            <FluentButton OnClick="@(() => Wizard.GoToStepAsync(lastStepIndex))" Appearance="Appearance.Accent">Go to last page</FluentButton>
+                }
+                </div>
+        }
+    </ButtonTemplate>
+                            -->
 </FluentWizard>
 
 <FluentOverlay @bind-Visible=@_overlayIsVisible
@@ -165,7 +208,10 @@
     //public vbFEBRABAN.cBoletoFEBRABAN objGeraBoleto = new vbFEBRABAN.cBoletoFEBRABAN();
     //public Tribuno.Boletos.Boleto objBol = new Tribuno.Boletos.Boleto();
     //public AutoDeclaracao autoDeclaracao { get; set; } = new AutoDeclaracao() { Imovel = new TribEdificaco() { InscricaoImobiliaria = string.Empty } };
-    public bool passolivre=true;
+    public bool passolivre=false;
+    int Value = 0;
+    public bool temITBIPendente=false;
+    public TribItbiedif ultimoitbiedifid;
     private FluentWizard Wizard { get; set; }
     public string? Inscricao { get; set; } = string.Empty;
     // [MetadataType(typeof(ImovelMetaData))]
@@ -211,6 +257,7 @@
     //public IQueryable<TribEdificaco> QueryImovel { get; set; }
     bool possuiDividasPendentes;
     List<TribItbiedif>? ITBIEdiflancados { get; set; } = new List<TribItbiedif>();
+    List<TribDividasImo>? DividasPendentes { get; set; } = new List<TribDividasImo>();
     private IQueryable<TribEdificacoesContrib>? Transmitentes;
     public string? TipoDeTransferencia { get; set; } = "COMPRA_VENDA"; // string.Empty;
     public string? Observacao = string.Empty;
@@ -228,9 +275,10 @@
     // Aguardar a renderização do componente para garantir que a navegação aconteça corretamente
     //await InvokeAsync(() => _wizard.GoToStep(stepIndex));
     //}
+
+
     async Task OnStepChange1(FluentWizardStepChangeEventArgs e, EditContext editContext)
     {
-
         //var DbSetImovel = await edificacoesAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
         //var QueryImovel = await 
         //await GoToStepAsync(3);
@@ -255,10 +303,10 @@
                 // TribunoNet.frmITBINovo teste = new TribunoNet.frmITBINovo();
                 //var codcedente = teste.getCodCedente(52, System.Data.SqlClient.SqlTransaction);
                 //
-                if (Imovel is null )
+                if (Imovel is null)
                 {
                     await DialogService.ShowInfoAsync($"Inscrição Imobiliária Não Encontrada.");
-                    Imovel = new TribEdificaco() { InscricaoImobiliaria = string.Empty, Lograd = new Logradouro(), Terreno = new TribTerreno(),TribEdificacoesContribs = new List<TribEdificacoesContrib>()};
+                    Imovel = new TribEdificaco() { InscricaoImobiliaria = string.Empty, Lograd = new Logradouro(), Terreno = new TribTerreno(), TribEdificacoesContribs = new List<TribEdificacoesContrib>() };
                     ListaDeTransmitentes = new List<Transmitente>();
                     ListaDeAdquirentes = new List<Adquirente>();
 
@@ -266,65 +314,143 @@
                 }
                 else
                 {
-                    possuiDividasPendentes = await PossuiDividas(Imovel.EdificacaoId);
-                    if (possuiDividasPendentes)
+                    //  possuiDividasPendentes = await PossuiDividas(Imovel.EdificacaoId);
+                    //  if (possuiDividasPendentes)
+                    // {
+                    //   await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas Pendentes!");
+                    //}
+                    
+                    //Navigation.NavigateTo("http://www2.pmfi.pr.gov.br/24horas/ITBI/wfrmITBIExConsulta.aspx");
+
+                   // ProxyCrystalService.CrystalReport exporta = new ProxyCrystalService.CrystalReport();
+                    //"ServerCrystalPDF" value = "tcp://172.27.1.177:15123/ServerGiiGnet" />
+                    // NavigationManager
+                     ITBIEdiflancados = await possuiITBI(Imovel.EdificacaoId);
+                    if (ITBIEdiflancados.Count() > 0)
                     {
-                        await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas Pendentes!");
+                         await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} Possui ITBI lançado!");
+                        temITBIPendente = true;
+                       // passolivre = true;
+
                     }
-                    ITBIEdiflancados =  await possuiITBI(Imovel.EdificacaoId);
-                    if(ITBIEdiflancados.Count() > 0)
+                    if (temITBIPendente)
                     {
-                        await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui ITBI lançado!");
+
+                        //await Wizard.GoToStepAsync(6,false);
+                        e.IsCancelled = true;
+                        await Wizard.GoToStepAsync(6);
+
                     }
-
-
-                    ListaDeTransmitentes = new List<Transmitente>();
-                    ListaDeAdquirentes = new List<Adquirente>();
-                    editContextImovel = new EditContext(Imovel);
-                    editContextTransmitentes = new EditContext(ListaDeTransmitentes);
-                    editContext3 = new EditContext(ListaDeAdquirentes);
-
-                    Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
-                    docsExigidos = await tribItbidocumentoTipoAppService.GetDocumentosExigidos("Contribuinte");
-                    //--------------
-                    //Carrega ListaDeTransmitente con devidos Documentos Exigidos
-                    if (Transmitentes.Count() > 0)
+                    else
                     {
 
 
-                        foreach (var edificacoesdoscontribuites in Transmitentes.ToList())
+
+                    // DividasPendentes = null;
+                    /*            DividasPendentes = await ProcuraDividas(Imovel.EdificacaoId);
+                    var DbSetBoletoDivida = await tribBoletosDividasAppService.GetDbSet();
+                    if (DividasPendentes.Count() > 0)
+                    {
+                    foreach(var div in DividasPendentes)
+                    {
+                    if(div.TipoTribId == 79 && div.TipoBxId == 1)
                         {
-                            var transmitente = new Transmitente()
+                        temITBIPendente = true;
+                        }
+                    if(div.TipoTribId == 79)
+                    {
+                    foreach (var itbiedif in div.TribItbiedifs)
+                    {
+                    if(itbiedif.ItbiedifDataVenc > DateTime.Now)
+                    {
+
+                    //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
+                    }
+                    itbiedif.ImoIddividaNavigation.TribBoletosDivida = await Task.FromResult(DbSetBoletoDivida.Where(d => d.ImoIddivida == itbiedif.ImoIddivida).ToList());
+                                //itbiedif.paga = div.TipoBxId == 1 ? false : true;
+                                        ITBIEdiflancados.Add(itbiedif);
+                                        }
+                                        }  
+                                        }
+                                        //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
+                                            }
+                                        */
+
+
+
+                        ListaDeTransmitentes = new List<Transmitente>();
+                        ListaDeAdquirentes = new List<Adquirente>();
+                        editContextImovel = new EditContext(Imovel);
+                        editContextTransmitentes = new EditContext(ListaDeTransmitentes);
+                        editContext3 = new EditContext(ListaDeAdquirentes);
+
+                        Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
+                        var docsExigidosPF = await tribItbidocumentoTipoAppService.GetDocumentosExigidos("ContribuintePF");
+                        var docsExigidosPJ = await tribItbidocumentoTipoAppService.GetDocumentosExigidos("ContribuintePJ");
+                        docsExigidos = await tribItbidocumentoTipoAppService.GetDocumentosExigidos("Contribuinte");
+                        //--------------
+                        //Carrega ListaDeTransmitente con devidos Documentos Exigidos
+                        if (Transmitentes.Count() > 0)
+                        {
+                            foreach (var edificacoesdoscontribuites in Transmitentes.ToList())
+                            {
+                                var transmitente = new Transmitente()
                                 {
                                     Contribuinte = edificacoesdoscontribuites.Con,
                                     AnexosExigidos = new List<Anexo>(),
                                     percentualtransmitido = edificacoesdoscontribuites.Percentual.ToString(),
-                                    Titularidade = await pegaTitularidade(edificacoesdoscontribuites)
-                                }; 
+                                    Titularidade = await pegaTitularidade(edificacoesdoscontribuites),
+                                    sainoboleto = (edificacoesdoscontribuites.Responsavel == "Sim") ||
+                                        (edificacoesdoscontribuites.Proprietario == "Sim" && (edificacoesdoscontribuites.Responsavel == "Sim")) ? "Sim" : "Não"
+                                };
 
-                            foreach (var docexigido in docsExigidos.ToList())
-                            {
-                                transmitente.AnexosExigidos.Add(new Anexo()
+                                if (transmitente.Contribuinte.ConTipoPessoa == "FISICA")
+                                {
+                                    foreach (var docexigido in docsExigidosPF.ToList())
                                     {
-                                        carregado = false,
-                                        Doc = docexigido,
-                                        nomearquivo = string.Empty,
-                                        nomeDEFINITIVO = string.Empty,
-                                        pertenceA = transmitente.Contribuinte.ConCnpjcpf, //.Trim().PadLeft(14, '0'),
-                                       // AnexoBf = new List<IBrowserFile>()
-                                        // InputFile = null,
-                                    });
+                                        transmitente.AnexosExigidos.Add(new Anexo()
+                                        {
+                                            carregado = false,
+                                            Doc = docexigido,
+                                            nomearquivo = string.Empty,
+                                            nomeDEFINITIVO = string.Empty,
+                                            pertenceA = transmitente.Contribuinte.ConCnpjcpf, //.Trim().PadLeft(14, '0'),
+                                                                                              // AnexoBf = new List<IBrowserFile>()
+                                                                                              // InputFile = null,
+                                        });
+                                    }
+
+                                }
+                                if (transmitente.Contribuinte.ConTipoPessoa == "JURIDICA")
+                                {
+                                    foreach (var docexigido in docsExigidosPJ.ToList())
+                                    {
+                                        transmitente.AnexosExigidos.Add(new Anexo()
+                                        {
+                                            carregado = false,
+                                            Doc = docexigido,
+                                            nomearquivo = string.Empty,
+                                            nomeDEFINITIVO = string.Empty,
+                                            pertenceA = transmitente.Contribuinte.ConCnpjcpf, //.Trim().PadLeft(14, '0'),
+                                                                                              // AnexoBf = new List<IBrowserFile>()
+                                                                                              // InputFile = null,
+                                        });
+                                    }
+
+                                }
+
+                                ListaDeTransmitentes.Add(transmitente);
                             }
-                            ListaDeTransmitentes.Add(transmitente);
                         }
+                        //--------------
+
+
                     }
-                    //--------------
-
-                }
-
+                }//final temitbi
                 _overlayIsVisible = false;
             }
         }
+
 
     }
     async Task<string> pegaTitularidade(TribEdificacoesContrib Edificacoescontrib)
@@ -364,8 +490,19 @@
                 return;
 
             }else{
+                int contasainaguia = 0;
+                int containdefinido = 0;
                 foreach(var transmitente in ListaDeTransmitentes)
                 {
+                    if (transmitente.sainoboleto == "Sim")
+                    {
+                        contasainaguia = contasainaguia + 1;
+                    }
+                    if (transmitente.sainoboleto == "Indefinido")
+                    {
+                        containdefinido = containdefinido + 1;
+                    }
+
                     foreach(var anexo in transmitente.AnexosExigidos)
                     {
                         if (anexo.carregado == false)
@@ -379,22 +516,30 @@
                     if (transmitente.Contribuinte.ConEmail is null || transmitente.Contribuinte.ConEmail == "")
                     {
 
-                        await DialogService.ShowInfoAsync($"Informe o email!");
+                        await DialogService.ShowInfoAsync($"Informe o email do {transmitente.Contribuinte.ConCnpjcpf} !");
                         e.IsCancelled = true;
                         return;
                     }
                     if (transmitente.Contribuinte.ConTelefoneCelular is null || transmitente.Contribuinte.ConTelefoneCelular == "")
                     {
-                        await DialogService.ShowInfoAsync($"Informe o Telefone Celular!");
+                        await DialogService.ShowInfoAsync($"Informe o Telefone Celular do {transmitente.Contribuinte.ConCnpjcpf} !");
                         e.IsCancelled = true;
                         return;
                     }
                     if (transmitente.percentualtransmitido is null || transmitente.percentualtransmitido == "" || transmitente.percentualtransmitido == "0,00")
                     {
-                        await DialogService.ShowInfoAsync($"Informe o Percentual Transmitido!");
+                        await DialogService.ShowInfoAsync($"Informe o Percentual Transmitido do {transmitente.Contribuinte.ConCnpjcpf}!");
                         e.IsCancelled = true;
                         return;
                     }
+
+                }
+                //if (containdefinido == ListaDeAdquirentes.Count() || contasainaguia > 1)
+                if (contasainaguia > 1 || contasainaguia==0)
+                {
+                    await DialogService.ShowInfoAsync($"Você deve selecionar Um e Apenas um Transmitente para sair na Guia");
+                    e.IsCancelled = true;
+                    return;
                 }
 
                 if (!editContextTransmitentes.Validate())
@@ -419,8 +564,19 @@
             }
             else
             {
+                int contasainaguia = 0;
+                int containdefinido = 0;
                 foreach (var adquirente in ListaDeAdquirentes)
                 {
+                    if (adquirente.sainoboleto == "Sim")
+                    {
+                        contasainaguia = contasainaguia + 1;
+                    }
+                    if (adquirente.sainoboleto == "Indefinido")
+                    {
+                        containdefinido = containdefinido + 1;
+                    }
+
                     foreach (var anexo in adquirente.AnexosExigidos)
                     {
                         if (anexo.carregado == false)
@@ -434,23 +590,31 @@
                     if (adquirente.Contribuinte.ConEmail is null || adquirente.Contribuinte.ConEmail == "")
                     {
 
-                        await DialogService.ShowInfoAsync($"Informe o email!");
+                        await DialogService.ShowInfoAsync($"Informe o email do {adquirente.Contribuinte.ConCnpjcpf} !");
                         e.IsCancelled = true;
                         return;
                     }
                     if (adquirente.Contribuinte.ConTelefoneCelular is null || adquirente.Contribuinte.ConTelefoneCelular == "")
                     {
-                        await DialogService.ShowInfoAsync($"Informe o Telefone Celular!");
+                        await DialogService.ShowInfoAsync($"Informe o Telefone Celular do {adquirente.Contribuinte.ConCnpjcpf} !");
                         e.IsCancelled = true;
                         return;
                     }
                     if (adquirente.percentualAdquirido is null || adquirente.percentualAdquirido == "" || adquirente.percentualAdquirido == "0,00")
                     {
-                        await DialogService.ShowInfoAsync($"Informe o Percentual Adquirido!");
+                        await DialogService.ShowInfoAsync($"Informe o Percentual Adquirido do {adquirente.Contribuinte.ConCnpjcpf} !");
                         e.IsCancelled = true;
                         return;
                     }
                 }
+                //if (containdefinido == ListaDeAdquirentes.Count() || contasainaguia > 1)
+                if (contasainaguia > 1 || contasainaguia == 0)
+                {
+                    await DialogService.ShowInfoAsync($"Você deve selecionar Um e Apenas um Transmitente para sair na Guia");
+                    e.IsCancelled = true;
+                    return;
+                }
+
                 if (!editContext3.Validate())
                 {
                     // Bloquear a mudança de etapa se o formulário não for válido
@@ -464,7 +628,7 @@
         if (!passolivre)
         {
 
-            if (AnexosOperacao.Count() == 0)
+            if (AnexosOperacao.Count() == 0 || AnexosOperacao is null)
             {
                 await DialogService.ShowInfoAsync($"Você deve adicionar os Anexos Obrigatórios");
                 e.IsCancelled = true;
@@ -514,8 +678,123 @@
             }
         }
     }
+    async Task OnStepChangeEmitirGuia(FluentWizardStepChangeEventArgs e)
+    {
+        if (passolivre)
+        {
+            DividasPendentes = null;
+            ITBIEdiflancados = new List<TribItbiedif>();
+            DividasPendentes = await ProcuraDividas(Imovel.EdificacaoId);
+            var DbSetBoletoDivida = await tribBoletosDividasAppService.GetDbSet();
+            if (DividasPendentes.Count() > 0)
+            {
+                foreach (var div in DividasPendentes)
+                {
+                    if (div.TipoTribId == 79)
+                    {
+                        foreach (var itbiedif in div.TribItbiedifs)
+                        {
+                            if (itbiedif.ItbiedifDataVenc > DateTime.Now)
+                            {
+
+                                //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
+                            }
+                            itbiedif.ImoIddividaNavigation.TribBoletosDivida = await Task.FromResult(DbSetBoletoDivida.Where(d => d.ImoIddivida == itbiedif.ImoIddivida).ToList());
+                            // itbiedif.paga = div.TipoBxId == 1 ? false : true;
+                            ITBIEdiflancados.Add(itbiedif);
+                        }
+                    }
+
+                }
+
+                //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
+            }
+        }
+        if (!passolivre)
+        {
+            if (e.TargetIndex == 2)
+            {
+                _overlayIsVisible = false;
+                //await Task.Delay(2000);
+                if(AnexosImovel.AnexoBf.Count() == 0 || AnexosImovel.AnexoBf == null)
+                {
+                    await DialogService.ShowInfoAsync($"Anexar Copia da Matrícula Atualizada!");
+                    e.IsCancelled = true;
+                }
+                //      _overlayIsVisible = ;
+            }
+            if(e.TargetIndex == 6)
+            {
+                if (!temITBIPendente)
+                {
+                    await InsereDeclaracao();
+                }
+                DividasPendentes = null;
+                ITBIEdiflancados = new List<TribItbiedif>();
+                DividasPendentes = await ProcuraDividas(Imovel.EdificacaoId);
+                var DbSetBoletoDivida = await tribBoletosDividasAppService.GetDbSet();
+                if (DividasPendentes.Count() > 0)
+                {
+                    foreach (var div in DividasPendentes)
+                    {
+                        if (div.TipoTribId == 79)
+                        {
+                            foreach (var itbiedif in div.TribItbiedifs)
+                            {
+                                if (itbiedif.ItbiedifDataVenc > DateTime.Now)
+                                {
+
+                                    //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
+                                }
+                                itbiedif.ImoIddividaNavigation.TribBoletosDivida = await Task.FromResult(DbSetBoletoDivida.Where(d => d.ImoIddivida == itbiedif.ImoIddivida).ToList());
+                                //itbiedif.paga = div.TipoBxId == 1 ? false : true;
+
+                                ITBIEdiflancados.Add(itbiedif);
+                            }
+                        }
+                    }
+                    //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
+                }
+            }
+        }
+    }
     async Task OnStepChange(FluentWizardStepChangeEventArgs e)
     {
+        if (passolivre)
+        {
+            DividasPendentes = null;
+            ITBIEdiflancados = new List<TribItbiedif>();
+
+            DividasPendentes = await ProcuraDividas(Imovel.EdificacaoId);
+            var DbSetBoletoDivida = await tribBoletosDividasAppService.GetDbSet();
+            if (DividasPendentes.Count() > 0)
+            {
+                foreach (var div in DividasPendentes)
+                {
+                    if (div.TipoTribId == 79)
+                    {
+                        foreach (var itbiedif in div.TribItbiedifs)
+                        {
+                            if (itbiedif.ItbiedifDataVenc > DateTime.Now)
+                            {
+
+                                //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
+                            }
+                            itbiedif.ImoIddividaNavigation.TribBoletosDivida = await Task.FromResult(DbSetBoletoDivida.Where(d => d.ImoIddivida == itbiedif.ImoIddivida).ToList());
+                            // itbiedif.paga = div.TipoBxId == 1 ? false : true;
+                            ITBIEdiflancados.Add(itbiedif);
+                        }
+                    }
+
+                }
+
+                //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
+            }
+
+
+
+        }
+
         if (!passolivre)
         {
 
@@ -529,6 +808,34 @@
                     e.IsCancelled = true;
                 }
                 //      _overlayIsVisible = ;
+            }
+            if(e.TargetIndex == 5)
+            {
+                DividasPendentes = null;
+                ITBIEdiflancados = new List<TribItbiedif>();
+                DividasPendentes = await ProcuraDividas(Imovel.EdificacaoId);
+                var DbSetBoletoDivida = await tribBoletosDividasAppService.GetDbSet();
+                if (DividasPendentes.Count() > 0)
+                {
+                    foreach (var div in DividasPendentes)
+                    {
+                        if (div.TipoTribId == 79)
+                        {
+                            foreach (var itbiedif in div.TribItbiedifs)
+                            {
+                                if (itbiedif.ItbiedifDataVenc > DateTime.Now)
+                                {
+
+                                    //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
+                                }
+                                itbiedif.ImoIddividaNavigation.TribBoletosDivida = await Task.FromResult(DbSetBoletoDivida.Where(d => d.ImoIddivida == itbiedif.ImoIddivida).ToList());
+                                //itbiedif.paga = div.TipoBxId == 1 ? false : true;
+                                ITBIEdiflancados.Add(itbiedif);
+                            }
+                        }
+                    }
+                    //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
+                }
             }
         }
     }
@@ -577,6 +884,7 @@
     }
     private async Task InsereNovoITBI(){
         TribItbi.Itbiid = await autoNumEntidadesAppService.GetMaxAutoNumEntidade("TRIBITBI");
+        //ultimoitbiid = TribItbi.Itbiid;
         ITBIID = TribItbi.Itbiid;
         TribItbi.ItbidataLanc = DateTime.Now.Date;
         TribItbi.Itbiobservacao = ObservacaoITBI;
@@ -586,6 +894,11 @@
         TribItbi.Itbiano = DateTime.Now.Date.Year;
         TribItbi.ItbidsTipo = TipoDeTransferencia;
         TribItbi.ConId = null;
+        if(ParcelaOptionSelecionada.unica){
+            TribItbi.Itbiobservacao = "Opção de Pagamento do ITBI em parcela Única";              
+        }else{
+            TribItbi.Itbiobservacao = $"Opção de Pagamento do ITBI em  { ParcelaOptionSelecionada.Parcela} parcela(s) de { ParcelaOptionSelecionada.Valor}";              
+        }
         TribItbi.ItbidsAlerta = "Atenção - ITBI";
         await tribITBIAppService.AddAsync(TribItbi, CancellationToken.None);
         await InsereAnexoImovel(TribItbi);
@@ -606,7 +919,8 @@
         {
             for(int i = 1;i<= parcelaOption.Parcela; i++)
             {
-                await InsereTribDividasImo(241, parcelaOption,i);
+                //await InsereTribDividasImo(241, parcelaOption,i);
+                await InsereTribDividasImo(79, parcelaOption, i);
             } 
         }
 
@@ -619,9 +933,11 @@
         tdi.ImoDivAno = DateTime.Now.Date.Year;
         tdi.TipoTribId = tipoTribID;
         tdi.ImoDivSubDivida = 0;
-        tdi.ImoDivParcela = parcelaOption.Parcela == 1 && tipoTribID == 79 ? 0 : parcela;//parcelaOption.Parcela;
-                                                                                         //tdi.ImoDivParcela = parcelaOption  // == 1 && tipoTribID == 79 ? 0 : parcela;//parcelaOption.Parcela;
-        tdi.ImoDivVencimento = parcelaOption.Parcela == 1 && tipoTribID == 79 ? DateTime.Now.Date.AddDays(180) : DateTime.Now.Date.AddDays(parcela * 30);
+        //tdi.ImoDivParcela = parcelaOption.Parcela == 1 && tipoTribID == 79 ? 0 : parcela;//parcelaOption.Parcela;
+        tdi.ImoDivParcela = parcelaOption.Parcela == 1 && parcelaOption.unica == true ? 0 : parcela;//parcelaOption.Parcela;
+                                                                                                    //tdi.ImoDivParcela = parcelaOption  // == 1 && tipoTribID == 79 ? 0 : parcela;//parcelaOption.Parcela;
+                                                                                                    //tdi.ImoDivVencimento = parcelaOption.Parcela == 1 && tipoTribID == 79 ? DateTime.Now.Date.AddDays(180) : DateTime.Now.Date.AddDays(parcela * 30);
+        tdi.ImoDivVencimento = parcelaOption.Parcela == 1 && parcelaOption.unica == true ? DateTime.Now.Date.AddDays(180) : DateTime.Now.Date.AddDays(parcela * 30);
         //   TribDividasImo.ImoDivDataGeracao = DateTime.Now;
         tdi.ImoDivTipoDivida = 1;
         tdi.ImoDivDataBloqCorrecao = null;
@@ -630,10 +946,11 @@
         tdi.ImoDivVlrUltimaCorrecao = 0; //  decimal.Parse(ValorDeclarado) * decimal.Parse(TxITBI);
         tdi.ImoDivDataUltimaCorrecao = null; // DateTime.Now.Date;
         tdi.ImoDivOrigemLancamento = "Automática";
-        tdi.ImoDivParcelaUnica = parcelaOption.Parcela==1 && tipoTribID == 79 ? "Sim" : "Não";
+        tdi.ImoDivParcelaUnica = parcelaOption.Parcela == 1 && parcelaOption.unica == true ? "Sim" : "Não";
         tdi.TipoBxId = 1;
         int mesdiv = DateTime.Now.Date.AddMonths(parcela).Month; //parcelaOption.Parcela;
-        tdi.ImoDivMes = parcelaOption.Parcela == 1 && tipoTribID == 79 ? DateTime.Now.Date.AddDays(180).Month : mesdiv;//parcelaOption.Parcela);
+                                                                 //tdi.ImoDivMes = parcelaOption.Parcela == 1 && tipoTribID == 79 ? DateTime.Now.Date.AddDays(180).Month : mesdiv;//parcelaOption.Parcela);
+        tdi.ImoDivMes = parcelaOption.Parcela == 1 && parcelaOption.unica == true ? DateTime.Now.Date.AddDays(180).Month : mesdiv;//parcelaOption.Parcela);
         tdi.ImoDivDataBaixa = null;
         //    TribDividasImo.ImoDivValorHistorico = decimal.Parse(ValorDeclarado) * decimal.Parse(TxITBI);
         //  TribDividasImo.ImoDivValorBaixa = 0;
@@ -664,12 +981,14 @@
         await tribDividasImoAppService.AddAsync(tdi, CancellationToken.None);
         await InsereTribComposicaoDivImo(tdi.ImoIddivida, tdi?.TipoTribId ?? 0, tdi.ImoDivValor);
         var tribITBIEdif = await InsereNovoITBIEdif(tdi.ImoIddivida, tdi?.TipoTribId ?? 0, parcelaOption,parcela);
+        ultimoitbiedifid = tribITBIEdif;
         //        decimal v = 100.00m;
         var boleto = await GeraBoleto(tdi.ImoDivValor, tdi.ImoDivVencimento);
+
         await GeraBoletosDividas(boleto,tdi);
         await GeraBoletosBarra(boleto);
         //if(parcelaOption)
-        await GravaDadosRelatorio(boleto.BoleNossoNumero, 52, "Geral", false, false, tribITBIEdif, tdi, "0");
+        //await GravaDadosRelatorio(boleto.BoleNossoNumero, 52, "Geral", false, false, tribITBIEdif, tdi, "0");
         //GravaDadosRelatorio(string strNossoNumero, int ConvenioID, string TipoITBI, bool TemParcelamento, bool TemDividaPaga, TribItbiedif ITBIEdif, TribDividasImo tribDividasImo, string ? TipoDivida = "0")
 
 
@@ -703,10 +1022,11 @@
         tief.ItbiedifPercTransacao = decimal.Parse(TxITBI);
         tief.ItbiedifAreaConstr = Imovel.EdifAreaConstruida;
         tief.ItbiedifVlrVenalIptu = Imovel.ValorVenalCalculo;
-        tief.ItbiedifVlrDeclarado = decimal.Parse(ValorDeclarado);
-        tief.ItbiedifFinanciado = "Não";
-        tief.ItbiedifBaseCalcFin = 0;
-        tief.ItbiedifAliqFinanc = 0;
+        tief.ItbiedifVlrDeclarado = ValoresOperacao.ValorDeclarado; //decimal.Parse(ValorDeclarado);
+                                                                    //tief.ItbiedifFinanciado = parcelaOption.unica ? "Não" :"Sim";
+        tief.ItbiedifFinanciado = ValoresOperacao.isFinanciado ? "Sim" : "Não"; //ValoresOperacao.Financiamento;
+        tief.ItbiedifBaseCalcFin = ValoresOperacao.ValorFinanciado;
+        tief.ItbiedifAliqFinanc = ValoresOperacao.aliquotafinanciamento;
         tief.ItbiedifVlrDevido = parcelaOption.Valor;//decimal.Parse(ValorDeclarado) * decimal.Parse(TxITBI);             //;/
                                                      //tief.ItbiedifDataVenc = parcelaOption.Parcela == 1 && tipoTribID == 79 ? DateTime.Now.Date.AddDays(180) : DateTime.Now.Date.AddDays(parcelaOption.Parcela * 30);
         tief.ItbiedifDataVenc = parcelaOption.Parcela == 1 && tipoTribID == 79 ? DateTime.Now.Date.AddDays(180) : DateTime.Now.Date.AddDays(parcela * 30);
@@ -718,19 +1038,36 @@
         tief.ItbiedifMesDivida = parcelaOption.Parcela == 1 && tipoTribID == 79 ? DateTime.Now.Date.AddDays(180).Month : mesdiv;//parcelaOption.Parcela);
         tief.ItbiedifParc = parcelaOption.Parcela == 1 && tipoTribID == 79 ? 0 : parcela; // parcelaOption.Parcela;
         tief.TipoTribId = tipoTribID;
-        //TribItbiEdif.ItbiedifTipoConstrucao;          ///
-        //TribItbiEdif.ItbiedifObservacao               ///
-        tief.ItbiedifBaseCalcImovel = decimal.Parse(ValorDeclarado);
+        //TribItbiEdif.ItbiedifTipoConstrucao = Imovel.
+        if(ParcelaOptionSelecionada.unica){
+            tief.ItbiedifObservacao = "Opção de Pagamento do ITBI em parcela Única";              
+        }else{
+            tief.ItbiedifObservacao = $"Parcela {parcela}/{ParcelaOptionSelecionada.Parcela}";              
+        }
+        if(ValoresOperacao.isFinanciado)
+        {
+            if(ValoresOperacao.Financimanto == "Financiamento-Minha Casa Minha Vida".Trim()){
+                tief.ItbiedifBaseCalcImovel = ValoresOperacao.ValorDeclarado - ValoresOperacao.ValorFinanciado; //decimal.Parse(ValorDeclarado);
+            }
+
+        }
+        else
+        {
+            tief.ItbiedifBaseCalcImovel = ValoresOperacao.ValorDeclarado; //decimal.Parse(ValorDeclarado);
+
+        }
         tief.ItbisomaEconomias = null;
         tief.Itbiendereco = null;
-        tief.ItbiinscIncra = null;
+        tief.ItbiinscIncra = Imovel.InscricaoImobiliaria;
         tief.ItbiareaTotalImo = null;
         tief.ConIddivida = null;
         tief.Matricula = Imovel.EdifMatricula;
         tief.ItbiedifPercTransmitir = 100;      ///
         tief.ItbiedifDtMinhaCasa = null;
         tief.InscricaoImobiliaria = Imovel.InscricaoImobiliaria;
-        tief.PStrEdifEnderecoCompleto = "nulo por enquanto";    /////
+        var endcompleto = $"{Imovel.Lograd.LogradTipo} {Imovel.Lograd.LogradNome}, {Imovel.EdifNumeracao??"S/N"} - {Imovel.IdloteamentoNavigation.Descricao ?? ""} ";
+        tief.PStrEdifEnderecoCompleto = endcompleto ; //"nulo por enquanto";    /////
+        tief.PStredifBairro = $"{Imovel.IdloteamentoNavigation.Idloteamento.ToString() ?? ""} - {Imovel.IdloteamentoNavigation.Descricao ?? ""}";
         tief.EdifMatricula = Imovel.EdifMatricula;
         tief.EdifCaracteristica = Imovel.EdifCaracteristica;
         tief.TerrenoId = Imovel.TerrenoId;
@@ -759,65 +1096,7 @@
         return tribITBIEdifadicionado;
 
     }
-    private async Task InsereNovoITBIEdifbk()
-    {
 
-        TribItbiEdif.ItbiedifId = ITBIEdifID;
-        TribItbiEdif.Itbiid = ITBIID;
-        TribItbiEdif.EdificacaoId = Imovel.EdificacaoId;
-        TribItbiEdif.ImoIddivida = ImoIDDivida;
-        TribItbiEdif.ItbiedifPercTransacao = decimal.Parse(TxITBI);
-        TribItbiEdif.ItbiedifAreaConstr = Imovel.EdifAreaConstruida;
-        TribItbiEdif.ItbiedifVlrVenalIptu = Imovel.ValorVenalCalculo;
-        TribItbiEdif.ItbiedifVlrDeclarado = decimal.Parse(ValorDeclarado);
-        TribItbiEdif.ItbiedifFinanciado = "Não";
-        TribItbiEdif.ItbiedifBaseCalcFin = 0;
-        TribItbiEdif.ItbiedifAliqFinanc = 0;
-        TribItbiEdif.ItbiedifVlrDevido = decimal.Parse(ValorDeclarado) * decimal.Parse(TxITBI);             ///
-        TribItbiEdif.ItbiedifDataVenc = DateTime.Now.Date.AddDays(180);
-        TribItbiEdif.ItbiedifAnoDiv = DateTime.Now.Date.Year;
-        TribItbiEdif.ItbiedifSubDivida = 0;
-        TribItbiEdif.ItbiedifMesDivida = DateTime.Now.Date.Month;
-        TribItbiEdif.ItbiedifParc = 0;
-        TribItbiEdif.TipoTribId = 79;
-        //TribItbiEdif.ItbiedifTipoConstrucao;          ///
-        //TribItbiEdif.ItbiedifObservacao               ///
-        TribItbiEdif.ItbiedifBaseCalcImovel = decimal.Parse(ValorDeclarado);
-        TribItbiEdif.ItbisomaEconomias = null;
-        TribItbiEdif.Itbiendereco = null;
-        TribItbiEdif.ItbiinscIncra = null;
-        TribItbiEdif.ItbiareaTotalImo = null;
-        TribItbiEdif.ConIddivida = null;
-        TribItbiEdif.Matricula = Imovel.EdifMatricula;
-        TribItbiEdif.ItbiedifPercTransmitir = 100;      ///
-        TribItbiEdif.ItbiedifDtMinhaCasa = null;
-        TribItbiEdif.InscricaoImobiliaria = Imovel.InscricaoImobiliaria;
-        TribItbiEdif.PStrEdifEnderecoCompleto = "nulo por enquanto";    /////
-        TribItbiEdif.EdifMatricula = Imovel.EdifMatricula;
-        TribItbiEdif.EdifCaracteristica = Imovel.EdifCaracteristica;
-        TribItbiEdif.TerrenoId = Imovel.TerrenoId;
-        TribItbiEdif.Idloteamento = Imovel.Idloteamento;
-        TribItbiEdif.QuadraLoteamento = Imovel.Terreno.QuadraLoteamento;                ///
-        TribItbiEdif.Loteamento = Imovel.Terreno.Loteamento;   /// Imovel.Idloteamento;   ///
-        TribItbiEdif.TerrReferenciaAnterior = Imovel.Terreno.TerrReferenciaAnterior;       ///
-        TribItbiEdif.InscricaoImobiliariaGeo = "";
-        TribItbiEdif.TerrAreaTerreno = Imovel.Terreno.TerrAreaTerreno;
-        TribItbiEdif.LoteLoteamento = Imovel.Terreno.LoteLoteamento;           ////
-        TribItbiEdif.QuadraId = Imovel.Terreno.QuadraId;                 //////
-                                                                         // TribItbiEdif.PStredifBairro = Imovel.;               ////
-        TribItbiEdif.AreaAbertaCoberta = Imovel.Terreno.AreaAbertaCoberta;            ////
-        TribItbiEdif.LogradId = Imovel.LogradId;             /////
-        TribItbiEdif.DenoId = Imovel.DenoId;                ///
-        TribItbiEdif.EdifNumeracao = Imovel.EdifNumeracao;
-        TribItbiEdif.EdifComplemento = Imovel.EdifComplemento;
-        TribItbiEdif.EdifAndarConstrucao = Imovel.EdifAndarConstrucao;
-        TribItbiEdif.EdifBloco = Imovel.EdifBloco;
-        TribItbiEdif.EdifNumAptoSalaLoja = Imovel.EdifNumAptoSalaLoja;
-        TribItbiEdif.EdifAreaCoberta = Imovel.EdifAreaCoberta;
-        await tribITBIEdifAppService.AddAsync(TribItbiEdif, CancellationToken.None);
-
-
-    }
     private async Task InsereAnexoImovel(TribItbi itbi)
     {
         if(AnexosImovel.AnexoBf.Count > 0)
@@ -979,7 +1258,7 @@
                     {
                         ItbiedifId = itbiedifid,
                         ConId = adquirente.Contribuinte.ConId,
-                        ImprimeNaGuia = "Sim"
+                        ImprimeNaGuia = adquirente.sainoboleto
 
                     }, CancellationToken.None);
             }
@@ -1000,7 +1279,7 @@
                 {
                         ItbiedifId = itbiedifid,
                         ConId = transmitente.Contribuinte.ConId,
-                        ImprimeNaGuia = "Sim"
+                        ImprimeNaGuia = transmitente.sainoboleto
 
                 }, CancellationToken.None);
             }
@@ -1041,9 +1320,28 @@
     }
 
     private async Task InsereDeclaracao(){
-        await PegaNovosIds();
-        await InsereNovoITBI();
-        await InsereDivida(ParcelaOptionSelecionada);
+        //DbSet<TribItbiedif> DbSetUltimoItbi = await tribITBIEdifAppService.GetDbSet();
+
+        foreach(var divida in DividasPendentes)
+        {
+            if(divida.TipoTribId == 79 && divida.TipoBxId == 1)
+            {
+                temITBIPendente = true;
+                //ultimoitbiedifid = Task.FromResult(DbSetUltimoItbi.);
+
+            };
+        }
+
+
+        if (!temITBIPendente)
+        {
+            await PegaNovosIds();
+            //await InsereNovoITBI();
+            await InsereNovoITBI();
+            await InsereDivida(ParcelaOptionSelecionada);
+
+        }
+
         //await InsereComposicaoDivida();
         //await InsereNovoITBIEdif();
         //await InsereCompradores();
@@ -1060,7 +1358,9 @@
         //AutoNumAnoNumero = await autoNumANoNumeroAppService.
         //AutoNumAnoNumero = await autoNumANoNumeroAppService.GetMaxAutoNumAnoNumero(2024, "ITBI");
         _overlayIsVisible = true;
+
         await InsereDeclaracao();
+
 
 
         //-- Seria aqui para gerar a guia
@@ -1202,6 +1502,7 @@
         var context = new ValidationContext(Imovel);
         return Validator.TryValidateObject(Imovel, context, validationResults, true);
     }
+    public  async Task<Adquirente> pegaContribuinteDoBoleto() => await  Task.FromResult(ListaDeAdquirentes.Find(s => s.sainoboleto == "Sim"));
     public async Task<TribBoleto> GeraBoleto(decimal Valor,DateTime? DTVencimento)
     {
         vbFEBRABAN.cBoletoFEBRABAN objGeraBoleto = new vbFEBRABAN.cBoletoFEBRABAN();
@@ -1233,7 +1534,7 @@
         objGeraBoleto.GeraBarraLinhaDigitavel();
         Boleto.BoleNossoNumero = objGeraBoleto.pStrNossoNumeroGerado;
         Boleto.BoleData = DateTime.Now.Date;
-        Boleto.BoleValorPrinc = Valor;
+        Boleto.BoleValorPrinc = 0; 
         Boleto.BoleValorDesconto = 0;
         Boleto.BoleValorJuros = 0;
         Boleto.BoleValorMulta = 0;
@@ -1248,14 +1549,18 @@
         Boleto.BoleOrigem = "Externa";
         Boleto.BoleValorBoleto = Valor;
         Boleto.BoleValorMultaDa = 0;
-        Boleto.ConId = null;
+        Adquirente a  = await pegaContribuinteDoBoleto();
+        Boleto.ConId = a.Contribuinte.ConId != null ? a.Contribuinte.ConId : null;
         Boleto.LeiDescId = null;
         Boleto.BoleIp = null;
-        return await tribBoletoAppService.AddAsync(Boleto, CancellationToken.None);
+        var retornaboleto =  await tribBoletoAppService.AddAsync(Boleto, CancellationToken.None);
+        await tribBoletoAppService.SaveChangesAsync();
+        return retornaboleto;
 
         // await GeraBoletosDividas(Boleto);
 
     }
+
     public async Task GeraBoletosDividas(TribBoleto Boleto,TribDividasImo DividasImo)
     {
         TribBoletosDivida BoletosDivida = new TribBoletosDivida
@@ -1877,21 +2182,21 @@
     /*
     private async Task GenerateReport()
     {
-        string reportPath = Path.Combine(EnvironmentRazor.WebRootPath, "reports", "YourReportFile.rpt");
+    string reportPath = Path.Combine(EnvironmentRazor.WebRootPath, "reports", "YourReportFile.rpt");
 
-        var parameters = new
+    var parameters = new
         {
-            // Defina seus parâmetros aqui
-            ParameterName1 = "Value1",
-            ParameterName2 = "Value2"
-        };
+        // Defina seus parâmetros aqui
+    ParameterName1 = "Value1",
+    ParameterName2 = "Value2"
+    };
 
-        byte[] reportData = await ReportService.GenerateReportAsync(reportPath, parameters);
+    byte[] reportData = await ReportService.GenerateReportAsync(reportPath, parameters);
 
-        // Você pode retornar o PDF gerado ao cliente para visualização ou download
-        var base64Report = Convert.ToBase64String(reportData);
-        var url = $"data:application/pdf;base64,{base64Report}";
-        //await JSRuntime.InvokeVoidAsync("open", url, "_blank");
+    // Você pode retornar o PDF gerado ao cliente para visualização ou download
+    var base64Report = Convert.ToBase64String(reportData);
+    var url = $"data:application/pdf;base64,{base64Report}";
+    //await JSRuntime.InvokeVoidAsync("open", url, "_blank");
     }*/
     public async void HandleImprimirGuia(TribItbiedif itbiedif)
     {
@@ -1994,11 +2299,28 @@
         }
         return false;
     }
+    public async Task<List<TribDividasImo>> ProcuraDividas(long Id)
+    {
+        var DBSetDividasImo = await tribDividasImoAppService.GetDbSet();
+        //var dividas = await Task.FromResult(DBSetDividasImo.Where(d => d.EdificacaoId == Id && ((d.TipoBxId == 1) || ((d.TipoBxId == 1 || d.TipoBxId==2) && d.TipoTribId == 79))  ).Include(i => i.TribItbiedifs).Include(t => t.TipoTrib).ToList());
+        //var dividas = await Task.FromResult(DBSetDividasImo.Where(d => d.EdificacaoId == Id).Include(i => i.TribItbiedifs).Include(t => t.TipoTrib).Include(b=>b.TribBoletosDivida).ToList());
+        var dividas = await Task.FromResult(DBSetDividasImo.Where(d => d.EdificacaoId == Id && d.TipoBxId == 1)
+                                                        .Include(i => i.TribItbiedifs)
+                                                        .Include(t => t.TipoTrib)
+                                                        .Include(b => b.TribBoletosDivida).ThenInclude(b => b.BoleNossoNumeroNavigation).ToList());
+
+        if (dividas.Any())
+        {
+            return dividas;
+
+        }
+        return null;
+    }
     public async Task<List<TribItbiedif>> possuiITBI(long Id)
     {
         var DBSetDividasImo = await tribDividasImoAppService.GetDbSet();
         var DBSetITBIEdif = await tribITBIEdifAppService.GetDbSet();
-      //  List<TribItbiedif> itbiediflancados = new List<TribItbiedif>();
+        List<TribItbiedif> itbiediflancados = new List<TribItbiedif>();
         //var dividas = await Task.FromResult(DBSetDividasImo.Where(d => d.EdificacaoId == Id && d.TipoBxId == 1 && (d.TipoTribId == 79)).ToList());
         //var dividas = await Task.FromResult(DBSetDividasImo.FirstOrDefault(d => d.EdificacaoId == Id && d.TipoBxId == 1 && (d.TipoTribId == 79)));
         var dividas = await Task.FromResult(DBSetDividasImo.Where(d => d.EdificacaoId == Id && (d.TipoBxId == 1 || d.TipoBxId == 2) && (d.TipoTribId == 79)).ToList());
@@ -2008,12 +2330,18 @@
             //itbiediflancados = await Task.FromResult(DBSetITBIEdif.FirstOrDefault(ie => ie.EdificacaoId == divida.EdificacaoId && ie.ImoIddivida == divida.ImoIddivida));
             foreach(var divida in dividas)
             {
-                var newIE = await Task.FromResult(DBSetITBIEdif.Include(d=>d.ImoIddividaNavigation).Include(i=>i.Itbi).FirstOrDefault(ie => ie.EdificacaoId == divida.EdificacaoId && ie.ImoIddivida == divida.ImoIddivida));
-                 ITBIEdiflancados.Add(newIE);
+                var newIE = await Task.FromResult(DBSetITBIEdif.Include(d=>d.ImoIddividaNavigation).FirstOrDefault(ie => ie.EdificacaoId == divida.EdificacaoId && ie.ImoIddivida == divida.ImoIddivida));
+                //ITBIEdiflancados.Add(newIE);
+                itbiediflancados.Add(newIE);
+                if (divida.TipoBxId == 1)
+                {
+                    temITBIPendente = true;
+                }
             }
-           
+
+
         }
-        return ITBIEdiflancados;
+        return itbiediflancados;
     }
     public static string getQS4DP(Hashtable paramDP)
     {
@@ -2043,6 +2371,46 @@
             }
         }
     }
-    
+    /*  private void MoveToStep(int step)
+          {
+          Wizard.GoToStep(step);
+      }*/
+    private string cpfCnpj = "06842203937"; // Exemplo de CPF/CNPJ
+    private string inscricaoImobiliaria = "06622500452001"; // Exemplo de inscrição imobiliária
+
+    private async Task SubmitConsulta()
+    {
+        var client = ClientFactory.CreateClient();
+        var formContent = new FormUrlEncodedContent(new[]
+        {
+            new KeyValuePair<string, string>("__VIEWSTATE", "/wEPDwUJNjc3MTIwMTg3D2QWAgIDD2QWBgIBDw9kFgQeCGxhbmd1YWdlBQpqYXZhc2NyaXB0HgpPbktleVByZXNzBRZyZXR1cm4gU29OdW1lcm8oZXZlbnQpZAIDDw9kFgQfAAUKamF2YXNjcmlwdB8BBRZyZXR1cm4gU29OdW1lcm8oZXZlbnQpFgICAQ8PFgIeCU1heExlbmd0aAIOFgQeCm9ua2V5cHJlc3MFFnJldHVybiBTb051bWVybyhldmVudCkfAAUKamF2YXNjcmlwdGQCBg8WAh4HVmlzaWJsZWcWAgICD2QWAmYPZBYCAgMPPCsACwEADxYCHwRoZGRkvxxrfJKwpZAZ69aUkBcNDNCPxQo="),
+            new KeyValuePair<string, string>("__VIEWSTATEGENERATOR", "86E449E9"),
+            new KeyValuePair<string, string>("txtCPFComprador", cpfCnpj),
+            new KeyValuePair<string, string>("txtInscricaoImo$txtInscricaoImobiliaria", inscricaoImobiliaria),
+            new KeyValuePair<string, string>("btnConsultar", "Consultar")
+        });
+
+        var response = await client.PostAsync("http://www2.pmfi.pr.gov.br/24horas/ITBI/wfrmITBIExConsulta.aspx", formContent);
+
+        var responseString = await response.Content.ReadAsStringAsync();
+
+        // Abrir a resposta em uma nova janela
+        OpenInNewWindow(responseString);
+    }
+
+    private async Task OpenInNewWindow(string htmlContent)
+    {
+        var base64Html = Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(htmlContent));
+        var newWindowHtml = $"<html><body><iframe src=\"data:text/html;base64,{base64Html}\" style=\"width: 100%; height: 100%; border: none;\"></iframe></body></html>";
+
+        // Crie um URL para abrir uma nova janela
+        //var url = $"data:text/html;base64,{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(newWindowHtml))}";
+        var url = "http://www2.pmfi.pr.gov.br/24horas/pdf/uelvj5jdawlj5cvf0d50qir1uelvj5jdawlj5cvf0d50qir1222TribRelITBICertidaoPagamento.pdf";
+        // Abrir a URL em uma nova janela
+       // var js = $"window.open('{url}', '_blank')";
+        await JS.InvokeVoidAsync("open", url, "_blank");
+    }
 }
 
+
+   

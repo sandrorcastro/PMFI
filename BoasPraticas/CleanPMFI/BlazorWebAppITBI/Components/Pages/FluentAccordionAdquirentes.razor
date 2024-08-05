@@ -24,7 +24,15 @@
 
                         <FluentTextField ReadOnly @bind-Value="@Adquirente.Titularidade" style="width: 10%;font-size: 12px;" Required Maxlength="14">Titularidade:</FluentTextField>
                         -->
-                                <FluentTextField @bind-Value="@Adquirente.percentualAdquirido" Required style="width: 6%;font-size: 12px;" Maxlength="5">%Adquirido</FluentTextField>
+                        <FluentTextField @bind-Value="@Adquirente.percentualAdquirido" Required style="width: 6%;font-size: 12px;" Maxlength="5">%Adquirido</FluentTextField>
+                      
+                        <FluentSelect Position="SelectPosition.Below" @bind-Value="Adquirente.sainoboleto" TOption="string">
+                                    <FluentOption Selected Value="Indefinido">Sai Na Guia?</FluentOption>
+                                    <FluentOption Value="Sim">Sim</FluentOption>
+                                    <FluentOption Value="Não">Não</FluentOption>
+                        </FluentSelect>
+
+
                                       <FluentSpacer />
                         <FluentButton Appearance="Appearance.Outline" OnClick="()=>RemoveAdquirente(Adquirente)"
                                           IconStart="@(new Icons.Regular.Size20.SubtractSquare().WithColor(Color.Accent))" >

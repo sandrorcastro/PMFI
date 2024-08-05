@@ -10,8 +10,9 @@ namespace BlazorWebAppITBI.Models
         public string? percentualtransmitido { get; set; }
         public List<Anexo>? AnexosExigidos { get; set; }
         public string Titularidade {  get; set; }
-     
-        
+        public string sainoboleto { get; set; } = "Não";
+
+
         /*public string? _percentualtransmitido { get; set; } = "100";
 
         public string? percentualtransmitido

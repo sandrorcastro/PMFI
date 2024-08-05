@@ -11,6 +11,7 @@ namespace BlazorWebAppITBI.Models
         public List<Anexo>? AnexosExigidos { get; set; }
         public string Titularidade { get; set; }
         public  bool isento { get; set; } = false;
+        public string sainoboleto { get; set; } ="Não";
 
     }
 }

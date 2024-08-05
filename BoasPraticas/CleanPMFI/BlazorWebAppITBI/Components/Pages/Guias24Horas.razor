@@ -1,0 +1,106 @@
+﻿@using OpenQA.Selenium
+@using OpenQA.Selenium.Chrome
+@using OpenQA.Selenium.Edge
+@using OpenQA.Selenium.Support.UI
+@inject HttpClient Http
+
+
+<PageTitle>24Horas</PageTitle>
+<button @onclick="ConsultITBI">Consultar ITBI</button>
+<FluentBodyContent>
+    <!--
+
+    <iframe src=@URL24Horas width="100%" height="600px" frameborder="0" allowfullscreen></iframe>
+    -->
+    <div>
+        @if (!string.IsNullOrEmpty(ExternalPageContent))
+        {
+           <div>@((MarkupString)ExternalPageContent)</div>
+          //  <iframe src=@((MarkupString)ExternalPageContent) width="100%" height="600px" frameborder="0" allowfullscreen></iframe>
+          //  <iframe src="http://localhost/24horas/ITBI/wfrmITBIExConsulta.aspx" width="100%" height="600px" frameborder="0" allowfullscreen></iframe>
+        }
+        else
+        {
+            <p>Carregando...</p>
+        }
+    </div>
+</FluentBodyContent>
+@code {
+        [Parameter]
+        public string? ExternalPageContent { get; set; }
+    //public string? URL24Horas { get; set; } = "http://www2.pmfi.pr.gov.br/24horas/ITBI/wfrmITBIExConsulta.aspx";
+    //public string? URL24Horas { get; set; } = "http://172.27.1.177/24horas/ITBI/wfrmITBIExConsulta.aspx";
+    public string? URL24Horas { get; set; } = "http://localhost/24horas/ITBI/wfrmITBIExConsulta.aspx";
+    [Parameter]
+    public List<TribItbiedif>? Content { get; set; }
+    [Parameter]
+    public List<Adquirente>? ListaDeAdquirentes { get; set; }
+    IWebDriver driver;
+
+    protected async Task ConsultITBI()
+    //OnInitializedAsync()
+    {
+        Adquirente ad;
+
+
+        var browserType = "Edge"; // Você pode mudar para "Chrome" ou fazer isso dinamicamente
+      //  await Task.Run(() =>
+        //{
+            try
+            {
+
+                IWebDriver driver = InitializeWebDriver(browserType);
+                //driver.Navigate().GoToUrl("http://172.27.1.177/24horas/ITBI/wfrmITBIExConsulta.aspx");
+            driver.Navigate().GoToUrl(URL24Horas);
+                var cpfField = driver.FindElement(By.Id("txtCPFComprador"));
+                cpfField.SendKeys("06842203937");
+                var inscricaoField = driver.FindElement(By.Id("txtInscricaoImo_txtInscricaoImobiliaria"));
+            //txtInscricaoImo$txtInscricaoImobiliaria
+                inscricaoField.SendKeys("06622500452001"); var consultarButton = driver.FindElement(By.Id("btnConsultar"));
+                consultarButton.Click();
+                var wait = new WebDriverWait(driver, TimeSpan.FromSeconds(10));
+                wait.Until(drv => drv.FindElement(By.Id("tblResultado")).Displayed);
+
+
+               // ExternalPageContent = await Http.GetStringAsync("http://localhost/24horas/ITBI/wfrmITBIExConsulta.aspx");
+                ExternalPageContent = driver.PageSource;
+            }
+            catch (Exception ex)
+            {
+                // Lidar com erros, se necessário
+                Console.WriteLine($"Erro ao buscar conteúdo: {ex.Message}");
+            }
+            finally
+            {
+                //  driver.Quit();
+            }
+            InvokeAsync(StateHasChanged);
+       // });
+    }
+    private IWebDriver InitializeWebDriver(string browserType)
+    {
+        IWebDriver driver;
+        if (browserType == "Chrome")
+        {
+            var options = new ChromeOptions();
+            options.AddArgument("headless"); // Executar em modo headless (opcional)
+            options.AddArgument("disable-gpu");
+            options.AddArgument("no-sandbox");
+           // var service = ChromeDriverService.CreateDefaultService("C:/path/to/chromedriver");
+            driver = new ChromeDriver(options);
+        }
+        else if (browserType == "Edge")
+         {
+             var options = new EdgeOptions();
+             options.AddArgument("headless"); // Executar em modo headless (opcional)
+             options.AddArgument("disable-gpu");
+            // var service = EdgeDriverService.CreateDefaultService("C:/path/to/edgedriver");
+             driver = new EdgeDriver(options);
+         }
+        else
+        {
+            throw new ArgumentException("Unsupported browser type");
+        }
+        return driver;
+    }
+}

@@ -136,5 +136,10 @@ namespace Domain.Entities.DBProsiga
         public virtual ICollection<TribCmprocesso> Cmprocs { get; set; }
         public virtual ICollection<TribEdificacoesInsencoesMinhaCasa> IdIsencaos { get; set; }
         public virtual ICollection<TribEdificacoesInsencoesMinhaCasa> IdIsencaosNavigation { get; set; }
+        
+        
+        //public virtual TribBoleto TribBoleto { get; set; }
+        //public virtual TribBoletosBarra TribBoletosBarra { get; set; }
+        
     }
 }
