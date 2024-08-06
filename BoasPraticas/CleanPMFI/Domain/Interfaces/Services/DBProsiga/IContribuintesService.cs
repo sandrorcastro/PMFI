@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Interfaces.Services.DBProsiga
 {
-    public interface IContribuinteService : IServiceBase<Contribuinte>
+    public interface IContribuintesService : IServiceBase<Contribuinte>
     {
       /*  public Task<long> GeraNossoNumero(int ConvenioId);
         public Task<ConvenioBanco> GeraNossoNumero(ConvenioBanco ConvenioBanco);*/

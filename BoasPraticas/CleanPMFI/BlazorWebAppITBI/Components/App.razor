@@ -5,6 +5,12 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <base href="/" />
+
+   <!--
+    <link href="css/site.css" rel="stylesheet" />
+   <script type="module" src="https://unpkg.com/@fluentui/web-components@latest"></script> 
+   -->
+    
     <link rel="stylesheet" href="app.css" />
 
     <link href="~/css/custom.css" rel="stylesheet" />
@@ -15,8 +21,37 @@
 </head>
 
 <body>
+    
+
+    <!--
+
+    <div id="loading-indicator">
+        <fluent-progress-ring></fluent-progress-ring>
+    </div>
+    <app>
+        <component type="typeof(App)" render-mode="ServerPrerendered" />
+    </app>
+
+    -->
+
+
+
     <Routes />
     <script src="_framework/blazor.web.js"></script>
 </body>
 
 </html>
+
+<!-- 
+
+<script>
+    window.addEventListener('DOMContentLoaded', (event) => {
+        var loadingIndicator = document.getElementById('loading-indicator');
+        if (loadingIndicator) {
+            loadingIndicator.style.display = 'none';
+        }
+    });
+</script>
+-->
+
+

@@ -1,7 +1,9 @@
 ﻿@using BlazorWebAppITBI.Models
+
 @rendermode InteractiveServer
 @inject IDialogService DialogService
 @inject IContribuinteAppService contribuinteAppService
+@inject ITribEmpresasAppService tribEmpresasAppService
 @inject ITribItbidocumentoTipoAppService tribItbidocumentoTipoAppService
 <FluentButton OnClick="@(()=> BuscarContribuinteDialog("Adquirente"))" Appearance="Appearance.Accent">Adicionar Adquirente</FluentButton>
 <FluentAccordionAdquirentes Content="@ListaDeAdquirentes" ListAdquirenteChanged="HandledListAdquirenteChanged" >  </FluentAccordionAdquirentes>
@@ -23,6 +25,8 @@
     FluentAccordionItem? changed;
     [Parameter]
     public EventCallback<List<Adquirente>> ListaDeAdquirentesChanged { get; set; }
+    [Parameter]
+    public  List<int> ListaDeIsentos { get; set; }
     private async Task HandledListAdquirenteChanged(List<Adquirente> listAdquirentes)
     {
         ListaDeAdquirentes = listAdquirentes;
@@ -31,8 +35,10 @@
     }
     private async Task  NovoAdquirente(Adquirente AdquirenteSelecionado)
     {
+        var DbSetEmpresas = await tribEmpresasAppService.GetDbSet();
+
         /* var indice = await ObterIndiceAdquirente(AdquirenteSelecionado);
-          if (indice > -1)
+              if (indice > -1)
               {
               ListaDeAdquirentes.RemoveAt(indice);
               StateHasChanged();
@@ -49,10 +55,10 @@
                 };
         if (Adquirente.Contribuinte.ConTipoPessoa == "FISICA")
         {
-            
-             foreach (var docexigido in docsExigidosPF.ToList())
-                            {
-                                    Adquirente.AnexosExigidos.Add(new Anexo()
+
+            foreach (var docexigido in docsExigidosPF.ToList())
+            {
+                Adquirente.AnexosExigidos.Add(new Anexo()
                                     {
                                         carregado = false,
                                         Doc = docexigido,
@@ -62,10 +68,14 @@
                                         AnexoBf = new List<IBrowserFile>()
                                         // InputFile = null,
                                     });
-                            }
+            }
         }
         if (Adquirente.Contribuinte.ConTipoPessoa == "JURIDICA")
         {
+            var empresa = await Task.FromResult(DbSetEmpresas.FirstOrDefaultAsync(c=>c.ConId == Adquirente.Contribuinte.ConId).Result) ;
+            int? isento = empresa?.EmprConstitId;
+            bool isIsentoNaLista = isento.HasValue && ListaDeIsentos.Contains(isento.Value);
+            Adquirente.isento = isIsentoNaLista;
 
             foreach (var docexigido in docsExigidosPJ.ToList())
             {
@@ -77,13 +87,14 @@
                         nomeDEFINITIVO = string.Empty,
                         pertenceA = Adquirente.Contribuinte.ConCnpjcpf.Trim().PadLeft(14, '0'),
                         AnexoBf = new List<IBrowserFile>()
+
                         // InputFile = null,
                     });
             }
         }
 
         ListaDeAdquirentes.Add(Adquirente);
-       // }
+        // }
         ListaDeAdquirentesChanged.InvokeAsync(ListaDeAdquirentes);
         StateHasChanged();
     }
@@ -97,8 +108,8 @@
     }
     protected override async Task OnInitializedAsync()
     {
-      //  List<Anexo> listdoc = new List<Anexo>();
-            await base.OnInitializedAsync();
+        //  List<Anexo> listdoc = new List<Anexo>();
+        await base.OnInitializedAsync();
     }
     private async Task BuscarContribuinteDialog(string _tipoContribuinte)
     {
@@ -129,7 +140,7 @@
                 Adquirente = result.Data as Adquirente;
                 contribuinteSpec = new Domain.Specs.DBProsiga.ContribuinteByCPFCNPJSpec(Adquirente.Contribuinte.ConCnpjcpf);
                 Adquirente.Contribuinte = await contribuinteAppService.GetBySpecAsync(contribuinteSpec, CancellationToken.None);
-                if (Adquirente != null)
+                if (Adquirente.Contribuinte != null)
                 {
                     await ContribuinteFormDialog();
                 }
@@ -138,6 +149,7 @@
                     //await DialogService.ShowInfoAsync("Adquirente Não Encontrado!");
                     //  tipoContribuinte = "NovoAdquirente";
                     Adquirente.Contribuinte = new Contribuinte() { ConBairro = new Bairro(), ConCidade = new Cidade() { Pais = new Paise() } };
+                    Adquirente.novocontribuinte = true;
                     await ContribuinteFormDialog();
 
                 }

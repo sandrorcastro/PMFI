@@ -12,7 +12,7 @@ namespace BlazorWebAppITBI.Models
         public string Titularidade {  get; set; }
         public string sainoboleto { get; set; } = "Não";
 
-
+        public bool novocontribuinte { get; set; } = false;
         /*public string? _percentualtransmitido { get; set; } = "100";
 
         public string? percentualtransmitido

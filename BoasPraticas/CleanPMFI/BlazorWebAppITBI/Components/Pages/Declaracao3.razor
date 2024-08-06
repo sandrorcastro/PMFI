@@ -10,6 +10,7 @@
 @using System.Text.Json
 @using ProxyCrystalService
 
+
 @inject IHttpClientFactory ClientFactory
 @inject IJSRuntime JS
 @inherits Microsoft.AspNetCore.Components.ComponentBase
@@ -18,6 +19,7 @@
 @inject ITribEdificacoesAppService edificacoesAppService
 @inject ITribITBIAppService itbiAppService
 @inject ITribITBIEdifAppService itbiEdifAppService
+@inject IContribuintesAppService contribuintesAppService
 @inject ITribITBICompradoresAppService itbiCimpradoresAppService
 @inject ITribITBIVendedoresAppService itbiVendedoresAppService
 @inject IWebHostEnvironment EnvironmentRazor
@@ -41,6 +43,7 @@
 @inject ITribItbiexAnexoAppService tribItbiexAnexoAppService
 @inject ITribReportSqlAppService tribReportSqlAppService
 @inject ITribReportParAppService tribReportParAppService
+@inject ITribEmpresasAppService tribEmpresasAppService
 @inject ISisParametrosAppService sisParametrosAppService
 @inject ITribTextosAppService tribTextosAppService
 <h1>Página de Declaração ITBI</h1>
@@ -103,7 +106,7 @@
             <FluentEditForm EditContext="editContext3" FormName="adquirentesInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <AdquirentesForm5 ListaDeAdquirentes=@ListaDeAdquirentes ListaDeAdquirentesChanged ="HandleListaDeAdquirentesChanged" DocsExigidos="docsExigidos"  />
+                    <AdquirentesForm5 ListaDeAdquirentes=@ListaDeAdquirentes ListaDeAdquirentesChanged ="HandleListaDeAdquirentesChanged" DocsExigidos="docsExigidos" ListaDeIsentos="ListaDeIsentos" />
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
@@ -155,7 +158,9 @@
                           -->
                          <Guias24Horas Content=@ITBIEdiflancados ExternalPageContent=@ExternalPageContent/>
         </FluentWizardStep>
-   <FluentWizardStep Id=9 Label="Fim">
+   <FluentWizardStep Id=9 Label="Fim" OnChange="(e=>OnStepChangeFim(e))">
+       <!--
+
        <FluentEditForm Model="Imovel" FormName="adquirentesInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
@@ -163,6 +168,7 @@
             </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
+       -->
         </FluentWizardStep>
     
     </Steps>
@@ -210,6 +216,7 @@
     //public AutoDeclaracao autoDeclaracao { get; set; } = new AutoDeclaracao() { Imovel = new TribEdificaco() { InscricaoImobiliaria = string.Empty } };
     public bool passolivre=false;
     int Value = 0;
+    List<int> ListaDeIsentos = new List<int> { 14, 15, 18, 20, 21, 28, 29, 101, 102, 103, 104, 105, 106, 107, 108, 110, 111, 112, 123, 114, 115, 116, 117, 118, 123, 124, 125, 126, 127, 322 };
     public bool temITBIPendente=false;
     public TribItbiedif ultimoitbiedifid;
     private FluentWizard Wizard { get; set; }
@@ -319,18 +326,18 @@
                     // {
                     //   await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas Pendentes!");
                     //}
-                    
+
                     //Navigation.NavigateTo("http://www2.pmfi.pr.gov.br/24horas/ITBI/wfrmITBIExConsulta.aspx");
 
-                   // ProxyCrystalService.CrystalReport exporta = new ProxyCrystalService.CrystalReport();
+                    // ProxyCrystalService.CrystalReport exporta = new ProxyCrystalService.CrystalReport();
                     //"ServerCrystalPDF" value = "tcp://172.27.1.177:15123/ServerGiiGnet" />
                     // NavigationManager
-                     ITBIEdiflancados = await possuiITBI(Imovel.EdificacaoId);
+                    ITBIEdiflancados = await possuiITBI(Imovel.EdificacaoId);
                     if (ITBIEdiflancados.Count() > 0)
                     {
-                         await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} Possui ITBI lançado!");
+                        await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} Possui ITBI lançado!");
                         temITBIPendente = true;
-                       // passolivre = true;
+                        // passolivre = true;
 
                     }
                     if (temITBIPendente)
@@ -346,34 +353,34 @@
 
 
 
-                    // DividasPendentes = null;
-                    /*            DividasPendentes = await ProcuraDividas(Imovel.EdificacaoId);
-                    var DbSetBoletoDivida = await tribBoletosDividasAppService.GetDbSet();
-                    if (DividasPendentes.Count() > 0)
-                    {
-                    foreach(var div in DividasPendentes)
-                    {
-                    if(div.TipoTribId == 79 && div.TipoBxId == 1)
+                        // DividasPendentes = null;
+                        /*            DividasPendentes = await ProcuraDividas(Imovel.EdificacaoId);
+                        var DbSetBoletoDivida = await tribBoletosDividasAppService.GetDbSet();
+                        if (DividasPendentes.Count() > 0)
+                        {
+                        foreach(var div in DividasPendentes)
+                        {
+                        if(div.TipoTribId == 79 && div.TipoBxId == 1)
                         {
                         temITBIPendente = true;
                         }
-                    if(div.TipoTribId == 79)
-                    {
-                    foreach (var itbiedif in div.TribItbiedifs)
-                    {
-                    if(itbiedif.ItbiedifDataVenc > DateTime.Now)
-                    {
+                        if(div.TipoTribId == 79)
+                        {
+                        foreach (var itbiedif in div.TribItbiedifs)
+                        {
+                            if(itbiedif.ItbiedifDataVenc > DateTime.Now)
+                        {
 
-                    //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
-                    }
-                    itbiedif.ImoIddividaNavigation.TribBoletosDivida = await Task.FromResult(DbSetBoletoDivida.Where(d => d.ImoIddivida == itbiedif.ImoIddivida).ToList());
-                                //itbiedif.paga = div.TipoBxId == 1 ? false : true;
-                                        ITBIEdiflancados.Add(itbiedif);
-                                        }
-                                        }  
-                                        }
-                                        //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
+                        //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
+                        }
+                        itbiedif.ImoIddividaNavigation.TribBoletosDivida = await Task.FromResult(DbSetBoletoDivida.Where(d => d.ImoIddivida == itbiedif.ImoIddivida).ToList());
+                                            //itbiedif.paga = div.TipoBxId == 1 ? false : true;
+                                            ITBIEdiflancados.Add(itbiedif);
                                             }
+                                            }  
+                                            }
+                                            //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
+                                        }
                                         */
 
 
@@ -725,6 +732,7 @@
             }
             if(e.TargetIndex == 6)
             {
+                _overlayIsVisible = true;
                 if (!temITBIPendente)
                 {
                     await InsereDeclaracao();
@@ -755,8 +763,10 @@
                     }
                     //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
                 }
+                _overlayIsVisible = false;
             }
         }
+
     }
     async Task OnStepChange(FluentWizardStepChangeEventArgs e)
     {
@@ -883,6 +893,13 @@
         // ImoIDDivida = AutoNumEntidade.AutNumId;
     }
     private async Task InsereNovoITBI(){
+        //var DbSetEmpresas = await tribEmpresasAppService.GetDbSet();
+
+        //var empresa = await Task.FromResult(DbSetEmpresas.FirstOrDefaultAsync(c => c.ConId == Adquirente.Contribuinte.ConId).Result);
+        //int? isento = empresa?.EmprConstitId;
+        //bool isIsentoNaLista = isento.HasValue && ListaDeIsentos.Contains(isento.Value);
+        //Adquirente.isento = isIsentoNaLista;
+
         TribItbi.Itbiid = await autoNumEntidadesAppService.GetMaxAutoNumEntidade("TRIBITBI");
         //ultimoitbiid = TribItbi.Itbiid;
         ITBIID = TribItbi.Itbiid;
@@ -905,6 +922,21 @@
         await InsereAnexoTransmitente(TribItbi);
         await InsereAnexoAdquirente(TribItbi);
         await InsereAnexoOperacao(TribItbi);
+
+    }
+    private async Task<Contribuinte> InsereNovoContribuinte(Contribuinte _Contribuinte)
+    {
+        //DbContext dbContextContribuinte = await DBProsigaContext();
+        Contribuinte contribuinte = _Contribuinte;
+        /// var DbSetContribuintes = await contribuintesAppService.GetDbSet();
+        contribuinte.ConId = await autoNumEntidadesAppService.GetMaxAutoNumEntidade("CONTRIBUINTES");
+        // var novocontribuinte = Task.FromResult(DbSetContribuintes.AddAsync(contribuinte));
+        ///var novocontribuinte = await DbSetContribuintes.AddAsync(contribuinte);
+        var novocontribuinte = await contribuintesAppService.AddAsync(contribuinte, CancellationToken.None);
+        //await DbSetContribuintes.Sa .SaveChangesAsync();
+        return novocontribuinte;
+        //await contribui
+
 
     }
     private async Task InsereDivida(ParcelasOption parcelaOption){
@@ -1062,7 +1094,21 @@
         tief.ItbiareaTotalImo = null;
         tief.ConIddivida = null;
         tief.Matricula = Imovel.EdifMatricula;
-        tief.ItbiedifPercTransmitir = 100;      ///
+
+        //var transmitido = ListaDeTransmitentes.FirstOrDefault(p=>p.sainoboleto=="Sim").percentualtransmitido;
+        var transmitente = ListaDeTransmitentes.FirstOrDefault(p => p.sainoboleto == "Sim");
+        decimal transmitido = 0;
+
+        if (transmitente != null && decimal.TryParse(transmitente.percentualtransmitido, out decimal parsedValue))
+        {
+            transmitido = Math.Round(parsedValue, 2);
+        }
+        else
+        {
+            // Handle the case where the value is not a valid decimal or transmitente is null
+            transmitido = 0; // Or some default value or handling code
+        }
+        tief.ItbiedifPercTransmitir = transmitido;      ///
         tief.ItbiedifDtMinhaCasa = null;
         tief.InscricaoImobiliaria = Imovel.InscricaoImobiliaria;
         var endcompleto = $"{Imovel.Lograd.LogradTipo} {Imovel.Lograd.LogradNome}, {Imovel.EdifNumeracao??"S/N"} - {Imovel.IdloteamentoNavigation.Descricao ?? ""} ";
@@ -1105,7 +1151,14 @@
             {
                 var buffer = new byte[anex.Size];
                 var extensao = Path.GetExtension(anex.Name);
-                await anex.OpenReadStream().ReadAsync(buffer);
+
+                using (var stream = anex.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024))
+                // using (var stream = anexo.browserFile.OpenReadStream(maxAllowedSize: 10 * 1024 * 1024))
+                {
+                    await stream.ReadAsync(buffer);
+                }
+
+                //await anex.OpenReadStream().ReadAsync(buffer);
 
                 var anexoinserido =  await InsereTribObjeto(buffer, extensao);
 
@@ -1260,6 +1313,7 @@
                         ConId = adquirente.Contribuinte.ConId,
                         ImprimeNaGuia = adquirente.sainoboleto
 
+
                     }, CancellationToken.None);
             }
         }
@@ -1320,8 +1374,25 @@
     }
 
     private async Task InsereDeclaracao(){
-        //DbSet<TribItbiedif> DbSetUltimoItbi = await tribITBIEdifAppService.GetDbSet();
+                    //DbSet<TribItbiedif> DbSetUltimoItbi = await tribITBIEdifAppService.GetDbSet();
+                        /*
+                        foreach(var transmitente in ListaDeTransmitentes){
+                        if(transmitente.novocontribuinte){
+                        var novotransmitente = await InsereNovoContribuinte(transmitente.Contribuinte);
+                transmitente.Contribuinte.ConId = novotransmitente.ConId;
 
+                    }
+                    }
+                    foreach (var adquirente in ListaDeAdquirentes)
+                        {
+                        if (adquirente.novocontribuinte)
+                        {
+                        var novoadquirente = await InsereNovoContribuinte(adquirente.Contribuinte);
+                        adquirente.Contribuinte.ConId = novoadquirente.ConId;
+
+                }
+                }
+        */
         foreach(var divida in DividasPendentes)
         {
             if(divida.TipoTribId == 79 && divida.TipoBxId == 1)
@@ -2184,9 +2255,9 @@
     {
     string reportPath = Path.Combine(EnvironmentRazor.WebRootPath, "reports", "YourReportFile.rpt");
 
-    var parameters = new
+        var parameters = new
         {
-        // Defina seus parâmetros aqui
+    // Defina seus parâmetros aqui
     ParameterName1 = "Value1",
     ParameterName2 = "Value2"
     };
@@ -2407,8 +2478,17 @@
         //var url = $"data:text/html;base64,{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(newWindowHtml))}";
         var url = "http://www2.pmfi.pr.gov.br/24horas/pdf/uelvj5jdawlj5cvf0d50qir1uelvj5jdawlj5cvf0d50qir1222TribRelITBICertidaoPagamento.pdf";
         // Abrir a URL em uma nova janela
-       // var js = $"window.open('{url}', '_blank')";
+        // var js = $"window.open('{url}', '_blank')";
         await JS.InvokeVoidAsync("open", url, "_blank");
+    }
+    async Task OnStepChangeFim(FluentWizardStepChangeEventArgs e)
+    {
+        ListaDeTransmitentes = new List<Transmitente>();
+        ListaDeAdquirentes = new List<Adquirente>();
+        Imovel = new TribEdificaco();
+        e.IsCancelled = true;
+        await Wizard.GoToStepAsync(0);
+
     }
 }
 

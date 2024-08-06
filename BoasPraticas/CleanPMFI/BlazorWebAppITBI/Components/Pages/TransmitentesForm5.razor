@@ -32,7 +32,7 @@
     private async Task  NovoTransmitente(Transmitente transmitenteSelecionado)
     {
         /* var indice = await ObterIndiceTransmitente(transmitenteSelecionado);
-          if (indice > -1)
+              if (indice > -1)
               {
               ListaDeTransmitentes.RemoveAt(indice);
               StateHasChanged();
@@ -45,14 +45,14 @@
                 {
                     Contribuinte = transmitenteSelecionado.Contribuinte,
                     AnexosExigidos = new List<Anexo>(),
-                    percentualtransmitido = string.Empty,
+                    percentualtransmitido = null //string.Empty,
                 };
         if (transmitente.Contribuinte.ConTipoPessoa == "FISICA")
         {
-            
-                             foreach (var docexigido in docsExigidosPF.ToList())
-                            {
-                                    transmitente.AnexosExigidos.Add(new Anexo()
+
+            foreach (var docexigido in docsExigidosPF.ToList())
+            {
+                transmitente.AnexosExigidos.Add(new Anexo()
                                     {
                                         carregado = false,
                                         Doc = docexigido,
@@ -62,7 +62,7 @@
                                         AnexoBf = new List<IBrowserFile>()
                                         // InputFile = null,
                                     });
-                            }
+            }
         }
         if (transmitente.Contribuinte.ConTipoPessoa == "JURIDICA")
         {
@@ -82,8 +82,8 @@
             }
         }
 
-            ListaDeTransmitentes.Add(transmitente);
-       // }
+        ListaDeTransmitentes.Add(transmitente);
+        // }
         ListaDeTransmitentesChanged.InvokeAsync(ListaDeTransmitentes);
         StateHasChanged();
     }
@@ -97,8 +97,8 @@
     }
     protected override async Task OnInitializedAsync()
     {
-      //  List<Anexo> listdoc = new List<Anexo>();
-            await base.OnInitializedAsync();
+        //  List<Anexo> listdoc = new List<Anexo>();
+        await base.OnInitializedAsync();
     }
     private async Task BuscarContribuinteDialog(string _tipoContribuinte)
     {
@@ -138,6 +138,7 @@
                     //await DialogService.ShowInfoAsync("Transmitente Não Encontrado!");
                     //  tipoContribuinte = "NovoTransmitente";
                     transmitente.Contribuinte = new Contribuinte() { ConBairro = new Bairro(), ConCidade = new Cidade() { Pais = new Paise() } };
+                    transmitente.novocontribuinte = true;
                     await ContribuinteFormDialog();
 
                 }

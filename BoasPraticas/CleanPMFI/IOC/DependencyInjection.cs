@@ -129,7 +129,8 @@ namespace IOC
             services.AddScoped<Application.Interfaces.DBProsiga.ISisParametrosAppService, Application.Services.DBProsiga.SisParametrosAppService>();
             services.AddScoped<Application.Interfaces.DBProsiga.ITribTextosAppService, Application.Services.DBProsiga.TribTextosAppService>();
             services.AddScoped<Application.Interfaces.DBProsiga.IAgenciaAppService, Application.Services.DBProsiga.AgenciaAppService>();
-
+            services.AddScoped<Application.Interfaces.DBProsiga.ITribEmpresasAppService, Application.Services.DBProsiga.TribEmpresasAppService>();
+            services.AddScoped<Application.Interfaces.DBProsiga.IContribuintesAppService, Application.Services.DBProsiga.ContribuintesAppService>();
 
 
             ////////////////////////////////////////////////////////////////////
@@ -167,6 +168,8 @@ namespace IOC
             services.AddScoped<Domain.Interfaces.Services.DBProsiga.ISisParametrosService, Domain.Services.DBProsiga.SisParametrosService>();
             services.AddScoped<Domain.Interfaces.Services.DBProsiga.ITribTextosService, Domain.Services.DBProsiga.TribTextosService>();
             services.AddScoped<Domain.Interfaces.Services.DBProsiga.IAgenciaService, Domain.Services.DBProsiga.AgenciaService>();
+            services.AddScoped<Domain.Interfaces.Services.DBProsiga.ITribEmpresasService, Domain.Services.DBProsiga.TribEmpresasService>();
+            services.AddScoped<Domain.Interfaces.Services.DBProsiga.IContribuintesService, Domain.Services.DBProsiga.ContribuintesService>();
 
 
             //////////////////////////////////////////////////////////////////////
@@ -206,6 +209,9 @@ namespace IOC
             services.AddScoped<Domain.Interfaces.Repositories.DBProsiga.ISisParametrosRepository, Infrastructure.Repositories.DBProsiga.SisParametrosRepository>();
             services.AddScoped<Domain.Interfaces.Repositories.DBProsiga.ITribTextosRepository, Infrastructure.Repositories.DBProsiga.TribTextosRepository>();
             services.AddScoped<Domain.Interfaces.Repositories.DBProsiga.IAgenciaRepository, Infrastructure.Repositories.DBProsiga.AgenciaRepository>();
+            services.AddScoped<Domain.Interfaces.Repositories.DBProsiga.ITribEmpresasRepository, Infrastructure.Repositories.DBProsiga.TribEmpresasRepository>();
+            services.AddScoped<Domain.Interfaces.Repositories.DBProsiga.IContribuintesRepository, Infrastructure.Repositories.DBProsiga.ContribuintesRepository>();
+
             //////////////////////////////////////////////////////////////////////
             //services.AddScoped<ISpecification<Domain.Entities.DBProsiga.TribItbidocumentoTipo>, Domain.Specs.DBProsiga.TribItbidocumentoTipoSpec>();
             //services.AddScoped<ISpecificationEvaluator, SpecificationEvaluator>();

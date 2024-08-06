@@ -16,19 +16,25 @@
 <div class="fluent-select-container">
 -->
     <FluentStack Orientation="Orientation.Horizontal">
-    <FluentTextField Disabled="@(!IsAgreed)" @bind-Value="@valordeclarado" @onchange="OnTextFildChange"  Label="Valor Declarado/Base de Cálculo"></FluentTextField>
-    <FluentTextField Disabled="@(!IsAgreed)" @bind-Value="@valorITBIdevido" @onchange="OnTextFildChange" Label="Valor ITBI Devido "></FluentTextField>
-    <FluentSelect Disabled="@(!IsAgreed)" Position="SelectPosition.Below" @bind-Value="selectedParcela" TOption="string">
+    <FluentTextField ReadOnly Disabled="@(!IsAgreed)" @bind-Value="@valordeclarado" @onchange="OnTextFildChange"  Label="Valor Declarado/Base de Cálculo"></FluentTextField>
+    <FluentTextField ReadOnly Disabled="@(!IsAgreed)" @bind-Value="@valorITBIdevido" @onchange="OnTextFildChange" Label="Valor ITBI Devido "></FluentTextField>
+    <!--
+
+    <FluentSelect Disabled="@(!IsAgreed)" Position="SelectPosition.Below" @bind-Value="selectedParcela" ValueChanged=GerarGuia TOption="string">
+    -->
+    <FluentSelect Disabled="@(!IsAgreed)" Position="SelectPosition.Below" ValueChanged="@(e => GerarGuia(e))" TOption="string">
     @foreach (var option in ParcelasOption)
     {
         <FluentOption Value="@option.Parcela.ToString()">@option.Parcela parcela(s) - @option.Valor.ToString("C", CultureInfo.GetCultureInfo("pt-BR"))</FluentOption>
+                
     }
-
+  
 </FluentSelect>
 <!--
+
     <FluentButton Disabled="@(!IsAgreed)" OnClick="GerarGuia" Appearance="Appearance.Accent">Gerar</FluentButton>
 -->
-    </FluentStack>
+</FluentStack>
 <!--   
 
 </div>
@@ -94,15 +100,22 @@
         ValoresOperacao.ValorDeclarado = decimal.Parse(e.Value.ToString());
         await ValoresOperacaoChanged.InvokeAsync(ValoresOperacao);
         await ValorDeclaradoChanged.InvokeAsync(valordeclarado);
+
+        //
+        //  ParcelaOptionSelecionada = ParcelasOption.Find(p => p.Parcela == int.Parse(selectedParcela));
+        //  await ParcelaOptionSelecionadaChanged.InvokeAsync(ParcelaOptionSelecionada);
+        //
         calculoITBI();
         calculaParcelamento();
         StateHasChanged();
     }
-    public async Task GerarGuia()
+    public async Task GerarGuia(string e)
     {
+        selectedParcela = e;
         ParcelaOptionSelecionada = ParcelasOption.Find(p => p.Parcela == int.Parse(selectedParcela));
+        //ParcelaOptionSelecionada = ParcelasOption.Find(p => p.Parcela == int.Parse(selectedParcela));
         await ParcelaOptionSelecionadaChanged.InvokeAsync(ParcelaOptionSelecionada);
-        await Gerar.InvokeAsync();
+        //await Gerar.InvokeAsync();
 
     }
     private void Proceed()
@@ -118,7 +131,7 @@
         calculoITBI();
         calculaParcelamento();
     }
-    private void calculoITBI(){
+    private async Task  calculoITBI(){
         if ((ValoresOperacao.isFinanciado == true ) && (ValoresOperacao.Financimanto.Trim() == "Financiamento-Minha Casa Minha Vida".Trim()))
         //if (ValoresOperacao.Financimanto.Trim() == "Financiamento - Minha Casa Minha Vida")
         {
@@ -147,7 +160,8 @@
             ValoresOperacao.ValorImpostoDevido = valorITBIdevido;
         }
         //  valordeclarado = vd.ToString();
-
+        //ParcelaOptionSelecionada = ParcelasOption.Find(p => p.Parcela == int.Parse(selectedParcela));
+        //await ParcelaOptionSelecionadaChanged.InvokeAsync(ParcelaOptionSelecionada);
     }
     private void calculoITBIbk()
     {
