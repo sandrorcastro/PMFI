@@ -38,6 +38,7 @@
             <FluentOption Value="Não" Selected="true">Não</FluentOption>
             <FluentOption Value="Financiamento Normal">Financiamento Normal</FluentOption>
             <FluentOption Value="Financiamento-Minha Casa Minha Vida">Financiamento-Minha Casa Minha Vida</FluentOption>
+            <FluentOption Value="Financiamento-Minha Casa Verde Amarelo">Financiamento-Minha Casa Verde Amarelo</FluentOption>
         
             
             <!-- 
@@ -108,6 +109,7 @@
     private bool mostraobservacaoValorDeclarado = false;
     private bool enableValorDeclarado = false;
     private bool enableFinanciado = false;
+   
     private decimal Uffi = 111.87m;
     private ValoresOperacao? valoresOperacao { get; set; } = new ValoresOperacao();
     public IQueryable<Anexo>? AnexosExigidosQ { get; set; }
@@ -121,6 +123,8 @@
     public EventCallback<ValoresOperacao> ValoresOperacaoChanged { get; set; }
     [Parameter]
     public EventCallback<string> ObservacaoChanged { get; set; }
+    //[Parameter]
+    //public EventCallback<bool> IsAgreedChanged { get; set; } 
     [Parameter]
     public EventCallback<string> ValorDeclaradoChanged { get; set; }
     [Parameter]
@@ -186,6 +190,7 @@
         // }
         await ValoresOperacaoChanged.InvokeAsync(valoresOperacao);
         await ValorDeclaradoChanged.InvokeAsync(valordeclarado);
+        //await IsAgreedChanged.InvokeAsync(false);
         //await ValoresOperacao.InvokeAsync(new Models.ValoresOperacao() { ValorDeclarado=decimal.Parse(valordeclarado),ValorFinanciado=decimal.Parse() };
         if (decimal.TryParse(e.Value.ToString(), out decimal valorDecimal))
         {

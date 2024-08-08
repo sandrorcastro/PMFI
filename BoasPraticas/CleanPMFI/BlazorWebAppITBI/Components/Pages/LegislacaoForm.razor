@@ -44,7 +44,8 @@
 
 
 @code {
-    private bool IsAgreed { get; set; } = false;
+    //[Parameter]
+    public bool IsAgreed { get; set; } = false;
     [Parameter]
     public string? valordeclarado { get; set; } //= "12.000,00"; // { get; set; }
     [Parameter]
@@ -57,6 +58,9 @@
     public string? valorITBIdevido { get; set; }
     decimal? vd = 0;
     decimal? vi = 0; //0.02m;
+    public int TipoBaixaIDMinhaCasaMinhaVida = 150; 
+    public int TipoBaixaIDMinhaCasaVerdeAmarelo = 150;
+    public int TipoBaixaIDPendente = 1;
 
     private decimal Uffi = 111.87m;
     [Parameter]
@@ -67,6 +71,9 @@
     public EventCallback Gerar { get; set; }
     [Parameter]
     public EventCallback<ParcelasOption> ParcelaOptionSelecionadaChanged { get; set; }
+    // [Parameter]
+    // public EventCallback<bool> IsAgreedChanged { get; set; }
+
     protected override void OnInitialized()
     {
         // vd = decimal.Parse(valordeclarado.ToString());
@@ -82,7 +89,7 @@
         IsAgreed = false;
     }
 
-    private void AgreementChanged(ChangeEventArgs e)
+    private async void AgreementChanged(ChangeEventArgs e)
     {
         IsAgreed = !IsAgreed;
         if (IsAgreed)
@@ -93,6 +100,7 @@
             //   calculaParcelamento();
         }
         //IsAgreed = (bool)e.Value;
+        //await IsAgreedChanged.InvokeAsync(IsAgreed);
     }
     public async Task OnTextFildChange(ChangeEventArgs e)
     {
@@ -132,39 +140,40 @@
         calculaParcelamento();
     }
     private async Task  calculoITBI(){
+        //"Financiamento Normal
+        //"Financiamento-Minha Casa Verde Amarelo"
         if ((ValoresOperacao.isFinanciado == true ) && (ValoresOperacao.Financimanto.Trim() == "Financiamento-Minha Casa Minha Vida".Trim()))
-        //if (ValoresOperacao.Financimanto.Trim() == "Financiamento - Minha Casa Minha Vida")
         {
-            //if (ValoresOperacao.Financimanto == "Financiamento - Minha Casa Minha Vida")
-            //{
             valorITBIdevido = (ValoresOperacao.ValorRecursoProprio * 0.02m + ValoresOperacao.ValorFinanciado * pegaTaxa()).ToString();
             ValoresOperacao.ValorImpostoDevido = valorITBIdevido;
-            //}
-            //if (ValoresOperacao.Financimanto == "Financiamento Normal")
-            //{
-            //  valorITBIdevido = (ValoresOperacao.ValorRecursoProprio + ValoresOperacao.ValorFinanciado * 0.02m).ToString(); 
-
-            //}
-
-
-
-        } else
-        {
-
-            vd = decimal.Parse(valordeclarado.ToString());
-            // vi = 0.02m;
-            vi = pegaTaxa();
-            vi = vd * vi;
-            //ITBIdevido = (decimal.TryParse(valordeclarado.ToString(), out decimal valorDecimal){valorITBIdevido=valorDecimal * 0.02}).ToString();
-            valorITBIdevido = vi?.ToString("N2");
-            ValoresOperacao.ValorImpostoDevido = valorITBIdevido;
+            ValoresOperacao.tipotribid = 79;
+            ValoresOperacao.tipoBxId = 150;
+            ValoresOperacao.isento = true;
         }
-        //  valordeclarado = vd.ToString();
-        //ParcelaOptionSelecionada = ParcelasOption.Find(p => p.Parcela == int.Parse(selectedParcela));
-        //await ParcelaOptionSelecionadaChanged.InvokeAsync(ParcelaOptionSelecionada);
-    }
-    private void calculoITBIbk()
-    {
+        if ((ValoresOperacao.isFinanciado == true) && (ValoresOperacao.Financimanto.Trim() == "Financiamento-Minha Casa Verde Amarelo".Trim()))
+        {
+            valorITBIdevido = (ValoresOperacao.ValorRecursoProprio * 0.02m + ValoresOperacao.ValorFinanciado * pegaTaxa()).ToString();
+            ValoresOperacao.ValorImpostoDevido = valorITBIdevido;
+            ValoresOperacao.tipotribid = 79;
+            ValoresOperacao.tipoBxId = 150;
+            ValoresOperacao.isento = true;
+        }
+        if ((ValoresOperacao.isFinanciado == true) && (ValoresOperacao.Financimanto.Trim() == "Financiamento Normal".Trim()))
+        {
+            valorITBIdevido = (ValoresOperacao.ValorRecursoProprio * 0.02m + ValoresOperacao.ValorFinanciado * pegaTaxa()).ToString();
+            ValoresOperacao.ValorImpostoDevido = valorITBIdevido;
+            ValoresOperacao.tipotribid = 79;
+            ValoresOperacao.tipoBxId = 1;
+        }
+        if ((ValoresOperacao.isFinanciado == false) && (ValoresOperacao.Financimanto.Trim() == "Não".Trim()))
+        {
+            //valorITBIdevido = (ValoresOperacao.ValorRecursoProprio * 0.02m + ValoresOperacao.ValorFinanciado * pegaTaxa()).ToString();
+            //ValoresOperacao.ValorImpostoDevido = valorITBIdevido;
+            ValoresOperacao.tipotribid = 79;
+            ValoresOperacao.tipoBxId = 1;
+        }
+
+
 
         vd = decimal.Parse(valordeclarado.ToString());
         // vi = 0.02m;
@@ -172,9 +181,15 @@
         vi = vd * vi;
         //ITBIdevido = (decimal.TryParse(valordeclarado.ToString(), out decimal valorDecimal){valorITBIdevido=valorDecimal * 0.02}).ToString();
         valorITBIdevido = vi?.ToString("N2");
-        //  valordeclarado = vd.ToString();
+        ValoresOperacao.ValorImpostoDevido = valorITBIdevido;
+       // ValoresOperacao.tipotribid = 79;
+       // ValoresOperacao.tipoBxId = 1;
 
+        //  valordeclarado = vd.ToString();
+        //ParcelaOptionSelecionada = ParcelasOption.Find(p => p.Parcela == int.Parse(selectedParcela));
+        //await ParcelaOptionSelecionadaChanged.InvokeAsync(ParcelaOptionSelecionada);
     }
+
     private decimal pegaTaxa()
     {
         //var totalRecursoProprio = 0.00m
@@ -202,6 +217,70 @@
                 if (vl < (600 * Uffi))
                 {
                     ValoresOperacao.aliquotafinanciamento = 0.00m;
+                    ValoresOperacao.isento = true;
+                    return 0.00m;
+                }
+
+            }
+            ValoresOperacao.aliquotafinanciamento = 0.02m;
+            return 0.02m;
+
+        }
+        if ((ValoresOperacao.isFinanciado == true) && (ValoresOperacao.Financimanto.Trim() == "Financiamento-Minha Casa Verde Amarelo".Trim()))
+        {
+
+            if (vl < (4000 * Uffi))
+            {
+                if (vl > (2700 * Uffi))
+                {
+                    ValoresOperacao.aliquotafinanciamento = 0.02m;
+                    return 0.02m;
+                }
+                if ((vl > (1400 * Uffi)) && (vl <= (2700 * Uffi)))
+                {
+                    ValoresOperacao.aliquotafinanciamento = 0.01m;
+                    return 0.01m;
+                }
+                if ((vl > (600 * Uffi)) && (vl <= (1400 * Uffi)))
+                {
+                    ValoresOperacao.aliquotafinanciamento = 0.005m;
+                    return 0.005m;
+                }
+                if (vl < (600 * Uffi))
+                {
+                    ValoresOperacao.aliquotafinanciamento = 0.00m;
+                    return 0.00m;
+                }
+
+            }
+            ValoresOperacao.aliquotafinanciamento = 0.02m;
+            return 0.02m;
+
+        }
+        if ((ValoresOperacao.isFinanciado == true) && (ValoresOperacao.Financimanto.Trim() == "Financiamento Normal".Trim()))
+        {
+
+            if (vl < (4000 * Uffi))
+            {
+                if (vl > (2700 * Uffi))
+                {
+                    ValoresOperacao.aliquotafinanciamento = 0.02m;
+                    return 0.02m;
+                }
+                if ((vl > (1400 * Uffi)) && (vl <= (2700 * Uffi)))
+                {
+                    ValoresOperacao.aliquotafinanciamento = 0.01m;
+                    return 0.01m;
+                }
+                if ((vl > (600 * Uffi)) && (vl <= (1400 * Uffi)))
+                {
+                    ValoresOperacao.aliquotafinanciamento = 0.005m;
+                    return 0.005m;
+                }
+                if (vl < (600 * Uffi))
+                {
+                    ValoresOperacao.aliquotafinanciamento = 0.00m;
+                    ValoresOperacao.isento = true;
                     return 0.00m;
                 }
 

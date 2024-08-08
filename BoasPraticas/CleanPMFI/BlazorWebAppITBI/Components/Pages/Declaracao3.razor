@@ -46,7 +46,7 @@
 @inject ITribEmpresasAppService tribEmpresasAppService
 @inject ISisParametrosAppService sisParametrosAppService
 @inject ITribTextosAppService tribTextosAppService
-<h1>Página de Declaração ITBI</h1>
+<h1>Auto Declaração ITBI</h1>
 <!--
 
 <FluentWizard StepperPosition="StepperPosition.Left"
@@ -216,6 +216,7 @@
     //public AutoDeclaracao autoDeclaracao { get; set; } = new AutoDeclaracao() { Imovel = new TribEdificaco() { InscricaoImobiliaria = string.Empty } };
     public bool passolivre=false;
     int Value = 0;
+    //private bool IsAgreed { get; set; } 
     List<int> ListaDeIsentos = new List<int> { 14, 15, 18, 20, 21, 28, 29, 101, 102, 103, 104, 105, 106, 107, 108, 110, 111, 112, 123, 114, 115, 116, 117, 118, 123, 124, 125, 126, 127, 322 };
     public bool temITBIPendente=false;
     public TribItbiedif ultimoitbiedifid;
@@ -235,6 +236,7 @@
         };
 
     public ParcelasOption? ParcelaOptionSelecionada { get; set; }
+    public string UsuarioLogado { get; set; } = "dbo";
     private EditContext? editContextImovel;
     private EditContext? editContextTransmitentes;
     private EditContext? editContext3;
@@ -367,8 +369,8 @@
                         if(div.TipoTribId == 79)
                         {
                         foreach (var itbiedif in div.TribItbiedifs)
-                        {
-                            if(itbiedif.ItbiedifDataVenc > DateTime.Now)
+                            {
+                        if(itbiedif.ItbiedifDataVenc > DateTime.Now)
                         {
 
                         //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
@@ -410,30 +412,30 @@
                                     sainoboleto = (edificacoesdoscontribuites.Responsavel == "Sim") ||
                                         (edificacoesdoscontribuites.Proprietario == "Sim" && (edificacoesdoscontribuites.Responsavel == "Sim")) ? "Sim" : "Não"
                                 };
-
-                                if (transmitente.Contribuinte.ConTipoPessoa == "FISICA")
-                                {
-                                    foreach (var docexigido in docsExigidosPF.ToList())
+                                /*
+                                    if (transmitente.Contribuinte.ConTipoPessoa == "FISICA")
                                     {
-                                        transmitente.AnexosExigidos.Add(new Anexo()
+                                        foreach (var docexigido in docsExigidosPF.ToList())
                                         {
+                                            transmitente.AnexosExigidos.Add(new Anexo()
+                                            {
                                             carregado = false,
                                             Doc = docexigido,
                                             nomearquivo = string.Empty,
                                             nomeDEFINITIVO = string.Empty,
-                                            pertenceA = transmitente.Contribuinte.ConCnpjcpf, //.Trim().PadLeft(14, '0'),
+                                                                                              pertenceA = transmitente.Contribuinte.ConCnpjcpf, //.Trim().PadLeft(14, '0'),
                                                                                               // AnexoBf = new List<IBrowserFile>()
-                                                                                              // InputFile = null,
-                                        });
-                                    }
+                                    // InputFile = null,
+                                });
+                                }
 
                                 }
                                 if (transmitente.Contribuinte.ConTipoPessoa == "JURIDICA")
-                                {
-                                    foreach (var docexigido in docsExigidosPJ.ToList())
                                     {
-                                        transmitente.AnexosExigidos.Add(new Anexo()
+                                    foreach (var docexigido in docsExigidosPJ.ToList())
                                         {
+                                        transmitente.AnexosExigidos.Add(new Anexo()
+                                            {
                                             carregado = false,
                                             Doc = docexigido,
                                             nomearquivo = string.Empty,
@@ -441,11 +443,11 @@
                                             pertenceA = transmitente.Contribuinte.ConCnpjcpf, //.Trim().PadLeft(14, '0'),
                                                                                               // AnexoBf = new List<IBrowserFile>()
                                                                                               // InputFile = null,
-                                        });
-                                    }
-
+                                    });
                                 }
 
+                                }
+                                */
                                 ListaDeTransmitentes.Add(transmitente);
                             }
                         }
@@ -509,17 +511,17 @@
                     {
                         containdefinido = containdefinido + 1;
                     }
-
+                    /*
                     foreach(var anexo in transmitente.AnexosExigidos)
-                    {
-                        if (anexo.carregado == false)
                         {
+                        if (anexo.carregado == false)
+                            {
                             //await DialogService.ShowInfoAsync($"Você deve adicionar pelo menos um Transmitente!");
                             await DialogService.ShowInfoAsync($"Anexo obrigatório para o Transmitente {transmitente.Contribuinte.ConCnpjcpf} : {anexo.Doc.ItbidsDocumento}");
                             e.IsCancelled = true;
-                            return;
-                        }
+                        return;
                     }
+                    }*/
                     if (transmitente.Contribuinte.ConEmail is null || transmitente.Contribuinte.ConEmail == "")
                     {
 
@@ -944,7 +946,7 @@
         if (parcelaOption.Parcela == 1)
         {   
 
-            await InsereTribDividasImo(79,parcelaOption,1);
+            await InsereTribDividasImo(ValoresOperacao,parcelaOption,1);
             //await InsereTribIT           
         }
         else
@@ -952,18 +954,18 @@
             for(int i = 1;i<= parcelaOption.Parcela; i++)
             {
                 //await InsereTribDividasImo(241, parcelaOption,i);
-                await InsereTribDividasImo(79, parcelaOption, i);
+                await InsereTribDividasImo(ValoresOperacao, parcelaOption, i);
             } 
         }
 
     }
-    private async Task InsereTribDividasImo(int tipoTribID,ParcelasOption parcelaOption,int parcela)
+    private async Task InsereTribDividasImo(ValoresOperacao vo,ParcelasOption parcelaOption,int parcela)
     {
         TribDividasImo tdi = new TribDividasImo();
         tdi.ImoIddivida = await autoNumEntidadesAppService.GetMaxAutoNumEntidade("TribDividasImo");
         tdi.EdificacaoId = Imovel.EdificacaoId;
         tdi.ImoDivAno = DateTime.Now.Date.Year;
-        tdi.TipoTribId = tipoTribID;
+        tdi.TipoTribId = vo.tipotribid;
         tdi.ImoDivSubDivida = 0;
         //tdi.ImoDivParcela = parcelaOption.Parcela == 1 && tipoTribID == 79 ? 0 : parcela;//parcelaOption.Parcela;
         tdi.ImoDivParcela = parcelaOption.Parcela == 1 && parcelaOption.unica == true ? 0 : parcela;//parcelaOption.Parcela;
@@ -979,14 +981,14 @@
         tdi.ImoDivDataUltimaCorrecao = null; // DateTime.Now.Date;
         tdi.ImoDivOrigemLancamento = "Automática";
         tdi.ImoDivParcelaUnica = parcelaOption.Parcela == 1 && parcelaOption.unica == true ? "Sim" : "Não";
-        tdi.TipoBxId = 1;
+        tdi.TipoBxId = vo.tipoBxId;
         int mesdiv = DateTime.Now.Date.AddMonths(parcela).Month; //parcelaOption.Parcela;
                                                                  //tdi.ImoDivMes = parcelaOption.Parcela == 1 && tipoTribID == 79 ? DateTime.Now.Date.AddDays(180).Month : mesdiv;//parcelaOption.Parcela);
         tdi.ImoDivMes = parcelaOption.Parcela == 1 && parcelaOption.unica == true ? DateTime.Now.Date.AddDays(180).Month : mesdiv;//parcelaOption.Parcela);
         tdi.ImoDivDataBaixa = null;
         //    TribDividasImo.ImoDivValorHistorico = decimal.Parse(ValorDeclarado) * decimal.Parse(TxITBI);
         //  TribDividasImo.ImoDivValorBaixa = 0;
-        tdi.UsuarioInclusao = "Sandro.src"; // null;
+        tdi.UsuarioInclusao = UsuarioLogado; // null;
                                             //  TribDividasImo.ImoDivMotivoBaixa = "";
                                             //  TribDividasImo.ImoDivObs = null;
                                             //  TribDividasImo.ImoDivTipoLancamentoIptu = "";
@@ -1374,23 +1376,23 @@
     }
 
     private async Task InsereDeclaracao(){
-                    //DbSet<TribItbiedif> DbSetUltimoItbi = await tribITBIEdifAppService.GetDbSet();
-                        /*
-                        foreach(var transmitente in ListaDeTransmitentes){
-                        if(transmitente.novocontribuinte){
-                        var novotransmitente = await InsereNovoContribuinte(transmitente.Contribuinte);
-                transmitente.Contribuinte.ConId = novotransmitente.ConId;
+        //DbSet<TribItbiedif> DbSetUltimoItbi = await tribITBIEdifAppService.GetDbSet();
+    /*
+    foreach(var transmitente in ListaDeTransmitentes){
+        if(transmitente.novocontribuinte){
+        var novotransmitente = await InsereNovoContribuinte(transmitente.Contribuinte);
+        transmitente.Contribuinte.ConId = novotransmitente.ConId;
 
-                    }
-                    }
+        }
+        }
                     foreach (var adquirente in ListaDeAdquirentes)
-                        {
-                        if (adquirente.novocontribuinte)
-                        {
-                        var novoadquirente = await InsereNovoContribuinte(adquirente.Contribuinte);
-                        adquirente.Contribuinte.ConId = novoadquirente.ConId;
+    {
+    if (adquirente.novocontribuinte)
+        {
+        var novoadquirente = await InsereNovoContribuinte(adquirente.Contribuinte);
+        adquirente.Contribuinte.ConId = novoadquirente.ConId;
 
-                }
+        }
                 }
         */
         foreach(var divida in DividasPendentes)
@@ -1471,6 +1473,11 @@
     {
         ValoresOperacao = _ValoresOperacao;
     }
+   /* private void HandleIsAgreedChanged(bool valor)
+    {
+        IsAgreed = valor;
+    }*/
+    
     private void HandleListaDeTransmitentesChanged(List<Transmitente> listaAtualizada)
     {
         ListaDeTransmitentes = listaAtualizada;
@@ -2394,7 +2401,10 @@
         List<TribItbiedif> itbiediflancados = new List<TribItbiedif>();
         //var dividas = await Task.FromResult(DBSetDividasImo.Where(d => d.EdificacaoId == Id && d.TipoBxId == 1 && (d.TipoTribId == 79)).ToList());
         //var dividas = await Task.FromResult(DBSetDividasImo.FirstOrDefault(d => d.EdificacaoId == Id && d.TipoBxId == 1 && (d.TipoTribId == 79)));
-        var dividas = await Task.FromResult(DBSetDividasImo.Where(d => d.EdificacaoId == Id && (d.TipoBxId == 1 || d.TipoBxId == 2) && (d.TipoTribId == 79)).ToList());
+        var dividas = await Task.FromResult(DBSetDividasImo.Where(d => d.EdificacaoId == Id && 
+                                                                 (d.TipoBxId == 1 || d.TipoBxId == 2 ||  d.TipoBxId == 150) &&
+                                                                 (d.TipoTribId == 79) 
+                                                                 ).ToList());
         if (dividas is not null || dividas.Count() > 0)
         {
             //itbiediflancados = await Task.FromResult(DBSetITBIEdif.FirstOrDefault(ie => ie.EdificacaoId == divida.EdificacaoId && ie.ImoIddivida == divida.ImoIddivida));

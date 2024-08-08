@@ -16,9 +16,10 @@ namespace BlazorWebAppITBI.Uteis
 {
     public class ReportService
     {
-       // IOptions<AppSettings> AppSettings;
-        //ReportService(IOptions<AppSettings> _AppSettings) { AppSettings = _AppSettings; }
-//        ReportService() {  }
+        private readonly AppSettings appSettings;
+        public ReportService(IOptions<AppSettings> _AppSettings)
+        { appSettings = _AppSettings.Value; }
+              //  ReportService() {  }
 
         public async Task<byte[]> GenerateReportAsync()
         {
@@ -259,9 +260,9 @@ namespace BlazorWebAppITBI.Uteis
 
             using (var report = new Report())
             {
-
-                //string connectionString = AppSettings.Value.ConnectionString;
-                string connectionString = "Data Source=172.27.1.98;Initial Catalog=DBProsiga;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Persist Security Info=True;User ID=usergiigteste;Password=PMFI@dien";
+            
+                string connectionString = appSettings.ConnectionString;
+                //string connectionString = "Data Source=172.27.1.98;Initial Catalog=DBProsiga;Integrated Security=False;Encrypt=False;TrustServerCertificate=False;ApplicationIntent=ReadWrite;MultiSubnetFailover=False;Persist Security Info=True;User ID=usergiigteste;Password=PMFI@dien";
 
                 // Defina o nome da stored procedure
                 string storedProcedureName = "dbo.ITBIGetDadosGUIAbyImoIdDivida";

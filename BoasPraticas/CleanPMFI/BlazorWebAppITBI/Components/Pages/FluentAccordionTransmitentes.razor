@@ -34,18 +34,17 @@
                                         <FluentTextField @bind-Value="@transmitente.Contribuinte.ConCidade.CidUf" style="width: 5%;font-size: 11px;" Required Maxlength="14"></FluentTextField>
                                                             </FluentStack>
                 </HeadingTemplate>
+                <!--
 
                 <ChildContent>
-                             <!--
-                             <ChildContentDocsExigidos Content="transmitente.AnexosExigidos" AnexoChanged="HandledAnexoChanged"></ChildContentDocsExigidos>
-                                --> 
+                             
                     @if (Content != null)
                     {
                                                 <FluentDataGrid Items=transmitente.AnexosExigidos.AsQueryable() TGridItem=Anexo>
                                         <PropertyColumn Title="Documento Obrigatório" Property="@(c => c!.Doc.ItbidsDocumento)" Sortable="true" Align=Align.Start />
                                         <PropertyColumn Title="Arquivo" Property="@(c => c!.nomearquivo)" Sortable="true" Align=Align.Start />
                                        
-                                     <!---->   
+                                  
                                         <TemplateColumn Title="Ação" Sortable="true" Align=Align.End>
                                 @{
                                     var anexoSelecionado = @context as Anexo;
@@ -68,6 +67,7 @@
                                 
                     }
                 </ChildContent>
+                -->
             </FluentAccordionItem>
         }
     }
