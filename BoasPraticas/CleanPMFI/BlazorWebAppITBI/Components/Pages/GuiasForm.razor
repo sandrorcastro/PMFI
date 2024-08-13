@@ -43,7 +43,6 @@
                                           IconStart="@(new Icons.Regular.Size20.Document().WithColor(Color.Accent))">
                             </FluentButton>
                             -->
-                            
                         }
                     </FluentStack>
                 </HeadingTemplate>
@@ -123,7 +122,6 @@
     }*/
     private async Task Get24HorasITBI(TribItbiedif itbiedif)
     {
-        
         reportUrl = await Http.GetStringAsync("https://www5.pmfi.pr.gov.br/orgao-79");
     }
     private async Task GetDadosGUIAbyImoIdDivida(TribItbiedif itbiedif)

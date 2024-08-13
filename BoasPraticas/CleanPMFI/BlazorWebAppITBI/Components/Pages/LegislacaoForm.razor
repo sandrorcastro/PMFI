@@ -249,6 +249,7 @@
                 if (vl < (600 * Uffi))
                 {
                     ValoresOperacao.aliquotafinanciamento = 0.00m;
+                    ValoresOperacao.isento = true;
                     return 0.00m;
                 }
 
@@ -312,8 +313,23 @@
             //{
             quantidadeparcelas = 1;
             //}
-        }
-        else
+        } else
+        if (Math.Floor(impdevido / uffi) < 1 || ((ValoresOperacao.isFinanciado == true) && (ValoresOperacao.Financimanto.Trim() == "Financiamento-Minha Casa Verde Amarelo".Trim())))
+        {
+            //if (ValoresOperacao.Financimanto == "Financiamento - Minha Casa Minha Vida")
+            //{
+            quantidadeparcelas = 1;
+            //}
+        } else
+        if (Math.Floor(impdevido / uffi) < 1 || ((ValoresOperacao.isFinanciado == false) && (ValoresOperacao.Financimanto.Trim() == "Não".Trim())))
+        {
+            if (ValoresOperacao.isento)
+            {
+                quantidadeparcelas = 1;
+            }
+        } else
+
+        
         {
             int contador=1;
             while (impdevido/contador >= uffi  && contador<=maxquantidadeparcelas)

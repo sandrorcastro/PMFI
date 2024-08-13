@@ -368,8 +368,8 @@
                         }
                         if(div.TipoTribId == 79)
                         {
-                        foreach (var itbiedif in div.TribItbiedifs)
-                            {
+                            foreach (var itbiedif in div.TribItbiedifs)
+                        {
                         if(itbiedif.ItbiedifDataVenc > DateTime.Now)
                         {
 
@@ -393,7 +393,7 @@
                         editContextTransmitentes = new EditContext(ListaDeTransmitentes);
                         editContext3 = new EditContext(ListaDeAdquirentes);
 
-                        Transmitentes = Imovel.TribEdificacoesContribs?.AsQueryable();
+                        Transmitentes = Imovel.TribEdificacoesContribs?.Where(p=>p.Proprietario=="Sim").AsQueryable();
                         var docsExigidosPF = await tribItbidocumentoTipoAppService.GetDocumentosExigidos("ContribuintePF");
                         var docsExigidosPJ = await tribItbidocumentoTipoAppService.GetDocumentosExigidos("ContribuintePJ");
                         docsExigidos = await tribItbidocumentoTipoAppService.GetDocumentosExigidos("Contribuinte");
@@ -401,7 +401,7 @@
                         //Carrega ListaDeTransmitente con devidos Documentos Exigidos
                         if (Transmitentes.Count() > 0)
                         {
-                            foreach (var edificacoesdoscontribuites in Transmitentes.ToList())
+                            foreach (var edificacoesdoscontribuites in Transmitentes.Where(p => p.Proprietario == "Sim").ToList())
                             {
                                 var transmitente = new Transmitente()
                                 {
@@ -409,32 +409,32 @@
                                     AnexosExigidos = new List<Anexo>(),
                                     percentualtransmitido = edificacoesdoscontribuites.Percentual.ToString(),
                                     Titularidade = await pegaTitularidade(edificacoesdoscontribuites),
-                                    sainoboleto = (edificacoesdoscontribuites.Responsavel == "Sim") ||
+                                    sainoboleto = (edificacoesdoscontribuites.Proprietario == "Sim") ||
                                         (edificacoesdoscontribuites.Proprietario == "Sim" && (edificacoesdoscontribuites.Responsavel == "Sim")) ? "Sim" : "Não"
                                 };
-                                /*
-                                    if (transmitente.Contribuinte.ConTipoPessoa == "FISICA")
-                                    {
-                                        foreach (var docexigido in docsExigidosPF.ToList())
+                                    /*
+                                        if (transmitente.Contribuinte.ConTipoPessoa == "FISICA")
                                         {
+                                            foreach (var docexigido in docsExigidosPF.ToList())
+                                            {
                                             transmitente.AnexosExigidos.Add(new Anexo()
                                             {
                                             carregado = false,
                                             Doc = docexigido,
                                             nomearquivo = string.Empty,
-                                            nomeDEFINITIVO = string.Empty,
+                                                                                              nomeDEFINITIVO = string.Empty,
                                                                                               pertenceA = transmitente.Contribuinte.ConCnpjcpf, //.Trim().PadLeft(14, '0'),
-                                                                                              // AnexoBf = new List<IBrowserFile>()
-                                    // InputFile = null,
+                                    // AnexoBf = new List<IBrowserFile>()
+                                // InputFile = null,
                                 });
                                 }
 
                                 }
-                                if (transmitente.Contribuinte.ConTipoPessoa == "JURIDICA")
+                                    if (transmitente.Contribuinte.ConTipoPessoa == "JURIDICA")
                                     {
-                                    foreach (var docexigido in docsExigidosPJ.ToList())
+                                        foreach (var docexigido in docsExigidosPJ.ToList())
                                         {
-                                        transmitente.AnexosExigidos.Add(new Anexo()
+                                            transmitente.AnexosExigidos.Add(new Anexo()
                                             {
                                             carregado = false,
                                             Doc = docexigido,
@@ -443,12 +443,17 @@
                                             pertenceA = transmitente.Contribuinte.ConCnpjcpf, //.Trim().PadLeft(14, '0'),
                                                                                               // AnexoBf = new List<IBrowserFile>()
                                                                                               // InputFile = null,
-                                    });
+                                });
                                 }
 
                                 }
                                 */
-                                ListaDeTransmitentes.Add(transmitente);
+                              
+                               
+                                    ListaDeTransmitentes.Add(transmitente);
+                             
+
+
                             }
                         }
                         //--------------
@@ -514,12 +519,12 @@
                     /*
                     foreach(var anexo in transmitente.AnexosExigidos)
                         {
-                        if (anexo.carregado == false)
+                            if (anexo.carregado == false)
                             {
                             //await DialogService.ShowInfoAsync($"Você deve adicionar pelo menos um Transmitente!");
                             await DialogService.ShowInfoAsync($"Anexo obrigatório para o Transmitente {transmitente.Contribuinte.ConCnpjcpf} : {anexo.Doc.ItbidsDocumento}");
                             e.IsCancelled = true;
-                        return;
+                    return;
                     }
                     }*/
                     if (transmitente.Contribuinte.ConEmail is null || transmitente.Contribuinte.ConEmail == "")
@@ -689,49 +694,49 @@
     }
     async Task OnStepChangeEmitirGuia(FluentWizardStepChangeEventArgs e)
     {
-        if (passolivre)
-        {
-            DividasPendentes = null;
-            ITBIEdiflancados = new List<TribItbiedif>();
-            DividasPendentes = await ProcuraDividas(Imovel.EdificacaoId);
-            var DbSetBoletoDivida = await tribBoletosDividasAppService.GetDbSet();
-            if (DividasPendentes.Count() > 0)
-            {
-                foreach (var div in DividasPendentes)
-                {
-                    if (div.TipoTribId == 79)
-                    {
-                        foreach (var itbiedif in div.TribItbiedifs)
-                        {
-                            if (itbiedif.ItbiedifDataVenc > DateTime.Now)
-                            {
+             /* if (passolivre)
+             {
+             DividasPendentes = null;
+             ITBIEdiflancados = new List<TribItbiedif>();
+             DividasPendentes = await ProcuraDividas(Imovel.EdificacaoId);
+             var DbSetBoletoDivida = await tribBoletosDividasAppService.GetDbSet();
+                 if (DividasPendentes.Count() > 0)
+                     {
+                     foreach (var div in DividasPendentes)
+                         {
+                         if (div.TipoTribId == 79)
+                         {
+                         foreach (var itbiedif in div.TribItbiedifs)
+                             {
+                             if (itbiedif.ItbiedifDataVenc > DateTime.Now)
+                                 {
 
-                                //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
-                            }
-                            itbiedif.ImoIddividaNavigation.TribBoletosDivida = await Task.FromResult(DbSetBoletoDivida.Where(d => d.ImoIddivida == itbiedif.ImoIddivida).ToList());
-                            // itbiedif.paga = div.TipoBxId == 1 ? false : true;
-                            ITBIEdiflancados.Add(itbiedif);
-                        }
-                    }
+                                 //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
+                             }
+                             itbiedif.ImoIddividaNavigation.TribBoletosDivida = await Task.FromResult(DbSetBoletoDivida.Where(d => d.ImoIddivida == itbiedif.ImoIddivida).ToList());
+                             // itbiedif.paga = div.TipoBxId == 1 ? false : true;
+                         ITBIEdiflancados.Add(itbiedif);
+                     }
+                 }
 
-                }
+                 }
 
-                //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
-            }
-        }
+                 //await DialogService.ShowInfoAsync($"Inscrição Imobiliária:{Imovel.InscricaoImobiliaria} possui dividas!");
+         }
+         }*/
         if (!passolivre)
         {
-            if (e.TargetIndex == 2)
-            {
-                _overlayIsVisible = false;
-                //await Task.Delay(2000);
-                if(AnexosImovel.AnexoBf.Count() == 0 || AnexosImovel.AnexoBf == null)
-                {
-                    await DialogService.ShowInfoAsync($"Anexar Copia da Matrícula Atualizada!");
-                    e.IsCancelled = true;
-                }
-                //      _overlayIsVisible = ;
-            }
+                  /*  if (e.TargetIndex == 2)
+                  {
+                  _overlayIsVisible = false;
+                  //await Task.Delay(2000);
+                  if(AnexosImovel.AnexoBf.Count() == 0 || AnexosImovel.AnexoBf == null)
+                      {
+                      await DialogService.ShowInfoAsync($"Anexar Copia da Matrícula Atualizada!");
+                      e.IsCancelled = true;
+                  }
+                  //      _overlayIsVisible = ;
+              }*/
             if(e.TargetIndex == 6)
             {
                 _overlayIsVisible = true;
@@ -918,7 +923,11 @@
         }else{
             TribItbi.Itbiobservacao = $"Opção de Pagamento do ITBI em  { ParcelaOptionSelecionada.Parcela} parcela(s) de { ParcelaOptionSelecionada.Valor}";              
         }
-        TribItbi.ItbidsAlerta = "Atenção - ITBI";
+        if (ValoresOperacao.isento)
+        {
+            TribItbi.Itbiobservacao = "ITBI ISENTO";
+        }
+        TribItbi.ItbidsAlerta = "" ;// "Atenção - ITBI";
         await tribITBIAppService.AddAsync(TribItbi, CancellationToken.None);
         await InsereAnexoImovel(TribItbi);
         await InsereAnexoTransmitente(TribItbi);
@@ -2402,7 +2411,8 @@
         //var dividas = await Task.FromResult(DBSetDividasImo.Where(d => d.EdificacaoId == Id && d.TipoBxId == 1 && (d.TipoTribId == 79)).ToList());
         //var dividas = await Task.FromResult(DBSetDividasImo.FirstOrDefault(d => d.EdificacaoId == Id && d.TipoBxId == 1 && (d.TipoTribId == 79)));
         var dividas = await Task.FromResult(DBSetDividasImo.Where(d => d.EdificacaoId == Id && 
-                                                                 (d.TipoBxId == 1 || d.TipoBxId == 2 ||  d.TipoBxId == 150) &&
+                                                                 //(d.TipoBxId == 1 || d.TipoBxId == 2 ||  d.TipoBxId == 150) &&
+                                                                 (d.TipoBxId == 1 ) &&
                                                                  (d.TipoTribId == 79) 
                                                                  ).ToList());
         if (dividas is not null || dividas.Count() > 0)
