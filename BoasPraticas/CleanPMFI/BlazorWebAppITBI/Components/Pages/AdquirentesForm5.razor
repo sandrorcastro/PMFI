@@ -53,6 +53,10 @@
                     AnexosExigidos = new List<Anexo>(),
                     percentualAdquirido = string.Empty,
                 };
+        if (AdquirenteSelecionado.novocontribuinte)
+        {
+            Adquirente.novocontribuinte = true;
+        }
         if (Adquirente.Contribuinte.ConTipoPessoa == "FISICA")
         {
 

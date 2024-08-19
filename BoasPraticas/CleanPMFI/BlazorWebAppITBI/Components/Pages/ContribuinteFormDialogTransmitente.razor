@@ -14,6 +14,10 @@
 <FluentDialogBody>
     <FluentEditForm Model="Content" FormName="inscricaoInfo" >
         <DataAnnotationsValidator />
+        <FluentSelect Position="SelectPosition.Below" @bind-Value="Content!.Contribuinte.ConTipoPessoa" TOption="string" Label="Tipo Pessoa?">
+            <FluentOption Value="FISICA" Selected="true">Física</FluentOption>
+            <FluentOption Value="JURIDICA">Jurídica</FluentOption>
+        </FluentSelect>
         <FluentStack Orientation="Orientation.Horizontal">
             <FluentTextField Placeholder="Nome" @bind-Value="Content!.Contribuinte.ConNome">Nome</FluentTextField> 
         </FluentStack>

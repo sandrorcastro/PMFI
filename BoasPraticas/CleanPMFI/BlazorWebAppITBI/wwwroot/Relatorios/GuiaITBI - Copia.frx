@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="07/27/2024 09:31:41" ReportInfo.Modified="08/19/2024 07:52:27" ReportInfo.CreatorVersion="2024.2.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="07/27/2024 09:31:41" ReportInfo.Modified="08/19/2024 07:37:04" ReportInfo.CreatorVersion="2024.2.0.0">
   <Dictionary>
     <TableDataSource Name="GuiaITBI" ReferenceName="GuiaITBI" DataType="System.Int32" Enabled="true">
       <Column Name="Lancamento" DataType="System.String"/>
@@ -111,11 +111,11 @@
       </ContainerObject>
       <ContainerObject Name="Container14" Left="311.85" Top="75.6" Width="103.95" Height="18.9" Border.Lines="All">
         <TextObject Name="Text36" Width="75.6" Height="9.45" Text="Área Construída m²" Font="Arial, 5pt"/>
-        <TextObject Name="Text37" Top="9.45" Width="103.95" Height="9.45" Text="[GuiaITBI.AreaConstruida]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Bottom" WordWrap="false" Font="Arial, 6pt" Trimming="EllipsisCharacter"/>
+        <TextObject Name="Text37" Top="9.45" Width="103.95" Height="9.45" Text="[GuiaITBI.AreaConstruida]" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Bottom" WordWrap="false" Font="Arial, 6pt" Trimming="EllipsisCharacter"/>
       </ContainerObject>
       <ContainerObject Name="Container15" Left="415.8" Top="75.6" Width="103.95" Height="18.9" Border.Lines="All">
         <TextObject Name="Text38" Width="75.6" Height="9.45" Text="Área Coberta m²" Font="Arial, 5pt"/>
-        <TextObject Name="Text39" Width="94.5" Height="18.9" Text="[GuiaITBI.AreaCoberta]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Bottom" WordWrap="false" Font="Arial, 6pt" Trimming="EllipsisCharacter"/>
+        <TextObject Name="Text39" Width="94.5" Height="18.9" Text="[GuiaITBI.AreaCoberta]" Format="Currency" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Bottom" WordWrap="false" Font="Arial, 6pt" Trimming="EllipsisCharacter"/>
       </ContainerObject>
       <ContainerObject Name="Container16" Left="519.75" Top="75.6" Width="179.55" Height="18.9" Border.Lines="All">
         <TextObject Name="Text40" Width="75.6" Height="9.45" Text="Identificação da Divida" Font="Arial, 5pt"/>

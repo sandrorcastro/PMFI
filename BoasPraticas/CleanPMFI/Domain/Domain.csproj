@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-	  <ProjectReference Include="..\GerarClasses\GerarClasses.csproj" />
+    <ProjectReference Include="..\GerarClasses\GerarClasses.csproj" />
   </ItemGroup>
 
 </Project>
