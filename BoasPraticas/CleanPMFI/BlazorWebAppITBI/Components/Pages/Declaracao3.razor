@@ -939,11 +939,13 @@
     {
         //DbContext dbContextContribuinte = await DBProsigaContext();
         Contribuinte contribuinte = _Contribuinte;
-        /// var DbSetContribuintes = await contribuintesAppService.GetDbSet();
+        var DbSetContribuintes = await contribuintesAppService.GetDbSet();
         contribuinte.ConId = await autoNumEntidadesAppService.GetMaxAutoNumEntidade("CONTRIBUINTES");
         // var novocontribuinte = Task.FromResult(DbSetContribuintes.AddAsync(contribuinte));
+        //var novocontribuinte = DbSetContribuintes.AddAsync(contribuinte);
         ///var novocontribuinte = await DbSetContribuintes.AddAsync(contribuinte);
         var novocontribuinte = await contribuintesAppService.AddAsync(contribuinte, CancellationToken.None);
+        
         //await DbSetContribuintes.Sa .SaveChangesAsync();
         return novocontribuinte;
         //await contribui

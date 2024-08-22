@@ -42,7 +42,9 @@
     IWebDriver driver;
     protected override async Task OnInitializedAsync()
     {
-      ExternalPageContent = await Http.GetStringAsync("http://localhost/24horas/ITBI/wfrmITBIExConsulta.aspx");
+      //ExternalPageContent = await Http.GetStringAsync("http://localhost/24horas/ITBI/wfrmITBIExConsulta.aspx");
+        ExternalPageContent = await Http.GetStringAsync("http://www2.pmfi.pr.gov.br/24horas/ITBI/wfrmITBIExConsulta.aspx");
+
         await base.OnInitializedAsync();
     }
     protected async Task ConsultITBI()
