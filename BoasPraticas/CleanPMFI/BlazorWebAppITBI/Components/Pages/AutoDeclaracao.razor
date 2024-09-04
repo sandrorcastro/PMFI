@@ -93,7 +93,7 @@
             <FluentEditForm EditContext="editContextTransmitentes" FormName="transmitenteInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <TransmitentesForm5 Imovel="Imovel" ListaDeTransmitentes=@ListaDeTransmitentes ListaDeTransmitentesChanged="HandleListaDeTransmitentesChanged" DocsExigidos="docsExigidos" />
+                    <TransmitentesForm Imovel="Imovel" ListaDeTransmitentes=@ListaDeTransmitentes ListaDeTransmitentesChanged="HandleListaDeTransmitentesChanged" DocsExigidos="docsExigidos" />
                      <ValidationMessage For="() => ListaDeTransmitentes" />
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
@@ -106,18 +106,20 @@
             <FluentEditForm EditContext="editContext3" FormName="adquirentesInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
                 <DataAnnotationsValidator />
                 <FluentStack Orientation="Orientation.Vertical">
-                    <AdquirentesForm5 ListaDeAdquirentes=@ListaDeAdquirentes ListaDeAdquirentesChanged ="HandleListaDeAdquirentesChanged" DocsExigidos="docsExigidos" ListaDeIsentos="ListaDeIsentos" />
+                    <AdquirentesForm ListaDeAdquirentes=@ListaDeAdquirentes ListaDeAdquirentesChanged ="HandleListaDeAdquirentesChanged" DocsExigidos="docsExigidos" ListaDeIsentos="ListaDeIsentos" />
                 </FluentStack>
                 <FluentValidationSummary style="color:darkred" />
             </FluentEditForm>
         </FluentWizardStep>
    
-       <FluentWizardStep Disabled=@(temITBIPendente is false ? false : true) Id=5 Label="Transação Imobiliária"
-                        
+                        <!--    
+
                           IconPrevious="@(new Icons.Filled.Size24.Star())"
                           IconCurrent="@(new Icons.Filled.Size24.StarEmphasis())"
                           IconNext="@(new Icons.Regular.Size24.Star())"
                           DisplayStepNumber="false"
+                        -->
+       <FluentWizardStep Disabled=@(temITBIPendente is false ? false : true) Id=5 Label="Transação Imobiliária"
                           OnChange="@OnStepChangeTransacaoImobiliaria">
            
             <FluentEditForm Model="Imovel" FormName="transãcaoInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
@@ -129,12 +131,7 @@
             </FluentEditForm>
 
 
-           <!--  
-
-                   <FluentSelect Items="@(Enumerable.Range(10, 80).Select(i => i.ToString()))"
-                                  Style="min-width: 70px;"
-                                  Height="300px" />
-           --> 
+          
         </FluentWizardStep>
          <FluentWizardStep Disabled=@(temITBIPendente is false ? false : true) Id=6 Label="Emitir Guia"
                           OnChange="@OnStepChangeEmitirGuia">
@@ -150,25 +147,17 @@
                           -->
                         <GuiasForm Content=@ITBIEdiflancados ExternalPageContent=@ExternalPageContent/>
         </FluentWizardStep>
-            
+            <!--
         <FluentWizardStep Id=8 Label="Guia24Horas"
                           OnChange="@OnStepChange">
+        -->
                           <!--
                                 <GuiasForm Content=@ITBIEdiflancados ImprimirGuia="HandleImprimirGuiacls" ExternalPageContent=@ExternalPageContent/>
-                          -->
                          <Guias24Horas Content=@ITBIEdiflancados ExternalPageContent=@ExternalPageContent/>
         </FluentWizardStep>
+                          -->
    <FluentWizardStep Id=9 Label="Fim" OnChange="(e=>OnStepChangeFim(e))">
-       <!--
-
-       <FluentEditForm Model="Imovel" FormName="adquirentesInfo" OnValidSubmit="OnValidSubmit" OnInvalidSubmit="OnInvalidSubmit">
-                <DataAnnotationsValidator />
-                <FluentStack Orientation="Orientation.Vertical">
-                    
-            </FluentStack>
-                <FluentValidationSummary style="color:darkred" />
-            </FluentEditForm>
-       -->
+      
         </FluentWizardStep>
     
     </Steps>
@@ -527,6 +516,8 @@
                     return;
                     }
                     }*/
+
+                    /*
                     if (transmitente.Contribuinte.ConEmail is null || transmitente.Contribuinte.ConEmail == "")
                     {
 
@@ -540,9 +531,10 @@
                         e.IsCancelled = true;
                         return;
                     }
+                    */
                     if (transmitente.percentualtransmitido is null || transmitente.percentualtransmitido == "" || transmitente.percentualtransmitido == "0,00")
                     {
-                        await DialogService.ShowInfoAsync($"Informe o Percentual Transmitido do {transmitente.Contribuinte.ConCnpjcpf}!");
+                        await DialogService.ShowInfoAsync($"Informe o Percentual Transmitido:  {transmitente.Contribuinte.ConNome}!");
                         e.IsCancelled = true;
                         return;
                     }
@@ -595,7 +587,7 @@
                     {
                         if (anexo.carregado == false)
                         {
-                            await DialogService.ShowInfoAsync($"Anexo obrigatório para o Adquirente {adquirente.Contribuinte.ConCnpjcpf} : {anexo.Doc.ItbidsDocumento}");
+                            await DialogService.ShowInfoAsync($"Anexo obrigatório para o Adquirente: {adquirente.Contribuinte.ConNome} : {anexo.Doc.ItbidsDocumento}");
                             e.IsCancelled = true;
                             return;
                         }

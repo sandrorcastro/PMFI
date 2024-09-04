@@ -18,13 +18,12 @@ builder.Services.AddScoped<ReportService>();
 
 builder.Services.AddInfrastructure(builder.Configuration);
 builder.Services.AddInfrastructureAutoMapper(builder.Configuration);
-
 //builder.Services.AddScoped<BlazorWebAppITBI.Uteis.AuthenticationService>();
 //builder.Services.AddHttpClient<AuthenticationService>(client =>
 //{
-  //  client.BaseAddress = new Uri("http://www2.pmfi.pr.gov.br/");
-  //  client.DefaultRequestHeaders.Accept.Clear();
-  //  client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
+//  client.BaseAddress = new Uri("http://www2.pmfi.pr.gov.br/");
+//  client.DefaultRequestHeaders.Accept.Clear();
+//  client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/x-www-form-urlencoded"));
 //});
 
 
@@ -36,6 +35,7 @@ builder.Services.AddRazorComponents()
 //builder.Services.AddFluentValidation(fv => fv.RegisterValidatorsFromAssemblyContaining<TribEdificacoesValidator>());
 builder.Services.AddHttpClient();
 builder.Services.AddFluentUIComponents();
+//builder.Services.AddDataGridEntityFrameworkAdapter();
 
 var app = builder.Build();
 

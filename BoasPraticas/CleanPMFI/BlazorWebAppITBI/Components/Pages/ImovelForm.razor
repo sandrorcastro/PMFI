@@ -14,6 +14,19 @@
     <FluentNumberField ReadOnly @bind-Value="@Content.EdifFracaoIdealEdificacao">Fração</FluentNumberField>
 </FluentCard>
 <FluentCard Justify="@JustifyContent.Center">
+
+    <FluentTextField ReadOnly @bind-Value="@Content.Lograd.LogradTipo">TipoLogradouro:</FluentTextField>
+    <FluentTextField ReadOnly @bind-Value="@Content.Lograd.LogradNome">Logradouro:</FluentTextField>
+    <FluentTextField ReadOnly @bind-Value="@Content.EdifNumeracao">Número:</FluentTextField>
+    <FluentTextField ReadOnly @bind-Value="@Content.IdloteamentoNavigation.Descricao">Bairro:</FluentTextField>
+</FluentCard>
+<!--
+
+<EnderecoForm Content="@Content.Lograd" Bairro="@(Content.IdloteamentoNavigation.Descricao ?? " ")" Numero="@(Content.EdifNumeracao ?? " ")" />
+-->
+
+
+<FluentCard Justify="@JustifyContent.Center">
     <FluentDataGrid Items=@AnexosExigidosQ TGridItem=Anexo>
         <PropertyColumn Title="Documento Obrigatório" Property="@(c => c!.Doc.ItbidsDocumento)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="Arquivo" Property="@(c => c!.nomearquivo)" Sortable="true" Align=Align.Start />
@@ -33,7 +46,7 @@
                      Mode="InputFileMode.Buffer"
                      Multiple="true"
                      MaximumFileSize="@(1000 * 1024 * 1024)"
-                     Accept="*/*" 
+                     Accept="application/pdf" 
                      OnInputFileChange="OnProgressChangeAsyncBF"
                      OnCompleted="@OnCompleted" />
     <FluentProgress Visible="@(progressPercent > 0)" Min="0" Max="100" Value="@progressPercent" />

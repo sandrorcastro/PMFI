@@ -1,0 +1,111 @@
+﻿@page "/auditoria"
+@attribute [StreamRendering]
+@inject ITribITBIAppService tribITBIAppService
+@inject ITribITBIEdifAppService tribITBIEdifAppService
+@inject HttpClient Http
+@inject NavigationManager NavManager
+<PageTitle>Auditoria</PageTitle>
+@rendermode InteractiveServer
+<FluentCard Justify="@JustifyContent.Center">
+    <FluentDataGrid Items=@ITBIROWs.AsQueryable() TGridItem=ITBIRow>
+        <PropertyColumn Title="ID" Property="@(c => c!.Id)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Ano" Property="@(c => c!.Ano)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Data Lanc." Property="@(c => c!.Date)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Inscrição" Property="@(c => c!.Inscricao)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Edificacao" Property="@(c => c!.EdificacaoID)" Sortable="true" Align=Align.Start />
+    </FluentDataGrid>
+</FluentCard>
+
+
+<!--   
+
+@if (ITBIROWs == null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <table class="table">
+        <thead>
+            <tr>
+
+                <th>Ano</th>
+                <th></th>
+                <th>ITBI ID</th>
+                <th></th>
+                <th>Data Lançamento</th>
+                <th></th>
+                <th>Inscrição Imobiliaria</th>
+                <th></th>
+                <th>Edificacao ID</th>
+                
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var itbirow in ITBIROWs.OrderByDescending(d=>d.Id))
+            {
+                <tr>
+                    <td>@itbirow.Ano</td>
+                    <td></td>
+                    <td>@itbirow.Id</td>
+                    <td></td>
+                    <td>@itbirow.Date.Value.Date.ToShortDateString()</td>
+                    <td></td>
+                    <td>@itbirow.Inscricao</td>
+                
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+-->
+
+@code {
+  
+                                       //////////////// <summary>
+    /// 
+    /// </summary>
+    public DbSet<TribItbi>? DbSetTribItbi;
+    public DbSet<TribItbiedif>? DbSetTribItbiedif;
+    public List<TribItbi> ITBIS = new List<TribItbi>();
+    public List<ITBIRow> ITBIROWs = new List<ITBIRow>();
+    protected override async Task OnInitializedAsync()
+    {
+        // Simulate asynchronous loading to demonstrate streaming rendering
+        await Task.Delay(500);
+        DbSetTribItbi = await tribITBIAppService.GetDbSet();
+        DbSetTribItbiedif = await tribITBIEdifAppService.GetDbSet();
+        ITBIS = await Task.FromResult(DbSetTribItbi.Where(i => i.Itbiano == 2024 && i.ItbidataLanc >= DateTime.Parse("01/09/2024") && i.ItbidataLanc <= DateTime.Parse("30/09/2024")).Include(ie => ie.TribItbiedifs).ThenInclude(d=>d.ImoIddividaNavigation).ToList());
+        foreach(var itbi in ITBIS)
+        {
+
+            ITBIROWs.Add(new ITBIRow { Date = itbi.ItbidataLanc, 
+                                       Ano = itbi.Itbiano,
+                                       Observacao=itbi.Itbiobservacao,
+                                       Id=itbi.Itbiid ,
+                                       listTribItbiEdif = itbi.TribItbiedifs.ToList()
+                                       //Inscricao = await Task.FromResult(DbSetTribItbiedif.FirstOrDefaultAsync(i=>i.Itbiid == itbi.Itbiid).Result.InscricaoImobiliaria)
+                                       // Inscricao = this.listTribItbiEdif.
+
+
+            });
+        }
+       
+    }
+    public class ITBIRow
+    {
+        public DateTime? Date { get; set; }
+        public int? Ano { get; set; }
+        public string? Observacao { get; set; }
+        public long? Id { get; set; }
+        public string? Inscricao {get;set;}
+        public long EdificacaoID {get;set;}
+        public List<TribItbiedif> listTribItbiEdif = new List<TribItbiedif>();
+
+        public bool Selected { get; set; }
+
+
+    }
+  
+
+}

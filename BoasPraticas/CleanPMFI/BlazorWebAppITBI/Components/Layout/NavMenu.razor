@@ -5,6 +5,8 @@
     <nav class="sitenav" aria-labelledby="main-menu" onclick="document.getElementById('navmenu-toggle').click();">
         <FluentNavMenu Id="main-menu" Collapsible="true" Width="250" Title="Navigation menu" @bind-Expanded="expanded">
             <FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">AutoDeclaração</FluentNavLink>
+            <FluentNavLink Href="/auditoria" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.PersonAlert())" IconColor="Color.Accent">Auditoria</FluentNavLink>
+            <FluentNavLink Href="/avaliacao" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Money())" IconColor="Color.Accent">Avaliações</FluentNavLink>
         </FluentNavMenu>
     </nav>
 </div>
