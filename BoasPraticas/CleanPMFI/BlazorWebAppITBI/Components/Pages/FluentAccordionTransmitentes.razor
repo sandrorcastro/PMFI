@@ -1,4 +1,5 @@
 ﻿@rendermode InteractiveServer
+@inject IDialogService DialogService
 <FluentAccordion ExpandMode="AccordionExpandMode.Single" style="background-color: blue; color: brown;">
     @if(Content != null)
     {
@@ -6,32 +7,35 @@
         {
             <FluentAccordionItem Expanded="false" >
                 <HeadingTemplate>
-                    <FluentStack Orientation="Orientation.Horizontal">
+                    <FluentStack Orientation="Orientation.Horizontal" VerticalGap="10" HorizontalGap="10">
                                 <FluentTextField ReadOnly @bind-value="@transmitente.Contribuinte.ConCnpjcpf" style="width: 10%;font-size: 12px;" Maxlength="14">CPF/CNPJ:</FluentTextField>
-                                <FluentTextField ReadOnly @bind-value="@transmitente.Contribuinte.ConNome" style="width: 25%;font-size: 12px;" Maxlength="50">Nome/Razão:</FluentTextField>
-                                <FluentTextField @bind-Value="@transmitente.Contribuinte.ConEmail" style="width: 18%;font-size: 12px;" Required Maxlength="50">Email:</FluentTextField>
-                                <FluentTextField @bind-Value="@transmitente.Contribuinte.ConTelefoneCelular" style="width: 10%;font-size: 12px;" Required Maxlength="14">Celular:</FluentTextField>
-                                <FluentTextField ReadOnly @bind-Value="@transmitente.Titularidade" style="width: 10%;font-size: 12px;" Required Maxlength="14">Titularidade:</FluentTextField>
-                                <FluentTextField @bind-Value="@transmitente.percentualtransmitido" Required style="width: 6%;font-size: 12px;" Maxlength="5">%Transmitido</FluentTextField>
-                                <FluentSelect Position="SelectPosition.Below" @bind-Value="transmitente.sainoboleto" TOption="string">
+                                <FluentTextField ReadOnly @bind-value="@transmitente.Contribuinte.ConNome" style="width: 20%;font-size: 12px;" Maxlength="40">Nome/Razão:</FluentTextField>
+                                <FluentTextField @bind-Value="@transmitente.Contribuinte.ConEmail" style="width: 15%;font-size: 12px;" Required Maxlength="40">Email:</FluentTextField>
+                                <FluentTextField @bind-Value="@transmitente.Contribuinte.ConTelefoneCelular" style="width: 10%;font-size: 12px;" Required Maxlength="12">Celular:</FluentTextField>
+                                <FluentTextField ReadOnly @bind-Value="@transmitente.Titularidade" style="width: 10%;font-size: 12px;" Required Maxlength="10">Titularidade:</FluentTextField>
+                                <FluentTextField @bind-Value="@transmitente.percentualtransmitido" Required style="width: 10%;font-size: 12px;" Maxlength="5">%Transmitido</FluentTextField>
+                                        <FluentStack Orientation="Orientation.Vertical"   VerticalAlignment.Top VerticalGap="0" style="width: 5%;font-size: 5px;">
+                                                <FluentSelect Label="Principal:" Position="SelectPosition.Below" @bind-Value="transmitente.sainoboleto" TOption="string" style="width: 5%;font-size: 5px;"> 
                                     <FluentOption Value="Indefinido">Sai Na Guia?</FluentOption>
                                     <FluentOption Value="Sim">Sim</FluentOption>
                                     <FluentOption Value="Não">Não</FluentOption>
                                 </FluentSelect>
-                                      <FluentSpacer />
+                                </FluentStack>
+                                
+                                <FluentSpacer />
                         <FluentButton Appearance="Appearance.Outline" OnClick="()=>RemoveTransmitente(transmitente)"
                                           IconStart="@(new Icons.Regular.Size20.SubtractSquare().WithColor(Color.Accent))" >
                              </FluentButton>
                     </FluentStack>
                              <FluentStack Orientation="Orientation.Horizontal">
-                                         <FluentTextField Size="2"  @bind-value="@transmitente.Contribuinte.ConCep" style="width: 10%;font-size: 11px;" Required Maxlength="14"></FluentTextField>
-                                        <FluentTextField @bind-value="@transmitente.Contribuinte.ConTipoLograd" style="width: 9%;font-size: 11px;" Required Maxlength="14"></FluentTextField>
-                                        <FluentTextField @bind-value="@transmitente.Contribuinte.ConEndereco" style="width: 25%;font-size: 11px;" Required Maxlength="50"></FluentTextField>
-                                        <FluentTextField @bind-value="@transmitente.Contribuinte.ConNumero" style="width: 6%;font-size: 11px;" Required Maxlength="50"></FluentTextField>
+                                         <FluentTextField Size="2"  @bind-value="@transmitente.Contribuinte.ConCep" style="width: 10%;font-size: 11px;" Required Maxlength="14">CEP:</FluentTextField>
+                                        <FluentTextField @bind-value="@transmitente.Contribuinte.ConTipoLograd" style="width: 9%;font-size: 11px;" Required Maxlength="14">Tipo Logr.:</FluentTextField>
+                                        <FluentTextField @bind-value="@transmitente.Contribuinte.ConEndereco" style="width: 25%;font-size: 11px;" Required Maxlength="50">Logradouro:</FluentTextField>
+                                        <FluentTextField @bind-value="@transmitente.Contribuinte.ConNumero" style="width: 6%;font-size: 11px;" Required Maxlength="50">Número:</FluentTextField>
                                  
-                                        <FluentTextField @bind-Value="@transmitente.Contribuinte.ConBairro.BaiNome" style="width: 10%;font-size: 11px;" Required Maxlength="50"></FluentTextField>
-                                        <FluentTextField @bind-Value="@transmitente.Contribuinte.ConCidade.CidNome" style="width: 10%;font-size: 11px;" Required Maxlength="14"></FluentTextField>
-                                        <FluentTextField @bind-Value="@transmitente.Contribuinte.ConCidade.CidUf" style="width: 5%;font-size: 11px;" Required Maxlength="14"></FluentTextField>
+                                        <FluentTextField @bind-Value="@transmitente.Contribuinte.ConBairro.BaiNome" style="width: 10%;font-size: 11px;" Required Maxlength="50">Bairro:</FluentTextField>
+                                        <FluentTextField @bind-Value="@transmitente.Contribuinte.ConCidade.CidNome" style="width: 10%;font-size: 11px;" Required Maxlength="14">Cidade:</FluentTextField>
+                                        <FluentTextField @bind-Value="@transmitente.Contribuinte.ConCidade.CidUf" style="width: 5%;font-size: 11px;" Required Maxlength="14">Estado:</FluentTextField>
                                                             </FluentStack>
                 </HeadingTemplate>
                 <!--
@@ -191,6 +195,11 @@
  
     async Task OnProgressChangeAsyncTransmitente(InputFileChangeEventArgs file)
     {
+         if(file.File.Size > (10000000))
+        {
+            await DialogService.ShowInfoAsync("O Arquivo deve ser no formato PDF não pode ultrapassar 10 Mega bytes!");
+            return;
+        }
         var inputFile = file.GetMultipleFiles();
 
         if (inputFile != null && currentAnexo != null)

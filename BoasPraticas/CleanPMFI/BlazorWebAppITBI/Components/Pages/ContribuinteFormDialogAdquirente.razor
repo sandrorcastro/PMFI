@@ -1,4 +1,10 @@
 ﻿@implements IDialogContentComponent<Adquirente>
+@inject ICepcorreioAppService cepcorreioAppService
+@inject ICepAppService cepAppService
+@inject IPaisAppService paisAppService
+@inject IBairroAppService bairroAppService
+@inject ICidadeAppService cidadeAppService
+@inject IDialogService DialogService
 @using BlazorWebAppITBI.Models
 <!-- Header -->
 <FluentDialogHeader ShowDismiss="true">
@@ -12,36 +18,43 @@
 
 <!-- Body -->
 <FluentDialogBody>
-    <FluentEditForm Model="Content" FormName="inscricaoInfo" >
+    <!--    
+
+        <FluentEditForm Model="Content" FormName="cadastroAdquirente" >
+
+    -->
+    <FluentEditForm EditContext="editContextContribuinte" FormName="cadastroAdquirente">
         <DataAnnotationsValidator />
-        <FluentSelect Position="SelectPosition.Below" @bind-Value="Content!.Contribuinte.ConTipoPessoa" TOption="string" Label="Tipo Pessoa?">
+        <FluentSelect Position="SelectPosition.Below" @bind-Value="Content!.Contribuinte.ConTipoPessoa" TOption="string" Label="Tipo Pessoa?" style="width: 20%;font-size: 12px;" Maxlength="10">
             <FluentOption Value="FISICA" Selected="true">Física</FluentOption>
             <FluentOption Value="JURIDICA">Jurídica</FluentOption>
             
         </FluentSelect>
 
         <FluentStack Orientation="Orientation.Horizontal">
-            <FluentTextField Placeholder="Nome" @bind-Value="Content!.Contribuinte.ConNome">Nome</FluentTextField> 
+            <FluentTextField Required Placeholder="Nome" @bind-Value="Content!.Contribuinte.ConNome" style="width: 100%;font-size: 12px;" Maxlength="40">Nome</FluentTextField>
         </FluentStack>
         <FluentStack Orientation="Orientation.Horizontal">
-            <FluentTextField Placeholder="CPF/CNPJ" @bind-Value="Content!.Contribuinte.ConCnpjcpf">CPF/CNPJ</FluentTextField> 
+            <FluentTextField Required Placeholder="CPF/CNPJ" @bind-Value="Content!.Contribuinte.ConCnpjcpf">CPF/CNPJ</FluentTextField>
+            <ValidationMessage For="() => Content!.Contribuinte.ConCnpjcpf" />
             <FluentTextField Placeholder="RG" @bind-Value="Content!.Contribuinte.ConRg">RG</FluentTextField> 
+            <FluentValidationSummary style="color:darkred" />
         </FluentStack>
         <FluentStack Orientation="Orientation.Horizontal">
             <FluentTextField Placeholder="Email" @bind-Value="Content!.Contribuinte.ConEmail">Email</FluentTextField> 
             <FluentTextField Placeholder="Celular" @bind-Value="Content!.Contribuinte.ConTelefoneCelular">Celular</FluentTextField> 
         </FluentStack>
         <FluentStack Orientation="Orientation.Horizontal">
-            <FluentTextField Placeholder="CEP" @bind-Value="Content!.Contribuinte.ConCep">CEP</FluentTextField> 
-            <FluentTextField Placeholder="Tipo Logradouro" @bind-Value="Content.Contribuinte.ConTipoLograd">Tipo Logradouro</FluentTextField> 
-            <FluentTextField Placeholder="Logradouro" @bind-Value="Content.Contribuinte.ConEndereco">Logradouro</FluentTextField> 
-            <FluentTextField Placeholder="Número" @bind-Value="Content!.Contribuinte.ConNumero">Número</FluentTextField> 
+            <FluentTextField Required @onchange= "BuscaCEPCorreiosAsync" Placeholder="CEP" @bind-Value="Content!.Contribuinte.ConCep" style="width: 20%;font-size: 12px;" Maxlength="10">CEP</FluentTextField>
+            <FluentTextField Placeholder="Tipo Logradouro" @bind-Value="Content.Contribuinte.ConTipoLograd" style="width: 15%;font-size: 12px;" Maxlength="10">Tipo Logr.</FluentTextField> 
+            <FluentTextField Placeholder="Logradouro" @bind-Value="Content.Contribuinte.ConEndereco" style="width: 55%;font-size: 12px;" Maxlength="40">Logradouro</FluentTextField> 
+            <FluentTextField Placeholder="Número" @bind-Value="Content!.Contribuinte.ConNumero" style="width: 10%;font-size: 12px;" Maxlength="5">Número</FluentTextField> 
         </FluentStack>
        <FluentStack Orientation="Orientation.Horizontal">
-            <FluentTextField Placeholder="Bairro" @bind-Value="Content!.Contribuinte.ConBairro!.BaiNome">Bairro</FluentTextField> 
-            <FluentTextField Placeholder="Cidade" @bind-Value="Content!.Contribuinte.ConCidade!.CidNome">Cidade</FluentTextField> 
-            <FluentTextField Placeholder="Estado" @bind-Value="Content!.Contribuinte.ConCidade!.CidUf">Estado</FluentTextField> 
-            <FluentTextField Placeholder="Pais" @bind-Value="Content!.Contribuinte.ConCidade!.Pais!.PaisNome">País</FluentTextField> 
+            <FluentTextField Placeholder="Bairro" @bind-Value="Content!.Contribuinte.ConBairro!.BaiNome" style="width: 35%;font-size: 12px;" Maxlength="30">Bairro</FluentTextField> 
+            <FluentTextField Required Placeholder="Cidade" @bind-Value="Content!.Contribuinte.ConCidade!.CidNome" style="width: 35%;font-size: 12px;" Maxlength="30">Cidade</FluentTextField> 
+            <FluentTextField Placeholder="Estado" @bind-Value="Content!.Contribuinte.ConCidade!.CidUf" style="width: 10%;font-size: 12px;" Maxlength="20">Estado</FluentTextField> 
+            <FluentTextField Placeholder="Pais" @bind-Value="Content!.Contribuinte.ConCidade!.Pais!.PaisNome" style="width: 20%;font-size: 12px;" Maxlength="20">País</FluentTextField> 
         </FluentStack>
        
         <FluentValidationSummary style="color:darkred" />
@@ -51,8 +64,10 @@
 <!-- Footer -->
 <FluentDialogFooter>
     <FluentButton Appearance="Appearance.Accent"
-                  
-                  OnClick="@SaveAsync">
+                  OnClick="@(e => SaveAsync(editContextContribuinte))">
+                  <!--     
+                    OnClick="@SaveAsync">
+                  -->
         Salvar
     </FluentButton>
     <FluentButton Appearance="Appearance.Neutral"
@@ -63,7 +78,9 @@
 
 @code
 {
-    
+    private string cidadeselecionada;
+    private EditContext? editContextContribuinte;
+    private List<Cidade> cidades { get; set; } = new List<Cidade>();
     [Parameter]
     public Adquirente? Content { get; set; } = default!;
     
@@ -74,8 +91,10 @@
     protected override void OnInitialized()
     {
         Content = new Adquirente();
+        editContextContribuinte = new EditContext(Content);
     }
-
+    
+    /*
     private async Task SaveAsync()
     {
        // if (Content.Validate())
@@ -84,6 +103,102 @@
             //await Dialog.CancelAsync();
             //await Dialog.
         //}
+    }
+    */
+    private async Task SaveAsync(EditContext e)
+    {
+        if (editContextContribuinte.Validate())
+        {
+            // e.IsCancelled = true;
+
+        }
+        if (Content.Contribuinte.ConNome is not null
+            && Content.Contribuinte.ConCnpjcpf is not null
+            && Content.Contribuinte.ConEmail is not null
+            && Content.Contribuinte.ConRg is not null
+            && Content.Contribuinte.ConTelefoneCelular is not null
+            && Content.Contribuinte.ConCep is not null
+            && Content.Contribuinte.ConCidade.CidNome is not null
+            && Content.Contribuinte.ConCidade.CidUf is not null
+            && Content.Contribuinte.ConCidade.Pais is not null
+
+            )
+        {
+            await Dialog.CloseAsync(Content);
+        }
+        else
+        {
+            await DialogService.ShowInfoAsync("Favor Imormar Todos os Campos!");
+        }
+    }
+    private async Task BuscaCEPCorreiosAsync(ChangeEventArgs e)
+    {
+        int tcep = int.Parse(e.Value.ToString());
+        //if(e.Value is not null  && int.Parse(e.Value.ToString()).Length == 8){
+        if (e.Value is not null && e.Value.ToString().Trim().Length == 8)
+        {
+            var DBSetCepcorreio = await cepcorreioAppService.GetDbSet();
+            var cepcorreio = await Task.FromResult(DBSetCepcorreio.FirstOrDefault(c => c.Cep == e.Value));
+            if (cepcorreio != null)
+            {
+                Content.Contribuinte.ConCep = e.Value.ToString();
+                Content.Contribuinte.ConTipoLograd = cepcorreio.TipoLogradouro;
+                Content.Contribuinte.ConEndereco = cepcorreio.Logradouro;
+                Content.Contribuinte.ConBairro = await BuscaBairro(cepcorreio.IdbairroNovo);
+                //    Content.Contribuinte.ConCidade = new Cidade();               
+                //Content.Contribuinte.ConCidade = await BuscaCidadeByParam(cepcorreio.IdbairroNovo,cepcorreio.Idlogradouro);
+
+                Content.Contribuinte.ConCidade = await BuscaCidadeByCep(e.Value.ToString());
+
+
+            }
+            /* 
+            Content.Contribuinte.ConBairro.BaiNome = cepcorreio.BairroNovo;
+             Content.Contribuinte.ConCidade.CidNome = cepcorreio.
+            Content.Contribuinte.ConCidade.CidNome =
+            Content.Contribuinte.ConCidade.CidUf =
+            Content.Contribuinte.ConCidade.Pais =*/
+        }
+    }
+    public async Task<Bairro> BuscaBairro(int? id)
+    {
+        var DBSetBairro = await bairroAppService.GetDbSet();
+        return await Task.FromResult(DBSetBairro.FirstOrDefault(b => b.BairroId == id));
+    }
+    public async Task<Cidade> BuscaCidadeByParam(int? bairroid, int? idlogradouro)
+    {
+        var DBSetCep = await cepAppService.GetDbSet();
+        var cep = await Task.FromResult(DBSetCep.FirstOrDefault(x => x.IdBairro == bairroid && x.Idlogradouro == idlogradouro));
+        //var cep = await Task.FromResult(DBSetCep.FirstOrDefault(x => x.Cep1 ==));
+        return await BuscaCidade(cep.IdCidade);
+
+    }
+    public async Task<Cidade> BuscaCidadeByCep(string? _cep)
+    {
+        var DBSetCep = await cepAppService.GetDbSet();
+        //var cep = await Task.FromResult(DBSetCep.FirstOrDefault(x => x.IdBairro == bairroid && x.Idlogradouro==idlogradouro));
+        var cep = await Task.FromResult(DBSetCep.FirstOrDefault(x => x.Cep1 == _cep));
+        return await BuscaCidade(cep.IdCidade);
+
+    }
+    public async Task<Cidade> BuscaCidade(int? cidadeid)
+    {
+        var DBSetCidade = await cidadeAppService.GetDbSet();
+        var cidade = await Task.FromResult(DBSetCidade.FirstOrDefault(c => c.CidadeId == cidadeid));
+        if (cidade is null)
+        {
+            cidade = await Task.FromResult(DBSetCidade.FirstOrDefault(c => c.CidadeId == 3));
+        }
+        cidade.Pais = await BuscaPais(cidade.PaisId);
+        return cidade;
+
+    }
+    public async Task<Paise> BuscaPais(int? paisid)
+    {
+        var DBSetPais = await paisAppService.GetDbSet();
+        var pais = await Task.FromResult(DBSetPais.FirstOrDefault(c => c.PaisId == paisid));
+        return pais;
+
     }
 
     private async Task CancelAsync()

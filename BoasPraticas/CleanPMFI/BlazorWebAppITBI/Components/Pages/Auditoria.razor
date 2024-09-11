@@ -13,6 +13,11 @@
         <PropertyColumn Title="Data Lanc." Property="@(c => c!.Date)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="Inscrição" Property="@(c => c!.Inscricao)" Sortable="true" Align=Align.Start />
         <PropertyColumn Title="Edificacao" Property="@(c => c!.EdificacaoID)" Sortable="true" Align=Align.Start />
+        <PropertyColumn Title="Situação" Property="@(c => c!.Status)" Sortable="true" Align=Align.Start />
+       
+        <FluentButton Appearance="Appearance.Accent">PAF</FluentButton>
+        <FluentButton Appearance="Appearance.Accent">Emitir Certidão</FluentButton>
+
     </FluentDataGrid>
 </FluentCard>
 
@@ -61,8 +66,8 @@ else
 -->
 
 @code {
-  
-                                       //////////////// <summary>
+
+    //////////////// <summary>
     /// 
     /// </summary>
     public DbSet<TribItbi>? DbSetTribItbi;
@@ -90,7 +95,7 @@ else
 
             });
         }
-       
+
     }
     public class ITBIRow
     {
@@ -103,6 +108,8 @@ else
         public List<TribItbiedif> listTribItbiEdif = new List<TribItbiedif>();
 
         public bool Selected { get; set; }
+        public string Status { get; set; } = "Pendente";
+       
 
 
     }

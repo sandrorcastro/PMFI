@@ -1,8 +1,8 @@
-﻿
-@* @inherits Microsoft.AspNetCore.Components.ComponentBase *@
+﻿@* @inherits Microsoft.AspNetCore.Components.ComponentBase *@
 @using System.ComponentModel.DataAnnotations
 @using Microsoft.FluentUI.AspNetCore.Components
 @inject ITribItbidocumentoTipoAppService tribItbidocumentoTipoAppService
+@inject IDialogService DialogService
 <!--
     @using ITBI.Services
     @implements IDialogContentComponent<IQueryable<Contribuinte>>
@@ -79,7 +79,7 @@
                                  Mode="InputFileMode.Buffer"
                                  Multiple="true"
                                  MaximumFileSize="@(1000 * 1024 * 1024)"
-                                 Accept="*/*" 
+                                Accept="application/pdf" 
                                  OnInputFileChange="OnProgressChangeAsyncOperacao"
                                  OnCompleted="@OnCompleted" />
             }
@@ -104,7 +104,7 @@
     private string? valordeclarado { get; set; }
     private string? valorfinanciado { get; set; }
     private string? valorRecursoProprio { get; set; }
-    private string? observacao = "BASE DE CÁLCULO CONFORME VALOR DECLARADO. SE VERIFICADA DIVERGÊNCIA NO VALOR DECLARADO PELO CONTRIBUINTE INFORMAMOS QUE SERÁ ABERTO PROCEDIMENTO ADMINISTRATIVO FISCAL PARA APURAÇÃO DA BASE DE CÁLCULO CONFORME LEI COMPLEMENTAR 403/2023. PROT 54226/2024.";
+    private string? observacao = "BASE DE CÁLCULO CONFORME VALOR DECLARADO. SE VERIFICADA DIVERGÊNCIA NO VALOR DECLARADO PELO CONTRIBUINTE INFORMAMOS QUE SERÁ ABERTO PROCEDIMENTO ADMINISTRATIVO FISCAL PARA APURAÇÃO DA BASE DE CÁLCULO CONFORME LEI COMPLEMENTAR 403/2023.";
     private string? observacaoValorDeclarado= "Você pode prosseguir! No entando estará sujeito a um Procedimento Administrativo, pois o Valor Declarado está abaixo do Valor Venal do Imóvel. ";
     private bool mostraobservacaoValorDeclarado = false;
     private bool enableValorDeclarado = false;
@@ -282,6 +282,11 @@
     }
     async Task OnProgressChangeAsyncOperacao(InputFileChangeEventArgs file)
     {
+        if (file.File.Size > (10000000))
+        {
+            await DialogService.ShowInfoAsync("O Arquivo deve ser no formato PDF não pode ultrapassar 10 Mega bytes!");
+            return;
+        }
         var inputFile = file.GetMultipleFiles();
 
         if (inputFile != null && currentAnexo != null)

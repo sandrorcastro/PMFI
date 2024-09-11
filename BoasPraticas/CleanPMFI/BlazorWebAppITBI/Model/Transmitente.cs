@@ -6,7 +6,7 @@ namespace BlazorWebAppITBI.Models
     public class Transmitente
     {
         public Contribuinte Contribuinte { get; set; }
-        [Required(ErrorMessage = "Percentual Transmitido é obrigatório")]
+       // [Required(ErrorMessage = "Percentual Transmitido é obrigatório")]
         public string? percentualtransmitido { get; set; }
         public List<Anexo>? AnexosExigidos { get; set; }
         public string Titularidade {  get; set; }

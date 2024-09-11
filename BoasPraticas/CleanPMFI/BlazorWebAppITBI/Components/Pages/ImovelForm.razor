@@ -2,23 +2,25 @@
 @implements IDialogContentComponent<TribEdificaco>
 @inject ITribItbidocumentoTipoAppService tribItbidocumentoTipoAppService
 @inject IJSRuntime JSRuntime
+@inject IDialogService DialogService
     
 <FluentCard Justify="@JustifyContent.Center">
-    <FluentTextField ReadOnly @bind-Value="@Content.InscricaoImobiliaria">Inscrição Imobiliária:</FluentTextField>
-    <FluentNumberField ReadOnly @bind-Value="@Content.EdificacaoId">EdificacaoID:</FluentNumberField>
-    <FluentTextField ReadOnly @bind-Value="@Content.EdifMatricula">Matrícula:</FluentTextField>
-    <FluentTextField ReadOnly @bind-Value="@Content.EdifCaracteristica">Caracteristica</FluentTextField>
-    <FluentNumberField ReadOnly @bind-Value="@Content.EdifNumOficio">Número do Ofício:</FluentNumberField>
-    <FluentNumberField ReadOnly @bind-Value="@Content.Terreno.TerrAreaTerreno">Área do Terreno</FluentNumberField>
-    <FluentNumberField ReadOnly @bind-Value="@Content.EdifAreaConstruida">Área do Construída</FluentNumberField>
-    <FluentNumberField ReadOnly @bind-Value="@Content.EdifFracaoIdealEdificacao">Fração</FluentNumberField>
+    <FluentTextField ReadOnly @bind-Value="@Content.InscricaoImobiliaria" style="width: 10%;font-size: 12px;" Maxlength="14">Inscrição Imobiliária: </FluentTextField>
+    <FluentNumberField ReadOnly @bind-Value="@Content.EdificacaoId" style="width: 10%;font-size: 12px;">EdificacaoID:</FluentNumberField>
+    <FluentTextField ReadOnly @bind-Value="@Content.EdifMatricula" style="width: 10%;font-size: 12px;" Maxlength="8" >Matrícula:</FluentTextField>
+    <FluentTextField ReadOnly @bind-Value="@Content.EdifCaracteristica" style="width: 10%;font-size: 12px;" Maxlength="12">Caracteristica</FluentTextField>
+    <FluentNumberField ReadOnly @bind-Value="@Content.EdifNumOficio" style="width: 10%;font-size: 12px;" >N° Ofício:</FluentNumberField>
+    <FluentNumberField ReadOnly @bind-Value="@Content.Terreno.TerrAreaTerreno" style="width: 10%;font-size: 12px;" >Área do Terreno</FluentNumberField>
+    <FluentNumberField ReadOnly @bind-Value="@Content.EdifAreaConstruida" style="width: 10%;font-size: 12px;">Área do Construída</FluentNumberField>
+    <FluentNumberField ReadOnly @bind-Value="@Content.EdifFracaoIdealEdificacao" style="width: 10%;font-size: 12px;">Fração</FluentNumberField>
+    <FluentTextField ReadOnly @bind-Value="@Content.EdifComplemento" style="width: 10%;font-size: 12px;">Complemento</FluentTextField>
 </FluentCard>
 <FluentCard Justify="@JustifyContent.Center">
-
-    <FluentTextField ReadOnly @bind-Value="@Content.Lograd.LogradTipo">TipoLogradouro:</FluentTextField>
-    <FluentTextField ReadOnly @bind-Value="@Content.Lograd.LogradNome">Logradouro:</FluentTextField>
-    <FluentTextField ReadOnly @bind-Value="@Content.EdifNumeracao">Número:</FluentTextField>
-    <FluentTextField ReadOnly @bind-Value="@Content.IdloteamentoNavigation.Descricao">Bairro:</FluentTextField>
+    <FluentTextField ReadOnly @bind-Value="@Content.EdifCep" style="width: 10%;font-size: 12px;" Maxlength="15">CEP:</FluentTextField>
+    <FluentTextField ReadOnly @bind-Value="@Content.Lograd.LogradTipo" style="width: 10%;font-size: 12px;" Maxlength="15">TipoLogradouro:</FluentTextField>
+    <FluentTextField ReadOnly @bind-Value="@Content.Lograd.LogradNome" style="width: 20%;font-size: 12px;" Maxlength="50">Logradouro:</FluentTextField>
+    <FluentTextField ReadOnly @bind-Value="@Content.EdifNumeracao" style="width: 10%;font-size: 12px;" Maxlength="9">Número:</FluentTextField>
+    <FluentTextField ReadOnly @bind-Value="@Content.IdloteamentoNavigation.Descricao" style="width: 20%;font-size: 12px;" Maxlength="50">Bairro:</FluentTextField>
 </FluentCard>
 <!--
 
@@ -87,15 +89,15 @@
     public EventCallback<Anexo> AnexosImovelChanged { get; set; }
     async Task OnProgressChangeAsync(FluentInputFileEventArgs file)
     {
-       
+
         progressPercent = file.ProgressPercent;
         progressTitle = file.ProgressTitle;
         file.IsCancelled = IsCanceled;
-      //  if (!Files.ContainsKey(file.Index))
+        //  if (!Files.ContainsKey(file.Index))
         //{
-          //  var localFile = Path.GetTempFileName() + file.Name;
-            //Files.Add(file.Index, localFile);
-       // }
+        //  var localFile = Path.GetTempFileName() + file.Name;
+        //Files.Add(file.Index, localFile);
+        // }
         //await file.Buffer.AppendToFileAsync(Files[file.Index]);
     }
     private async void OpenFileSelector(Anexo anexo)
@@ -126,7 +128,12 @@
     }
     async Task OnProgressChangeAsyncBF(InputFileChangeEventArgs file)
     {
-       
+
+        if(file.File.Size > (10000000))
+        {
+            await DialogService.ShowInfoAsync("O Arquivo deve ser no formato PDF não pode ultrapassar 10 Mega bytes!");
+            return;
+        }
         if (currentAnexo != null)
         {
         }

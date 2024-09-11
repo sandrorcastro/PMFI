@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Domain.Entities.DBProsiga
 {
@@ -102,6 +103,7 @@ namespace Domain.Entities.DBProsiga
         /// Razao Social ou Nome Completo do Contribuinte. 
         /// </summary>
         public string? ConNome { get; set; }
+        [Required(ErrorMessage = "Informe o CPF/CNPJ")]
         public string? ConCnpjcpf { get; set; }
         public string? ConNomeFantasia { get; set; }
         public string? ConInscrEstadual { get; set; }
