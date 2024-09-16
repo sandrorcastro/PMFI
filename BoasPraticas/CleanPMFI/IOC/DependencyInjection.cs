@@ -17,6 +17,7 @@ using Infrastructure.Context.DBProsiga;
 using Infrastructure.Evaluators;
 using Infrastructure.Repositories;
 using Infrastructure.Repositories.Base;
+using Infrastructure.Repositories.DBProsiga;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -31,7 +32,7 @@ namespace IOC
         
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-
+            
             services.AddDbContextFactory<DBProsigaContext>(options => {
 
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection-DBProsiga"),
@@ -44,8 +45,8 @@ namespace IOC
                   options.UseSqlServer(configuration.GetConnectionString("DefaultConnection-DBProsigaDev"),
                   b => b.MigrationsAssembly(typeof(DBProsigaContext).Assembly.FullName));
               });*/
-
-            services.AddDbContextFactory<ApplicationDbContext>(options => {
+            
+          /*  services.AddDbContextFactory<ApplicationDbContext>(options => {
             //services.AddDbContext<ApplicationDbContext>(options => {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection-SRC-PMFI"),
                 b => b.MigrationsAssembly(typeof(ApplicationDbContext).Assembly.FullName));
@@ -64,7 +65,7 @@ namespace IOC
                 //    services.AddDbContext<MegaDataDBContext>(options => {
                 options.UseSqlServer(configuration.GetConnectionString("DefaultConnection-MegaData"),
                 b => b.MigrationsAssembly(typeof(MegaDataDBContext).Assembly.FullName));
-            });
+            });*/
 
 
 
@@ -94,13 +95,13 @@ namespace IOC
             services.AddScoped(typeof(IAppServiceBase<>),typeof(AppServiceBase<>));
             //         services.AddScoped<IUfAppService,UfAppService>();
             //    services.AddScoped<IPaisAppService, PaisAppService>();
-            services.AddScoped<ICidadeAppService, CidadeAppService>();
+          /*  services.AddScoped<ICidadeAppService, CidadeAppService>();
             services.AddScoped<IPaisAppService, PaisAppService>();
             services.AddScoped<IUfAppService, UfAppService>();
             services.AddScoped<ILogradouroAppService, LogradouroAppService>();
             services.AddScoped<ITipoLogradouroAppService, TipoLogradouroAppService>();
             services.AddScoped<ITribAlvDocumentoAppService, TribAlvDocumentoAppService>();
-            /*services.AddScoped<INFSE_To_MegaData_AppService, NFSE_To_MegaData_AppService>();
+            */  /*services.AddScoped<INFSE_To_MegaData_AppService, NFSE_To_MegaData_AppService>();
             services.AddScoped<IMegaData_NFSE_AppService, MegaData_NFSE_AppService>();
             services.AddScoped<IMegaData_Export_AppService, MegaData_Export_AppService>();
             services.AddScoped<IMegaDataAppService, MegaDataAppService>();*/
@@ -141,7 +142,7 @@ namespace IOC
             ////////////////////////////////////////////////////////////////////
             services.AddScoped(typeof(IServiceBase<>),typeof(ServiceBase<>));
             //       services.AddScoped<IUfService, UfService>();
-            services.AddScoped<ICidadeService, CidadeService>();
+         /*   services.AddScoped<ICidadeService, CidadeService>();
             services.AddScoped<IPaisService, PaisService>();
             services.AddScoped<IUfService, UfService>();
             services.AddScoped<ILogradouroService, LogradouroService>();
@@ -149,7 +150,7 @@ namespace IOC
             services.AddScoped<ITribAlvDocumentoService, TribAlvDocumentoService>();
             services.AddScoped<INfseTblNfse_Service, NfseTblNfse_Service>();
             services.AddScoped<IMegaData_NFSE_Service, MegaData_NFSE_Service>();
-            services.AddScoped<IMegaDataService, MegaDataService>();
+            services.AddScoped<IMegaDataService, MegaDataService>();*/
             //DBProsiga
             services.AddScoped<Domain.Interfaces.Services.DBProsiga.ITribEdificacoesService, Domain.Services.DBProsiga.TribEdificacoesService>();
             services.AddScoped<Domain.Interfaces.Services.DBProsiga.IContribuinteService, Domain.Services.DBProsiga.ContribuinteService>();
@@ -184,18 +185,18 @@ namespace IOC
 
             //////////////////////////////////////////////////////////////////////
             services.AddScoped(typeof(IRepositoryBase<>),typeof(RepositoryBase<>));
-            services.AddScoped(typeof(IReadRepositoryBase<>), typeof(RepositoryBase<>));
+        /*    services.AddScoped(typeof(IReadRepositoryBase<>), typeof(RepositoryBase<>));
             //services.AddScoped(typeof(IRepositoryBase<Cidade>), typeof(RepositoryBase<Cidade>));
             //services.AddScoped(typeof(IRepositoryBase<Uf>), typeof(RepositoryBase<Uf>));
             services.AddScoped<IUfRepository, UfRepository>();
-            services.AddScoped<ICidadeRepository, CidadeRepository>();
-            services.AddScoped<IPaisRepository, PaisRepository>();
-            services.AddScoped<ILogradouroRepository, LogradouroRepository>();
+            //services.AddScoped<ICidadeRepository, CidadeRepository>();
+            //services.AddScoped<IPaisRepository, PaisRepository>();
+            //services.AddScoped<ILogradouroRepository, LogradouroRepository>();
             services.AddScoped<ITipoLogradouroRepository, TipoLogradouroRepository>();
             services.AddScoped<ITribAlvDocumentoRepository, TribAlvDocumentoRepository>();
             services.AddScoped<INfseTblNfse_Repository, NfseTblNfse_Repository>();
             services.AddScoped<IMegaData_NFSE_Repository, MegaData_NFSE_Repository>();
-            services.AddScoped<IMegaDataRepository, MegaDataRepository>();
+            services.AddScoped<IMegaDataRepository, MegaDataRepository>();*/
             //DBProsiga
             services.AddScoped<Domain.Interfaces.Repositories.DBProsiga.ITribEdificacoesRepository, Infrastructure.Repositories.DBProsiga.TribEdificacoesRepository>();
             services.AddScoped<Domain.Interfaces.Repositories.DBProsiga.IContribuinteRepository, Infrastructure.Repositories.DBProsiga.ContribuinteRepository>();
