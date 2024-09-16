@@ -28,7 +28,9 @@
                         <FluentTextField @bind-Value="@Adquirente.percentualAdquirido" Required style="width: 10%;font-size: 12px;" Maxlength="5">%Adquirido</FluentTextField>
                                <FluentStack Orientation="Orientation.Vertical"   VerticalAlignment.Top VerticalGap="0" style="width: 5%;font-size: 5px;">
                                         <FluentSelect Label="Principal:" Position="SelectPosition.Below" @bind-Value="Adquirente.sainoboleto" TOption="string" style="width: 5%;font-size: 5px;">
-                                    <FluentOption Selected Value="Indefinido">Sai Na Guia?</FluentOption>
+                                   <!--
+                                       <FluentOption Selected Value="Indefinido">Sai Na Guia?</FluentOption>
+                                   -->
                                     <FluentOption Value="Sim">Sim</FluentOption>
                                     <FluentOption Value="Não">Não</FluentOption>
                         </FluentSelect>
@@ -51,7 +53,7 @@
                                                             </FluentStack>
                 </HeadingTemplate>
 
-                <ChildContent>
+                <ChildContent >
                              <!--
                              <ChildContentDocsExigidos Content="Adquirente.AnexosExigidos" AnexoChanged="HandledAnexoChanged"></ChildContentDocsExigidos>
                                 --> 

@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq.Expressions;
 
+using Domain.Interfaces.Base;
 namespace Domain.Services.Base
 {
     

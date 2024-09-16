@@ -1,7 +1,7 @@
 ﻿
 using Application.ViewModels;
 
-using Application.ViewModels.MegaData;
+//using Application.ViewModels.MegaData;
 using Application.ViewModels.NFSEDB;
 using AutoMapper;
 using Domain.Entities;
@@ -25,10 +25,10 @@ namespace Application.Mappings
             CreateMap<TribAlvDocumento, TribAlvDocumentoViewModel>();
 
 
-            CreateMap<NfseTblNfse, LayoutNFSE_MegaData>();
+            //CreateMap<NfseTblNfse, LayoutNFSE_MegaData>();
             CreateMap<NfseTblNfse, LayoutNotasFiscais_MegaData>();
             CreateMap<NfseTblNfse, NFSEViewModel>();
-            CreateMap<MegaData_NFSE, MegaData_NFSE_ViewModel>();
+            //CreateMap<MegaData_NFSE, MegaData_NFSE_ViewModel>();
 
             
 

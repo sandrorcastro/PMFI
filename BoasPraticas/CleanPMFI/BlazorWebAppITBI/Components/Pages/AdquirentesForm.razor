@@ -142,7 +142,7 @@
             if (tipoContribuinte == "Adquirente")
             {
                 Adquirente = result.Data as Adquirente;
-                contribuinteSpec = new Domain.Specs.DBProsiga.ContribuinteByCPFCNPJSpec(Adquirente.Contribuinte.ConCnpjcpf);
+                contribuinteSpec = new Domain.Specs.DBProsiga.ContribuinteByCPFCNPJSpec(Adquirente.Contribuinte.ConCnpjcpf.Trim());
                 Adquirente.Contribuinte = await contribuinteAppService.GetBySpecAsync(contribuinteSpec, CancellationToken.None);
                 if (Adquirente.Contribuinte != null)
                 {

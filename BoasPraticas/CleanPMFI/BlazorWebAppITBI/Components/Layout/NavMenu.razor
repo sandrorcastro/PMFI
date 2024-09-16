@@ -1,12 +1,30 @@
-﻿@rendermode InteractiveServer
+﻿@implements IDisposable
+@inject NavigationManager NavigationManager
+@rendermode InteractiveServer
 
 <div class="navmenu">
     <input type="checkbox" id="navmenu-toggle" />
     <nav class="sitenav" aria-labelledby="main-menu" onclick="document.getElementById('navmenu-toggle').click();">
         <FluentNavMenu Id="main-menu" Collapsible="true" Width="250" Title="Navigation menu" @bind-Expanded="expanded">
+
             <FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">AutoDeclaração</FluentNavLink>
+             <AuthorizeView>
+                    <Authorized>
+                        <FluentNavLink Href="Account/Manage" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.PersonAccounts())" IconColor="Color.Accent">@context.User.Identity?.Name</FluentNavLink>
+                        <FluentNavLink Href="Account/Logout" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.ArrowExit())" IconColor="Color.Accent">Sair</FluentNavLink>
+                        
+                    </Authorized>
+                    <NotAuthorized>
+                         <FluentNavLink Href="Account/Register" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.PersonAdd())" IconColor="Color.Accent">Registrar</FluentNavLink>
+                        <FluentNavLink Href="Account/Login" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.PersonStar())" IconColor="Color.Accent">Login</FluentNavLink>
+                    </NotAuthorized>
+            </AuthorizeView>
+            <!--  
             <FluentNavLink Href="/auditoria" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.PersonAlert())" IconColor="Color.Accent">Auditoria</FluentNavLink>
             <FluentNavLink Href="/avaliacao" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.Money())" IconColor="Color.Accent">Avaliações</FluentNavLink>
+           -->
+           
+       
         </FluentNavMenu>
     </nav>
 </div>
@@ -29,6 +47,24 @@
 
         _overlayIsVisible = false;
     }*/
+    private string? currentUrl;
+
+    protected override void OnInitialized()
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
+        NavigationManager.LocationChanged += OnLocationChanged;
+    }
+
+    private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
+    {
+        currentUrl = NavigationManager.ToBaseRelativePath(e.Location);
+        StateHasChanged();
+    }
+
+    public void Dispose()
+    {
+        NavigationManager.LocationChanged -= OnLocationChanged;
+    }
 }
 
 

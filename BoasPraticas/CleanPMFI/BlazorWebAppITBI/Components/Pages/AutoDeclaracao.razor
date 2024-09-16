@@ -9,6 +9,7 @@
 @using System.Runtime.Serialization.Formatters.Binary
 @using System.Text.Json
 @using ProxyCrystalService
+@using Microsoft.AspNetCore.Authorization
 
 
 @inject IHttpClientFactory ClientFactory
@@ -46,6 +47,11 @@
 @inject ITribEmpresasAppService tribEmpresasAppService
 @inject ISisParametrosAppService sisParametrosAppService
 @inject ITribTextosAppService tribTextosAppService
+@attribute [Authorize]
+<!-- 
+
+<AuthorizeView>
+-->
 <h1>Auto Declaração ITBI</h1>
 <!--
 
@@ -188,6 +194,9 @@
     </ButtonTemplate>
                             -->
 </FluentWizard>
+<!-- 
+</AuthorizeView>
+-->
 
 <FluentOverlay @bind-Visible=@_overlayIsVisible
                Opacity="0.4"
@@ -225,7 +234,8 @@
         };
 
     public ParcelasOption? ParcelaOptionSelecionada { get; set; }
-    public string UsuarioLogado { get; set; } = "dbo";
+    //public string UsuarioLogado { get; set; } = @context.User.Identity?.Name ; // "dbo";
+    public string UsuarioLogado { get; set; } =  "dbo";
     private EditContext? editContextImovel;
     private EditContext? editContextTransmitentes;
     private EditContext? editContext3;
@@ -294,7 +304,7 @@
                 _overlayIsVisible = true;
                 await Task.Delay(2000);
                 //edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString().PadLeft(14, '0'));
-                edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.ToString());
+                edificacaoSpec = new Domain.Specs.DBProsiga.EdificacaoByInscricaoImobiliariaSpec(Imovel.InscricaoImobiliaria.Trim().ToString());
                 Imovel = await edificacoesAppService.GetBySpecAsync(edificacaoSpec, CancellationToken.None);
                 //Teste
                 //var convbanco = await GetCodCedente(52);
@@ -501,7 +511,7 @@
                     {
                         contasainaguia = contasainaguia + 1;
                     }
-                    if (transmitente.sainoboleto == "Indefinido")
+                    if (transmitente.sainoboleto == "Não")
                     {
                         containdefinido = containdefinido + 1;
                     }
@@ -547,6 +557,12 @@
                     e.IsCancelled = true;
                     return;
                 }
+                if (containdefinido == ListaDeTransmitentes.Count())
+                {
+                    await DialogService.ShowInfoAsync($"Você deve selecionar Um e Apenas um Transmitente para sair na Guia");
+                    e.IsCancelled = true;
+                    return;
+                }
 
                 if (!editContextTransmitentes.Validate())
                 {
@@ -578,7 +594,7 @@
                     {
                         contasainaguia = contasainaguia + 1;
                     }
-                    if (adquirente.sainoboleto == "Indefinido")
+                    if (adquirente.sainoboleto == "Não")
                     {
                         containdefinido = containdefinido + 1;
                     }
@@ -615,6 +631,12 @@
                 }
                 //if (containdefinido == ListaDeAdquirentes.Count() || contasainaguia > 1)
                 if (contasainaguia > 1 || contasainaguia == 0)
+                {
+                    await DialogService.ShowInfoAsync($"Você deve selecionar Um e Apenas um Transmitente para sair na Guia");
+                    e.IsCancelled = true;
+                    return;
+                }
+                if (containdefinido == ListaDeAdquirentes.Count())
                 {
                     await DialogService.ShowInfoAsync($"Você deve selecionar Um e Apenas um Transmitente para sair na Guia");
                     e.IsCancelled = true;
@@ -1102,9 +1124,10 @@
 
         //var transmitido = ListaDeTransmitentes.FirstOrDefault(p=>p.sainoboleto=="Sim").percentualtransmitido;
         var transmitente = ListaDeTransmitentes.FirstOrDefault(p => p.sainoboleto == "Sim");
+        var adquirente  = ListaDeAdquirentes.FirstOrDefault(p => p.sainoboleto == "Sim");
         decimal transmitido = 0;
 
-        if (transmitente != null && decimal.TryParse(transmitente.percentualtransmitido, out decimal parsedValue))
+        if (adquirente != null && decimal.TryParse(adquirente.percentualAdquirido, out decimal parsedValue))
         {
             transmitido = Math.Round(parsedValue, 2);
         }
@@ -1579,8 +1602,8 @@
     private bool ImovelIsValid()
     {
         var validationResults = new List<ValidationResult>();
-        var context = new ValidationContext(Imovel);
-        return Validator.TryValidateObject(Imovel, context, validationResults, true);
+        var contexti = new ValidationContext(Imovel);
+        return Validator.TryValidateObject(Imovel, contexti, validationResults, true);
     }
     public  async Task<Adquirente> pegaContribuinteDoBoleto() => await  Task.FromResult(ListaDeAdquirentes.Find(s => s.sainoboleto == "Sim"));
     public async Task<TribBoleto> GeraBoleto(decimal Valor,DateTime? DTVencimento)

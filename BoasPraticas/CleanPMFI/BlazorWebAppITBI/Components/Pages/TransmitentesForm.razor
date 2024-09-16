@@ -132,7 +132,7 @@
             if (tipoContribuinte == "Transmitente")
             {
                 transmitente = result.Data as Transmitente;
-                contribuinteSpec = new Domain.Specs.DBProsiga.ContribuinteByCPFCNPJSpec(transmitente.Contribuinte.ConCnpjcpf);
+                contribuinteSpec = new Domain.Specs.DBProsiga.ContribuinteByCPFCNPJSpec(transmitente.Contribuinte.ConCnpjcpf.Trim());
                 transmitente.Contribuinte = await contribuinteAppService.GetBySpecAsync(contribuinteSpec, CancellationToken.None);
                 if (transmitente.Contribuinte != null)
                 {

@@ -43914,7 +43914,7 @@ namespace Infrastructure.Context.DBProsiga
                     .HasMaxLength(20)
                     .IsUnicode(false)
                     .HasColumnName("ImoDivTipoLancamentoIPTU")
-                    .HasComputedColumnSql("([dbo].[TribTipoLancamentoIPTU]([ImoIDDivida]))", false);
+                   .HasComputedColumnSql("([dbo].[TribTipoLancamentoIPTU]([ImoIDDivida]))", false);
 
                 entity.Property(e => e.ImoDivValor).HasColumnType("money");
 

@@ -10,6 +10,10 @@
 	<PackageReference Include="FastReport.OpenSource" Version="2024.2.1" />
 	<PackageReference Include="FastReport.OpenSource.Export.PdfSimple" Version="2024.2.1" />
 	<PackageReference Include="HtmlAgilityPack" Version="1.11.61" />
+	  <!-- troquei 8.0.6 para 6.0.21-->
+	<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.21" />
+	<PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="6.0.21" />
+	<PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.21" />
 	<PackageReference Include="Microsoft.FluentUI.AspNetCore.Components" Version="4.*-* " />
     <PackageReference Include="Microsoft.FluentUI.AspNetCore.Components.Icons" Version="4.*-* " />
     <PackageReference Include="Selenium.WebDriver" Version="4.23.0" />
@@ -18,37 +22,38 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Application\Application.csproj" />
     <ProjectReference Include="..\Infrastructure\Infrastructure.csproj" />
     <ProjectReference Include="..\IOC\IOC.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="BaseClass">
-      <HintPath>..\..\..\..\..\tfs-GIIGNet\GIIGNet\Bibliotecas\Bibliotecas\NET\BaseClass.dll</HintPath>
+      <HintPath>BibliotecasGIIG\BaseClass.dll</HintPath>
     </Reference>
     <Reference Include="BC">
-      <HintPath>..\..\..\..\..\tfs-GIIGNet\GIIGNet\Bibliotecas\Bibliotecas\NET\BC.dll</HintPath>
+      <HintPath>BibliotecasGIIG\BC.dll</HintPath>
     </Reference>
     <Reference Include="clsGeraCrystalPDF">
-      <HintPath>..\..\..\..\..\tfs-GIIGNet\GIIGNet\Bibliotecas\Bibliotecas\NET\clsGeraCrystalPDF.dll</HintPath>
+      <HintPath>BibliotecasGIIG\clsGeraCrystalPDF.dll</HintPath>
     </Reference>
     <Reference Include="CryptDP">
-      <HintPath>..\..\..\..\..\tfs-GIIGNet\GIIGNet\Bibliotecas\Bibliotecas\NET\CryptDP.dll</HintPath>
+      <HintPath>BibliotecasGIIG\CryptDP.dll</HintPath>
     </Reference>
     <Reference Include="ProxyCrystalService">
-      <HintPath>..\..\..\..\..\tfs-GIIGNet\GIIGNet\Bibliotecas\Bibliotecas\NET\ProxyCrystalService.dll</HintPath>
+      <HintPath>BibliotecasGIIG\ProxyCrystalService.dll</HintPath>
     </Reference>
     <Reference Include="RemoGeraCrystalPDF">
-      <HintPath>..\..\..\..\..\tfs-GIIGNet\GIIGNet\Bibliotecas\Bibliotecas\NET\RemoGeraCrystalPDF.dll</HintPath>
+      <HintPath>BibliotecasGIIG\RemoGeraCrystalPDF.dll</HintPath>
     </Reference>
     <Reference Include="Tribuno">
-      <HintPath>..\..\..\..\..\tfs-GIIGNet\GIIGNet\Bibliotecas\Bibliotecas\NET\Tribuno.dll</HintPath>
+      <HintPath>BibliotecasGIIG\Tribuno.dll</HintPath>
     </Reference>
     <Reference Include="TribunoNet">
-      <HintPath>..\..\..\..\..\tfs-GIIGNet\GIIGNet\Tributario\Projetos\Tribuno.Net\TribunoNet\bin\TribunoNet.dll</HintPath>
+      <HintPath>BibliotecasGIIG\TribunoNet.dll</HintPath>
     </Reference>
     <Reference Include="vbFEBRABAN">
-      <HintPath>..\..\..\..\..\tfs-GIIGNet\GIIGNet\Bibliotecas\Bibliotecas\NET\vbFEBRABAN.dll</HintPath>
+      <HintPath>BibliotecasGIIG\vbFEBRABAN.dll</HintPath>
     </Reference>
   </ItemGroup>
 

@@ -100,10 +100,10 @@ namespace IOC
             services.AddScoped<ILogradouroAppService, LogradouroAppService>();
             services.AddScoped<ITipoLogradouroAppService, TipoLogradouroAppService>();
             services.AddScoped<ITribAlvDocumentoAppService, TribAlvDocumentoAppService>();
-            services.AddScoped<INFSE_To_MegaData_AppService, NFSE_To_MegaData_AppService>();
+            /*services.AddScoped<INFSE_To_MegaData_AppService, NFSE_To_MegaData_AppService>();
             services.AddScoped<IMegaData_NFSE_AppService, MegaData_NFSE_AppService>();
             services.AddScoped<IMegaData_Export_AppService, MegaData_Export_AppService>();
-            services.AddScoped<IMegaDataAppService, MegaDataAppService>();
+            services.AddScoped<IMegaDataAppService, MegaDataAppService>();*/
             //DBProsiga
             //services.AddScoped<Application.Interfaces.DBProsiga.ILogradouroAppService, Application.Services.DBProsiga.LogradouroAppService>();
             //services.AddScoped<Application.Interfaces.DBProsiga.ILogradouroTipoAppService, Application.Services.DBProsiga.LogradouroTipoAppService>();
