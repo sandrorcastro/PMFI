@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Report ScriptLanguage="CSharp" ReportInfo.Created="07/27/2024 09:31:41" ReportInfo.Modified="09/03/2024 20:15:34" ReportInfo.CreatorVersion="2024.2.0.0">
+<Report ScriptLanguage="CSharp" ReportInfo.Created="07/27/2024 09:31:41" ReportInfo.Modified="09/19/2024 11:50:42" ReportInfo.CreatorVersion="2024.2.0.0">
   <Dictionary>
     <TableDataSource Name="GuiaITBI" ReferenceName="GuiaITBI" DataType="System.Int32" Enabled="true">
       <Column Name="Lancamento" DataType="System.String"/>
@@ -155,7 +155,7 @@
         <TextObject Name="Text51" Width="255.15" Height="9.45" Text="Base Cálculo Imóvel Financiado: R$" HorzAlign="Right" VertAlign="Bottom" Font="Arial, 5pt"/>
       </ContainerObject>
       <ContainerObject Name="Container27" Left="585.9" Top="122.85" Width="113.4" Height="9.45">
-        <TextObject Name="Text61" Width="113.4" Height="9.45" Border.Lines="Right" Text="[GuiaITBI.AliquotaFinanciamento]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Right" VertAlign="Bottom" Font="Arial, 5pt"/>
+        <TextObject Name="Text61" Width="113.4" Height="9.45" Border.Lines="Right" Text="[GuiaITBI.AliquotaFinanciamento]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Bottom" Font="Arial, 5pt"/>
       </ContainerObject>
       <ContainerObject Name="Container30" Left="207.9" Top="132.3" Width="255.15" Height="9.45">
         <TextObject Name="Text52" Width="255.15" Height="9.45" Text="Base Cálculo Imóvel: R$" HorzAlign="Right" VertAlign="Bottom" Font="Arial, 5pt"/>
@@ -177,7 +177,7 @@
         <TextObject Name="Text59" Width="122.85" Height="9.45" Text="[GuiaITBI.ImpostoValorImovel]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="0" HorzAlign="Right" VertAlign="Bottom" Font="Arial, 5pt"/>
       </ContainerObject>
       <ContainerObject Name="Container37" Left="585.9" Top="132.3" Width="113.4" Height="9.45">
-        <TextObject Name="Text62" Width="113.4" Height="9.45" Border.Lines="Right" Text="[GuiaITBI.Aliquota]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="3" HorzAlign="Right" VertAlign="Bottom" WordWrap="false" Font="Arial, 5pt" Trimming="EllipsisCharacter"/>
+        <TextObject Name="Text62" Width="113.4" Height="9.45" Border.Lines="Right" Text="[GuiaITBI.Aliquota]" Format="Number" Format.UseLocale="true" Format.DecimalDigits="2" HorzAlign="Right" VertAlign="Bottom" WordWrap="false" Font="Arial, 5pt" Trimming="EllipsisCharacter"/>
       </ContainerObject>
       <ContainerObject Name="Container38" Left="585.9" Top="141.75" Width="113.4" Height="9.45" Border.Lines="Right"/>
       <ContainerObject Name="Container39" Left="585.9" Top="151.2" Width="113.4" Height="9.45" Border.Lines="Right"/>

@@ -6,13 +6,22 @@
     <input type="checkbox" id="navmenu-toggle" />
     <nav class="sitenav" aria-labelledby="main-menu" onclick="document.getElementById('navmenu-toggle').click();">
         <FluentNavMenu Id="main-menu" Collapsible="true" Width="250" Title="Navigation menu" @bind-Expanded="expanded">
-
-            <FluentNavLink Href="/" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">AutoDeclaração</FluentNavLink>
+            <!-- <FluentNavLink Href="/"></FluentNavLink> -->
+            <FluentNavLink Href="autodeclaracao" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">Auto Declaração</FluentNavLink>
              <AuthorizeView>
                     <Authorized>
                         <FluentNavLink Href="Account/Manage" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.PersonAccounts())" IconColor="Color.Accent">@context.User.Identity?.Name</FluentNavLink>
-                        <FluentNavLink Href="Account/Logout" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.ArrowExit())" IconColor="Color.Accent">Sair</FluentNavLink>
-                        
+                        <!--
+                            <FluentNavLink Href="Account/Logout" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.ArrowExit())" IconColor="Color.Accent">Sair</FluentNavLink>
+                        -->
+                        <form action="Account/Logout" method="post">
+                        <AntiforgeryToken />
+                        <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+                        <button type="submit" class="nav-link">
+                            <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Sair
+                        </button>
+                       
+                    </form>
                     </Authorized>
                     <NotAuthorized>
                          <FluentNavLink Href="Account/Register" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.PersonAdd())" IconColor="Color.Accent">Registrar</FluentNavLink>
@@ -49,10 +58,14 @@
     }*/
     private string? currentUrl;
 
-    protected override void OnInitialized()
+    protected async override void OnInitialized()
     {
+       // _overlayIsVisible = true;
+
+//        await Task.Delay(100);
         currentUrl = NavigationManager.ToBaseRelativePath(NavigationManager.Uri);
         NavigationManager.LocationChanged += OnLocationChanged;
+  //      _overlayIsVisible = false;
     }
 
     private void OnLocationChanged(object? sender, LocationChangedEventArgs e)
@@ -64,6 +77,11 @@
     public void Dispose()
     {
         NavigationManager.LocationChanged -= OnLocationChanged;
+    }
+    public void Logout()
+    {
+        // Sua lógica de logout aqui
+        NavigationManager.NavigateTo("/Account/Logout", forceLoad: true);
     }
 }
 
