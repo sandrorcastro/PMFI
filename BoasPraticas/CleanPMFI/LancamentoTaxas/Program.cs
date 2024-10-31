@@ -9,7 +9,7 @@ using Microsoft.Extensions.Hosting;
 using System;
 using System.Linq;
 
-namespace LancamentoTaxas
+namespace LancamentoDecenio
 {
     class Program
     {

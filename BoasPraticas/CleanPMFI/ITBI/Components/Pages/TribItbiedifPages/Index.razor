@@ -1,0 +1,42 @@
+﻿@page "/tribitbiedifs"
+@using Microsoft.EntityFrameworkCore
+@using Microsoft.FluentUI
+@using Domain.Entities.DBProsiga
+@using Context
+@implements IAsyncDisposable
+@inject IDbContextFactory<Context.DBProsigaContext> DbFactory
+
+<PageTitle>Index</PageTitle>
+
+<h1>Index</h1>
+
+<p>
+    <FluentButton Appearance="Primary" OnClick="@(() => NavigationManager.NavigateTo("/tribitbiedifs/create"))">Create New</FluentButton>
+</p>
+
+<FluentDataGrid ItemsSource="@context.TribItbiedifs" GeneratedColumns="false">
+    <FluentDataGridColumn Field="@nameof(TribItbiedif.Itbiid)" Title="ID" />
+    <FluentDataGridColumn Field="@nameof(TribItbiedif.ImoIddivida)" Title="Imo ID Dívida" />
+    <FluentDataGridColumn Field="@nameof(TribItbiedif.ItbiedifPercTransacao)" Title="Perc. Transação" />
+    <FluentDataGridColumn Field="@nameof(TribItbiedif.ItbiedifAreaConstr)" Title="Área Construída" />
+    <FluentDataGridColumn Field="@nameof(TribItbiedif.ItbiedifVlrVenalIptu)" Title="Valor Venal IPTU" />
+    <!-- Adicione mais colunas conforme necessário -->
+
+    <FluentDataGridColumn Title="Actions">
+        <Template>
+            <FluentButton Appearance="accent" OnClick="@(() => NavigationManager.NavigateTo($"/tribitbiedifs/edit?itbiedifid={((TribItbiedif)context).Itbiid}"))">Edit</FluentButton>
+            <FluentButton Appearance="neutral" OnClick="@(() => NavigationManager.NavigateTo($"/tribitbiedifs/details?itbiedifid={((TribItbiedif)context).Itbiid}"))">Details</FluentButton>
+            <FluentButton Appearance="lightweight" OnClick="@(() => NavigationManager.NavigateTo($"/tribitbiedifs/delete?itbiedifid={((TribItbiedif)context).Itbiid}"))">Delete</FluentButton>
+        </Template>
+    </FluentDataGridColumn>
+</FluentDataGrid>
+@code {
+    private DBProsigaContext context = default!;
+
+    protected override void OnInitialized()
+    {
+        context = DbFactory.CreateDbContext();
+    }
+
+    public async ValueTask DisposeAsync() => await context.DisposeAsync();
+}

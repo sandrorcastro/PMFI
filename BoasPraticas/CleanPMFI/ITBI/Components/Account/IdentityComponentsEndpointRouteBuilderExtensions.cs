@@ -36,6 +36,8 @@ namespace Microsoft.AspNetCore.Routing
                     "/Account/ExternalLogin",
                     QueryString.Create(query));
 
+                provider = TemporaryFluentButtonFix(provider);
+
                 var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
                 return TypedResults.Challenge(properties, [provider]);
             });
@@ -63,6 +65,8 @@ namespace Microsoft.AspNetCore.Routing
                     context.Request.PathBase,
                     "/Account/Manage/ExternalLogins",
                     QueryString.Create("Action", ExternalLogins.LinkLoginCallbackAction));
+
+                provider = TemporaryFluentButtonFix(provider);
 
                 var properties = signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, signInManager.UserManager.GetUserId(context.User));
                 return TypedResults.Challenge(properties, [provider]);
@@ -108,6 +112,20 @@ namespace Microsoft.AspNetCore.Routing
             });
 
             return accountGroup;
+        }
+
+        private static string TemporaryFluentButtonFix(string provider)
+        {
+            // Temporary workaround for FluentButton returning a provider value twice
+            // Split the comma-separated list of strings
+            var providers = provider.Split(',');
+
+            // Find the value that appears twice in the list
+            provider = providers.GroupBy(p => p)
+                                .Where(g => g.Count() == 2)
+                                .Select(g => g.Key)
+                                .First();
+            return provider;
         }
     }
 }

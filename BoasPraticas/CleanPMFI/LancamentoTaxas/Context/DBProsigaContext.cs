@@ -4,7 +4,7 @@ using Domain.Entities.DBProsiga;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata;
 
-namespace LancamentoTaxas
+namespace LancamentoDecenio
 { 
     public partial class DBProsigaContext : DbContext
     {

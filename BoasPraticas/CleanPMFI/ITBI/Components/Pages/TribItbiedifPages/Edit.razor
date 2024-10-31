@@ -1,0 +1,344 @@
+﻿@page "/tribitbiedifs/edit"
+@using Microsoft.EntityFrameworkCore
+@using Domain.Entities.DBProsiga
+@inject IDbContextFactory<Context.DBProsigaContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Edit</PageTitle>
+
+<h1>Edit</h1>
+
+<h2>TribItbiedif</h2>
+<hr />
+@if (TribItbiedif is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="row">
+        <div class="col-md-4">
+            <EditForm method="post" Model="TribItbiedif" OnValidSubmit="UpdateTribItbiedif" FormName="edit" Enhance>
+                <DataAnnotationsValidator />
+                <ValidationSummary />
+                <input type="hidden" name="TribItbiedif.ItbiedifId" value="@TribItbiedif.ItbiedifId" />
+                <div class="mb-3">
+                    <label for="itbiid" class="form-label">Itbiid:</label>
+                    <InputNumber id="itbiid" @bind-Value="TribItbiedif.Itbiid" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.Itbiid" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="edificacaoid" class="form-label">EdificacaoId:</label>
+                    <InputNumber id="edificacaoid" @bind-Value="TribItbiedif.EdificacaoId" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.EdificacaoId" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="imoiddivida" class="form-label">ImoIddivida:</label>
+                    <InputNumber id="imoiddivida" @bind-Value="TribItbiedif.ImoIddivida" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ImoIddivida" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiedifperctransacao" class="form-label">ItbiedifPercTransacao:</label>
+                    <InputNumber id="itbiedifperctransacao" @bind-Value="TribItbiedif.ItbiedifPercTransacao" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiedifPercTransacao" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiedifareaconstr" class="form-label">ItbiedifAreaConstr:</label>
+                    <InputNumber id="itbiedifareaconstr" @bind-Value="TribItbiedif.ItbiedifAreaConstr" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiedifAreaConstr" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiedifvlrvenaliptu" class="form-label">ItbiedifVlrVenalIptu:</label>
+                    <InputNumber id="itbiedifvlrvenaliptu" @bind-Value="TribItbiedif.ItbiedifVlrVenalIptu" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiedifVlrVenalIptu" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiedifvlrdeclarado" class="form-label">ItbiedifVlrDeclarado:</label>
+                    <InputNumber id="itbiedifvlrdeclarado" @bind-Value="TribItbiedif.ItbiedifVlrDeclarado" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiedifVlrDeclarado" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiediffinanciado" class="form-label">ItbiedifFinanciado:</label>
+                    <InputText id="itbiediffinanciado" @bind-Value="TribItbiedif.ItbiedifFinanciado" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiedifFinanciado" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiedifbasecalcfin" class="form-label">ItbiedifBaseCalcFin:</label>
+                    <InputNumber id="itbiedifbasecalcfin" @bind-Value="TribItbiedif.ItbiedifBaseCalcFin" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiedifBaseCalcFin" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiedifaliqfinanc" class="form-label">ItbiedifAliqFinanc:</label>
+                    <InputNumber id="itbiedifaliqfinanc" @bind-Value="TribItbiedif.ItbiedifAliqFinanc" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiedifAliqFinanc" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiedifvlrdevido" class="form-label">ItbiedifVlrDevido:</label>
+                    <InputNumber id="itbiedifvlrdevido" @bind-Value="TribItbiedif.ItbiedifVlrDevido" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiedifVlrDevido" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiedifdatavenc" class="form-label">ItbiedifDataVenc:</label>
+                    <InputDate id="itbiedifdatavenc" @bind-Value="TribItbiedif.ItbiedifDataVenc" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiedifDataVenc" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiedifanodiv" class="form-label">ItbiedifAnoDiv:</label>
+                    <InputNumber id="itbiedifanodiv" @bind-Value="TribItbiedif.ItbiedifAnoDiv" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiedifAnoDiv" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiedifsubdivida" class="form-label">ItbiedifSubDivida:</label>
+                    <InputNumber id="itbiedifsubdivida" @bind-Value="TribItbiedif.ItbiedifSubDivida" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiedifSubDivida" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiedifmesdivida" class="form-label">ItbiedifMesDivida:</label>
+                    <InputNumber id="itbiedifmesdivida" @bind-Value="TribItbiedif.ItbiedifMesDivida" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiedifMesDivida" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiedifparc" class="form-label">ItbiedifParc:</label>
+                    <InputNumber id="itbiedifparc" @bind-Value="TribItbiedif.ItbiedifParc" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiedifParc" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="tipotribid" class="form-label">TipoTribId:</label>
+                    <InputNumber id="tipotribid" @bind-Value="TribItbiedif.TipoTribId" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.TipoTribId" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiediftipoconstrucao" class="form-label">ItbiedifTipoConstrucao:</label>
+                    <InputText id="itbiediftipoconstrucao" @bind-Value="TribItbiedif.ItbiedifTipoConstrucao" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiedifTipoConstrucao" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiedifobservacao" class="form-label">ItbiedifObservacao:</label>
+                    <InputText id="itbiedifobservacao" @bind-Value="TribItbiedif.ItbiedifObservacao" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiedifObservacao" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiedifbasecalcimovel" class="form-label">ItbiedifBaseCalcImovel:</label>
+                    <InputNumber id="itbiedifbasecalcimovel" @bind-Value="TribItbiedif.ItbiedifBaseCalcImovel" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiedifBaseCalcImovel" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbisomaeconomias" class="form-label">ItbisomaEconomias:</label>
+                    <InputText id="itbisomaeconomias" @bind-Value="TribItbiedif.ItbisomaEconomias" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbisomaEconomias" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiendereco" class="form-label">Itbiendereco:</label>
+                    <InputText id="itbiendereco" @bind-Value="TribItbiedif.Itbiendereco" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.Itbiendereco" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiinscincra" class="form-label">ItbiinscIncra:</label>
+                    <InputText id="itbiinscincra" @bind-Value="TribItbiedif.ItbiinscIncra" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiinscIncra" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiareatotalimo" class="form-label">ItbiareaTotalImo:</label>
+                    <InputNumber id="itbiareatotalimo" @bind-Value="TribItbiedif.ItbiareaTotalImo" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiareaTotalImo" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="coniddivida" class="form-label">ConIddivida:</label>
+                    <InputNumber id="coniddivida" @bind-Value="TribItbiedif.ConIddivida" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ConIddivida" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="matricula" class="form-label">Matricula:</label>
+                    <InputText id="matricula" @bind-Value="TribItbiedif.Matricula" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.Matricula" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiedifperctransmitir" class="form-label">ItbiedifPercTransmitir:</label>
+                    <InputNumber id="itbiedifperctransmitir" @bind-Value="TribItbiedif.ItbiedifPercTransmitir" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiedifPercTransmitir" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="itbiedifdtminhacasa" class="form-label">ItbiedifDtMinhaCasa:</label>
+                    <InputDate id="itbiedifdtminhacasa" @bind-Value="TribItbiedif.ItbiedifDtMinhaCasa" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.ItbiedifDtMinhaCasa" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="inscricaoimobiliaria" class="form-label">InscricaoImobiliaria:</label>
+                    <InputText id="inscricaoimobiliaria" @bind-Value="TribItbiedif.InscricaoImobiliaria" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.InscricaoImobiliaria" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="pstredifenderecocompleto" class="form-label">PStrEdifEnderecoCompleto:</label>
+                    <InputText id="pstredifenderecocompleto" @bind-Value="TribItbiedif.PStrEdifEnderecoCompleto" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.PStrEdifEnderecoCompleto" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="edifmatricula" class="form-label">EdifMatricula:</label>
+                    <InputText id="edifmatricula" @bind-Value="TribItbiedif.EdifMatricula" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.EdifMatricula" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="edifcaracteristica" class="form-label">EdifCaracteristica:</label>
+                    <InputText id="edifcaracteristica" @bind-Value="TribItbiedif.EdifCaracteristica" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.EdifCaracteristica" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="terrenoid" class="form-label">TerrenoId:</label>
+                    <InputNumber id="terrenoid" @bind-Value="TribItbiedif.TerrenoId" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.TerrenoId" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="idloteamento" class="form-label">Idloteamento:</label>
+                    <InputNumber id="idloteamento" @bind-Value="TribItbiedif.Idloteamento" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.Idloteamento" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="quadraloteamento" class="form-label">QuadraLoteamento:</label>
+                    <InputText id="quadraloteamento" @bind-Value="TribItbiedif.QuadraLoteamento" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.QuadraLoteamento" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="loteamento" class="form-label">Loteamento:</label>
+                    <InputNumber id="loteamento" @bind-Value="TribItbiedif.Loteamento" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.Loteamento" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="terrreferenciaanterior" class="form-label">TerrReferenciaAnterior:</label>
+                    <InputText id="terrreferenciaanterior" @bind-Value="TribItbiedif.TerrReferenciaAnterior" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.TerrReferenciaAnterior" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="inscricaoimobiliariageo" class="form-label">InscricaoImobiliariaGeo:</label>
+                    <InputText id="inscricaoimobiliariageo" @bind-Value="TribItbiedif.InscricaoImobiliariaGeo" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.InscricaoImobiliariaGeo" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="terrareaterreno" class="form-label">TerrAreaTerreno:</label>
+                    <InputNumber id="terrareaterreno" @bind-Value="TribItbiedif.TerrAreaTerreno" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.TerrAreaTerreno" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="loteloteamento" class="form-label">LoteLoteamento:</label>
+                    <InputText id="loteloteamento" @bind-Value="TribItbiedif.LoteLoteamento" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.LoteLoteamento" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="quadraid" class="form-label">QuadraId:</label>
+                    <InputNumber id="quadraid" @bind-Value="TribItbiedif.QuadraId" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.QuadraId" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="pstredifbairro" class="form-label">PStredifBairro:</label>
+                    <InputText id="pstredifbairro" @bind-Value="TribItbiedif.PStredifBairro" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.PStredifBairro" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="areaabertacoberta" class="form-label">AreaAbertaCoberta:</label>
+                    <InputNumber id="areaabertacoberta" @bind-Value="TribItbiedif.AreaAbertaCoberta" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.AreaAbertaCoberta" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="logradid" class="form-label">LogradId:</label>
+                    <InputNumber id="logradid" @bind-Value="TribItbiedif.LogradId" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.LogradId" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="denoid" class="form-label">DenoId:</label>
+                    <InputNumber id="denoid" @bind-Value="TribItbiedif.DenoId" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.DenoId" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="edifnumeracao" class="form-label">EdifNumeracao:</label>
+                    <InputText id="edifnumeracao" @bind-Value="TribItbiedif.EdifNumeracao" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.EdifNumeracao" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="edifcomplemento" class="form-label">EdifComplemento:</label>
+                    <InputText id="edifcomplemento" @bind-Value="TribItbiedif.EdifComplemento" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.EdifComplemento" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="edifandarconstrucao" class="form-label">EdifAndarConstrucao:</label>
+                    <InputNumber id="edifandarconstrucao" @bind-Value="TribItbiedif.EdifAndarConstrucao" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.EdifAndarConstrucao" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="edifareaconstruida" class="form-label">EdifAreaConstruida:</label>
+                    <InputNumber id="edifareaconstruida" @bind-Value="TribItbiedif.EdifAreaConstruida" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.EdifAreaConstruida" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="edifbloco" class="form-label">EdifBloco:</label>
+                    <InputText id="edifbloco" @bind-Value="TribItbiedif.EdifBloco" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.EdifBloco" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="edifnumaptosalaloja" class="form-label">EdifNumAptoSalaLoja:</label>
+                    <InputText id="edifnumaptosalaloja" @bind-Value="TribItbiedif.EdifNumAptoSalaLoja" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.EdifNumAptoSalaLoja" class="text-danger" />
+                </div>
+                <div class="mb-3">
+                    <label for="edifareacoberta" class="form-label">EdifAreaCoberta:</label>
+                    <InputNumber id="edifareacoberta" @bind-Value="TribItbiedif.EdifAreaCoberta" class="form-control" />
+                    <ValidationMessage For="() => TribItbiedif.EdifAreaCoberta" class="text-danger" />
+                </div>
+                <button type="submit" class="btn btn-primary">Save</button>
+            </EditForm>
+        </div>
+    </div>
+}
+
+<div>
+    <a href="/tribitbiedifs">Back to List</a>
+</div>
+
+@code {
+    [SupplyParameterFromQuery]
+    private long ItbiedifId { get; set; }
+
+    [SupplyParameterFromForm]
+    private TribItbiedif? TribItbiedif { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        TribItbiedif ??= await context.TribItbiedifs.FirstOrDefaultAsync(m => m.ItbiedifId == ItbiedifId);
+
+        if (TribItbiedif is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    // To protect from overposting attacks, enable the specific properties you want to bind to.
+    // For more information, see https://learn.microsoft.com/aspnet/core/blazor/forms/#mitigate-overposting-attacks.
+    private async Task UpdateTribItbiedif()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.Attach(TribItbiedif!).State = EntityState.Modified;
+
+        try
+        {
+            await context.SaveChangesAsync();
+        }
+        catch (DbUpdateConcurrencyException)
+        {
+            if (!TribItbiedifExists(TribItbiedif!.ItbiedifId))
+            {
+                NavigationManager.NavigateTo("notfound");
+            }
+            else
+            {
+                throw;
+            }
+        }
+
+        NavigationManager.NavigateTo("/tribitbiedifs");
+    }
+
+    private bool TribItbiedifExists(long itbiedifid)
+    {
+        using var context = DbFactory.CreateDbContext();
+        return context.TribItbiedifs.Any(e => e.ItbiedifId == itbiedifid);
+    }
+}

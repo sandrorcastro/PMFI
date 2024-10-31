@@ -1,0 +1,259 @@
+﻿@page "/tribitbiedifs/delete"
+@using Microsoft.EntityFrameworkCore
+@using Domain.Entities.DBProsiga
+@inject IDbContextFactory<Context.DBProsigaContext> DbFactory
+@inject NavigationManager NavigationManager
+
+<PageTitle>Delete</PageTitle>
+
+<h1>Delete</h1>
+
+<p>Are you sure you want to delete this?</p>
+<div>
+    <h2>TribItbiedif</h2>
+    <hr />
+    @if (tribitbiedif is null)
+    {
+        <p><em>Loading...</em></p>
+    }
+    else {
+        <dl class="row">
+            <dt class="col-sm-2">Itbiid</dt>
+            <dd class="col-sm-10">@tribitbiedif.Itbiid</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">EdificacaoId</dt>
+            <dd class="col-sm-10">@tribitbiedif.EdificacaoId</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ImoIddivida</dt>
+            <dd class="col-sm-10">@tribitbiedif.ImoIddivida</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiedifPercTransacao</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiedifPercTransacao</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiedifAreaConstr</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiedifAreaConstr</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiedifVlrVenalIptu</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiedifVlrVenalIptu</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiedifVlrDeclarado</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiedifVlrDeclarado</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiedifFinanciado</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiedifFinanciado</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiedifBaseCalcFin</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiedifBaseCalcFin</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiedifAliqFinanc</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiedifAliqFinanc</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiedifVlrDevido</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiedifVlrDevido</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiedifDataVenc</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiedifDataVenc</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiedifAnoDiv</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiedifAnoDiv</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiedifSubDivida</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiedifSubDivida</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiedifMesDivida</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiedifMesDivida</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiedifParc</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiedifParc</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">TipoTribId</dt>
+            <dd class="col-sm-10">@tribitbiedif.TipoTribId</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiedifTipoConstrucao</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiedifTipoConstrucao</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiedifObservacao</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiedifObservacao</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiedifBaseCalcImovel</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiedifBaseCalcImovel</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbisomaEconomias</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbisomaEconomias</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Itbiendereco</dt>
+            <dd class="col-sm-10">@tribitbiedif.Itbiendereco</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiinscIncra</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiinscIncra</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiareaTotalImo</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiareaTotalImo</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ConIddivida</dt>
+            <dd class="col-sm-10">@tribitbiedif.ConIddivida</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Matricula</dt>
+            <dd class="col-sm-10">@tribitbiedif.Matricula</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiedifPercTransmitir</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiedifPercTransmitir</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">ItbiedifDtMinhaCasa</dt>
+            <dd class="col-sm-10">@tribitbiedif.ItbiedifDtMinhaCasa</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">InscricaoImobiliaria</dt>
+            <dd class="col-sm-10">@tribitbiedif.InscricaoImobiliaria</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">PStrEdifEnderecoCompleto</dt>
+            <dd class="col-sm-10">@tribitbiedif.PStrEdifEnderecoCompleto</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">EdifMatricula</dt>
+            <dd class="col-sm-10">@tribitbiedif.EdifMatricula</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">EdifCaracteristica</dt>
+            <dd class="col-sm-10">@tribitbiedif.EdifCaracteristica</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">TerrenoId</dt>
+            <dd class="col-sm-10">@tribitbiedif.TerrenoId</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Idloteamento</dt>
+            <dd class="col-sm-10">@tribitbiedif.Idloteamento</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">QuadraLoteamento</dt>
+            <dd class="col-sm-10">@tribitbiedif.QuadraLoteamento</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">Loteamento</dt>
+            <dd class="col-sm-10">@tribitbiedif.Loteamento</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">TerrReferenciaAnterior</dt>
+            <dd class="col-sm-10">@tribitbiedif.TerrReferenciaAnterior</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">InscricaoImobiliariaGeo</dt>
+            <dd class="col-sm-10">@tribitbiedif.InscricaoImobiliariaGeo</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">TerrAreaTerreno</dt>
+            <dd class="col-sm-10">@tribitbiedif.TerrAreaTerreno</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">LoteLoteamento</dt>
+            <dd class="col-sm-10">@tribitbiedif.LoteLoteamento</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">QuadraId</dt>
+            <dd class="col-sm-10">@tribitbiedif.QuadraId</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">PStredifBairro</dt>
+            <dd class="col-sm-10">@tribitbiedif.PStredifBairro</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">AreaAbertaCoberta</dt>
+            <dd class="col-sm-10">@tribitbiedif.AreaAbertaCoberta</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">LogradId</dt>
+            <dd class="col-sm-10">@tribitbiedif.LogradId</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">DenoId</dt>
+            <dd class="col-sm-10">@tribitbiedif.DenoId</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">EdifNumeracao</dt>
+            <dd class="col-sm-10">@tribitbiedif.EdifNumeracao</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">EdifComplemento</dt>
+            <dd class="col-sm-10">@tribitbiedif.EdifComplemento</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">EdifAndarConstrucao</dt>
+            <dd class="col-sm-10">@tribitbiedif.EdifAndarConstrucao</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">EdifAreaConstruida</dt>
+            <dd class="col-sm-10">@tribitbiedif.EdifAreaConstruida</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">EdifBloco</dt>
+            <dd class="col-sm-10">@tribitbiedif.EdifBloco</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">EdifNumAptoSalaLoja</dt>
+            <dd class="col-sm-10">@tribitbiedif.EdifNumAptoSalaLoja</dd>
+        </dl>
+        <dl class="row">
+            <dt class="col-sm-2">EdifAreaCoberta</dt>
+            <dd class="col-sm-10">@tribitbiedif.EdifAreaCoberta</dd>
+        </dl>
+        <EditForm method="post" Model="tribitbiedif" OnValidSubmit="DeleteTribItbiedif" FormName="delete" Enhance>
+            <button type="submit" class="btn btn-danger" disabled="@(tribitbiedif is null)">Delete</button> |
+            <a href="/tribitbiedifs">Back to List</a>
+        </EditForm>
+    }
+</div>
+
+@code {
+    private TribItbiedif? tribitbiedif;
+
+    [SupplyParameterFromQuery]
+    private long ItbiedifId { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        using var context = DbFactory.CreateDbContext();
+        tribitbiedif = await context.TribItbiedifs.FirstOrDefaultAsync(m => m.ItbiedifId == ItbiedifId);
+
+        if (tribitbiedif is null)
+        {
+            NavigationManager.NavigateTo("notfound");
+        }
+    }
+
+    private async Task DeleteTribItbiedif()
+    {
+        using var context = DbFactory.CreateDbContext();
+        context.TribItbiedifs.Remove(tribitbiedif!);
+        await context.SaveChangesAsync();
+        NavigationManager.NavigateTo("/tribitbiedifs");
+    }
+}

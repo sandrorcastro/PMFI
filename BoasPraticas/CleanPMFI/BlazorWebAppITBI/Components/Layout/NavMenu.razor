@@ -1,5 +1,6 @@
 ﻿@implements IDisposable
 @inject NavigationManager NavigationManager
+@inject HttpClient HttpClient
 @rendermode InteractiveServer
 
 <div class="navmenu">
@@ -8,12 +9,48 @@
         <FluentNavMenu Id="main-menu" Collapsible="true" Width="250" Title="Navigation menu" @bind-Expanded="expanded">
             <!-- <FluentNavLink Href="/"></FluentNavLink> -->
             <FluentNavLink Href="autodeclaracao" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.DocumentAdd())" IconColor="Color.Accent">Auto Declaração</FluentNavLink>
-             <AuthorizeView>
-                    <Authorized>
+             <AuthorizeView >
+                <Authorized>
                         <FluentNavLink Href="Account/Manage" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.PersonAccounts())" IconColor="Color.Accent">@context.User.Identity?.Name</FluentNavLink>
                         <!--
-                            <FluentNavLink Href="Account/Logout" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.ArrowExit())" IconColor="Color.Accent">Sair</FluentNavLink>
+                    <FluentNavLink Href="Account/Logout" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.ArrowExit())" IconColor="Color.Accent">Sair</FluentNavLink>
+                    <FluentNavLink OnClick="@(async () => await OnLogout())" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.ArrowExit())" IconColor="Color.Accent">Sair</FluentNavLink>
                         -->
+                   
+                    <!--
+                    <FluentEditForm OnValidSubmit="OnLogout">
+                        <input type="hidden" name="ReturnUrl" value="@ReturnUrl" />
+                        <FluentButton type="submit" class="nav-link">
+                            <FluentIcon Icon="ArrowExit20" />
+                            Sair
+                        </FluentButton>
+                    </FluentEditForm>
+                    
+
+
+                    <FluentEditForm OnValidSubmit="OnLogout">
+                      
+
+                        <input type="hidden" name="ReturnUrl" value="@ReturnUrl" />
+                        <FluentButton type="submit" class="nav-link">
+                            <FluentIcon Icon="@(new Icons.Regular.Size20.ArrowExit())" />
+                            Sair
+                        </FluentButton>
+                 
+                    </FluentEditForm>
+                    <div class="nav-item px-3">
+                        <form action="Account/Logout" method="post">
+                            <AntiforgeryToken />
+                            <input type="hidden" name="ReturnUrl" value="@currentUrl" />
+                            <button type="submit" class="nav-link">
+                                <span class="bi bi-arrow-bar-left-nav-menu" aria-hidden="true"></span> Logout
+                            </button>
+                           
+
+                        </form>
+                    </div>
+                    -->
+                    
                         <form action="Account/Logout" method="post">
                         <AntiforgeryToken />
                         <input type="hidden" name="ReturnUrl" value="@currentUrl" />
@@ -22,6 +59,7 @@
                         </button>
                        
                     </form>
+                   
                     </Authorized>
                     <NotAuthorized>
                          <FluentNavLink Href="Account/Register" Match="NavLinkMatch.All" Icon="@(new Icons.Regular.Size20.PersonAdd())" IconColor="Color.Accent">Registrar</FluentNavLink>
@@ -78,10 +116,18 @@
     {
         NavigationManager.LocationChanged -= OnLocationChanged;
     }
+    private string ReturnUrl { get; set; } = "/"; // Substitua pelo valor que desejar
+    private async Task OnLogout()
+    {
+        // Redirecione ou faça a operação necessária de logout
+        await HttpClient.PostAsync("Account/Logout?ReturnUrl=Account/Login", null);
+        //NavigationManager.NavigateTo($"Account/Logout?ReturnUrl={ReturnUrl}", forceLoad: true);
+        NavigationManager.NavigateTo(ReturnUrl, forceLoad: true);
+    }
     public void Logout()
     {
         // Sua lógica de logout aqui
-        NavigationManager.NavigateTo("/Account/Logout", forceLoad: true);
+        NavigationManager.NavigateTo("Account/Logout", forceLoad: true);
     }
 }
 
